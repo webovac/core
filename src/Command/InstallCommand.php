@@ -10,6 +10,7 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
 use Stepapo\Dataset\Utils;
 use Webovac\Core\InstallGroup;
+use Webovac\Core\Lib\CmsPrinter;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Module;
 
