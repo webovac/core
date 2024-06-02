@@ -5,8 +5,8 @@ namespace Webovac\Core\Model\Page;
 use App\Model\Page\Page;
 use App\Model\Person\Person;
 use Webovac\Core\Lib\CmsUser;
-use Webovac\Core\LoginRequiredException;
-use Webovac\Core\MissingPermissionException;
+use Webovac\Core\Exception\LoginRequiredException;
+use Webovac\Core\Exception\MissingPermissionException;
 
 
 class AccessSetup

@@ -10,8 +10,8 @@ use App\Model\PageTranslation\PageTranslationData;
 use Nette\Http\FileUpload;
 use Webovac\Core\Attribute\DefaultValue;
 use Webovac\Core\Lib\CmsUser;
-use Webovac\Core\LoginRequiredException;
-use Webovac\Core\MissingPermissionException;
+use Webovac\Core\Exception\LoginRequiredException;
+use Webovac\Core\Exception\MissingPermissionException;
 
 
 trait CorePageData

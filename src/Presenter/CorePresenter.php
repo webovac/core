@@ -30,8 +30,8 @@ use Webovac\Core\Core;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
-use Webovac\Core\LoginRequiredException;
-use Webovac\Core\MissingPermissionException;
+use Webovac\Core\Exception\LoginRequiredException;
+use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Model\CmsData;
 use Webovac\Core\Model\HasRequirements;
 
