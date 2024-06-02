@@ -1,0 +1,30 @@
+{templateType Webovac\Core\Control\Buttons\ButtonsTemplate}
+<div class="mb-3">
+	<a href="{plink Home:, $pageData->name, $pageData->hasParameter ? $entity?->getParameter($language) : null, $pageData->hasParentParameter ? $entity?->getParentParameter($language) : null}" n:class="btn, $pageData === $presenter->pageData ? btn-primary : btn-outline-primary">
+		<i n:if="$pageData->icon" class="{$layoutData->buttonsIcon ?? fas} fa-fw fa-{$pageData->icon}"></i>
+		{$pageData->getCollection('translations')->getBy(['language' => $languageData->id])->title ?: 'Přehled'}
+	</a>
+	{foreach $pageDatas as $p}
+		{var $t = $p->getCollection('translations')->getBy(['language' => $languageData->id])}
+		{if $p->type === App\Model\Page\Page::TYPE_SEPARATOR}
+		{elseif $p->type === App\Model\Page\Page::TYPE_INTERNAL_LINK}
+			{php $targetPage = $dataModel->getPageData($web->id, $p->targetPage)}
+			<a href="{plink 'Home:', $targetPage->name, [$p->targetParentParameter, $p->targetParameter]}" n:if="!$p->hideInNavigation" n:class="btn, 'btn-outline-' . $p->style ?: 'primary'"><i n:if="$p->icon" class="{$layoutData->buttonsIcon ?? fas} fa-fw fa-{$p->icon}"></i> <span>{$t->title}</span></a>
+		{elseif $p->type === App\Model\Page\Page::TYPE_SIGNAL}
+			<a href="{plink $p->targetSignal . '!'}" n:if="!$p->hideInNavigation" n:class="btn, 'btn-outline-' . $p->style ?: 'primary'"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}><i n:if="$p->icon" class="{$layoutData->buttonsIcon ?? fas} fa-fw fa-{$p->icon}"></i> <span>{$t->title}</span></a>
+		{elseif $p->type === App\Model\Page\Page::TYPE_EXTERNAL_LINK}
+			<a href="{$p->targetUrl}" n:if="!$p->hideInNavigation" n:class="btn, 'btn-outline-' . $p->style ?: 'primary'"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}><i n:if="$p->icon" class="{$layoutData->buttonsIcon ?? fas} fa-fw fa-{$p->icon}"></i> <span>{$t->title}</span></a>
+		{elseif $p->type === App\Model\Page\Page::TYPE_TEXT}
+			<div n:if="!$p->hideInNavigation" n:class="btn, 'btn-outline-' . $p->style ?: 'primary'"><i n:if="$p->icon" class="{$layoutData->buttonsIcon ?? fas} fa-fw fa-{$p->icon}"></i> <span>{$t->title|replacePlaceholder}</span></div>
+		{else}
+			<a href="{plink Home:, $p->name}" n:if="!$p->hideInNavigation" n:class="btn, btn, $control->isActive($p->id) ? ('btn-' . $p->style ?: 'primary') : ('btn-outline-' . $p->style ?: 'primary')"><i n:if="$p->icon" class="{$layoutData->buttonsIcon ?? fas} fa-fw fa-{$p->icon}"></i> <span>{$t->title}</span></a>
+		{/}
+	{/}
+
+	{*
+	<a n:foreach="$childPages as $childPage" href="{plink Home:, $childPage->name, $entity?->getParameter($language), $entity?->getParentParameter($language)}" n:class="btn, $control->isActive($childPage) ? btn-primary : btn-outline-primary">
+		<i n:if="$childPage->icon" class="{$layoutData->buttonsIcon ?? fas} fa-fw fa-{$childPage->icon}"></i>
+		{$childPage->getTranslation($language)->title}
+	</a>
+	*}
+</div>

@@ -1,0 +1,41 @@
+{
+	"name": "webovac/core",
+	"type": "library",
+	"description": "Core module for Webovac CMS.",
+	"keywords": ["webovac", "nette", "nextras", "cms", "module"],
+	"homepage": "https://github.com/webovac/core",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Štěpán Postler"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/webovac/core/issues"
+	},
+	"require": {
+		"php": ">=8.1",
+		"nette/application": "^3.2",
+		"nette/di": "^3.2",
+		"nette/security": "^3,2",
+		"nette/caching": "^4.0",
+		"nette/forms": "^4.0",
+		"latte/latte": "^4.0",
+		"nextras/orm": "^5.0",
+		"nextras/migrations": "^5.0"
+	},
+	"require-dev": {
+		"tracy/tracy": "^2.10",
+		"webovac/generator": "^0.1"
+	},
+	"scripts": {
+		"post-package-install": "php install.php",
+		"post-package-update": "php install.php",
+		"post-package-uninstall": "php uninstall.php"
+	},
+	"autoload": {
+		"psr-4": {
+			"Webovac\\Core\\": "src/"
+		}
+	}
+}

@@ -1,0 +1,61 @@
+{templateType Stepapo\Dataset\UI\Filter\FilterTemplate}
+<div n:class="my-1, !$column->filter->collapse ? table-responsive, clearfix" n:snippet>
+	<div class="input-group input-group-sm">
+		<div class="btn btn-sm btn-label">{_$column->label ?: $column->name}:</div>
+		{if $column->filter->collapse}
+			{if $column->filter->collapse == 1}
+				<a n:href="filter! value: $value" class="btn btn-sm btn-primary text-left ajax">
+					{$value ? $column->filter->options[$value]->label : ($column->filter->prompt|translate)}
+				</a>
+				<div class="dropdown">
+					<button class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown">
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<div class="dropdown-menu">
+						<a n:href="filter! value: null" n:if="$column->filter->prompt" n:class="dropdown-item, ajax">
+							{_$column->filter->prompt}
+						</a>
+						<a n:foreach="$column->filter->options as $name => $option" n:href="filter! value: $name" n:class="dropdown-item, ajax">
+							{$option instanceof Stepapo\Dataset\Option ? (string) $option->label : $option}
+						</a>
+					</div>
+				</div>
+			{else}
+				<a n:href="filter! value => null" n:if="$column->filter->prompt" n:class="btn, btn-sm, ajax, !$value ? btn-primary : btn-secondary">
+					{_$column->filter->prompt}
+				</a>
+				{var $selected = !$value}
+				{foreach $column->filter->options as $name => $option}
+					{if $iterator->counter + 1 < $column->filter->collapse}
+						{if $selected === false}
+							{var $selected = $name == $value}
+						{/}
+						<a n:href="filter! value: $name" n:class="btn, btn-sm, text-left, ajax, $name == $value ? btn-primary : btn-secondary">
+							{$option instanceof Stepapo\Dataset\Option ? (string) $option->label : $option}
+						</a>
+					{elseif $iterator->counter + 1 == $column->filter->collapse}
+						<a n:href="filter! value: !$selected ? $value : $option->name" n:class="btn, btn-sm, !$selected ? btn-primary : btn-secondary, text-left, ajax">{$selected ? $option->label : $column->filter->options[$value]->label}</a>
+						<div class="dropdown">
+							<button class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown">
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu">
+								<a n:foreach="$column->filter->options as $name => $option" n:if="$iterator->counter + 1 >= $column->filter->collapse" n:href="filter! value: $name" n:class="dropdown-item, ajax">
+									{$option instanceof Stepapo\Dataset\Option ? (string) $option->label : $option}
+								</a>
+							</div>
+						</div>
+						{breakIf true}
+					{/}
+				{/}
+			{/}
+		{else}
+			<a n:href="filter! value => null" n:if="$column->filter->prompt" n:class="btn, btn-sm, ajax, !$value ? btn-primary : btn-secondary">
+				{_$column->filter->prompt}
+			</a>
+			<a n:foreach="$column->filter->options as $name => $option" n:href="filter! value => $name" n:class="btn, btn-sm, ajax, $name == $value ? btn-primary : btn-secondary">
+				{_$option instanceof Stepapo\Dataset\Option ? $option->label : $option}
+			</a>
+		{/}
+	</div>
+</div>

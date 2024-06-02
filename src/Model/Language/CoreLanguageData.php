@@ -1,0 +1,17 @@
+<?php
+
+namespace Webovac\Core\Model\Language;
+
+use App\Model\LanguageTranslation\LanguageTranslationData;
+
+
+trait CoreLanguageData
+{
+	public ?int $id;
+	public string $shortcut;
+	/** @var array<LanguageTranslationData|array> */ public array $translations;
+	public int|string|null $createdByPerson;
+	public int|string|null $updatedByPerson;
+	public ?\DateTimeInterface $createdAt;
+	public ?\DateTimeInterface $updatedAt;
+}

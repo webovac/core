@@ -1,0 +1,44 @@
+{templateType Webovac\Core\Control\Signpost\SignpostTemplate}
+<div class="grid signpost text-center">
+	{foreach $pageDatas as $p}
+		{var $t = $p->getCollection('translations')->getBy(['language' => $languageData->id])}
+		{continueIf $p->type === App\Model\Page\Page::TYPE_SEPARATOR}
+		{if $p->type === App\Model\Page\Page::TYPE_INTERNAL_LINK}
+			{php $targetPage = $dataModel->getPageData($web->id, $p->targetPage)}
+			<a href="{plink 'Home:', $targetPage->name, [$p->targetParentParameter, $p->targetParameter]}" n:if="!$p->hideInNavigation" class="g-col-6 g-col-lg-4 bg-{$p->style ? ($p->style . '-subtle') : 'light'} p-3">
+				<div n:if="$p->icon" class="p-2 rounded-5 d-inline-block bg-white" style="width: 51px; height: 51px;">
+					<i class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$p->icon} lh-sm"></i>
+				</div>
+				<h3 class="mt-2 mb-0">{$t->title}</h3>
+			</a>
+		{elseif $p->type === App\Model\Page\Page::TYPE_SIGNAL}
+			<a href="{plink $p->targetSignal . '!'}" n:if="!$p->hideInNavigation" class="g-col-6 g-col-lg-4 bg-{$p->style ? ($p->style . '-subtle') : 'light'} p-3"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
+				<div n:if="$p->icon" class="p-2 rounded-5 d-inline-block bg-white" style="width: 51px; height: 51px;">
+					<i class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$p->icon} fs-2 lh-sm"></i>
+				</div>
+				<h3 class="mt-2 mb-0">{$t->title}</h3>
+			</a>
+		{elseif $p->type === App\Model\Page\Page::TYPE_EXTERNAL_LINK}
+			<a href="{$pageData['targetUrl']}" n:if="!$p->hideInNavigation" class="g-col-6 g-col-lg-4 bg-{$p->style ? ($p->style . '-subtle') : 'light'} p-3"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
+				<div n:if="$p->icon" class="p-2 rounded-5 d-inline-block bg-white" style="width: 51px; height: 51px;">
+					<i class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$p->icon} fs-2 lh-sm"></i>
+				</div>
+				<h3 class="mt-2 mb-0">{$t->title}</h3>
+			</a>
+		{elseif $p->type === App\Model\Page\Page::TYPE_TEXT}
+			<div n:if="!$p->hideInNavigation" class="g-col-6 g-col-lg-4 bg-{$p->style ? ($p->style . '-subtle') : 'light'} p-3">
+				<div n:if="$p->icon" class="p-2 rounded-5 d-inline-block bg-white" style="width: 51px; height: 51px;">
+					<i class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$p->icon} fs-2 lh-sm"></i>
+				</div>
+				<h3 class="mt-2 mb-0">{$t->title|replacePlaceholder}</h3>
+			</div>
+		{else}
+			<a href="{plink Home:, $p->name}" n:if="!$p->hideInNavigation" class="g-col-6 g-col-lg-4 bg-{$p->style ? ($p->style . '-subtle') : 'light'} p-3">
+				<div n:if="$p->icon" class="p-2 rounded-5 d-inline-block bg-white" style="width: 51px; height: 51px;">
+					<i class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$p->icon} fs-2 lh-sm"></i>
+				</div>
+				<h3 class="mt-2 mb-0">{$t->title}</h3>
+			</a>
+		{/}
+	{/}
+</div>

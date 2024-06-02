@@ -1,0 +1,84 @@
+{templateType Webovac\Core\Control\Menu\MenuTemplate}
+<div class="wrapper navigation-wrapper primary-navigation-wrapper" n:snippet>
+	<div class="navigation primary-navigation">
+		<a class="logo clearfix" href="{plink Home:, $homePageData->name}">
+			{if $layoutData->code === 'cvut'}
+				<img src="/dist/images/logo-lion.svg">
+				<div class="logo-wrapper d-none d-xxl-block">
+					<img src="/dist/images/logo-cvut-text.svg">
+					<span n:class="logo-text, strlen($title) > 4 ? logo-text-long : logo-text-short">{$title}</span>
+				</div>
+				<div class="logo-wrapper d-block d-xxl-none">
+					<img src="/dist/images/logo-fsv-text.svg">
+				</div>
+			{elseif !isset($logoUrl)}
+				<img src="/dist/images/logo-lion.svg">
+			{else}
+				<img src="/{$logoUrl}">
+			{/}
+		</a>
+		<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>
+		<div class="menu" id="menu">
+			{foreach $pageDatas as $p}
+				{var $t = $p->getCollection('translations')->getBy(['language' => $languageData->id])}
+				{if $p->type === App\Model\Page\Page::TYPE_SEPARATOR}
+					<hr>
+				{elseif $p->type === App\Model\Page\Page::TYPE_INTERNAL_LINK}
+					{php $targetPage = $dataModel->getPageData($webData->id, $p->targetPage)}
+					<a href="{plink 'Home:', $targetPage->name, [$p->targetParentParameter, $p->targetParameter]}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style, ($targetPage->id === $pageData->id) || (!$targetPage->isHomePage && $control->isActive($p->targetPage)) ? active">
+						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
+						<span>{$t->title}</span>
+					</a>
+				{elseif $p->type === App\Model\Page\Page::TYPE_SIGNAL}
+					<a href="{plink $p->targetSignal . '!'}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
+						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
+						<span>{$t->title}</span>
+					</a>
+				{elseif $p->type === App\Model\Page\Page::TYPE_EXTERNAL_LINK}
+					<a href="{$p->targetUrl}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
+						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
+						<span>{$t->title}</span>
+					</a>
+				{elseif $p->type === App\Model\Page\Page::TYPE_TEXT}
+					<div n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style">
+						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
+						<span>{$t->title|replacePlaceholder}</span>
+					</div>
+				{else}
+					<a href="{plink Home:, $p->name}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style, ($p->id === $pageData->id) || (!$p->isHomePage && $control->isActive($p->id)) ? active">
+						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
+						<span>{$t->title}</span>
+					</a>
+				{/}
+			{/}
+			<hr>
+			<div class="languages" n:if="count($webData->translations) > 1">
+				{foreach $webData->translations as $translation}
+					{php $l = $dataModel->getLanguageData($translation->language)}
+					{ifset $availableTranslations[$l->id]}
+						{if $cmsUser->isLoggedIn()}
+							<a href="{plink setLanguage!, $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id])->title}" data-tooltip-position="right">
+								<img src="/dist/images/languages/{$l->shortcut}.svg">
+							</a>
+						{else}
+							<a href="{plink Home:, $pageData->name, $entity?->getParameter($languageData), $entity?->getParentParameter($languageData), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getBy(['translationLanguage' => $l->id])->title}" data-tooltip-position="right">
+								<img src="/dist/images/languages/{$l->shortcut}.svg">
+							</a>
+						{/}
+					{else}
+						<div n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id])->title} nedostupné" data-tooltip-position="right">
+							<img src="/dist/images/languages/{$l->shortcut}.svg">
+						</div>
+					{/}
+				{/}
+			</div>
+			<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && ($layoutData->themes) > 1">
+				{foreach $layoutData->themes as $theme}
+					<a href="{plink setTheme!, $theme->id}" data-tooltip="{$theme->getCollection('translations')->getBy(['language' => $languageData->id])->title}" data-tooltip-position="right">
+						<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $theme->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$theme->getCollection('translations')->getBy(['language' => $languageData->id])->title|truncate:1,''}</div>
+					</a>
+				{/}
+			</div>
+		</div>
+	</div>
+</div>

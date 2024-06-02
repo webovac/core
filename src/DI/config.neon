@@ -1,0 +1,6 @@
+services:
+	- Nette\Caching\Cache
+	routerFactory: Webovac\Core\Router\RouterFactory()
+	router:
+		type: Nette\Routing\Router
+		create: @routerFactory::create

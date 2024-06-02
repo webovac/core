@@ -1,0 +1,58 @@
+{if $device['primaryCollapsed'] && $device['primaryOrientation'] === 'h'}
+	:root {
+		--cms-layout-primary-menu-item-justify-content: left;
+		--cms-layout-primary-hr-display: block;
+		--cms-layout-primary-menu-item-padding: var(--cms-menu-item-padding-y) var(--cms-primary-padding-right) var(--cms-menu-item-padding-y) var(--cms-primary-padding-left);
+	}
+	.layout .primary-navigation-wrapper .navigation {
+		justify-content: space-between;
+		align-items: stretch;
+	}
+	.layout .primary-navigation-wrapper .navigation .menu-button {
+		display: flex;
+	}
+	.layout .primary-navigation-wrapper .navigation .menu {
+		padding: var(--cms-primary-padding-top) 0 var(--cms-primary-padding-bottom) 0;
+		display: none;
+		position: absolute;
+		top: var(--cms-layout-primary-wrapper-min-height);
+		bottom: 0;
+		left: {if $device['secondaryOrientation'] === 'v'}var(--cms-layout-secondary-wrapper-width){else}0{/};
+		right: 0;
+		background: var(--cms-primary-bg);
+		z-index: 1000;
+	}
+{else}
+	.layout .primary-navigation-wrapper .navigation .menu {
+		display: flex !important;
+	}
+{/}
+{if $device['secondaryCollapsed'] && $device['secondaryOrientation'] === 'h'}
+	:root {
+		--cms-layout-secondary-menu-item-justify-content: left;
+		--cms-layout-secondary-hr-display: block;
+		--cms-layout-secondary-menu-item-padding: var(--cms-menu-item-padding-y) var(--cms-secondary-padding-right) var(--cms-menu-item-padding-y) var(--cms-secondary-padding-left);
+	}
+	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation {
+		justify-content: space-between;
+		align-items: stretch;
+	}
+	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .menu-button {
+		display: flex;
+	}
+	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .menu {
+		padding: var(--cms-secondary-padding-top) 0 var(--cms-secondary-padding-bottom) 0;
+		display: none;
+		position: absolute;
+		top: {if $device['primaryOrientation'] === 'h'}calc(var(--cms-layout-primary-wrapper-min-height) + var(--cms-layout-secondary-wrapper-min-height)){else}var(--cms-layout-secondary-wrapper-min-height){/};
+		bottom: 0;
+		left: {if $device['primaryOrientation'] === 'v'}var(--cms-layout-primary-wrapper-width){else}0{/};
+		right: 0;
+		background: var(--cms-secondary-bg);
+		z-index: 1000;
+	}
+{else}
+	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .menu {
+		display: flex !important;
+	}
+{/}

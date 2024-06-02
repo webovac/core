@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Webovac\Core\Presenter;
+
+use App\Model\Language\LanguageData;
+use App\Model\Page\Page;
+use App\Model\Page\PageData;
+use App\Model\PageTranslation\PageTranslation;
+use App\Model\Web\Web;
+use App\Model\Web\WebData;
+use App\Model\WebTranslation\WebTranslationData;
+use Nextras\Orm\Collection\ICollection;
+use Nextras\Orm\Entity\IEntity;
+
+
+trait CorePresenterTemplate
+{
+	public LanguageData $languageData;
+	public WebData $webData;
+	public WebTranslationData $webTranslationData;
+	public PageData $pageData;
+	public PageTranslation $pageTranslation;
+	public bool $hasSideMenu;
+	public ?IEntity $entity;
+	public string $title;
+	public ?string $content;
+	/** @var ICollection<Web>|array */ public array|ICollection $webs;
+	public ?Page $adminPage;
+}
