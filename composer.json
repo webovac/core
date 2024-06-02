@@ -22,13 +22,14 @@
 		"nette/caching": "^3.3",
 		"nette/forms": "^3.2",
 		"latte/latte": "^3.0",
+		"tracy/tracy": "^2.10",
 		"nextras/orm": "^4.0",
 		"nextras/migrations": "^3.3",
 		"contributte/forms-multiplier": "^4.0",
-		"stepapo/dataset": "^1.2"
+		"stepapo/dataset": "^1.2",
+		"choowx/rasterize-svg": "^0.1"
 	},
 	"require-dev": {
-		"tracy/tracy": "^2.10",
 		"webovac/generator": "dev-main"
 	},
 	"scripts": {
