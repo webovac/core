@@ -29,7 +29,7 @@
 	},
 	"require-dev": {
 		"tracy/tracy": "^2.10",
-		"webovac/generator": "^0.1"
+		"webovac/generator": "dev-main"
 	},
 	"scripts": {
 		"post-package-install": "php install.php",
