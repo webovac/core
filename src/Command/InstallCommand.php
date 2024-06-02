@@ -1,6 +1,6 @@
 <?php
 
-namespace Webovac\Core\Lib;
+namespace Webovac\Core\Command;
 
 use App\Model\DataModel;
 use App\Model\Orm;
@@ -9,7 +9,6 @@ use Nette\Utils\FileInfo;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
 use Stepapo\Dataset\Utils;
-use Webovac\Core\Command\Command;
 use Webovac\Core\InstallGroup;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Module;

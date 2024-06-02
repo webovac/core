@@ -2,8 +2,6 @@
 
 namespace Webovac\Core\Command;
 
-use Webovac\Core\Command\InstallCommand;
-
 
 class MigrateAndInstallCommand implements Command
 {
