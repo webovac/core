@@ -21,8 +21,8 @@
 		"nette/caching": "^4.0",
 		"nette/forms": "^4.0",
 		"latte/latte": "^4.0",
-		"nextras/orm": "^5.0",
-		"nextras/migrations": "^5.0"
+		"nextras/orm": "^4.0",
+		"nextras/migrations": "^3.3"
 	},
 	"require-dev": {
 		"tracy/tracy": "^2.10",
