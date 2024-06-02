@@ -1,0 +1,7 @@
+{templateType App\Control\Breadcrumbs\BreadcrumbsTemplate}
+<div n:if="!isModuleInstalled('style') || $webData->layout !== 'default'" class="breadcrumbs">
+	{foreach $crumbs as $crumb}
+		<a href="{$crumb['link']}">{$crumb['title']|noescape}</a>
+		<span n:sep class="separator"> : </span>
+	{/}
+</div>

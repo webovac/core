@@ -1,0 +1,8 @@
+{contentType 'application/manifest+json'}
+{
+	"name": "{$webTranslationData->title}",
+	"short_name": "{$webTranslationData->title}",
+	"display": "standalone",
+	"scope": "{plink '//Home:', 'Home', host: $webData->host, basePath: $webData->basePath}",
+	"start_url": "{plink '//Home:', 'Home', host: $webData->host, basePath: $webData->basePath}"
+}

@@ -1,0 +1,17 @@
+{varType string $message}
+
+{block content}
+
+<h1 n:block=title>{_'Přístup zakázán'}</h1>
+
+<div class="alert-danger alert">
+	<p>
+		{if $message}
+			{$message}
+		{else}
+			{_'Pro přístup ke stránce nemáte dostatečná oprávnění.'}
+		{/}
+	</p>
+</div>
+
+<p><small>error 403</small></p>

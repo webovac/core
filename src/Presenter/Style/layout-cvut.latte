@@ -1,0 +1,151 @@
+:root {
+    --cms-h1-font-size: 30px;
+    --cms-h2-font-size: 26px;
+    --cms-h3-font-size: 24px;
+    --cms-h4-font-size: 22px;
+
+    --cms-light-primary-bg: var(--cms-primary);
+    --cms-light-primary-active-link-color: var(--cms-primary);
+    --cms-light-secondary-link-color: var(--cms-primary);
+    --cms-light-secondary-active-link-color: var(--cms-primary);
+    --cms-light-link-color: var(--cms-primary);
+
+    --cms-light-primary-bg: var(--cms-primary);
+    --cms-light-primary-active-link-color: var(--cms-primary);
+    --cms-light-secondary-link-color: var(--cms-primary);
+    --cms-light-secondary-active-link-color: var(--cms-primary);
+    --cms-light-link-color: var(--cms-primary);
+    --cms-light-link-color-rgb: var(--cms-primary-rgb);
+}
+.logo img {
+    border: 1px solid var(--cms-primary-color);
+    display: block;
+    float: left;
+    margin-right: calc(var(--cms-layout-logo-height) * 0.05);
+}
+.logo-wrapper {
+    float: left;
+    position: relative;
+    .logo-text {
+        color: var(--cms-primary-color);
+        text-align: left;
+        position: absolute;
+        display: block;
+        width: 88px;
+        max-width: 88px;
+        bottom: 6px;
+        left: 6px;
+        letter-spacing: 0.5px;
+        white-space: initial;
+
+        &.logo-text-long {
+            font-size: 9.5px;
+            font-weight: 600;
+            line-height: 1.25;
+            text-transform: uppercase;
+        }
+
+        &.logo-text-short {
+            font-size: 30px;
+            font-weight: 900;
+            line-height: 1;
+        }
+    }
+}
+
+h1, .title {
+    font-weight: 900 !important;
+}
+
+.breadcrumbs {
+    padding: 16px var(--cms-content-padding-right) var(--cms-content-padding-bottom) var(--cms-content-padding-left);
+    position: absolute;
+}
+
+.content-wrapper {
+    position: relative;
+}
+
+.alert-main {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 12px var(--cms-content-padding-left) 12px var(--cms-content-padding-left);
+
+    .btn-close {
+        padding: 8px 16px 16px 16px;
+        line-height: 1;
+        font-size: 32px;
+        background: none;
+        height: auto;
+        width: auto;
+    }
+}
+
+.title i {
+    display: none;
+}
+
+@media (max-width: 1419.8px) and (min-width: 992px) {
+    :root {
+        --cms-layout-primary-menu-item-padding: 8px 10px;
+        --cms-layout-primary-menu-item-line-height: 1.5;
+    }
+}
+
+@media (max-width: 1419.8px) {
+    .override-padding > * {
+        padding-left: var(--cms-content-padding-left);
+        padding-right: var(--cms-content-padding-right);
+
+        &.table-bordered {
+            &.table-bordered td:first-child, &.table-bordered th:first-child {
+                border-left: 0;
+            }
+            &.table-bordered td:last-child, &.table-bordered th:last-child {
+                border-right: 0;
+            }
+        }
+    }
+    .override-padding {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+
+        > ul, > ol {
+            padding-left: calc(2rem + var(--cms-content-padding-left));
+        }
+
+        &.override-padding th:first-child, &.override-padding td:first-child {
+            padding-left: var(--cms-content-padding-left);
+        }
+
+        &.override-padding th:last-child, &.override-padding td:last-child {
+            padding-right: var(--cms-content-padding-right);
+        }
+
+        .ck {
+            &.ck-sticky-panel__content, &.ck-editor__editable_inline, .ck-source-editing-area textarea {
+                border-color: var(--cms-content-border-color) !important;
+                padding-left: var(--cms-content-padding-left);
+                padding-right: var(--cms-content-padding-right);
+                border-left: 0 !important;
+                border-right: 0 !important;
+            }
+
+            &.ck-toolbar {
+                padding: 0;
+            }
+        }
+    }
+}
+
+@media (max-width: 991.8px) {
+    :root {
+        --cms-layout-secondary-menu-item-padding: 8px 10px;
+        --cms-layout-secondary-menu-item-line-height: 1.5;
+    }
+    .breadcrumbs {
+        position: initial;
+        padding-bottom: 0;
+    }
+}

@@ -1,0 +1,317 @@
+{varType array $l}
+{varType App\Model\Web\WebData $webData}
+
+:root {
+    --cms-demo-scale: calc(1 / 5);
+
+    --cms-font-size: {$l['fontSize']}px;
+    --cms-font-family: {$l['fontFamily'] === 'system' ? "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" : $l['fontFamily']};
+    --cms-h1-font-size: 32px;
+    --cms-h2-font-size: 28px;
+    --cms-h3-font-size: 24px;
+    --cms-h4-font-size: 20px;
+    --cms-heading-line-height: 1.2;
+
+    --cms-content-margin-y: {$l['contentMarginY'] ? 'auto' : 'initial'};
+    --cms-image-display: {$l['imageDisplay'] ? 'block' : 'none'};
+
+    --cms-logo-width: {$l['logoWidth']}px;
+    --cms-logo-height: {$l['logoHeight']}px;
+
+    --cms-menu-item-padding-x: 1em;
+    --cms-menu-item-padding-y: 0.5em;
+
+    --cms-hr-margin: 0.5rem 0;
+    --cms-background-url: url('{$baseUrl}/{$backgroundUrl}');
+
+    --cms-primary: {$webData->color};
+    --cms-primary-rgb: {$webData->color|rgb};
+    --cms-primary-lighter: {$webData->color|tint:0.67};
+    --cms-primary-light: {$webData->color|tint:0.33};
+    --cms-primary-dark: {$webData->color|shade:0.33};
+    --cms-primary-darker: {$webData->color|shade:0.67};
+    --cms-complementary: {$webData->complementaryColor};
+    {foreach $colors as $color}
+        {continueIf $color === 'primary'}
+        --cms-{$color}: {$l[$color]};
+        --cms-{$color}-rgb: {$l[$color]|rgb};
+        --cms-{$color}-lighter: {$l[$color]|tint:0.67};
+        --cms-{$color}-light: {$l[$color]|tint:0.33};
+        --cms-{$color}-dark: {$l[$color]|shade:0.33};
+        --cms-{$color}-darker: {$l[$color]|shade:0.67};
+    {/}
+
+    {foreach $l['themes'] as $th}
+        --cms-{$th['code']}-body-bg: {$th['bodyBg']};
+        --cms-{$th['code']}-heading-color: {$th['headingColor']};
+        --cms-{$th['code']}-color: {$th['color']};
+        --cms-{$th['code']}-color-rgb: {$th['color']|rgb};
+        --cms-{$th['code']}-link-color: {$th['linkColor']};
+        --cms-{$th['code']}-link-color-rgb: {$th['linkColor']|rgb};
+        --cms-{$th['code']}-active-link-color: {$th['activeLinkColor']};
+        --cms-{$th['code']}-active-link-color-rgb: {$th['activeLinkColor']|rgb};
+        --cms-{$th['code']}-layout-bg: {$th['layoutBg']};
+        --cms-{$th['code']}-layout-border-color: {$th['layoutBorderColor']};
+
+        {foreach ['primary', 'secondary'] as $degree}
+            --cms-{$th['code']}-{$degree}-bg: {$th[$degree . 'Bg']};
+            --cms-{$th['code']}-{$degree}-border-color: {$th[$degree . 'BorderColor']};
+            --cms-{$th['code']}-{$degree}-link-color: {$th[$degree . 'LinkColor']};
+            --cms-{$th['code']}-{$degree}-active-link-bg: {$th[$degree . 'ActiveLinkBg']};
+            --cms-{$th['code']}-{$degree}-active-link-color: {$th[$degree . 'ActiveLinkColor']};
+            --cms-{$th['code']}-{$degree}-color: {$th[$degree . 'Color']};
+        {/}
+
+        --cms-{$th['code']}-content-bg: {$th['contentBg']};
+        --cms-{$th['code']}-content-bg-rgb: {$th['contentBg']|rgb};
+        --cms-{$th['code']}-content-border-color: {$th['contentBorderColor']};
+
+        .theme-{$th['code']} {
+            --cms-body-bg: var(--cms-{$th['code']}-body-bg);
+            --cms-heading-color: var(--cms-{$th['code']}-heading-color);
+            --cms-color: var(--cms-{$th['code']}-color);
+            --cms-color-rgb: var(--cms-{$th['code']}-color-rgb);
+            --cms-link-color: var(--cms-{$th['code']}-link-color);
+            --cms-link-color-rgb: var(--cms-{$th['code']}-link-color-rgb);
+            --cms-active-link-color: var(--cms-{$th['code']}-active-link-color);
+            --cms-active-link-color-rgb: var(--cms-{$th['code']}-active-link-color-rgb);
+            --cms-layout-bg: var(--cms-{$th['code']}-layout-bg);
+            --cms-layout-border-color: var(--cms-{$th['code']}-layout-border-color);
+            {foreach ['primary', 'secondary'] as $degree}
+                --cms-{$degree}-bg: var(--cms-{$th['code']}-{$degree}-bg);
+                --cms-{$degree}-border-color: var(--cms-{$th['code']}-{$degree}-border-color);
+                --cms-{$degree}-link-color: var(--cms-{$th['code']}-{$degree}-link-color);
+                --cms-{$degree}-active-link-bg: var(--cms-{$th['code']}-{$degree}-active-link-bg);
+                --cms-{$degree}-active-link-color: var(--cms-{$th['code']}-{$degree}-active-link-color);
+                --cms-{$degree}-color: var(--cms-{$th['code']}-{$degree}-color);
+            {/}
+            --cms-content-bg: var(--cms-{$th['code']}-content-bg);
+            --cms-content-bg-rgb: var(--cms-{$th['code']}-content-bg-rgb);
+            --cms-content-border-color: var(--cms-{$th['code']}-content-border-color);
+        }
+    {/}
+
+    {foreach $l['devices'] as $device}
+        --cms-{$device['code']}-layout-width: {$device['layoutWidth'] ? ($device['layoutWidth'] . 'px') : 'initial'};
+        {foreach ['margin', 'border'] as $property}
+            {foreach ['top', 'right', 'bottom', 'left'] as $side}
+                --cms-{$device['code']}-layout-{$property}-{$side}: {$device['layout' . ucfirst($property) . ucfirst($side)]}px;
+            {/}
+        {/}
+
+        {foreach ['primary', 'secondary'] as $degree}
+            --cms-{$device['code']}-{$degree}-width: {$device[$degree . 'Width'] ? ($device[$degree . 'Width'] . 'px') : 'initial'};
+            --cms-{$device['code']}-{$degree}-height: {$device[$degree . 'Height']}px;
+            {foreach ['margin', 'border', 'padding'] as $property}
+                {foreach ['top', 'right', 'bottom', 'left'] as $side}
+                    --cms-{$device['code']}-{$degree}-{$property}-{$side}: {$device[$degree . ucfirst($property) . ucfirst($side)]}px;
+                {/}
+            {/}
+            --cms-{$device['code']}-{$degree}-flex-direction: {$device[$degree . 'FlexDirection'] ? 'column' : 'initial'};
+            --cms-{$device['code']}-{$degree}-menu-item-flex-direction: {$device[$degree . 'MenuItemFlexDirection'] ? 'column' : 'initial'};
+            --cms-{$device['code']}-{$degree}-icon-display: {$device[$degree . 'IconDisplay'] ? 'inline-block' : 'none'};
+            --cms-{$device['code']}-{$degree}-icon-font-size: {$device[$degree . 'IconFontSize'] ? ($device[$degree . 'IconFontSize'] . 'px') : 'initial'};
+            --cms-{$device['code']}-{$degree}-span-display: {$device[$degree . 'SpanDisplay'] ? 'inline-block' : 'none'};
+            --cms-{$device['code']}-{$degree}-span-font-size: {$device[$degree . 'SpanFontSize'] ? ($device[$degree . 'SpanFontSize'] . 'px') : 'initial'};
+        {/}
+
+        --cms-{$device['code']}-content-width: {$device['contentWidth'] ? ($device['contentWidth'] . 'px') : '100%'};
+
+        {foreach ['margin', 'border', 'padding'] as $property}
+            {foreach ['top', 'right', 'bottom', 'left'] as $side}
+                --cms-{$device['code']}-content-{$property}-{$side}: {$device['content' . ucfirst($property) . ucfirst($side)]}px;
+            {/}
+        {/}
+    {/}
+}
+{foreach $l['devices'] as $device}
+    @media{if $device['minWidth']} (min-width: {$device['minWidth'] . 'px'}){/}{if $device['minWidth'] && $device['maxWidth']} and{/}{if $device['maxWidth']} (max-width: {$device['maxWidth'] . 'px'}){/} {
+        {include 'orientation-' . $device['primaryOrientation'] . $device['secondaryOrientation'] . '.latte', device: $device}
+        :root {
+            --cms-layout-width: var(--cms-{$device['code']}-layout-width);
+            --cms-layout-margin: var(--cms-{$device['code']}-layout-margin-top) var(--cms-{$device['code']}-layout-margin-right) var(--cms-{$device['code']}-layout-margin-bottom) var(--cms-{$device['code']}-layout-margin-left);
+            --cms-layout-border-width: var(--cms-{$device['code']}-layout-border-top) var(--cms-{$device['code']}-layout-border-right) var(--cms-{$device['code']}-layout-border-bottom) var(--cms-{$device['code']}-layout-border-left);
+
+            {foreach ['primary', 'secondary'] as $degree}
+                --cms-layout-{$degree}-justify-content: {if $device[$degree . 'Orientation'] === 'v' || $device[$degree . 'FlexDirection']}initial{else}flex-end{/};
+                --cms-{$degree}-height: var(--cms-{$device['code']}-{$degree}-height);
+                --cms-{$degree}-width: var(--cms-{$device['code']}-{$degree}-width);
+                --cms-{$degree}-margin: var(--cms-{$device['code']}-{$degree}-margin-top) var(--cms-{$device['code']}-{$degree}-margin-right) var(--cms-{$device['code']}-{$degree}-margin-bottom) var(--cms-{$device['code']}-{$degree}-margin-left);
+                {foreach ['top', 'right', 'bottom', 'left'] as $side}
+                    --cms-{$degree}-padding-{$side}: var(--cms-{$device['code']}-{$degree}-padding-{$side});
+                {/}
+                {foreach ['top', 'right', 'bottom', 'left'] as $side}
+                    --cms-{$degree}-border-{$side}: var(--cms-{$device['code']}-{$degree}-border-{$side});
+                {/}
+                --cms-{$degree}-padding: var(--cms-{$device['code']}-{$degree}-padding-top) var(--cms-{$device['code']}-{$degree}-padding-right) var(--cms-{$device['code']}-{$degree}-padding-bottom) var(--cms-{$device['code']}-{$degree}-padding-left);
+                --cms-{$degree}-border-width: var(--cms-{$device['code']}-{$degree}-border-top) var(--cms-{$device['code']}-{$degree}-border-right) var(--cms-{$device['code']}-{$degree}-border-bottom) var(--cms-{$device['code']}-{$degree}-border-left);
+                --cms-{$degree}-justify-content: var(--cms-{$device['code']}-{$degree}-justify-content);
+                --cms-{$degree}-flex-direction: {if $device[$degree . 'Orientation'] === 'v'}column{else}var(--cms-{$device['code']}-{$degree}-flex-direction){/};
+                --cms-{$degree}-menu-item-flex-direction: var(--cms-{$device['code']}-{$degree}-menu-item-flex-direction);
+                --cms-{$degree}-icon-display: var(--cms-{$device['code']}-{$degree}-icon-display);
+                --cms-{$degree}-icon-font-size: var(--cms-{$device['code']}-{$degree}-icon-font-size);
+                --cms-{$degree}-span-display: var(--cms-{$device['code']}-{$degree}-span-display);
+                --cms-{$degree}-span-font-size: var(--cms-{$device['code']}-{$degree}-span-font-size);
+            {/}
+
+            --cms-content-width: var(--cms-{$device['code']}-content-width);
+            --cms-content-margin: var(--cms-{$device['code']}-content-margin-top) var(--cms-{$device['code']}-content-margin-right) var(--cms-{$device['code']}-content-margin-bottom) var(--cms-{$device['code']}-content-margin-left);
+            {foreach ['top', 'right', 'bottom', 'left'] as $side}
+                --cms-content-padding-{$side}: var(--cms-{$device['code']}-content-padding-{$side});
+            {/}
+            --cms-content-padding: var(--cms-{$device['code']}-content-padding-top) var(--cms-{$device['code']}-content-padding-right) var(--cms-{$device['code']}-content-padding-bottom) var(--cms-{$device['code']}-content-padding-left);
+            --cms-content-border-width: var(--cms-{$device['code']}-content-border-top) var(--cms-{$device['code']}-content-border-right) var(--cms-{$device['code']}-content-border-bottom) var(--cms-{$device['code']}-content-border-left);
+        }
+        {include 'collapsed.latte' device: $device}
+    }
+{/}
+
+{foreach $l['themes'] as $th}
+    [data-bs-theme={$th['code']}] {
+        --cms-body-bg: var(--cms-{$th['code']}-body-bg);
+        --cms-heading-color: var(--cms-{$th['code']}-heading-color);
+        --cms-color: var(--cms-{$th['code']}-color);
+        --cms-color-rgb: var(--cms-{$th['code']}-color-rgb);
+        --cms-link-color: var(--cms-{$th['code']}-link-color);
+        --cms-link-color-rgb: var(--cms-{$th['code']}-link-color-rgb);
+        --cms-active-link-color: var(--cms-{$th['code']}-active-link-color);
+        --cms-active-link-color-rgb: var(--cms-{$th['code']}-active-link-color-rgb);
+        --cms-layout-bg: var(--cms-{$th['code']}-layout-bg);
+        --cms-layout-border-color: var(--cms-{$th['code']}-layout-border-color);
+        {foreach ['primary', 'secondary'] as $degree}
+            --cms-{$degree}-bg: var(--cms-{$th['code']}-{$degree}-bg);
+            --cms-{$degree}-border-color: var(--cms-{$th['code']}-{$degree}-border-color);
+            --cms-{$degree}-link-color: var(--cms-{$th['code']}-{$degree}-link-color);
+            --cms-{$degree}-active-link-bg: var(--cms-{$th['code']}-{$degree}-active-link-bg);
+            --cms-{$degree}-active-link-color: var(--cms-{$th['code']}-{$degree}-active-link-color);
+            --cms-{$degree}-color: var(--cms-{$th['code']}-{$degree}-color);
+        {/}
+        --cms-content-bg: var(--cms-{$th['code']}-content-bg);
+        --cms-content-bg-rgb: var(--cms-{$th['code']}-content-bg-rgb);
+        --cms-content-border-color: var(--cms-{$th['code']}-content-border-color);
+    }
+{/}
+
+{*bootstrap*}
+
+:root, [data-bs-theme=light] {
+    {foreach $colors as $color}
+        --bs-{$color}: var(--cms-{$color});
+        --bs-{$color}-rgb: var(--cms-{$color}-rgb);
+        --bs-{$color}-text-emphasis: var(--cms-{$color}-dark);
+        --bs-{$color}-bg-subtle: var(--cms-{$color}-lighter);
+        --bs-{$color}-border-subtle: var(--cms-{$color}-light);
+        .btn-subtle-{$color} {
+            border: 0;
+            color: #fff;
+            background-color: var(--cms-{$color});
+            &:active {
+                color: #fff;
+            }
+            &:hover, &.active {
+                background-color: var(--cms-{$color}-dark);
+            }
+        }
+    {/}
+}
+
+[data-bs-theme=dark] {
+    {foreach $colors as $color}
+        {continueIf in_array($color, ['dark', 'light'], true)}
+        --bs-{$color}: var(--cms-{$color});
+        --bs-{$color}-rgb: var(--cms-{$color}-rgb);
+        --bs-{$color}-text-emphasis: var(--cms-{$color}-light);
+        --bs-{$color}-bg-subtle: var(--cms-{$color}-darker);
+        --bs-{$color}-border-subtle: var(--cms-{$color}-dark);
+        .btn-subtle-{$color} {
+            &:hover, &.active {
+                background-color: var(--cms-{$color}-light);
+            }
+        }
+    {/}
+    --bs-light: var(--cms-dark);
+    --bs-light-rgb: var(--cms-dark-rgb);
+    --bs-light-text-emphasis: var(--cms-dark-light);
+    --bs-light-bg-subtle: var(--cms-dark-darker);
+    --bs-light-border-subtle: var(--cms-dark-dark);
+    --bs-dark: var(--cms-light);
+    --bs-dark-rgb: var(--cms-light-rgb);
+    --bs-dark-text-emphasis: var(--cms-light-light);
+    --bs-dark-bg-subtle: var(--cms-light-darker);
+    --bs-dark-border-subtle: var(--cms-light-dark);
+    --bs-white: #000000;
+    --bs-white-rgb: 0, 0, 0;
+    --bs-black: #ffffff;
+    --bs-black-rgb: 255, 255, 255;
+}
+
+{foreach $colors as $color}
+    .btn-{$color} {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: var(--bs-{$color});
+        --bs-btn-border-color: var(--bs-{$color});
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: var(--bs-{$color}-text-emphasis);
+        --bs-btn-hover-border-color: var(--bs-{$color}-text-emphasis);
+        --bs-btn-focus-shadow-rgb: var(--bs-{$color}-rgb);
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: var(--bs-{$color}-text-emphasis);
+        --bs-btn-active-border-color: var(--bs-{$color}-text-emphasis);
+        --bs-btn-disabled-color: #fff;
+        --bs-btn-disabled-bg: var(--bs-{$color}-bg-subtle);
+        --bs-btn-disabled-border-color: var(--bs-{$color}-bg-subtle);
+    }
+    .btn-outline-{$color} {
+        --bs-btn-color: var(--bs-{$color});
+        --bs-btn-border-color: var(--bs-{$color});
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: var(--bs-{$color});
+        --bs-btn-hover-border-color: var(--bs-{$color});
+        --bs-btn-focus-shadow-rgb: var(--bs-{$color}-rgb);
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: var(--bs-{$color});
+        --bs-btn-active-border-color: var(--bs-{$color});
+        --bs-btn-disabled-color: var(--bs-{$color}-bg-subtle);
+        --bs-btn-disabled-border-color: var(--bs-{$color}-bg-subtle);
+    }
+    .table-{$color} {
+        --bs-table-bg: var(--bs-{$color}-bg-subtle);
+        --bs-table-border-color: var(--bs-{$color}-border-subtle);
+        --bs-table-striped-bg: var(--bs-{$color}-border-subtle);
+        --bs-table-active-bg: var(--bs-{$color}-border-subtle);
+        --bs-table-hover-bg: var(--bs-{$color}-border-subtle);
+    }
+{/}
+
+.was-validated .form-control:valid, .form-control.is-valid {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23{$l['success']|replace:'#',''}' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+}
+
+.was-validated .form-select:valid:not([multiple]):not([size]), .was-validated .form-select:valid:not([multiple])[size="1"], .form-select.is-valid:not([multiple]):not([size]), .form-select.is-valid:not([multiple])[size="1"] {
+    --bs-form-select-bg-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23{$l['success']|replace:'#',''}' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+}
+
+.form-control.is-valid, .was-validated .form-control:valid {
+    +.selectize-control {
+        .selectize-input {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23{$l['success']|replace:'#',''}' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        }
+    }
+}
+
+.was-validated .form-control:invalid, .form-control.is-invalid {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23{$l['danger']|replace:'#',''}'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+}
+
+.was-validated .form-select:invalid:not([multiple]):not([size]), .was-validated .form-select:invalid:not([multiple])[size="1"], .form-select.is-invalid:not([multiple]):not([size]), .form-select.is-invalid:not([multiple])[size="1"] {
+    --bs-form-select-bg-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23{$l['danger']|replace:'#',''}'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+}
+
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    +.selectize-control {
+        .selectize-input {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23{$l['danger']|replace:'#',''}'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        }
+    }
+}
+

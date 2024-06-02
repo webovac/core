@@ -1,0 +1,10 @@
+{templateType Stepapo\Dataset\UI\ItemList\ItemListTemplate}
+<div n:class="$control->getDataset()->getItemListClass()" n:snippet>
+	{if $control->getDataset()->getCollectionCount() > 0}
+		{foreach $items as $item}
+			{control 'item-' . $item->getValue($idColumnName)}
+		{/}
+	{else}
+		{_$text->noResults}
+	{/}
+</div>

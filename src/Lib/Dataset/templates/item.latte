@@ -1,0 +1,16 @@
+{templateType Stepapo\Dataset\UI\Item\ItemTemplate}
+<tr n:class="$itemClassCallback ? $itemClassCallback($item)" n:snippet>
+	{foreach $columns as $column}
+		{continueIf $column->hide}
+		{var $value = $control->getValue($column->columnName)}
+		<td n:class="'text-' . str_replace('left', 'start', str_replace('right', 'end', $column->align)), $column->class ? $column->class"{if $column->width} style="width: {$column->width}px"{/}>
+			{include
+				$column->valueTemplateFile ?: $control->getSelectedView()->valueTemplate,
+				'entity' => $item,
+				'value' => $value,
+				'column' => $column,
+				'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a) ?: $a, $column->link->args) : null
+			}
+		</td>
+	{/}
+</tr>
