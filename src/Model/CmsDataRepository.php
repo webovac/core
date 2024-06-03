@@ -51,9 +51,9 @@ abstract class CmsDataRepository
 	public function createFromConfig(array $config, string $mode = self::MODE_INSTALL, ?int $iteration = null): IEntity
 	{
 		$data = $this->createDataFromConfig($config, $mode, $iteration);
-		$entity = $this->getOrmRepository()->createFromData($data, getOriginalByData: true);
+		$entity = $this->getOrmRepository()->createFromData($data, mode: $mode, getOriginalByData: true);
 		if (method_exists($this->getOrmRepository(), 'postProcessFromData')) {
-			return $this->getOrmRepository()->postProcessFromData($data, $entity);
+			return $this->getOrmRepository()->postProcessFromData($data, $entity, mode: $mode);
 		}
 		return $entity;
 	}

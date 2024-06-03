@@ -14,6 +14,7 @@ use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
+use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\Web\WebModuleData;
 
 
@@ -161,7 +162,7 @@ trait CorePageRepository
 	}
 
 
-	public function postProcessFromData(PageData $data, Page $page, ?Person $person = null): Page
+	public function postProcessFromData(PageData $data, Page $page, ?Person $person = null, string $mode = CmsDataRepository::MODE_INSTALL): Page
 	{
 		/** jaký typ stránky redirectPage? WIP */
 //		if (isset($data->redirectPage)) {
@@ -175,16 +176,16 @@ trait CorePageRepository
 //					]
 //			);
 //		}
-		if ($data->type === Page::TYPE_INTERNAL_LINK) {
-			if ($data->targetPage) {
+		if (isset($data->type) && $data->type === Page::TYPE_INTERNAL_LINK) {
+			if (isset($data->targetPage)) {
 				$page->targetPage = $this->getBy(
 					is_int($data->targetPage)
 						? ['id' => $data->targetPage]
 						: [
-							ICollection::AND,
-							['name' => $data->targetPage],
-							[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
-						]
+						ICollection::AND,
+						['name' => $data->targetPage],
+						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+					]
 				);
 			}
 		}
@@ -193,10 +194,10 @@ trait CorePageRepository
 				is_int($data->parentPage)
 					? ['id' => $data->parentPage]
 					: [
-						ICollection::AND,
-						['name' => $data->parentPage],
-						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
-					]
+					ICollection::AND,
+					['name' => $data->parentPage],
+					[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+				]
 			);
 		}
 		$this->persist($page);
@@ -206,7 +207,7 @@ trait CorePageRepository
 
 	public function postProcessModulePageFromData(WebModuleData $data, Page $page): Page
 	{
-		if ($data->parentPage) {
+		if (isset($data->parentPage)) {
 			$page->parentPage = $this->getBy(
 				is_int($data->parentPage)
 					? ['id' => $data->parentPage]

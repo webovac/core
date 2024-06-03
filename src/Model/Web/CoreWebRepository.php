@@ -17,6 +17,7 @@ use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
+use Webovac\Core\Model\CmsDataRepository;
 
 
 trait CoreWebRepository
@@ -27,7 +28,7 @@ trait CoreWebRepository
 	}
 
 
-	public function postProcessFromData(WebData $data, Web $web, ?Person $person = null): Web
+	public function postProcessFromData(WebData $data, Web $web, ?Person $person = null, string $mode = CmsDataRepository::MODE_INSTALL): Web
 	{
 		if (isset($data->homePage)) {
 			$web->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['web' => $web, 'name' => $data->homePage]);
@@ -48,11 +49,11 @@ trait CoreWebRepository
 		if (isset($data->pages)) {
 			/** @var Page $page */
 			foreach ($web->pages->toCollection()->findBy(['module' => null]) as $page) {
-				if (!array_key_exists($page->name, $data->pages)) {
+				if (!array_key_exists($page->name, $data->pages) && $mode === CmsDataRepository::MODE_INSTALL) {
 					$this->getModel()->getRepository(PageRepository::class)->delete($page);
 					continue;
 				}
-				$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page);
+				$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, mode: $mode);
 			}
 		}
 		if (isset($data->webModules)) {

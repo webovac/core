@@ -89,10 +89,12 @@ trait CorePageDataRepository
 	{
 		/** @var PageData $data */
 		$data = $this->processor->process($this->getSchema($mode), $config);
-		foreach ($data->translations as $key => $translationConfig) {
-			$translationConfig['language'] ??= $key;
-			unset($data->translations[$key]);
-			$data->translations[$translationConfig['language']] = $this->pageTranslationDataRepository->createDataFromConfig($translationConfig, $mode);
+		if (isset($data->translations)) {
+			foreach ($data->translations as $key => $translationConfig) {
+				$translationConfig['language'] ??= $key;
+				unset($data->translations[$key]);
+				$data->translations[$translationConfig['language']] = $this->pageTranslationDataRepository->createDataFromConfig($translationConfig, $mode);
+			}
 		}
 		if (isset($data->pages)) {
 			foreach ($data->pages as $key => $pageConfig) {

@@ -59,6 +59,7 @@ abstract class CmsRepository extends Repository
 		?string $parentName = null,
 		?Person $person = null,
 		?\DateTimeInterface $date = null,
+		string $mode = CmsDataRepository::MODE_INSTALL,
 		bool $getOriginalByData = false,
 	): IEntity
 	{
@@ -140,7 +141,7 @@ abstract class CmsRepository extends Repository
 					$ids[] = $related->getPersistedId();
 				}
 				/** Promazat zrušené entity */
-				if ($original) {
+				if ($original && $mode === CmsDataRepository::MODE_INSTALL) {
 					foreach ($entity->$name as $related) {
 						if (!in_array($related->getPersistedId(), $ids, true)) {
 							$relatedRepository->delete($related);

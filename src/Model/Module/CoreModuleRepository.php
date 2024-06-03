@@ -8,6 +8,8 @@ use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
 use App\Model\Person\Person;
+use Webovac\Core\Model\CmsData;
+use Webovac\Core\Model\CmsDataRepository;
 
 
 trait CoreModuleRepository
@@ -18,16 +20,16 @@ trait CoreModuleRepository
 	}
 
 
-	public function postProcessFromData(ModuleData $data, Module $module, ?Person $person = null): Module
+	public function postProcessFromData(ModuleData $data, Module $module, ?Person $person = null, string $mode = CmsDataRepository::MODE_INSTALL): Module
 	{
 		$module->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['module' => $module, 'name' => $data->homePage]);
 		$this->persist($module);
 		foreach ($module->pages as $page) {
-			if (!array_key_exists($page->name, $data->pages)) {
+			if (!array_key_exists($page->name, $data->pages) && $mode === CmsDataRepository::MODE_INSTALL) {
 				$this->getModel()->getRepository(PageRepository::class)->delete($page);
 				continue;
 			}
-			$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page);
+			$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, $mode);
 		}
 		return $module;
 	}
