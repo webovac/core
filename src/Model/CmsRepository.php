@@ -82,7 +82,7 @@ abstract class CmsRepository extends Repository
 				$relatedRepository = $this->getModel()->getRepository($property->relationship->repository);
 				if (isset($property->types[File::class])) {
 					$entity->$name = $data->$name instanceof FileData ? $relatedRepository->getById($data->id) : ($this->getModel()->getRepository(FileRepository::class)->createFile($data->$name, $person, $name === 'iconFile') ?: $entity->$name);
-				} elseif (is_int($data->$name)) {
+				} elseif (is_numeric($data->$name)) {
 					$entity->$name = $data->$name ? $relatedRepository->getById($data->$name) : null;
 				} elseif (method_exists($relatedRepository, 'getByData')) {
 					$entity->$name = $data->$name ? $relatedRepository->getByData($data->$name, $entity) : null;
@@ -93,7 +93,7 @@ abstract class CmsRepository extends Repository
 				foreach ($data->$name as $item) {
 					if (isset($property->types[File::class])) {
 						$array[] = $this->getModel()->getRepository(FileRepository::class)->createFile($item, $person);
-					} elseif (is_int($item)) {
+					} elseif (is_numeric($item)) {
 						if ($item = $relatedRepository->getById($item)) {
 							$array[] = $item;
 						}

@@ -9,10 +9,10 @@ use Nette\PhpGenerator\ClassType;
 use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
 use Webovac\Core\Command\Command;
+use Webovac\Core\Command\InstallCommand;
 use Webovac\Core\Core;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Lib\Dir;
-use Webovac\Core\Command\InstallCommand;
 use Webovac\Core\Module;
 
 

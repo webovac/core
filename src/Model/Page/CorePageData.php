@@ -9,9 +9,9 @@ use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslationData;
 use Nette\Http\FileUpload;
 use Webovac\Core\Attribute\DefaultValue;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
+use Webovac\Core\Lib\CmsUser;
 
 
 trait CorePageData
