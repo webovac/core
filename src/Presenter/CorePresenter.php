@@ -70,6 +70,12 @@ trait CorePresenter
 	public function injectCoreStartup(): void
 	{
 		$this->onStartup[] = function () {
+			if ($this->cmsUser->isLoggedIn()) {
+				if (!$this->cmsUser->getPerson()) {
+					$this->cmsUser->logout();
+					$this->redirect('this');
+				}
+			}
 			$this->addComponents(Core::getModuleName(), CoreControl::getComponentList());
 			$this->setupCoreOrmEvents();
 			$this->languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
@@ -133,10 +139,6 @@ trait CorePresenter
 				}
 			}
 			if ($this->cmsUser->isLoggedIn()) {
-				if (!$this->cmsUser->getPerson()) {
-					$this->cmsUser->logout();
-					$this->redirect('this');
-				}
 				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
 				if ($this->preference && $this->preference->language) {
 					if ($this->lang !== $this->preference->language->shortcut) {
