@@ -43,30 +43,38 @@ trait CoreWebDataRepository
 		$data = $this->processor->process($this->getSchema($mode), $config);
 		$rank = 1;
 		$this->processWebModules($data);
-		foreach ($data->tree as $parentPage => $pages) {
-			if (!$this->checkPage($parentPage, $data)) {
-				continue;
+		if (isset($data->tree)) {
+			foreach ($data->tree as $parentPage => $pages) {
+				if (!$this->checkPage($parentPage, $data)) {
+					continue;
+				}
+				$this->processTree((array) $pages, $parentPage, $rank++, $data);
 			}
-			$this->processTree((array) $pages, $parentPage, $rank++, $data);
 		}
-		foreach ($data->translations as $key => $translationConfig) {
-			$translationConfig['language'] ??= $key;
-			unset($data->translations[$key]);
-			$data->translations[$translationConfig['language']] = $this->webTranslationDataRepository->createDataFromConfig($translationConfig, $mode);
+		if (isset($data->translations)) {
+			foreach ($data->translations as $key => $translationConfig) {
+				$translationConfig['language'] ??= $key;
+				unset($data->translations[$key]);
+				$data->translations[$translationConfig['language']] = $this->webTranslationDataRepository->createDataFromConfig($translationConfig, $mode);
+			}
 		}
-		foreach ($data->pages as $key => $pageConfig) {
-			if (!$this->checkPage($key, $data)) {
+		if (isset($data->pages)) {
+			foreach ($data->pages as $key => $pageConfig) {
+				if (!$this->checkPage($key, $data)) {
+					unset($data->pages[$key]);
+					continue;
+				}
+				$pageConfig['name'] ??= $key;
 				unset($data->pages[$key]);
-				continue;
+				$data->pages[$pageConfig['name']] = $this->pageDataRepository->createDataFromConfig($pageConfig, $mode);
 			}
-			$pageConfig['name'] ??= $key;
-			unset($data->pages[$key]);
-			$data->pages[$pageConfig['name']] = $this->pageDataRepository->createDataFromConfig($pageConfig, $mode);
 		}
-		foreach ($data->webModules as $key => $webModuleConfig) {
-			$webModuleConfig['name'] ??= $key;
-			unset($data->webModules[$key]);
-			$data->webModules[$webModuleConfig['name']] = $this->processor->process(CmsExpect::fromDataClass(WebModuleData::class, $mode), $webModuleConfig);
+		if (isset($data->webModules)) {
+			foreach ($data->webModules as $key => $webModuleConfig) {
+				$webModuleConfig['name'] ??= $key;
+				unset($data->webModules[$key]);
+				$data->webModules[$webModuleConfig['name']] = $this->processor->process(CmsExpect::fromDataClass(WebModuleData::class, $mode), $webModuleConfig);
+			}
 		}
 		return $data;
 	}
@@ -74,6 +82,9 @@ trait CoreWebDataRepository
 
 	private function processWebModules(WebData &$config): void
 	{
+		if (!isset($config->webModules)) {
+			return;
+		}
 		foreach ($config->webModules as $key => $moduleName) {
 			if (!$this->moduleChecker->isModuleInstalled(lcfirst($moduleName))) {
 				unset($config->webModules[$key]);
