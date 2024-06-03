@@ -25,11 +25,13 @@ trait CoreModuleRepository
 		$module->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['module' => $module, 'name' => $data->homePage]);
 		$this->persist($module);
 		foreach ($module->pages as $page) {
-			if (!array_key_exists($page->name, $data->pages) && $mode === CmsDataRepository::MODE_INSTALL) {
-				$this->getModel()->getRepository(PageRepository::class)->delete($page);
+			if (!array_key_exists($page->name, $data->pages)) {
+				if ($mode === CmsDataRepository::MODE_INSTALL) {
+					$this->getModel()->getRepository(PageRepository::class)->delete($page);
+				}
 				continue;
 			}
-			$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, $mode);
+			$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, mode: $mode);
 		}
 		return $module;
 	}

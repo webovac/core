@@ -49,8 +49,10 @@ trait CoreWebRepository
 		if (isset($data->pages)) {
 			/** @var Page $page */
 			foreach ($web->pages->toCollection()->findBy(['module' => null]) as $page) {
-				if (!array_key_exists($page->name, $data->pages) && $mode === CmsDataRepository::MODE_INSTALL) {
-					$this->getModel()->getRepository(PageRepository::class)->delete($page);
+				if (!array_key_exists($page->name, $data->pages)) {
+					if ($mode === CmsDataRepository::MODE_INSTALL) {
+						$this->getModel()->getRepository(PageRepository::class)->delete($page);
+					}
 					continue;
 				}
 				$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, mode: $mode);
