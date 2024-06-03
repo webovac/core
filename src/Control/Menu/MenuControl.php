@@ -8,6 +8,8 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
+use Nette\Application\Request;
+use Nette\Http\IRequest;
 use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\Dir;
@@ -29,6 +31,7 @@ class MenuControl extends BaseControl
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
 		private FileUploader $fileUploader,
+		private IRequest $request,
 	) {}
 
 
@@ -52,6 +55,7 @@ class MenuControl extends BaseControl
 			$this->template->availableTranslations[$translationData->language] = $translationData->language;
 		}
 		$this->template->wwwDir = $this->dir->getWwwDir();
+		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
 		$this->template->render(__DIR__ . '/menu.latte');
 	}
 

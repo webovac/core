@@ -205,9 +205,15 @@ trait CorePresenter
 				$this->template->bodyClasses[] = "primary-m-collapsed";
 				$this->template->bodyClasses[] = "secondary-m-collapsed";
 			}
+			if ($this->request->getPresenterName() === 'Error4xx') {
+				$file = __DIR__ . "/../Presenter/Error4xx/{$this->getParameter('exception')->getCode()}.latte";
+				$main = file_get_contents(is_file($file) ? $file : __DIR__ . '/4xx.latte');
+			} else {
+				$main = $this->pageTranslation->content ?: '';
+			}
 			$this->template->getLatte()->setLoader(new StringLoader([
 				'@layout.file' => file_get_contents($this->dir->getAppDir() . "/Presenter/@layout.latte"),
-				'main.file' => $this->pageTranslation->content ?: '',
+				'main.file' => $main,
 				'footer.file' => $this->webTranslationData->footer ?: '',
 			]))
 				->setSandboxMode()

@@ -30,7 +30,7 @@
 						<span>{$t->title}</span>
 					</a>
 				{elseif $p->type === App\Model\Page\Page::TYPE_SIGNAL}
-					<a href="{plink $p->targetSignal . '!'}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
+					<a href="{plink $p->targetSignal . '!'}" n:if="!$isError && !$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
 						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
 						<span>{$t->title}</span>
 					</a>
@@ -52,7 +52,7 @@
 				{/}
 			{/}
 			<hr>
-			<div class="languages" n:if="count($webData->translations) > 1">
+			<div class="languages" n:if="count($webData->translations) > 1 && !$isError">
 				{foreach $webData->translations as $translation}
 					{php $l = $dataModel->getLanguageData($translation->language)}
 					{ifset $availableTranslations[$l->id]}
@@ -72,7 +72,7 @@
 					{/}
 				{/}
 			</div>
-			<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && ($layoutData->themes) > 1">
+			<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && ($layoutData->themes) > 1 && !$isError">
 				{foreach $layoutData->themes as $theme}
 					<a href="{plink setTheme!, $theme->id}" data-tooltip="{$theme->getCollection('translations')->getBy(['language' => $languageData->id])->title}" data-tooltip-position="right">
 						<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $theme->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$theme->getCollection('translations')->getBy(['language' => $languageData->id])->title|truncate:1,''}</div>

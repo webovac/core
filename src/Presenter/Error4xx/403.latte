@@ -1,17 +1,13 @@
-{varType string $message}
-
 {block content}
 
-<h1 n:block=title>{_'Přístup zakázán'}</h1>
+<h1 n:block="title">Přístup odepřed / Access Denied</h1>
 
-<div class="alert-danger alert">
-	<p>
-		{if $message}
-			{$message}
-		{else}
-			{_'Pro přístup ke stránce nemáte dostatečná oprávnění.'}
-		{/}
-	</p>
-</div>
+<p>Na tuto stránku nemáte přístup.</p>
+
+<p>You do not have permission to view this page. </p>
 
 <p><small>error 403</small></p>
+
+<div>
+	<a href="javascript:history.back()" class="btn btn-primary"><i class="fas fa-fw fa-arrow-left"></i> Zpět</a>
+</div>
