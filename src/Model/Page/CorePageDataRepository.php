@@ -60,18 +60,16 @@ trait CorePageDataRepository
 			$pageData->web = $parentPageData ? $parentPageData->web : $page->web->id;
 			$pageData->host = $parentPageData ? $parentPageData->host : $page->web->host;
 			$pageData->basePath = $parentPageData ? $parentPageData->basePath : $page->web->basePath;
-			$pageData->accessSetups = array_merge($parentPageData->accessSetups ?? [], [$accessSetup]);
+			$pageData->accessSetups = $pageData->dontInheritAccessSetup ? [$accessSetup] : array_merge($parentPageData->accessSetups ?? [], [$accessSetup]);
 			$pageData->isHomePage = $page->isHomePage();
 			$pageData->navigationPage = $page->providesNavigation ? $page->id : ($parentPageData->navigationPage ?? null);
 			$pageData->buttonsPage = $page->providesButtons ? $page->id : ($parentPageData->buttonsPage ?? null);
 			$pageData->parentPages = array_merge($parentPageData->parentPages ?? [], $page->type === Page::TYPE_MODULE ? [] : [$page->id]);
 			$pageData->parentPage = $page->parentPage?->id ?: ($parentPageData->parentPage ?? null);
 			foreach ($page->translations as $translation) {
-				$parentPath = $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])
+				$parentPath = !$pageData->dontInheritPath && $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])
 					? $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])->fullPath
-					: '//'
-					. $pageData->host
-					. ($pageData->basePath ? ('/' . $pageData->basePath) : '');
+					: '//' . $pageData->host . ($pageData->basePath ? ('/' . $pageData->basePath) : '');
 				$pageData->translations[$translation->id]->fullPath = $parentPath . ($translation->path ? '/' . $translation->path : '');
 			}
 			if ($page->type === Page::TYPE_MODULE) {

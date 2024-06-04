@@ -33,6 +33,8 @@ trait CorePageData
 	public bool $providesNavigation;
 	public bool $providesButtons;
 	public bool $stretched;
+	public bool $dontInheritPath;
+	public bool $dontInheritAccessSetup;
 	public ?string $icon;
 	public ?string $repository;
 	public ?string $parentRepository;

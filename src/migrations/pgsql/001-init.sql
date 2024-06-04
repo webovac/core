@@ -116,6 +116,8 @@ CREATE TABLE "public"."page" (
     "has_parent_parameter" bool NOT NULL DEFAULT false,
     "parent_repository" varchar,
     "provides_buttons" bool NOT NULL DEFAULT false,
+    "dont_inherit_path" bool NOT NULL DEFAULT false,
+    "dont_inherit_access_setup" bool NOT NULL DEFAULT false,
     "target_page_id" int4,
     "target_parameter" varchar,
     "target_parent_parameter" varchar,

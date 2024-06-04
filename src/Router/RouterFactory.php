@@ -41,16 +41,22 @@ final class RouterFactory
 				if ($pageData->hasParentParameter) {
 					$translationData->fullPath = preg_replace('/(<id>)(\/.*\/<id>)/', '<parentId>$2', $translationData->fullPath);
 				}
+				if ($pageData->redirectPage) {
+					$p = $this->dataModel->pageRepository->getBy($pageData->web . '-' . $pageData->redirectPage);
+				} else {
+					$p = $pageData;
+				}
 				$routeList->addRoute(
 					mask: $translationData->fullPath,
 					metadata: [
 						'presenter' => 'Home',
 						'action' => 'default',
-						'host' => $pageData->host,
-						'basePath' => $pageData->basePath,
-						'pageName' => $pageData->name,
+						'host' => $p->host,
+						'basePath' => $p->basePath,
+						'pageName' => $p->name,
 						'lang' => $languageData->shortcut,
 					],
+					oneWay: $pageData->redirectPage ? true : false,
 				);
 			}
 		}

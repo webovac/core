@@ -23,6 +23,7 @@ class MenuItemControl extends BaseControl
 		private ?IEntity $entity,
 		private ?PageData $activePageData,
 		private string $context,
+		private bool $checkActive,
 		private DataModel $dataModel,
 	) {}
 
@@ -77,6 +78,10 @@ class MenuItemControl extends BaseControl
 			'buttons' => 'btn btn-outline-' . ($this->pageData->style ?: 'primary'),
 			'content' => 'g-col-6 g-col-lg-4 bg-' . ($this->pageData->style ? ($this->pageData->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->pageData->style ? ' btn btn-subtle-' . $this->pageData->style : ''),
-		} . (($this->pageData->id === $this->activePageData->id) || ($this->isActive($this->pageData->id)) ? ' active' : '');
+		} . (
+			($this->pageData->id === $this->presenter->pageData->id)
+				|| ($this->checkActive && $this->isActive($this->pageData->id))
+				|| ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage)) ? ' active' : ''
+			);
 	}
 }

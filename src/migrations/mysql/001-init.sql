@@ -128,6 +128,8 @@ CREATE TABLE `page`  (
     `has_parent_parameter` tinyint NOT NULL DEFAULT 0,
     `parent_repository` varchar(50) COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,
     `provides_buttons` tinyint NOT NULL DEFAULT 0,
+    `dont_inherit_path` tinyint NOT NULL DEFAULT 0,
+    `dont_inherit_access_setup` tinyint NOT NULL DEFAULT 0,
     `target_parameter` varchar(50) COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,
     `target_parent_parameter` varchar(50) COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,
     `target_url` varchar(50) COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,

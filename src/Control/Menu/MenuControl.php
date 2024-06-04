@@ -65,7 +65,7 @@ class MenuControl extends BaseControl
 	{
 		return new Multiplier(function ($id): MenuItemControl {
 			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
-			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'primary');
+			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'primary', $this->webData->homePage !== $pageData->id);
 		});
 	}
 }

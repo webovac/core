@@ -164,18 +164,17 @@ trait CorePageRepository
 
 	public function postProcessFromData(PageData $data, Page $page, ?Person $person = null, string $mode = CmsDataRepository::MODE_INSTALL): Page
 	{
-		/** jaký typ stránky redirectPage? WIP */
-//		if (isset($data->redirectPage)) {
-//			$page->redirectPage = $this->getBy(
-//				is_int($data->redirectPage)
-//					? ['id' => $data->redirectPage]
-//					: [
-//						ICollection::AND,
-//						['name' => $data->redirectPage],
-//						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
-//					]
-//			);
-//		}
+		if (isset($data->redirectPage)) {
+			$page->redirectPage = $this->getBy(
+				is_int($data->redirectPage)
+					? ['id' => $data->redirectPage]
+					: [
+						ICollection::AND,
+						['name' => $data->redirectPage],
+						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+					]
+			);
+		}
 		if (isset($data->type) && $data->type === Page::TYPE_INTERNAL_LINK) {
 			if (isset($data->targetPage)) {
 				$page->targetPage = $this->getBy(

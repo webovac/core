@@ -54,7 +54,7 @@ class NavigationControl extends BaseControl
 
 	public function createComponentActiveMenuItem(): MenuItemControl
 	{
-		return $this->menuItem->create($this->pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'secondary');
+		return $this->menuItem->create($this->pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'secondary', false);
 	}
 
 

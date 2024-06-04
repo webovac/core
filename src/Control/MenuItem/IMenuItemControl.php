@@ -16,5 +16,6 @@ interface IMenuItemControl
 		?IEntity $entity,
 		?PageData $activePageData,
 		string $context,
+		bool $checkActive = true,
 	): MenuItemControl;
 }

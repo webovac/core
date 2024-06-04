@@ -51,7 +51,7 @@ class ButtonsControl extends BaseControl
 
 	public function createComponentActiveMenuItem(): MenuItemControl
 	{
-		return $this->menuItem->create($this->pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'buttons');
+		return $this->menuItem->create($this->pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'buttons', false);
 	}
 
 
