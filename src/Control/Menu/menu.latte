@@ -20,36 +20,7 @@
 		<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>
 		<div class="menu" id="menu">
 			{foreach $pageDatas as $p}
-				{var $t = $p->getCollection('translations')->getBy(['language' => $languageData->id])}
-				{if $p->type === App\Model\Page\Page::TYPE_SEPARATOR}
-					<hr>
-				{elseif $p->type === App\Model\Page\Page::TYPE_INTERNAL_LINK}
-					{php $targetPage = $dataModel->getPageData($webData->id, $p->targetPage)}
-					<a href="{plink 'Home:', $targetPage->name, [$p->targetParentParameter, $p->targetParameter]}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style, ($targetPage->id === $pageData->id) || (!$targetPage->isHomePage && $control->isActive($p->targetPage)) ? active">
-						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title}</span>
-					</a>
-				{elseif $p->type === App\Model\Page\Page::TYPE_SIGNAL}
-					<a href="{plink $p->targetSignal . '!'}" n:if="!$isError && !$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
-						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title}</span>
-					</a>
-				{elseif $p->type === App\Model\Page\Page::TYPE_EXTERNAL_LINK}
-					<a href="{$p->targetUrl}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
-						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title}</span>
-					</a>
-				{elseif $p->type === App\Model\Page\Page::TYPE_TEXT}
-					<div n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style">
-						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title|replacePlaceholder}</span>
-					</div>
-				{else}
-					<a href="{plink Home:, $p->name}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-' . $p->style, ($p->id === $pageData->id) || (!$p->isHomePage && $control->isActive($p->id)) ? active">
-						<i n:if="$p->icon" class="{$layoutData->primaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title}</span>
-					</a>
-				{/}
+				{control 'menuItem-' . $p->id}
 			{/}
 			<hr>
 			<div class="languages" n:if="count($webData->translations) > 1 && !$isError">

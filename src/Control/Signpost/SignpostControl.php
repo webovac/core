@@ -8,8 +8,11 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
+use Nette\Application\UI\Multiplier;
 use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Control\MenuItem\IMenuItemControl;
+use Webovac\Core\Control\MenuItem\MenuItemControl;
 use Webovac\Core\Lib\ModuleChecker;
 
 
@@ -25,6 +28,7 @@ class SignpostControl extends BaseControl
 		private ?IEntity $entity,
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
+		private IMenuItemControl $menuItem,
 	) {}
 
 
@@ -39,5 +43,14 @@ class SignpostControl extends BaseControl
 		}
 		$this->template->entity = $this->entity;
 		$this->template->render(__DIR__ . '/signpost.latte');
+	}
+
+
+	public function createComponentMenuItem(): Multiplier
+	{
+		return new Multiplier(function ($id): MenuItemControl {
+			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
+			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'content');
+		});
 	}
 }

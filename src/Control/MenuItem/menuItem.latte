@@ -1,30 +1,12 @@
 {templateType Webovac\Core\Control\Navigation\NavigationTemplate}
 {if $pageData->type === App\Model\Page\Page::TYPE_SEPARATOR}
     <hr n:if="$context !== 'content'">
-{elseif $pageData->type === App\Model\Page\Page::TYPE_INTERNAL_LINK}
-    {php $targetPage = $dataModel->getPageData($webData->id, $pageData->targetPage)}
-    <a href="{plink 'Home:', $targetPage->name, [$pageData->targetParentParameter, $pageData->targetParameter]}" n:if="!$pageData->hideInNavigation" n:class="menu-item, $pageData->style ? 'btn btn-subtle-' . $pageData->style, ($targetPage->id === $activePageData->id) || ($control->isActive($pageData->targetPage)) ? active">
-        <i n:if="$pageData->icon" class="{$layoutData->{$context . 'Icon'} ?? fas} fa-fw fa-{$pageData->icon}"></i>
-        <span>{$pageTranslationData->title}</span>
-    </a>
-{elseif $pageData->type === App\Model\Page\Page::TYPE_SIGNAL}
-    <a href="{plink $pageData->targetSignal . '!'}" n:if="!$pageData->hideInNavigation" n:class="menu-item, $pageData->style ? 'btn btn-subtle-' . $pageData->style"{if $pageTranslationData->onclick} onclick="return confirm({$pageTranslationData->onclick})"{/}>
-        <i n:if="$pageData->icon" class="{$layoutData->{$context . 'Icon'} ?? fas} fa-fw fa-{$pageData->icon}"></i>
-        <span>{$pageTranslationData->title}</span>
-    </a>
-{elseif $pageData->type === App\Model\Page\Page::TYPE_EXTERNAL_LINK}
-    <a href="{$pageData->targetUrl}" n:if="!$pageData->hideInNavigation" n:class="menu-item, $pageData->style ? 'btn btn-subtle-' . $pageData->style"{if $pageTranslationData->onclick} onclick="return confirm({$pageTranslationData->onclick})"{/}>
-        <i n:if="$pageData->icon" class="{$layoutData->{$context . 'Icon'} ?? fas} fa-fw fa-{$pageData->icon}"></i>
-        <span>{$pageTranslationData->title}</span>
-    </a>
-{elseif $pageData->type === App\Model\Page\Page::TYPE_TEXT}
-    <div n:if="!$pageData->hideInNavigation" n:class="menu-item, $pageData->style ? 'btn btn-subtle-' . $pageData->style">
-        <i n:if="$pageData->icon" class="{$layoutData->{$context . 'Icon'} ?? fas} fa-fw fa-{$pageData->icon}"></i>
-        <span>{$pageTranslationData->title|replacePlaceholder}</span>
-    </div>
 {else}
-    <a href="{plink Home:, $pageData->name, $pageData->hasParameter ? $entity?->getParameter($languageData) : null, $pageData->hasParentParameter ? $entity?->getParentParameter($languageData) : null}" n:if="!$pageData->hideInNavigation" n:class="menu-item, $pageData->style ? 'btn btn-subtle-' . $pageData->style, ($pageData->id === $activePageData->id) || ($control->isActive($pageData->id)) ? active">
-        <i n:if="$pageData->icon" class="{$layoutData->{$context . 'Icon'} ?? fas} fa-fw fa-{$pageData->icon}"></i>
-        <span>{$pageTranslationData->title}</span>
+    <a n:tag="$tag"{if $href} href="{$href}"{/} n:if="!$pageData->hideInNavigation" n:class="$class"{if $pageTranslationData->onclick} onclick="return confirm({$pageTranslationData->onclick})"{/}>
+        <div n:tag-if="$iconHasWrapper" n:if="$pageData->icon" class="p-2 rounded-5 d-inline-block bg-white" style="width: 51px; height: 51px;">
+            <i n:class="$layoutData[$context . 'Icon'] ?? fas, fa-fw, 'fa-' . $pageData->icon, $context === 'content' ? fs-2, $context === 'content' ? lh-sm"></i>
+        </div>
+        <h3 n:if="$context === 'content'" class="mt-2 mb-0">{$pageTranslationData->title}</h3>
+        <span n:else>{$pageTranslationData->title|replacePlaceholder}</span>
     </a>
 {/}

@@ -8,10 +8,11 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Nette\Application\Request;
-use Nette\Http\IRequest;
+use Nette\Application\UI\Multiplier;
 use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Control\MenuItem\IMenuItemControl;
+use Webovac\Core\Control\MenuItem\MenuItemControl;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
@@ -31,7 +32,7 @@ class MenuControl extends BaseControl
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
 		private FileUploader $fileUploader,
-		private IRequest $request,
+		private IMenuItemControl $menuItem,
 	) {}
 
 
@@ -60,8 +61,11 @@ class MenuControl extends BaseControl
 	}
 
 
-	public function isActive(int $pageId)
+	public function createComponentMenuItem(): Multiplier
 	{
-		return $this->getParent()->getComponent('breadcrumbs')->isActivePage($pageId);
+		return new Multiplier(function ($id): MenuItemControl {
+			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
+			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'primary');
+		});
 	}
 }

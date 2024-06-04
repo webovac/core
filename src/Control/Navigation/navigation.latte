@@ -1,56 +1,15 @@
 {templateType Webovac\Core\Control\Navigation\NavigationTemplate}
-<div class="mobile-collapsed wrapper navigation-wrapper secondary-navigation-wrapper" n:if="$thisPageData->providesNavigation" n:snippet>
+<div class="mobile-collapsed wrapper navigation-wrapper secondary-navigation-wrapper" n:if="$activePageData->providesNavigation" n:snippet>
 	<div class="navigation secondary-navigation">
 		<div class="title">
-			<i n:if="$thisPageData->icon" class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$thisPageData->icon}"></i>
+			<i n:if="$activePageData->icon" class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$activePageData->icon}"></i>
 			<span>{$title}</span>
 		</div>
 		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw fas fa-bars"></i></a>
 		<div class="menu" id="submenu">
-			<a href="{plink Home:, $thisPageData->name, $thisPageData->hasParameter ? $entity?->getParameter($languageData) : null, $thisPageData->hasParentParameter ? $entity?->getParentParameter($languageData) : null}" n:class="menu-item, $thisPageData->id === $presenter->pageData->id ? active">
-				<i n:if="$thisPageData->icon" class="{$layoutData->secondaryIcon ?? fas} fa-fw fa-{$thisPageData->icon}"></i>
-				<span>{$thisPageData->getCollection('translations')->getBy(['language' => $languageData->id])->title ?: 'Přehled'}</span>
-			</a>
-			{*
-			{foreach $childPages as $childPage}
-				{if $childPage->type === App\Model\Page\Page::TYPE_SEPARATOR}
-					<hr>
-				{else}
-					<a href="{plink Home:, $childPage->name, $childPage->hasParameter ? $entity?->getParameter($languageData) : null, $childPage->hasParentParameter ? $entity?->getParentParameter($languageData) : null}" n:if="!$childPage->hideInNavigation" n:class="menu-item, $control->isActive($childPage) ? active"><i n:if="$childPage->icon" class="fas fa-fw fa-{$childPage->icon}"></i> <span>{$childPage->getTranslation($languageData)->title|replacePlaceholder}</span></a>
-				{/}
-			{/}
-			*}
+			{control activeMenuItem}
 			{foreach $pageDatas as $p}
-				{var $t = $p->getCollection('translations')->getBy(['language' => $languageData->id])}
-				{if $p->type === App\Model\Page\Page::TYPE_SEPARATOR}
-					<hr>
-				{elseif $p->type === App\Model\Page\Page::TYPE_INTERNAL_LINK}
-					{php $targetPage = $dataModel->getPageData($web->id, $p->targetPage)}
-					<a href="{plink 'Home:', $targetPage->name, [$p->targetParentParameter, $p->targetParameter]}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-subtle-' . $p->style, ($targetPage->id === $thisPageData->id) || ($control->isActive($p->targetPage)) ? active">
-						<i n:if="$p->icon" class="{$layoutData->secondaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title}</span>
-					</a>
-				{elseif $p->type === App\Model\Page\Page::TYPE_SIGNAL}
-					<a href="{plink $p->targetSignal . '!'}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-subtle-' . $p->style"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
-						<i n:if="$p->icon" class="{$layoutData->secondaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title}</span>
-					</a>
-				{elseif $p->type === App\Model\Page\Page::TYPE_EXTERNAL_LINK}
-					<a href="{$p->targetUrl}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-subtle-' . $p->style"{if $t->onclick} onclick="return confirm({$t->onclick})"{/}>
-						<i n:if="$p->icon" class="{$layoutData->secondaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title}</span>
-					</a>
-				{elseif $p->type === App\Model\Page\Page::TYPE_TEXT}
-					<div n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-subtle-' . $p->style">
-						<i n:if="$p->icon" class="{$layoutData->secondaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title|replacePlaceholder}</span>
-					</div>
-				{else}
-					<a href="{plink Home:, $p->name, $p->hasParameter ? $entity?->getParameter($languageData) : null, $p->hasParentParameter ? $entity?->getParentParameter($languageData) : null}" n:if="!$p->hideInNavigation" n:class="menu-item, $p->style ? 'btn btn-subtle-' . $p->style, ($p->id === $thisPageData->id) || ($control->isActive($p->id)) ? active">
-						<i n:if="$p->icon" class="{$layoutData->secondaryIcon ?? fas} fa-fw fa-{$p->icon}"></i>
-						<span>{$t->title}</span>
-					</a>
-				{/}
+				{control 'menuItem-' . $p->id}
 			{/}
 		</div>
 	</div>

@@ -141,4 +141,27 @@
 			flex-grow: 1;
 		}
 	}
+	body {
+		padding-bottom: 48px;
+		background: var(--cms-content-bg)
+	}
+	.primary-navigation .menu {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 48px;
+		background: var(--cms-content-bg);
+		z-index: 100;
+	}
+}
+
+@media (display-mode: standalone) and (orientation: portrait) {
+	body {
+		padding-bottom: 98px;
+	}
+	.primary-navigation .menu {
+		height: 48px;
+		margin-bottom: 50px;
+	}
 }
