@@ -50,7 +50,7 @@ class SignpostControl extends BaseControl
 	{
 		return new Multiplier(function ($id): MenuItemControl {
 			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
-			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'content');
+			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'signpost');
 		});
 	}
 }

@@ -41,7 +41,8 @@ class MenuItemControl extends BaseControl
 		$this->template->href = $this->getHref();
 		$this->template->class = $this->getClass();
 		$this->template->tag = $this->pageData->type === Page::TYPE_TEXT ? 'div' : 'a';
-		$this->template->iconHasWrapper = $this->context === 'content';
+		$this->template->iconHasWrapper = $this->context === 'signpost';
+		$this->template->iconStyle = $this->dataModel->layoutRepository->getById($this->webData->layout)->{$this->context . 'Icon'} ?? 'fas';
 		$this->template->render(__DIR__ . '/menuItem.latte');
 	}
 
@@ -76,7 +77,7 @@ class MenuItemControl extends BaseControl
 	{
 		return match($this->context) {
 			'buttons' => 'btn btn-outline-' . ($this->pageData->style ?: 'primary'),
-			'content' => 'g-col-6 g-col-lg-4 bg-' . ($this->pageData->style ? ($this->pageData->style . '-subtle') : 'light') .  ' p-3',
+			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->pageData->style ? ($this->pageData->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->pageData->style ? ' btn btn-subtle-' . $this->pageData->style : ''),
 		} . (
 			($this->pageData->id === $this->presenter->pageData->id)

@@ -25,7 +25,6 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string $code
  * @property string $color
  * @property string $complementaryColor
- * // * @property string $colorRgb {virtual}
  * @property string $iconBackgroundColor {default '#ffffff'}
  * @property string $host
  * @property string $basePath {default ''}
