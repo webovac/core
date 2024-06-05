@@ -3,18 +3,16 @@
 	<div class="navigation primary-navigation">
 		<a class="logo clearfix" href="{plink Home:, $homePageData->name}">
 			{if $layoutData->code === 'cvut'}
-				<img src="/dist/images/logo-lion.svg">
+				<img src="{$baseUrl}/dist/images/logo-lion.svg">
 				<div class="logo-wrapper d-none d-xxl-block">
-					<img src="/dist/images/logo-cvut-text.svg">
+					<img src="{$baseUrl}/dist/images/logo-cvut-text.svg">
 					<span n:class="logo-text, strlen($title) > 4 ? logo-text-long : logo-text-short">{$title}</span>
 				</div>
 				<div class="logo-wrapper d-block d-xxl-none">
-					<img src="/dist/images/logo-fsv-text.svg">
+					<img src="{$baseUrl}/dist/images/logo-fsv-text.svg">
 				</div>
-			{elseif !isset($logoUrl)}
-				<img src="/dist/images/logo-lion.svg">
 			{else}
-				<img src="/{$logoUrl}">
+				<img src="{$baseUrl}/{$logoUrl}">
 			{/}
 		</a>
 		<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>

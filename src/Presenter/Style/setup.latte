@@ -203,13 +203,11 @@
         --bs-{$color}-border-subtle: var(--cms-{$color}-light);
         .btn-subtle-{$color} {
             border: 0;
-            color: #fff;
-            background-color: var(--cms-{$color});
-            &:active {
-                color: #fff;
-            }
-            &:hover, &.active {
-                background-color: var(--cms-{$color}-dark);
+            color: var(--cms-{$color}-dark);
+            background-color: var(--cms-{$color}-lighter);
+            &:active, &:hover, &.active {
+                background-color: var(--cms-{$color}-light);
+                color: var(--cms-{$color}-darker);
             }
         }
     {/}
@@ -224,8 +222,11 @@
         --bs-{$color}-bg-subtle: var(--cms-{$color}-darker);
         --bs-{$color}-border-subtle: var(--cms-{$color}-dark);
         .btn-subtle-{$color} {
-            &:hover, &.active {
-                background-color: var(--cms-{$color}-light);
+            color: var(--cms-{$color}-light);
+            background-color: var(--cms-{$color}-darker);
+            &:active, &:hover, &.active {
+                background-color: var(--cms-{$color}-dark);
+                color: var(--cms-{$color}-lighter);
             }
         }
     {/}

@@ -68,7 +68,12 @@ trait CoreWebRepository
 			}
 		}
 		if (isset($data->iconFile) && (($data->iconFile instanceof FileUpload && $data->iconFile->hasFile()) || is_string($data->iconFile))) {
+			$web->iconFile = $this->styleFile($web->iconFile, $data->complementaryColor, $data->color, $person, true);
 			$web->largeIconFile = $this->createLargeIcon($web, $data, $person);
+			$this->persist($web);
+		}
+		if (isset($data->logoFile) && (($data->logoFile instanceof FileUpload && $data->logoFile->hasFile()) || is_string($data->logoFile))) {
+			$web->logoFile = $this->styleFile($web->logoFile, $data->complementaryColor, $data->color, $person);
 			$this->persist($web);
 		}
 		return $web;
@@ -78,6 +83,22 @@ trait CoreWebRepository
 	public function getByData(WebData $data): ?Web
 	{
 		return $this->getBy(['host' => $data->host, 'basePath' => $data->basePath]);
+	}
+
+
+	public function styleFile(File $file, string $primary, string $secondary, ?Person $person = null, bool $forceSquare = false): File
+	{
+		if ($file->type !== File::TYPE_SVG) {
+			return $file;
+		}
+		$iconPath = $this->fileUploader->getPath($file->identifier);
+		$content = file_get_contents($iconPath);
+		$content = preg_replace_callback_array([
+			'/<!--.*-->/' => fn() => "",
+			'/<style>.*<\/style>/' => fn() => "<style>.fa-primary{fill:$primary}.fa-secondary{fill:$secondary}</style>",
+		], $content);
+		$upload = $this->getModel()->getRepository(FileRepository::class)->createFileUploadFromContent($content, $file);
+		return $this->getModel()->getRepository(FileRepository::class)->createFile($upload, $person, $forceSquare);
 	}
 
 

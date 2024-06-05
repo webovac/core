@@ -25,6 +25,7 @@ trait CoreFileRepository
 		if (is_string($upload)) {
 			$upload = $this->createFileUploadFromString($upload);
 		}
+		bdump($upload);
 		if (!$upload->hasFile()) {
 			return null;
 		}
@@ -115,6 +116,21 @@ trait CoreFileRepository
 		$name = Random::generate(8);
 		$path = $this->dir->getTempDir() . '/' . $name;
 		$size = file_put_contents($path, base64_decode($upload));
+		return new FileUpload([
+			'name' => $name,
+			'full_path' => $path,
+			'size' => $size ?: 0,
+			'tmp_name' => $path,
+			'error' => $size ? UPLOAD_ERR_OK : UPLOAD_ERR_NO_FILE,
+		]);
+	}
+
+
+	public function createFileUploadFromContent(string $content, ?File $originalFile = null): FileUpload
+	{
+		$name = $originalFile?->name ?: Random::generate(8);
+		$path = $this->dir->getTempDir() . '/' . $name;
+		$size = file_put_contents($path, $content);
 		return new FileUpload([
 			'name' => $name,
 			'full_path' => $path,

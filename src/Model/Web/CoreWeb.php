@@ -50,6 +50,11 @@ use Nextras\Orm\Relationships\OneHasMany;
  */
 trait CoreWeb
 {
+	public const DEFAULT_COLOR = '#2196f3';
+	public const DEFAULT_COMPLEMENTARY_COLOR = '#cccccc';
+	public const DEFAULT_ICON_BACKGROUND_COLOR = '#d3eafd';
+
+
 	public function getTitle(LanguageData $language): string
 	{
 		return $this->getTranslation($language)->title;
