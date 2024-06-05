@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Control\MenuItem;
 
 
@@ -37,12 +39,11 @@ class MenuItemControl extends BaseControl
 		$this->template->entity = $this->entity;
 		$this->template->activePageData = $this->activePageData;
 		$this->template->context = $this->context;
-		$this->template->dataModel = $this->dataModel;
 		$this->template->href = $this->getHref();
 		$this->template->class = $this->getClass();
 		$this->template->tag = $this->pageData->type === Page::TYPE_TEXT ? 'div' : 'a';
 		$this->template->iconHasWrapper = $this->context === 'signpost';
-		$this->template->iconStyle = $this->dataModel->layoutRepository->getById($this->webData->layout)->{$this->context . 'Icon'} ?? 'fas';
+		$this->template->iconStyle = $this->dataModel->layoutRepository->getById($this->webData->layout)->{$this->context . 'Icon'};
 		$this->template->render(__DIR__ . '/menuItem.latte');
 	}
 

@@ -38,7 +38,6 @@ class NavigationControl extends BaseControl
 			return;
 		}
 		$this->template->pageDatas = $this->dataModel->getChildPageDatas($this->webData, $this->pageData, $this->languageData);
-		$this->template->dataModel = $this->dataModel;
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$this->template->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
 		}

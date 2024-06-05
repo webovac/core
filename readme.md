@@ -10,6 +10,7 @@ Recommended way is to initialize project from [webovac/project](https://www.gith
 
 ```bash
 composer require webovac/core
+php vendor/webovac/core/src/install.php
 ```
 2. config.neon
 

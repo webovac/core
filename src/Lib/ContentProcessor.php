@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib;
 
 
 class ContentProcessor
 {
-	private const ALLOWED_TAGS = [
+	private const array ALLOWED_TAGS = [
 		'h1', 'h2', 'h3', 'p', 'b', 'i', 'a', 'br',
 		'ol', 'ul', 'li',
 		'table', 'thead', 'tbody', 'th', 'tr', 'td',

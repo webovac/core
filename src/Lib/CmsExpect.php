@@ -1,19 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib;
 
 use Nette\Schema\Elements\Structure;
 use Nette\Schema\Elements\Type;
 use Nette\Schema\Helpers;
 use Nette\Utils\Validators;
+use ReflectionClass;
 use Webovac\Core\Attribute\DefaultValue;
 use Webovac\Core\Model\CmsDataRepository;
+
 
 class CmsExpect
 {
 	public static function fromDataClass(string $class, string $mode, array $items = []): Structure
 	{
-		$rc = new \ReflectionClass($class);
+		$rc = new ReflectionClass($class);
 		$props = $rc->hasMethod('__construct')
 			? $rc->getMethod('__construct')->getParameters()
 			: $rc->getProperties();

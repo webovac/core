@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\WebTranslation;
 
+use DateTimeInterface;
+
 
 trait CoreWebTranslationData
 {
@@ -13,6 +15,6 @@ trait CoreWebTranslationData
 	public ?string $footer;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
-	public ?\DateTimeInterface $createdAt;
-	public ?\DateTimeInterface $updatedAt;
+	public ?DateTimeInterface $createdAt;
+	public ?DateTimeInterface $updatedAt;
 }

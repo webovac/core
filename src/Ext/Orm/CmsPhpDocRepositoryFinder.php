@@ -8,6 +8,7 @@ use Nette\Utils\Reflection;
 use Nextras\Orm\Bridges\NetteDI\PhpDocRepositoryFinder;
 use Nextras\Orm\Exception\InvalidStateException;
 use Nextras\Orm\Exception\RuntimeException;
+use Nextras\Orm\Model\IModel;
 use Nextras\Orm\Model\Model;
 use Nextras\Orm\Repository\IRepository;
 use ReflectionClass;
@@ -17,9 +18,9 @@ class CmsPhpDocRepositoryFinder extends PhpDocRepositoryFinder
 {
 	/**
 	 * @return array<string, string>
-	 * @phpstan-param class-string<\Nextras\Orm\Model\IModel> $modelClass
+	 * @phpstan-param class-string<IModel> $modelClass
 	 * @phpstan-return array<string, class-string<IRepository>>
-	 */
+	 */ 
 	public function findRepositories(string $modelClass): array
 	{
 		if ($modelClass === Model::class) {
@@ -48,7 +49,7 @@ class CmsPhpDocRepositoryFinder extends PhpDocRepositoryFinder
 				/** @phpstan-var class-string<IRepository> $type */
 				$type = Reflection::expandClassName($type, $reflection);
 				if (!class_exists($type)) {
-					throw new RuntimeException("Repository '{$type}' does not exist.");
+					throw new RuntimeException("Repository '$type' does not exist.");
 				}
 
 				$rc = new ReflectionClass($type);

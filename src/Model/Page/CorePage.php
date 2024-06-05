@@ -70,15 +70,14 @@ use Webovac\Core\Lib\CmsUser;
  */
 trait CorePage
 {
-	public const TYPE_PAGE = 'page';
-	public const TYPE_SIGNAL = 'signal';
-	public const TYPE_INTERNAL_LINK = 'internalLink';
-	public const TYPE_EXTERNAL_LINK = 'externalLink';
-	public const TYPE_TEXT = 'text';
-	public const TYPE_SEPARATOR = 'separator';
-	public const TYPE_MODULE = 'module';
-
-	public const TYPES = [
+	public const string TYPE_PAGE = 'page';
+	public const string TYPE_SIGNAL = 'signal';
+	public const string TYPE_INTERNAL_LINK = 'internalLink';
+	public const string TYPE_EXTERNAL_LINK = 'externalLink';
+	public const string TYPE_TEXT = 'text';
+	public const string TYPE_SEPARATOR = 'separator';
+	public const string TYPE_MODULE = 'module';
+	public const array TYPES = [
 		Page::TYPE_PAGE => 'Stránka',
 		Page::TYPE_SIGNAL => 'Akce',
 		Page::TYPE_INTERNAL_LINK => 'Interní odkaz',
@@ -87,29 +86,25 @@ trait CorePage
 		Page::TYPE_SEPARATOR => 'Oddělovač',
 		Page::TYPE_MODULE => 'Modul',
 	];
-
-	public const ACCESS_FOR_ALL = 'all';
-	public const ACCESS_FOR_LOGGED = 'logged';
-	public const ACCESS_FOR_SPECIFIC = 'specific';
-	public const ACCESS_FOR_GUEST = 'guest';
-
-	public const ACCESS_FORS = [
+	public const string ACCESS_FOR_ALL = 'all';
+	public const string ACCESS_FOR_LOGGED = 'logged';
+	public const string ACCESS_FOR_SPECIFIC = 'specific';
+	public const string ACCESS_FOR_GUEST = 'guest';
+	public const array ACCESS_FORS = [
 		Page::ACCESS_FOR_ALL => 'Všechny',
 		Page::ACCESS_FOR_LOGGED => 'Všechny přihlášené',
 		Page::ACCESS_FOR_SPECIFIC => 'Některé přihlášené',
 		Page::ACCESS_FOR_GUEST => 'Jen nepřihlášené',
 	];
-
-	public const STYLE_PRIMARY = 'primary';
-	public const STYLE_SECONDARY = 'secondary';
-	public const STYLE_SUCCESS = 'success';
-	public const STYLE_DANGER = 'danger';
-	public const STYLE_WARNING = 'warning';
-	public const STYLE_INFO = 'info';
-	public const STYLE_LIGHT = 'light';
-	public const STYLE_DARK = 'dark';
-
-	public const STYLES = [
+	public const string STYLE_PRIMARY = 'primary';
+	public const string STYLE_SECONDARY = 'secondary';
+	public const string STYLE_SUCCESS = 'success';
+	public const string STYLE_DANGER = 'danger';
+	public const string STYLE_WARNING = 'warning';
+	public const string STYLE_INFO = 'info';
+	public const string STYLE_LIGHT = 'light';
+	public const string STYLE_DARK = 'dark';
+	public const array STYLES = [
 		Page::STYLE_PRIMARY => 'Primary',
 		Page::STYLE_SECONDARY => 'Secondary',
 		Page::STYLE_SUCCESS => 'Success',
@@ -150,14 +145,14 @@ trait CorePage
 	}
 
 
-	/** @return Page[]&ICollection */
+	/** @return Page[]&ICollection */ 
 	public function getPages(): ICollection
 	{
 		return $this->childPages->toCollection();
 	}
 
 
-	/** @return ICollection<Page> */
+	/** @return ICollection<Page> */ 
 	public function getPagesForMenu(): ICollection
 	{
 		$pages = [];

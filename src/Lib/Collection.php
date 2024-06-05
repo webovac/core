@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib;
 
+use ArrayObject;
+use InvalidArgumentException;
 use Webovac\Core\Model\CmsData;
 
 
-class Collection extends \ArrayObject
+class Collection extends ArrayObject
 {
 	public function findAll(): Collection
 	{
@@ -20,7 +24,7 @@ class Collection extends \ArrayObject
 			function (CmsData $entity) use ($conds) {
 				foreach ($conds as $property => $value) {
 					if (!property_exists($entity, $property)) {
-						throw new \InvalidArgumentException;
+						throw new InvalidArgumentException;
 					}
 					if ($entity->$property !== $value) {
 						return false;

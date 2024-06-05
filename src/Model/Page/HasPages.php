@@ -13,7 +13,6 @@ interface HasPages extends IEntity
 {
 	/** @return ICollection<Page> */
 	function getPages(): ICollection;
-
 	/** @return ICollection<Page> */
 	function getPagesForMenu(): ICollection;
 }

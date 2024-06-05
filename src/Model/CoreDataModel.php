@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model;
 
 use App\Model\Language\LanguageData;
@@ -70,7 +72,7 @@ trait CoreDataModel
 	}
 
 
-	/** @return Collection<PageData> */
+	/** @return Collection<PageData> */ 
 	public function getRootPageDatas(WebData $webData, LanguageData $languageData): Collection
 	{
 		$array = (array) $this->pageRepository->findAll();
@@ -100,7 +102,7 @@ trait CoreDataModel
 	}
 
 
-	/** @return Collection<PageData> */
+	/** @return Collection<PageData> */ 
 	public function getChildPageDatas(WebData $webData, PageData $parentPageData, LanguageData $languageData): Collection
 	{
 		$array = (array) $this->pageRepository->findAll();

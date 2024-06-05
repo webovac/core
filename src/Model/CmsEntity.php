@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model;
 
 use App\Model\Language\LanguageData;
+use DateTimeImmutable;
 use Nette\Caching\Cache;
 use Nette\Utils\Type;
 use Nextras\Orm\Entity\Entity;
@@ -11,6 +14,8 @@ use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
+use ReflectionClass;
+use ReflectionProperty;
 
 
 abstract class CmsEntity extends Entity
@@ -33,13 +38,13 @@ abstract class CmsEntity extends Entity
 	abstract public function getDataClass(): string;
 
 
-	public function getParameter(?LanguageData $language = null): mixed
+	public function getParameter(?LanguageData $languageData = null): mixed
 	{
 		return $this->getPersistedId();
 	}
 
 
-	public function getParentParameter(?LanguageData $language = null): mixed
+	public function getParentParameter(?LanguageData $languageData = null): mixed
 	{
 		return null;
 	}
@@ -49,7 +54,7 @@ abstract class CmsEntity extends Entity
 	{
 		$new = $this->toArray(ToArrayConverter::RELATIONSHIP_AS_ID);
 		foreach ($old as $key => $value) {
-			if ($value instanceof \DateTimeImmutable) {
+			if ($value instanceof DateTimeImmutable) {
 				if ($value != $new[$key]) {
 					return true;
 				}
@@ -65,7 +70,7 @@ abstract class CmsEntity extends Entity
 
 	public function getData(): CmsData
 	{
-		$class = new \ReflectionClass($this->getDataClass());
+		$class = new ReflectionClass($this->getDataClass());
 		$data = $class->newInstance();
 		foreach ($class->getProperties() as $p) {
 			$name = $p->name;
@@ -90,14 +95,14 @@ abstract class CmsEntity extends Entity
 	}
 
 
-	private function shouldGetData(\ReflectionProperty $property): bool
+	private function shouldGetData(ReflectionProperty $property): bool
 	{
 		$types = Type::fromReflection($property)->getTypes();
 		foreach ($types as $type) {
 			if (!$type->isClass()) {
 				continue;
 			}
-			if ((new \ReflectionClass($type->getSingleName()))->isSubclassOf(CmsData::class)) {
+			if ((new ReflectionClass($type->getSingleName()))->isSubclassOf(CmsData::class)) {
 				return true;
 			}
 		}

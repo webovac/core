@@ -6,16 +6,22 @@ namespace Webovac\Core\Control\Navigation;
 
 use App\Control\BaseTemplate;
 use App\Model\Language\Language;
+use App\Model\Language\LanguageData;
+use App\Model\Layout\LayoutData;
 use App\Model\Page\Page;
+use App\Model\Page\PageData;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
+use Webovac\Core\Lib\Collection;
 
 
 class NavigationTemplate extends BaseTemplate
 {
 	public ?string $title;
-	public Page $page;
-	public Language $language;
+	public ?PageData $pageData;
+	public LanguageData $languageData;
+	public LayoutData $layoutData;
 	public ?IEntity $entity;
-	/** @var ICollection<Page>|array */ public ICollection|array $childPages;
+	public PageData $activePageData;
+	/** @var Collection<PageData> */ public Collection $pageDatas;
 }

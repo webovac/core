@@ -41,14 +41,14 @@ trait CoreModule
 	}
 
 
-	/** @return ICollection<Page> */
+	/** @return ICollection<Page> */ 
 	public function getPages(): ICollection
 	{
 		return $this->pages->toCollection()->findBy(['parentPage' => null, 'web' => null]);
 	}
 
 
-	/** @return ICollection<Page> */
+	/** @return ICollection<Page> */ 
 	public function getPagesForMenu(): ICollection
 	{
 		return $this->getPages();

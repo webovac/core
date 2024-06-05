@@ -6,6 +6,7 @@ namespace Webovac\Core\Model\Module;
 
 use App\Model\ModuleTranslation\ModuleTranslationData;
 use App\Model\Page\PageData;
+use DateTimeInterface;
 
 
 trait CoreModuleData
@@ -19,6 +20,6 @@ trait CoreModuleData
 	public array $tree;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
-	public ?\DateTimeInterface $createdAt;
-	public ?\DateTimeInterface $updatedAt;
+	public ?DateTimeInterface $createdAt;
+	public ?DateTimeInterface $updatedAt;
 }

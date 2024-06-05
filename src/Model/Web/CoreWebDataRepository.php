@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model\Web;
 
 use App\Model\Page\PageDataRepository;
@@ -86,11 +88,10 @@ trait CoreWebDataRepository
 			return;
 		}
 		foreach ($config->webModules as $key => $moduleName) {
+			unset($config->webModules[$key]);
 			if (!$this->moduleChecker->isModuleInstalled(lcfirst($moduleName))) {
-				unset($config->webModules[$key]);
 				continue;
 			}
-			unset($config->webModules[$key]);
 			$config->webModules[$moduleName] = [];
 		}
 	}
@@ -104,7 +105,7 @@ trait CoreWebDataRepository
 			if (!$relatedPage) {
 				return true;
 			}
-			return $this->checkPage(strpos($relatedPage, ':') !== false ? strtok($relatedPage, ':') : $relatedPage, $data);
+			return $this->checkPage(str_contains($relatedPage, ':') ? strtok($relatedPage, ':') : $relatedPage, $data);
 		}
 		if (isset($data->webModules[$page])) {
 			return $this->moduleChecker->isModuleInstalled(lcfirst($page));

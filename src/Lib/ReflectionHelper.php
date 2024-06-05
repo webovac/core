@@ -1,13 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib;
+
+use ReflectionNamedType;
+use ReflectionProperty;
 
 
 class ReflectionHelper
 {
-	public static function propertyHasType(\ReflectionProperty $prop, string $t): bool
+	public static function propertyHasType(ReflectionProperty $prop, string $t): bool
 	{
-		if ($prop->getType() instanceof \ReflectionNamedType) {
+		if ($prop->getType() instanceof ReflectionNamedType) {
 			return $prop->getType()->getName() === $t;
 		} else {
 			foreach ($prop->getType()->getTypes() as $type) {

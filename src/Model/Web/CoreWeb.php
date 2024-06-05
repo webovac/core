@@ -50,9 +50,9 @@ use Nextras\Orm\Relationships\OneHasMany;
  */
 trait CoreWeb
 {
-	public const DEFAULT_COLOR = '#2196f3';
-	public const DEFAULT_COMPLEMENTARY_COLOR = '#cccccc';
-	public const DEFAULT_ICON_BACKGROUND_COLOR = '#d3eafd';
+	public const string DEFAULT_COLOR = '#2196f3';
+	public const string DEFAULT_COMPLEMENTARY_COLOR = '#cccccc';
+	public const string DEFAULT_ICON_BACKGROUND_COLOR = '#d3eafd';
 
 
 	public function getTitle(LanguageData $language): string
@@ -67,14 +67,14 @@ trait CoreWeb
 	}
 
 
-	/** @return Page[]&ICollection */
+	/** @return Page[]&ICollection */ 
 	public function getPages(): ICollection
 	{
 		return $this->pages->toCollection()->findBy(['parentPage' => null]);
 	}
 
 
-	/** @return Page[]&ICollection */
+	/** @return Page[]&ICollection */ 
 	public function getPagesForMenu(): ICollection
 	{
 		$pages = [];

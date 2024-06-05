@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model\Page;
 
 use App\Model\Page\Page;
@@ -19,7 +21,7 @@ class AccessSetup
 	/**
 	 * @throws LoginRequiredException
 	 * @throws MissingPermissionException
-	 */
+	 */ 
 	public function checkRequirements(CmsUser $cmsUser): void
 	{
 		if ($this->accessFor === Page::ACCESS_FOR_ALL) {

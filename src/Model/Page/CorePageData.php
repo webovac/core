@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\Page;
 use App\Model\File\FileData;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslationData;
+use DateTimeInterface;
 use Nette\Http\FileUpload;
 use Webovac\Core\Attribute\DefaultValue;
 use Webovac\Core\Exception\LoginRequiredException;
@@ -48,9 +49,8 @@ trait CorePageData
 	public ?string $targetSignal;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
-	public ?\DateTimeInterface $createdAt;
-	public ?\DateTimeInterface $updatedAt;
-
+	public ?DateTimeInterface $createdAt;
+	public ?DateTimeInterface $updatedAt;
 	### for CachedModel ###
 
 	public ?int $web = null;
@@ -66,7 +66,7 @@ trait CorePageData
 	/**
 	 * @throws LoginRequiredException
 	 * @throws MissingPermissionException
-	 */
+	 */ 
 	public function checkRequirements(CmsUser $cmsUser): void
 	{
 		foreach ($this->accessSetups as $accessSetup) {

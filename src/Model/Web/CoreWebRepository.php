@@ -22,7 +22,7 @@ use Webovac\Core\Model\CmsDataRepository;
 
 trait CoreWebRepository
 {
-	public function getByParameter(mixed $parameter)
+	public function getByParameter(mixed $parameter): ?Web
 	{
 		return $this->getBy(['id' => $parameter]);
 	}
@@ -109,7 +109,7 @@ trait CoreWebRepository
 		$height = $iconFile->getHeight();
 		$largeIconFile = Image::fromBlank($width, $height, ImageColor::hex($data->iconBackgroundColor));
 		$largeIconFile->resize('133%', '133%');
-		$largeIconFile->place($iconFile, (int) round($width * 1 / 6), (int) round($height * 1 / 6));
+		$largeIconFile->place($iconFile, (int) round($width / 6), (int) round($height / 6));
 		$name = Random::generate(8) . '.png';
 		$path = $this->dir->getTempDir() . '/' . $name;
 		$largeIconFile->save($path, type: ImageType::PNG);

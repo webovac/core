@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Person;
 
+use DateTimeInterface;
+
 
 trait CorePersonData
 {
@@ -12,6 +14,6 @@ trait CorePersonData
 	public string $firstName;
 	public string $lastName;
 	/** @var string[] */ public array $roles;
-	public ?\DateTimeInterface $createdAt;
-	public ?\DateTimeInterface $updatedAt;
+	public ?DateTimeInterface $createdAt;
+	public ?DateTimeInterface $updatedAt;
 }

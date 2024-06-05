@@ -14,7 +14,7 @@ use Webovac\Core\Model\CmsDataRepository;
 
 trait CoreModuleRepository
 {
-	public function getByParameter(mixed $parameter)
+	public function getByParameter(mixed $parameter): ?Module
 	{
 		return $this->getBy(['id' => $parameter]);
 	}

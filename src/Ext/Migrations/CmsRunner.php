@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Ext\Migrations;
 
+use DateTime;
 use Nextras\Migrations\Engine\Finder;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\Entities\File;
@@ -16,14 +19,13 @@ use Nextras\Migrations\IPrinter;
 use Nextras\Migrations\LockException;
 use Nextras\Migrations\LogicException;
 
+
 class CmsRunner extends Runner
 {
 	private CmsOrderResolver $orderResolver;
 	private Finder $finder;
-	/** @var list<Group> */
-	private $groups = [];
-	/** @var array<string, IExtensionHandler> (extension => IExtensionHandler) */
-	private $extensionsHandlers = [];
+	/** @var list<Group> */ private $groups = [];
+	/** @var array<string, IExtensionHandler> (extension => IExtensionHandler) */ private $extensionsHandlers = [];
 
 
 	public function __construct(
@@ -56,7 +58,7 @@ class CmsRunner extends Runner
 
 	/**
 	 * @param  self::MODE_*   $mode
-	 */
+	 */ 
 	public function run(string $mode = self::MODE_CONTINUE, ?IConfiguration $config = null): void
 	{
 		if ($config) {
@@ -134,7 +136,7 @@ class CmsRunner extends Runner
 		$migration->group = $file->group->name;
 		$migration->filename = $file->name;
 		$migration->checksum = $file->checksum;
-		$migration->executedAt = new \DateTime('now');
+		$migration->executedAt = new DateTime('now');
 
 		$this->driver->insertMigration($migration);
 

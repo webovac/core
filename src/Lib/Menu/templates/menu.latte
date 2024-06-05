@@ -1,8 +1,0 @@
-{templateType Stepapo\Menu\UI\MenuTemplate}
-<div class="my-3" n:if="$buttons">
-	{foreach $buttons as $button}
-		<a n:if="!$button->hide" n:class="btn, 'btn-' . (!$presenter->isLinkCurrent($button->destination) && !$button->type ? 'outline-' : '') . ($button->type ? str_replace('red', 'danger',  str_replace('gray', 'secondary', $button->type)) : 'primary'), $button->ajax ? ajax"{if !$button->history} data-naja-history="off"{/}{if $button->confirmationText} data-confirmation="{$button->confirmationText}"{/} href="{plink $button->destination, (expand) $button->parameters}">
-			<i n:if="$button->icon" class="fas fa-fw fa-{$button->icon}"></i> {_$button->label}
-		</a>
-	{/}
-</div>

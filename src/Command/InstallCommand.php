@@ -1,13 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Command;
 
 use App\Model\DataModel;
 use App\Model\Orm;
+use LogicException;
 use Nette\Neon\Neon;
 use Nette\Utils\FileInfo;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
+use ReflectionClass;
 use Stepapo\Dataset\Utils;
 use Webovac\Core\InstallGroup;
 use Webovac\Core\Lib\CmsPrinter;
@@ -30,7 +34,7 @@ class InstallCommand implements Command
 		array $modules,
 	) {
 		foreach ($modules as $module) {
-			$reflection = new \ReflectionClass($module);
+			$reflection = new ReflectionClass($module);
 			if (file_exists($installPath = dirname($reflection->getFileName()) . '/install')) {
 				$this->paths[CmsDataRepository::MODE_INSTALL][] = $installPath;
 			}
@@ -59,7 +63,7 @@ class InstallCommand implements Command
 	}
 
 
-	private function install(InstallGroup $group, string $print = 'Installing', string $mode = CmsDataRepository::MODE_INSTALL)
+	private function install(InstallGroup $group, string $print = 'Installing', string $mode = CmsDataRepository::MODE_INSTALL): void
 	{
 		$files = Finder::findFiles("$group->name.*.neon")->from($this->paths[$mode] ?? [])->sortBy(
 			fn(FileInfo $a, FileInfo $b) => $a->getFilename() <=> $b->getFilename()
@@ -76,7 +80,7 @@ class InstallCommand implements Command
 		}
 		foreach ($files as $file) {
 			$text = str_replace(["$group->name.", ".neon"], "", $file->getFilename());
-			$config = (array) Neon::decode(FileSystem::read($file));
+			$config = (array) Neon::decode($file->read());
 			$this->printer->printText("- " . $text);
 			$parsedConfig = Utils::replaceParams($config, $this->params);
 			$this->dataModel->{$group->name . 'Repository'}->createFromConfig($parsedConfig, $mode, $group->iteration);
@@ -95,11 +99,11 @@ class InstallCommand implements Command
 				$cmp = $cmpA ? 1 : -1;
 			} elseif ($cmpA && $cmpB) {
 				$names = [
-					"{$a->name}",
-					"{$b->name}",
+					"$a->name",
+					"$b->name",
 				];
 				sort($names);
-				throw new \LogicException(sprintf(
+				throw new LogicException(sprintf(
 					'Unable to determine order for migrations "%s" and "%s".',
 					$names[0], $names[1]
 				));

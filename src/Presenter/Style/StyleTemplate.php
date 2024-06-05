@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Webovac\Core\Presenter\Style;
 
 use App\Control\BaseTemplate;
+use App\Model\Layout\LayoutData;
+use App\Model\Web\WebData;
 
 
 class StyleTemplate extends BaseTemplate
 {
-	public array $layout;
+	public ?WebData $webData;
+	public string $backgroundUrl;
+	public array $colors;
+	public LayoutData $l;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model;
 
 use App\Lib\OrmFunctions;
@@ -8,6 +10,7 @@ use App\Model\File\FileData;
 use App\Model\File\FileRepository;
 use App\Model\Person\Person;
 use Choowx\RasterizeSvg\Svg;
+use DateTimeInterface;
 use Nette\DI\Attributes\Inject;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
@@ -20,6 +23,7 @@ use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
 use Nextras\Orm\Repository\Repository;
+use ReflectionClass;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 
@@ -30,7 +34,7 @@ abstract class CmsRepository extends Repository
 	#[Inject] public Dir $dir;
 
 
-	public function createCollectionFunction(string $name)
+	public function createCollectionFunction(string $name): mixed
 	{
 		if (isset(OrmFunctions::CUSTOM_FUNCTIONS[$name])) {
 			return OrmFunctions::call($name);
@@ -40,13 +44,13 @@ abstract class CmsRepository extends Repository
 	}
 
 
-	public function getByParameter(mixed $parameter)
+	public function getByParameter(mixed $parameter): ?IEntity
 	{
 		return $this->getBy(['id' => $parameter]);
 	}
 
 
-	public function delete(IEntity $entity)
+	public function delete(IEntity $entity): void
 	{
 		$this->mapper->delete($entity);
 	}
@@ -58,7 +62,7 @@ abstract class CmsRepository extends Repository
 		?IEntity $parent = null,
 		?string $parentName = null,
 		?Person $person = null,
-		?\DateTimeInterface $date = null,
+		?DateTimeInterface $date = null,
 		string $mode = CmsDataRepository::MODE_INSTALL,
 		bool $getOriginalByData = false,
 	): IEntity
@@ -67,7 +71,7 @@ abstract class CmsRepository extends Repository
 			$original ??= method_exists($this, 'getByData') ? $this->getByData($data, $parent) : null;
 		}
 		$old = $original?->toArray(ToArrayConverter::RELATIONSHIP_AS_ID);
-		$class = new \ReflectionClass($this->getEntityClassName([]));
+		$class = new ReflectionClass($this->getEntityClassName([]));
 		$entity = $original ?: $class->newInstance();
 		$metadata = $entity->getMetadata();
 		foreach ($data as $name => $value) {
@@ -126,9 +130,6 @@ abstract class CmsRepository extends Repository
 		}
 
 		foreach ($data as $name => $value) {
-			if (!isset($data)) {
-				continue;
-			}
 			$property = $metadata->hasProperty($name) ? $metadata->getProperty($name) : null;
 			if (!$property) {
 				continue;

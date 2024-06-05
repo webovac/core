@@ -9,6 +9,7 @@ use App\Model\File\FileData;
 use App\Model\Page\PageData;
 use App\Model\Web\Web;
 use App\Model\WebTranslation\WebTranslationData;
+use DateTimeInterface;
 use Nette\Http\FileUpload;
 use Webovac\Core\Attribute\DefaultValue;
 
@@ -23,11 +24,9 @@ trait CoreWebData
 	#[DefaultValue(Web::DEFAULT_COMPLEMENTARY_COLOR)] public string $complementaryColor;
 	#[DefaultValue(Web::DEFAULT_ICON_BACKGROUND_COLOR)] public string $iconBackgroundColor;
 	#[DefaultValue('cs')] public int|string $defaultLanguage = 'cs';
-	#[DefaultValue(File::DEFAULT_ICON)]
-	public FileUpload|FileData|string|int|null $iconFile;
+	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $iconFile;
 	public FileUpload|FileData|string|int|null $largeIconFile;
-	#[DefaultValue(File::DEFAULT_ICON)]
-	public FileUpload|FileData|string|int|null $logoFile;
+	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $logoFile;
 	public FileUpload|FileData|string|int|null $backgroundFile;
 	/** @var array<WebTranslationData|array> */ public array $translations;
 	/** @var array<PageData|array> */ public array $pages;
@@ -36,8 +35,8 @@ trait CoreWebData
 	public array $tree;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
-	public ?\DateTimeInterface $createdAt;
-	public ?\DateTimeInterface $updatedAt;
+	public ?DateTimeInterface $createdAt;
+	public ?DateTimeInterface $updatedAt;
 
 
 	public function getStyleRouteMask(): string

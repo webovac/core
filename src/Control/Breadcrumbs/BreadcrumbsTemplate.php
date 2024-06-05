@@ -6,10 +6,11 @@ namespace Webovac\Core\Control\Breadcrumbs;
 
 use App\Control\BaseTemplate;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
 
 
 class BreadcrumbsTemplate extends BaseTemplate
 {
 	public array $crumbs;
-	public Web $web;
+	public WebData $webData;
 }

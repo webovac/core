@@ -24,6 +24,7 @@ use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\IRelationshipCollection;
+use stdClass;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Core;
@@ -42,7 +43,6 @@ trait CorePresenter
 	#[Persistent] public string $basePath;
 	#[Persistent] public string $lang;
 	#[Persistent] public string $backlink;
-
 	#[Inject] public ICoreControl $core;
 	#[Inject] public Orm $orm;
 	#[Inject] public Dir $dir;
@@ -51,7 +51,6 @@ trait CorePresenter
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public ModuleChecker $moduleChecker;
 	#[Inject] public Cache $cache;
-
 	private ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -195,10 +194,10 @@ trait CorePresenter
 			if ($this->moduleChecker->isModuleInstalled('style')) {
 				foreach ($this->layoutData->devices as $device) {
 					if ($device->primaryCollapsed) {
-						$this->template->bodyClasses[] = "primary-{$device->code}-collapsed";
+						$this->template->bodyClasses[] = "primary-$device->code-collapsed";
 					}
 					if ($device->secondaryCollapsed) {
-						$this->template->bodyClasses[] = "secondary-{$device->code}-collapsed";
+						$this->template->bodyClasses[] = "secondary-$device->code-collapsed";
 					}
 				}
 			} else {
@@ -221,7 +220,7 @@ trait CorePresenter
 					SecurityPolicy::createSafePolicy()
 						->allowTags(['include', 'control', 'plink', 'contentType'])
 						->allowFilters(['noescape', 'mTime'])
-						->allowProperties(\stdClass::class, SecurityPolicy::All)
+						->allowProperties(stdClass::class, SecurityPolicy::All)
 						->allowProperties(IEntity::class, SecurityPolicy::All)
 						->allowProperties(CmsData::class, SecurityPolicy::All)
 						->allowMethods(IEntity::class, SecurityPolicy::All)
@@ -248,7 +247,7 @@ trait CorePresenter
 	}
 
 
-	public function handleSetLanguage(string $language)
+	public function handleSetLanguage(string $language): void
 	{
 		$this->orm->preferenceRepository->setPreference(
 			webData: $this->webData,

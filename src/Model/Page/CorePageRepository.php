@@ -20,16 +20,16 @@ use Webovac\Core\Model\Web\WebModuleData;
 
 trait CorePageRepository
 {
-	public function getByParameters(mixed $parameter, mixed $parentParameter, ?string $parentRepository = null)
+	public function getByParameters(mixed $parameter, mixed $parentParameter, ?string $parentRepository = null): ?Page
 	{
-		if ($parentRepository && $parentRepository === 'module') {
+		if ($parentRepository === 'module') {
 			return $this->getBy(['module->id' => $parentParameter, 'id' => $parameter]);
 		}
 		return $this->getBy(['web->id' => $parentParameter, 'id' => $parameter]);
 	}
 
 
-	/** @return ICollection<Page> */
+	/** @return ICollection<Page> */ 
 	public function findRootPages(): ICollection
 	{
 		return $this->findBy(['parentPage' => null, 'web!=' => null])->orderBy('rank');
@@ -66,7 +66,7 @@ trait CorePageRepository
 	}
 
 
-	public function buildFromModule(Web $web, Module $module, ?Person $person = null, ?int $count = null)
+	public function buildFromModule(Web $web, Module $module, ?Person $person = null, ?int $count = null): void
 	{
 		if (!$web->modules->has($module)) {
 			$web->modules->add($module);
@@ -85,7 +85,7 @@ trait CorePageRepository
 	}
 
 
-	public function removeModule(Web $web, Module $module)
+	public function removeModule(Web $web, Module $module): void
 	{
 		$web->modules->remove($module);
 		$this->getModel()->persist($web);
@@ -145,6 +145,7 @@ trait CorePageRepository
 			$pageTranslation->language = $templatePageTranslation->language;
 			$pageTranslation->createdAt = $now;
 			$pageTranslation->createdByPerson = $person;
+			$this->getModel()->persist($pageTranslation);
 		}
 
 		foreach ($templatePage->authorizedPersons as $authorizedPerson) {
@@ -156,7 +157,6 @@ trait CorePageRepository
 		}
 
 		$this->persist($page);
-		$this->getModel()->persist($pageTranslation);
 
 		return $page;
 	}

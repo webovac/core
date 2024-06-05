@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib\Dataset;
 
 use Stepapo\Dataset\UI\Dataset\Dataset;

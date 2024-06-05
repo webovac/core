@@ -20,8 +20,7 @@ trait CoreTemplate
 	public array $flashes = [];
 
 
-	#[TemplateFilter]
-	public function replacePlaceholder(string $s): string
+	#[TemplateFilter] public function replacePlaceholder(string $s): string
 	{
 		return str_replace(
 			'{LOGGED_USER_NAME}',

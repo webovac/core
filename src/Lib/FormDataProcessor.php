@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib;
 
 use Nette\Forms\Container;
@@ -10,7 +12,7 @@ class FormDataProcessor
 {
 	/**
 	 * Merges default data with form data
-	 */
+	 */ 
 	public function process(Container $container, mixed $data, mixed $defaults): mixed
 	{
 		$components = $container->getComponents();

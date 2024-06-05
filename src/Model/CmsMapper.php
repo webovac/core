@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model;
 
 use Nextras\Orm\Entity\IEntity;
@@ -19,7 +21,7 @@ abstract class CmsMapper extends Mapper
 	}
 
 
-	public function delete(IEntity $entity)
+	public function delete(IEntity $entity): void
 	{
 		$this->connection->query('DELETE FROM %table WHERE id = %i', $this->getTableName(), $entity->getPersistedId());
 	}

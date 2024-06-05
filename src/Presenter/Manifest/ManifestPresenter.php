@@ -20,9 +20,7 @@ class ManifestPresenter extends Presenter
 	#[Persistent] public string $host;
 	#[Persistent] public string $basePath;
 	#[Persistent] public string $lang;
-
 	#[Inject] public DataModel $dataModel;
-
 	private ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model;
 
 use App\Model\Orm;
@@ -16,9 +18,8 @@ use Webovac\Core\Lib\ModuleChecker;
 
 abstract class CmsDataRepository
 {
-	public const MODE_INSTALL = 'install';
-	public const MODE_UPDATE = 'update';
-
+	public const string MODE_INSTALL = 'install';
+	public const string MODE_UPDATE = 'update';
 	/** @var Collection<CmsData> */ protected Collection $collection;
 	protected Processor $processor;
 
@@ -99,14 +100,14 @@ abstract class CmsDataRepository
 	}
 
 
-	/** @return Collection<CmsData> */
+	/** @return Collection<CmsData> */ 
 	public function findAll(): Collection
 	{
 		return $this->getCollection()->findAll();
 	}
 
 
-	/** @return Collection<CmsData> */
+	/** @return Collection<CmsData> */ 
 	public function findBy(array $conds): Collection
 	{
 		return $this->getCollection()->findBy($conds);

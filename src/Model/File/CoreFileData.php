@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model\File;
 
 use App\Model\File\File;
+use DateTimeInterface;
 
 
 trait CoreFileData
@@ -17,8 +20,8 @@ trait CoreFileData
 	public string $type;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
-	public ?\DateTimeInterface $createdAt;
-	public ?\DateTimeInterface $updatedAt;
+	public ?DateTimeInterface $createdAt;
+	public ?DateTimeInterface $updatedAt;
 
 
 	public function getDefaultIdentifier(): ?string

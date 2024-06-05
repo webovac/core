@@ -21,12 +21,10 @@ class StylePresenter extends Presenter
 {
 	#[Persistent] public string $host;
 	#[Persistent] public string $basePath;
-
 	#[Inject] public Orm $orm;
 	#[Inject] public DataModel $dataModel;
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public ModuleChecker $moduleChecker;
-
 	private ?WebData $webData;
 
 

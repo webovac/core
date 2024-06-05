@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Ext\Migrations;
 
 use Nextras\Migrations\Controllers\ConsoleController;

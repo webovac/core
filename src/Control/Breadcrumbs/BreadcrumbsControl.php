@@ -19,7 +19,6 @@ use Webovac\Core\Control\BaseControl;
 class BreadcrumbsControl extends BaseControl
 {
 	private array $crumbs = [];
-
 	private array $activePages = [];
 
 
@@ -29,7 +28,6 @@ class BreadcrumbsControl extends BaseControl
 		private LanguageData $languageData,
 		private ?IEntity $entity,
 		private ?IEntity $parentEntity,
-		private Orm $orm,
 		private DataModel $dataModel,
 	) {}
 
@@ -68,7 +66,7 @@ class BreadcrumbsControl extends BaseControl
 	}
 
 
-	public function addCrumb(string $title, $link)
+	public function addCrumb(string $title, $link): void
 	{
 		$this->crumbs[] = [
 			'title' => $title,
@@ -77,13 +75,13 @@ class BreadcrumbsControl extends BaseControl
 	}
 
 
-	public function addActivePage(int $id)
+	public function addActivePage(int $id): void
 	{
 		$this->activePages[] = $id;
 	}
 
 
-	public function isActivePage(int $pageId)
+	public function isActivePage(int $pageId): bool
 	{
 		return in_array($pageId, $this->activePages, true);
 	}

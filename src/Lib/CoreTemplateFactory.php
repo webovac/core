@@ -14,7 +14,6 @@ trait CoreTemplateFactory
 {
 	#[Inject] public Dir $dir;
 	#[Inject] public ModuleChecker $moduleChecker;
-
 	public function injectCoreCreate(): void
 	{
 		$this->onCreate[] = function (Template $template) {
@@ -32,7 +31,7 @@ trait CoreTemplateFactory
 	}
 
 
-	public static function rgb(string $color)
+	public static function rgb(string $color): string
 	{
 		list($r, $g, $b) = self::hex2rgb($color);
 		return sprintf("%s, %s, %s", $r, $g, $b);

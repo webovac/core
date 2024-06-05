@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\DI;
 
 use App\Model\Orm;
@@ -19,7 +21,6 @@ use Webovac\Core\Module;
 class CoreExtension extends BaseExtension
 {
 	private OrmExtension $ormExtension;
-	private MigrationsExtension $migrationsExtension;
 	private MultiplierExtension $multiplierExtension;
 
 
@@ -29,7 +30,7 @@ class CoreExtension extends BaseExtension
 	) {}
 
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('dir'))

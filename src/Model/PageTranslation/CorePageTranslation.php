@@ -9,7 +9,6 @@ use App\Model\Page\Page;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
-use Webovac\Core\Lib\Installer\Config\PageTranslationData;
 
 
 /**
@@ -31,7 +30,7 @@ use Webovac\Core\Lib\Installer\Config\PageTranslationData;
  */
 trait CorePageTranslation
 {
-	public function getRouteMask(?Web $web = null, array $parts = [])
+	public function getRouteMask(?Web $web = null, array $parts = []): string
 	{
 		$web ??= $this->page->web;
 		return '//'
@@ -41,7 +40,7 @@ trait CorePageTranslation
 	}
 
 
-	public function getRouteMetadata(?Web $web = null)
+	public function getRouteMetadata(?Web $web = null): array
 	{
 		$web ??= $this->page->web;
 		return [

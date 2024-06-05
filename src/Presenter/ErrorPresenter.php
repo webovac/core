@@ -21,7 +21,6 @@ trait ErrorPresenter
 	#[Persistent] public string $host;
 	#[Persistent] public string $basePath;
 	#[Persistent] public string $lang;
-
 	#[Inject] public ModuleChecker $moduleChecker;
 	#[Inject] public CmsUser $cmsUser;
 

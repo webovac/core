@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib;
 
 use App\Model\Orm;
@@ -28,7 +30,7 @@ class CmsUser
 	}
 
 
-	public function getId()
+	public function getId(): int|null|string
 	{
 		return $this->user->getId();
 	}

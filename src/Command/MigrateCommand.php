@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Command;
 
 use Nextras\Migrations\Controllers\ConsoleController;
@@ -13,7 +15,7 @@ use Webovac\Core\Module;
 
 class MigrateCommand implements Command
 {
-	/** @param Module[] $modules */
+	/** @param Module[] $modules */ 
 	public function __construct(
 		private IDriver $driver,
 		private array $modules

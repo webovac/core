@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib;
 
 use Webovac\Core\Module;
+
 
 class ModuleChecker
 {
 	private array $installedModules = [];
 
-	/**
-	 * @param Module[] $modules
-	 */
+
+	/** @param Module[] $modules */
 	public function __construct(
 		private array $modules,
 	) {
@@ -20,7 +22,7 @@ class ModuleChecker
 	}
 
 
-	public function isModuleInstalled(string $name)
+	public function isModuleInstalled(string $name): bool
 	{
 		return in_array($name, $this->installedModules, true);
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core;
 
 if (@!include __DIR__ . '/../../../../vendor/autoload.php') {

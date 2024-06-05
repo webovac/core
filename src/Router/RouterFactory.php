@@ -42,7 +42,7 @@ final class RouterFactory
 					$translationData->fullPath = preg_replace('/(<id>)(\/.*\/<id>)/', '<parentId>$2', $translationData->fullPath);
 				}
 				if ($pageData->redirectPage) {
-					$p = $this->dataModel->pageRepository->getBy($pageData->web . '-' . $pageData->redirectPage);
+					$p = $this->dataModel->pageRepository->getById($pageData->web . '-' . $pageData->redirectPage);
 				} else {
 					$p = $pageData;
 				}
@@ -56,7 +56,7 @@ final class RouterFactory
 						'pageName' => $p->name,
 						'lang' => $languageData->shortcut,
 					],
-					oneWay: $pageData->redirectPage ? true : false,
+					oneWay: (bool) $pageData->redirectPage,
 				);
 			}
 		}

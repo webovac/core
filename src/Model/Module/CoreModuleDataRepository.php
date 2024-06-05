@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model\Module;
 
 use App\Model\Module\ModuleData;
@@ -48,7 +50,7 @@ trait CoreModuleDataRepository
 			if (!$relatedPage) {
 				return true;
 			}
-			return $this->checkPage(strpos($relatedPage, ':') !== false ? strtok($relatedPage, ':') : $relatedPage, $data);
+			return $this->checkPage(str_contains($relatedPage, ':') ? strtok($relatedPage, ':') : $relatedPage, $data);
 		}
 		return false;
 	}
