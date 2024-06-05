@@ -67,12 +67,12 @@ trait CoreWebRepository
 				$this->getModel()->getRepository(PageRepository::class)->postProcessModulePageFromData($data->webModules[$page->module->name], $page);
 			}
 		}
-		if (isset($data->iconFile) && (($data->iconFile instanceof FileUpload && $data->iconFile->hasFile()) || is_string($data->iconFile))) {
+		if ((isset($data->iconFile) && (($data->iconFile instanceof FileUpload && $data->iconFile->hasFile()) || is_string($data->iconFile))) || ($mode === CmsDataRepository::MODE_UPDATE && (isset($data->color) || isset($data->complementaryColor)))) {
 			$web->iconFile = $this->styleFile($web->iconFile, $data->complementaryColor, $data->color, $person, true);
 			$web->largeIconFile = $this->createLargeIcon($web, $data, $person);
 			$this->persist($web);
 		}
-		if (isset($data->logoFile) && (($data->logoFile instanceof FileUpload && $data->logoFile->hasFile()) || is_string($data->logoFile))) {
+		if ((isset($data->logoFile) && (($data->logoFile instanceof FileUpload && $data->logoFile->hasFile()) || is_string($data->logoFile))) || ($mode === CmsDataRepository::MODE_UPDATE && (isset($data->color) || isset($data->complementaryColor)))) {
 			$web->logoFile = $this->styleFile($web->logoFile, $data->complementaryColor, $data->color, $person);
 			$this->persist($web);
 		}
