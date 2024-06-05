@@ -8,7 +8,6 @@ use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
 use App\Model\Person\Person;
-use Webovac\Core\Model\CmsData;
 use Webovac\Core\Model\CmsDataRepository;
 
 

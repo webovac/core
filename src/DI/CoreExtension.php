@@ -8,7 +8,6 @@ use App\Model\Orm;
 use Contributte\FormMultiplier\DI\MultiplierExtension;
 use Nette\DI\ContainerBuilder;
 use Nette\PhpGenerator\ClassType;
-use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
 use Webovac\Core\Command\Command;
 use Webovac\Core\Command\InstallCommand;

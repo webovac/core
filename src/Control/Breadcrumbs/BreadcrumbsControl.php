@@ -6,7 +6,6 @@ namespace Webovac\Core\Control\Breadcrumbs;
 
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
-use App\Model\Orm;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Nextras\Orm\Entity\IEntity;
