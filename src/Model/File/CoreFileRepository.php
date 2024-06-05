@@ -25,7 +25,6 @@ trait CoreFileRepository
 		if (is_string($upload)) {
 			$upload = $this->createFileUploadFromString($upload);
 		}
-		bdump($upload);
 		if (!$upload->hasFile()) {
 			return null;
 		}
