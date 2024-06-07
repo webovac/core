@@ -1,5 +1,5 @@
 {templateType Stepapo\Dataset\UI\Item\ItemTemplate}
-<tr n:class="$itemClassCallback ? $itemClassCallback($item)" n:snippet>
+<tr n:class="$itemClassCallback ? $itemClassCallback($item)"{if $itemLink} data-href="{plink $itemLink->destination ...array_values($linkArgs)}"{/} n:snippet>
 	{foreach $columns as $column}
 		{continueIf $column->hide}
 		{var $value = $control->getValue($column->columnName)}
