@@ -9,6 +9,7 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
+use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
 use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Control\BaseControl;
@@ -18,6 +19,10 @@ use Webovac\Core\Control\BaseControl;
  */
 class MenuItemControl extends BaseControl
 {
+	private ?PageTranslationData $pageTranslationData;
+	private ?LanguageData $targetLanguageData;
+
+
 	public function __construct(
 		private PageData $pageData,
 		private WebData $webData,
@@ -30,10 +35,20 @@ class MenuItemControl extends BaseControl
 	) {}
 
 
+	public function loadState(array $params): void
+	{
+		parent::loadState($params);
+		$t = $this->pageData->getCollection('translations')->getBy(['language' => $this->languageData->id]);
+		$this->pageTranslationData = $t ?: $this->pageData->getCollection('translations')->getBy(['language' => $this->webData->defaultLanguage]);
+		$this->targetLanguageData = $t ? $this->languageData : $this->dataModel->languageRepository->getById($this->webData->defaultLanguage);
+	}
+
+
 	public function render(): void
 	{
 		$this->template->pageData = $this->pageData;
-		$this->template->pageTranslationData = $this->pageData->getCollection('translations')->getBy(['language' => $this->languageData->id]);
+		$this->template->pageTranslationData = $this->pageTranslationData;
+		$this->template->targetLanguageData = $this->targetLanguageData;
 		$this->template->webData = $this->webData;
 		$this->template->languageData = $this->languageData;
 		$this->template->entity = $this->entity;
@@ -68,7 +83,7 @@ class MenuItemControl extends BaseControl
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $this->presenter->link($p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $this->presenter->link('Home:', $p->name, $targetParameter, $targetParentParameter),
+			Page::TYPE_PAGE => $this->presenter->link('Home:', [$p->name, $targetParameter, $targetParentParameter, 'lang' => $this->targetLanguageData->shortcut]),
 			default => null,
 		};
 	}

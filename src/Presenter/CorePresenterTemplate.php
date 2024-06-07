@@ -21,6 +21,8 @@ trait CorePresenterTemplate
 	public WebTranslationData $webTranslationData;
 	public PageData $pageData;
 	public string $imageUrl;
+	public string $smallIconUrl;
+	public string $largeIconUrl;
 	public PageTranslation $pageTranslation;
 	public PageTranslationData $pageTranslationData;
 	/** @var Collection<WebData> */ public Collection $webDatas;
@@ -33,4 +35,6 @@ trait CorePresenterTemplate
 	public string $metaUrl;
 	public bool $showAdmin;
 	public array $bodyClasses;
+	public string $adminLang;
+	public array $languageShortcuts;
 }

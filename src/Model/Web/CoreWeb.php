@@ -43,7 +43,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
  *
  * @property OneHasMany|Page[] $pages {1:m Page::$web, orderBy=rank}
- * @property OneHasMany|WebTranslation[] $translations {1:m WebTranslation::$web, orderBy=language->id}
+ * @property OneHasMany|WebTranslation[] $translations {1:m WebTranslation::$web, orderBy=language->rank}
  * @property OneHasMany|Preference[] $preferences {1:m Preference::$web}
  *
  * @property ManyHasMany|Module[] $modules {m:m Module::$webs}

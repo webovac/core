@@ -23,14 +23,15 @@
 			<hr>
 			<div class="languages" n:if="count($webData->translations) > 1 && !$isError">
 				{foreach $webData->translations as $translation}
-					{php $l = $dataModel->getLanguageData($translation->language)}
+					{var $l = $dataModel->getLanguageData($translation->language)}
+					{var $t = $l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id]) ?: $l->getCollection('translations')->getBy(['translationLanguage' => $webData->defaultLanguage])}
 					{ifset $availableTranslations[$l->id]}
 						{if $cmsUser->isLoggedIn()}
-							<a href="{plink setLanguage!, $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id])->title}" data-tooltip-position="right">
+							<a n:if="$t" href="{plink setLanguage!, $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
 								<img src="/dist/images/languages/{$l->shortcut}.svg">
 							</a>
 						{else}
-							<a href="{plink Home:, $pageData->name, $entity?->getParameter($languageData), $entity?->getParentParameter($languageData), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getBy(['translationLanguage' => $l->id])->title}" data-tooltip-position="right">
+							<a href="{plink Home:, $pageData->name, $entity?->getParameter($languageData), $entity?->getParentParameter($languageData), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
 								<img src="/dist/images/languages/{$l->shortcut}.svg">
 							</a>
 						{/}
@@ -43,8 +44,9 @@
 			</div>
 			<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && ($layoutData->themes) > 1 && !$isError">
 				{foreach $layoutData->themes as $theme}
-					<a href="{plink setTheme!, $theme->id}" data-tooltip="{$theme->getCollection('translations')->getBy(['language' => $languageData->id])->title}" data-tooltip-position="right">
-						<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $theme->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$theme->getCollection('translations')->getBy(['language' => $languageData->id])->title|truncate:1,''}</div>
+					{var $translation = $theme->getCollection('translations')->getBy(['language' => $languageData->id]) ?: $theme->getCollection('translations')->getBy(['language' => $webData->defaultLanguage])}
+					<a n:if="$translation" href="{plink setTheme!, $theme->id}" data-tooltip="{$translation->title}" data-tooltip-position="right">
+						<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $theme->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
 					</a>
 				{/}
 			</div>

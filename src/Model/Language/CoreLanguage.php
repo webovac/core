@@ -15,6 +15,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property int $id {primary}
  *
  * @property string $shortcut
+ * @property int $rank
  *
  * @property DateTimeImmutable $createdAt {default now}
  * @property DateTimeImmutable|null $updatedAt
@@ -22,7 +23,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property Person|null $createdByPerson {m:1 Person, oneSided=true}
  * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
  *
- * @property OneHasMany|LanguageTranslation[] $translations {1:m LanguageTranslation::$language, orderBy=language->id}
+ * @property OneHasMany|LanguageTranslation[] $translations {1:m LanguageTranslation::$language, orderBy=language->rank}
  */
 trait CoreLanguage
 {

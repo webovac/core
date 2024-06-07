@@ -84,4 +84,14 @@ trait CorePageData
 		}
 		return true;
 	}
+
+
+	public function getLanguageIds(): array
+	{
+		$return = [];
+		foreach ($this->getCollection('translations') as $translation) {
+			$return[] = $translation->language;
+		}
+		return $return;
+	}
 }

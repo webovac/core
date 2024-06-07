@@ -29,4 +29,14 @@ trait CoreLanguageDataRepository
 		}
 		return $data;
 	}
+
+
+	public function findAllPairs(): array
+	{
+		$return = [];
+		foreach ($this->findAll() as $languageData) {
+			$return[$languageData->id] = $languageData->shortcut;
+		}
+		return $return;
+	}
 }

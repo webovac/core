@@ -140,7 +140,7 @@ trait CorePresenter
 			if ($this->cmsUser->isLoggedIn()) {
 				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
 				if ($this->preference && $this->preference->language) {
-					if ($this->lang !== $this->preference->language->shortcut) {
+					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getBy(['language' => $this->preference->language->id])) {
 						$this->redirect(
 							'Home:',
 							[
@@ -186,7 +186,10 @@ trait CorePresenter
 			$this->template->metaType = $this->entity?->getRepository()->getMapper()->getTableName() ?: 'page';
 			$this->template->metaUrl = $this->link('//Home:', $this->pageData->name, $this->entity?->getParameter(), $this->entity?->getParentParameter());
 			$this->template->webDatas = $this->dataModel->getWebDatas();
-			$this->template->showAdmin = $this->dataModel->getPageDataByName($this->webData->id, 'Admin:Home')?->isUserAuthorized($this->cmsUser) ?: false;
+			$adminPageData = $this->dataModel->getPageDataByName($this->webData->id, 'Admin:Home');
+			$this->template->showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser) ?: false;
+			$this->template->adminLang = in_array($this->languageData->id, $adminPageData->getLanguageIds(), true) ? $this->lang : 'cs';
+			$this->template->languageShortcuts = $this->dataModel->languageRepository->findAllPairs();
 			$this->template->bodyClasses = [];
 			$this->template->bodyClasses[] = "web-{$this->webData->code}";
 			$this->template->bodyClasses[] = 'layout-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->layoutData->code : 'cvut');
@@ -225,7 +228,7 @@ trait CorePresenter
 						->allowProperties(CmsData::class, SecurityPolicy::All)
 						->allowMethods(IEntity::class, SecurityPolicy::All)
 						->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)
-						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst'])
+						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array'])
 				);
 
 			$this->template->setFile('@layout.file');

@@ -19,11 +19,13 @@ CREATE SEQUENCE "public"."language_id_seq";
 CREATE TABLE "public"."language" (
     "id" int4 NOT NULL DEFAULT nextval('language_id_seq'::regclass),
     "shortcut" varchar NOT NULL,
+    "rank" int4 NOT NULL,
     "created_by_person_id" int4,
     "updated_by_person_id" int4,
     "created_at" timestamp NOT NULL DEFAULT now(),
     "updated_at" timestamp,
     UNIQUE ("shortcut"),
+    UNIQUE ("rank"),
     PRIMARY KEY ("id")
 );
 CREATE INDEX ON "public"."language" ("created_by_person_id");

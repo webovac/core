@@ -60,7 +60,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
  *
  * @property OneHasMany|Page[] $childPages {1:m Page::$parentPage, orderBy=rank}
- * @property OneHasMany|PageTranslation[] $translations {1:m PageTranslation::$page, orderBy=language->id}
+ * @property OneHasMany|PageTranslation[] $translations {1:m PageTranslation::$page, orderBy=language->rank}
  *
  * @property ManyHasMany|Person[] $authorizedPersons {m:m Person, isMain=true, oneSided=true}
  * @property ManyHasMany|Role[] $authorizedRoles {m:m Role, isMain=true, oneSided=true}

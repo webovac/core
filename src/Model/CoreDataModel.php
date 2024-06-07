@@ -83,9 +83,9 @@ trait CoreDataModel
 			if (count($pageData->parentPages) > 1) {
 				return false;
 			}
-			if ($pageData->type === Page::TYPE_PAGE && !$pageData->getCollection('translations')->getBy(['language' => $languageData->id])) {
-				return false;
-			}
+//			if ($pageData->type === Page::TYPE_PAGE && !$pageData->getCollection('translations')->getBy(['language' => $languageData->id])) {
+//				return false;
+//			}
 			if (!$pageData->isUserAuthorized($this->cmsUser)) {
 				return false;
 			}
@@ -114,8 +114,8 @@ trait CoreDataModel
 				return false;
 			}
 			if ($pageData->type === Page::TYPE_PAGE && (
-					!$pageData->getCollection('translations')->getBy(['language' => $languageData->id])
-					|| $pageData->hasParameter !== $parentPageData->hasParameter
+//					!$pageData->getCollection('translations')->getBy(['language' => $languageData->id]) ||
+					$pageData->hasParameter !== $parentPageData->hasParameter
 					|| $pageData->hasParentParameter !== $parentPageData->hasParentParameter
 				)) {
 				return false;
