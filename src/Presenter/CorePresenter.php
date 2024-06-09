@@ -214,24 +214,25 @@ trait CorePresenter
 				$main = $this->pageTranslation->content ?: '';
 			}
 			$this->template->getLatte()->setLoader(new StringLoader([
-				'@layout.file' => file_get_contents($this->dir->getAppDir() . "/Presenter/@layout.latte"),
+				'@layout.latte' => file_get_contents($this->dir->getAppDir() . "/Presenter/@layout.latte"),
+				'layout.latte' => file_get_contents(__DIR__ . "/../templates/layout.latte"),
 				'main.file' => $main,
 				'footer.file' => $this->webTranslationData->footer ?: '',
 			]))
 				->setSandboxMode()
 				->setPolicy(
 					SecurityPolicy::createSafePolicy()
-						->allowTags(['include', 'control', 'plink', 'contentType'])
+						->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox'])
 						->allowFilters(['noescape', 'mTime'])
 						->allowProperties(stdClass::class, SecurityPolicy::All)
 						->allowProperties(IEntity::class, SecurityPolicy::All)
 						->allowProperties(CmsData::class, SecurityPolicy::All)
 						->allowMethods(IEntity::class, SecurityPolicy::All)
 						->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)
-						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array'])
+						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'core'])
 				);
 
-			$this->template->setFile('@layout.file');
+			$this->template->setFile('@layout.latte');
 		};
 	}
 

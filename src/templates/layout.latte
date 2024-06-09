@@ -1,0 +1,71 @@
+{templateType App\Presenter\BasePresenterTemplate}
+<!DOCTYPE html>
+<html lang="{$languageData->shortcut}">
+<head>
+	<title>{$metaTitle . ' | ' . $webTranslationData->title|truncate:60}</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="description" n:ifset="$pageTranslation->description" content="{$pageTranslationData->description|truncate:300}">
+	<meta name="theme-color" content="{$themeData->contentBg}">
+	<meta property="og:type" content="{$entity ? $entityName : 'page'}">
+	<meta property="og:title" content="{$metaTitle|truncate:60}">
+	<meta property="og:description" n:if="$pageTranslation->description" content="{$pageTranslationData->description|truncate:300}">
+	<meta property="og:image" n:ifset="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
+	<meta property="og:url" content="{$metaUrl}">
+	<meta property="og:site_name" content="{$webTranslationData->title|truncate:60}">
+	<meta name="twitter:title" content="{$metaTitle|truncate:60}">
+	<meta name="twitter:description" n:if="$pageTranslation->description" content="{$pageTranslationData->description|truncate:300}">
+	<meta name="twitter:image" n:ifset="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
+	{*
+	<meta name="twitter:site" content="@USERNAME">
+	<meta name="twitter:creator" content="@USERNAME">
+	*}
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="{$webTranslationData->title|truncate:60}">
+	<link rel="canonical" href="{$metaUrl}">
+	<link rel="shortcut icon" n:ifset="$smallIconUrl" href="{$baseUrl}/{$smallIconUrl}?m={=$smallIconUrl|mTime}">
+	<link rel="apple-touch-icon" n:ifset="$largeIconUrl" href="{$baseUrl}/{$largeIconUrl}?m={=$largeIconUrl|mTime}">
+	<link rel="manifest" href="{plink '//Manifest:', host: $webData->host, basePath: $webData->basePath, lang: $languageData->shortcut}?m={$webTranslationData->updatedAt ?: $webTranslationData->createdAt|date:'U'}">
+	<link rel="stylesheet" href="{$baseUrl}/dist-pro/css/bundle.css?m={='dist/css/bundle.css'|mTime}">
+	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $themeData->updatedAt ?: $themeData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
+	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
+</head>
+<body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? $themeData->code : 'light'}">
+<div n:class="layout, $pageData->stretched ? stretched">
+	{control core-menu}
+	<div class="horizontal-wrapper">
+		{control core-navigation}
+		<div class="content-image-wrapper">
+			<div class="content-wrapper">
+				{control core-breadcrumbs}
+				<div class="alert-wrapper" n:if="$flashes">
+					<div n:foreach="$flashes as $flash" n:class="alert-main, alert, 'alert-' . $flash->type, alert-dismissible" role="alert">
+						{$flash->message}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> × </button>
+					</div>
+				</div>
+				<div class="content override-padding">
+					{include 'main.file'}
+				</div>
+				<div class="footer small" n:if="$showAdmin">
+					<p n:if="$showAdmin">
+						<a href="{plink Home:, 'Admin:PageDetail', $pageData->id, lang: $adminLang}">Administrace</a>
+						<br>
+						{foreach $webDatas as $w}
+							<a href="{plink Home:, 'Home', host: $w->host, basePath: $w->basePath, lang: $languageShortcuts[$w->defaultLanguage]}" class="link-secondary">
+								{$w->host}{if $w->basePath}/{$w->basePath}{/}
+							</a>
+							{sep} · {/}
+						{/}
+					</p>
+					{include 'footer.file'}
+				</div>
+			</div>
+			<div class="background"></div>
+		</div>
+	</div>
+</div>
+<script src="{$basePath}/dist/js/bundle.js?m={='dist/js/bundle.js'|mTime}"></script>
+</body>
+</html>

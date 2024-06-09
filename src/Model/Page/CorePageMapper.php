@@ -88,6 +88,7 @@ trait CorePageMapper
 
 	public function removePage(Page $page): void
 	{
+		$this->getDatabasePlatform();
 		$filter = $page->web
 			? ['web_id' => $page->web->id]
 			: ['module_id' => $page->module->id, 'web_id' => null];

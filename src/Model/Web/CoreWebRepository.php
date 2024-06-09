@@ -121,7 +121,7 @@ trait CoreWebRepository
 			'error' => filesize($path) ? UPLOAD_ERR_OK : UPLOAD_ERR_NO_FILE,
 		]);
 		$largeIconFile = $this->getModel()->getRepository(FileRepository::class)->createFile($upload, $person);
-		unlink($path);
+//		unlink($path);
 		return $largeIconFile;
 	}
 }

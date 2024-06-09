@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\File;
 
-
 use App\Model\File\File;
 use App\Model\File\FileRepository;
 use App\Model\Person\Person;
@@ -14,6 +13,7 @@ use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
+
 
 trait CoreFileRepository
 {
@@ -54,7 +54,7 @@ trait CoreFileRepository
 		} else {
 			$file->createdByPerson = $person;
 		}
-		$this->getModel()->persist($file);
+		$this->persist($file);
 		return $file;
 	}
 
@@ -63,6 +63,7 @@ trait CoreFileRepository
 	{
 		$tmpFile = $upload->getTemporaryFile();
 		Svg::make(file_get_contents($tmpFile))->saveAsPng($tmpFile);
+
 		return $forceSquare ? $this->image2square($upload) : $this->createFileUpload($upload);
 	}
 
