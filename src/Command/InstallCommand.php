@@ -12,6 +12,7 @@ use Nette\Utils\FileInfo;
 use Nette\Utils\Finder;
 use ReflectionClass;
 use Stepapo\Dataset\Utils;
+use Tracy\Dumper;
 use Webovac\Core\InstallGroup;
 use Webovac\Core\Lib\CmsPrinter;
 use Webovac\Core\Model\CmsDataRepository;
@@ -27,6 +28,7 @@ class InstallCommand implements Command
 	/** @param Module[] $modules */
 	public function __construct(
 		private array $params,
+		private bool $debugMode,
 		private CmsPrinter $printer,
 		private DataModel $dataModel,
 		private Orm $orm,
@@ -79,6 +81,9 @@ class InstallCommand implements Command
 		}
 		foreach ($files as $file) {
 			$text = str_replace(["$group->name.", ".neon"], "", $file->getFilename());
+			if ($text === 'dev' && !$this->debugMode) {
+				continue;
+			}
 			$config = (array) Neon::decode($file->read());
 			$this->printer->printText("- " . $text);
 			$parsedConfig = Utils::replaceParams($config, $this->params);

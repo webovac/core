@@ -26,6 +26,7 @@ class CoreExtension extends BaseExtension
 	public function __construct(
 		private string $appDir,
 		private array $params,
+		private bool $debugMode = false,
 	) {}
 
 
@@ -35,7 +36,7 @@ class CoreExtension extends BaseExtension
 		$builder->addDefinition($this->prefix('dir'))
 			->setFactory(Dir::class, [$this->appDir]);
 		$builder->addDefinition($this->prefix('installer'))
-			->setFactory(InstallCommand::class, [$this->params]);
+			->setFactory(InstallCommand::class, [$this->params, $this->debugMode]);
 		$this->createOrmExtension($builder);
 		$this->createMultiplierExtension($builder);
 		$this->createSearchExtension($builder);
