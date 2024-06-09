@@ -23,4 +23,5 @@ class MenuItemTemplate extends BaseTemplate
 	public string $class;
 	public string $tag;
 	public bool $iconHasWrapper;
+	public string $iconStyle;
 }
