@@ -91,78 +91,78 @@
         }
     {/}
 
-    {foreach $l['devices'] as $device}
-        --cms-{$device['code']}-layout-width: {$device['layoutWidth'] ? ($device['layoutWidth'] . 'px') : 'initial'};
+    {foreach $l['screens'] as $screen}
+        --cms-{$screen['code']}-layout-width: {$screen['layoutWidth'] ? ($screen['layoutWidth'] . 'px') : 'initial'};
         {foreach ['margin', 'border'] as $property}
             {foreach ['top', 'right', 'bottom', 'left'] as $side}
-                --cms-{$device['code']}-layout-{$property}-{$side}: {$device['layout' . ucfirst($property) . ucfirst($side)]}px;
+                --cms-{$screen['code']}-layout-{$property}-{$side}: {$screen['layout' . ucfirst($property) . ucfirst($side)]}px;
             {/}
         {/}
 
         {foreach ['primary', 'secondary'] as $degree}
-            --cms-{$device['code']}-{$degree}-width: {$device[$degree . 'Width'] ? ($device[$degree . 'Width'] . 'px') : 'initial'};
-            --cms-{$device['code']}-{$degree}-height: {$device[$degree . 'Height']}px;
+            --cms-{$screen['code']}-{$degree}-width: {$screen[$degree . 'Width'] ? ($screen[$degree . 'Width'] . 'px') : 'initial'};
+            --cms-{$screen['code']}-{$degree}-height: {$screen[$degree . 'Height']}px;
             {foreach ['margin', 'border', 'padding'] as $property}
                 {foreach ['top', 'right', 'bottom', 'left'] as $side}
-                    --cms-{$device['code']}-{$degree}-{$property}-{$side}: {$device[$degree . ucfirst($property) . ucfirst($side)]}px;
+                    --cms-{$screen['code']}-{$degree}-{$property}-{$side}: {$screen[$degree . ucfirst($property) . ucfirst($side)]}px;
                 {/}
             {/}
-            --cms-{$device['code']}-{$degree}-flex-direction: {$device[$degree . 'FlexDirection'] ? 'column' : 'initial'};
-            --cms-{$device['code']}-{$degree}-menu-item-flex-direction: {$device[$degree . 'MenuItemFlexDirection'] ? 'column' : 'initial'};
-            --cms-{$device['code']}-{$degree}-icon-display: {$device[$degree . 'IconDisplay'] ? 'inline-block' : 'none'};
-            --cms-{$device['code']}-{$degree}-icon-font-size: {$device[$degree . 'IconFontSize'] ? ($device[$degree . 'IconFontSize'] . 'px') : 'initial'};
-            --cms-{$device['code']}-{$degree}-span-display: {$device[$degree . 'SpanDisplay'] ? 'inline-block' : 'none'};
-            --cms-{$device['code']}-{$degree}-span-font-size: {$device[$degree . 'SpanFontSize'] ? ($device[$degree . 'SpanFontSize'] . 'px') : 'initial'};
+            --cms-{$screen['code']}-{$degree}-flex-direction: {$screen[$degree . 'FlexDirection'] ? 'column' : 'initial'};
+            --cms-{$screen['code']}-{$degree}-menu-item-flex-direction: {$screen[$degree . 'MenuItemFlexDirection'] ? 'column' : 'initial'};
+            --cms-{$screen['code']}-{$degree}-icon-display: {$screen[$degree . 'IconDisplay'] ? 'inline-block' : 'none'};
+            --cms-{$screen['code']}-{$degree}-icon-font-size: {$screen[$degree . 'IconFontSize'] ? ($screen[$degree . 'IconFontSize'] . 'px') : 'initial'};
+            --cms-{$screen['code']}-{$degree}-span-display: {$screen[$degree . 'SpanDisplay'] ? 'inline-block' : 'none'};
+            --cms-{$screen['code']}-{$degree}-span-font-size: {$screen[$degree . 'SpanFontSize'] ? ($screen[$degree . 'SpanFontSize'] . 'px') : 'initial'};
         {/}
 
-        --cms-{$device['code']}-content-width: {$device['contentWidth'] ? ($device['contentWidth'] . 'px') : '100%'};
+        --cms-{$screen['code']}-content-width: {$screen['contentWidth'] ? ($screen['contentWidth'] . 'px') : '100%'};
 
         {foreach ['margin', 'border', 'padding'] as $property}
             {foreach ['top', 'right', 'bottom', 'left'] as $side}
-                --cms-{$device['code']}-content-{$property}-{$side}: {$device['content' . ucfirst($property) . ucfirst($side)]}px;
+                --cms-{$screen['code']}-content-{$property}-{$side}: {$screen['content' . ucfirst($property) . ucfirst($side)]}px;
             {/}
         {/}
     {/}
 }
-{foreach $l['devices'] as $device}
-    @media{if $device['minWidth']} (min-width: {$device['minWidth'] . 'px'}){/}{if $device['minWidth'] && $device['maxWidth']} and{/}{if $device['maxWidth']} (max-width: {$device['maxWidth'] . 'px'}){/} {
-        {include 'orientation-' . $device['primaryOrientation'] . $device['secondaryOrientation'] . '.latte', device: $device}
+{foreach $l['screens'] as $screen}
+    @media{if $screen['minWidth']} (min-width: {$screen['minWidth'] . 'px'}){/}{if $screen['minWidth'] && $screen['maxWidth']} and{/}{if $screen['maxWidth']} (max-width: {$screen['maxWidth'] . 'px'}){/} {
+        {include 'orientation-' . $screen['primaryOrientation'] . $screen['secondaryOrientation'] . '.latte', screen: $screen}
         :root {
-            --cms-layout-width: var(--cms-{$device['code']}-layout-width);
-            --cms-layout-margin: var(--cms-{$device['code']}-layout-margin-top) var(--cms-{$device['code']}-layout-margin-right) var(--cms-{$device['code']}-layout-margin-bottom) var(--cms-{$device['code']}-layout-margin-left);
-            --cms-layout-border-width: var(--cms-{$device['code']}-layout-border-top) var(--cms-{$device['code']}-layout-border-right) var(--cms-{$device['code']}-layout-border-bottom) var(--cms-{$device['code']}-layout-border-left);
+            --cms-layout-width: var(--cms-{$screen['code']}-layout-width);
+            --cms-layout-margin: var(--cms-{$screen['code']}-layout-margin-top) var(--cms-{$screen['code']}-layout-margin-right) var(--cms-{$screen['code']}-layout-margin-bottom) var(--cms-{$screen['code']}-layout-margin-left);
+            --cms-layout-border-width: var(--cms-{$screen['code']}-layout-border-top) var(--cms-{$screen['code']}-layout-border-right) var(--cms-{$screen['code']}-layout-border-bottom) var(--cms-{$screen['code']}-layout-border-left);
 
             {foreach ['primary', 'secondary'] as $degree}
-                --cms-layout-{$degree}-justify-content: {if $device[$degree . 'Orientation'] === 'v' || $device[$degree . 'FlexDirection']}initial{else}flex-end{/};
-                --cms-{$degree}-height: var(--cms-{$device['code']}-{$degree}-height);
-                --cms-{$degree}-width: var(--cms-{$device['code']}-{$degree}-width);
-                --cms-{$degree}-margin: var(--cms-{$device['code']}-{$degree}-margin-top) var(--cms-{$device['code']}-{$degree}-margin-right) var(--cms-{$device['code']}-{$degree}-margin-bottom) var(--cms-{$device['code']}-{$degree}-margin-left);
+                --cms-layout-{$degree}-justify-content: {if $screen[$degree . 'Orientation'] === 'v' || $screen[$degree . 'FlexDirection']}initial{else}flex-end{/};
+                --cms-{$degree}-height: var(--cms-{$screen['code']}-{$degree}-height);
+                --cms-{$degree}-width: var(--cms-{$screen['code']}-{$degree}-width);
+                --cms-{$degree}-margin: var(--cms-{$screen['code']}-{$degree}-margin-top) var(--cms-{$screen['code']}-{$degree}-margin-right) var(--cms-{$screen['code']}-{$degree}-margin-bottom) var(--cms-{$screen['code']}-{$degree}-margin-left);
                 {foreach ['top', 'right', 'bottom', 'left'] as $side}
-                    --cms-{$degree}-padding-{$side}: var(--cms-{$device['code']}-{$degree}-padding-{$side});
+                    --cms-{$degree}-padding-{$side}: var(--cms-{$screen['code']}-{$degree}-padding-{$side});
                 {/}
                 {foreach ['top', 'right', 'bottom', 'left'] as $side}
-                    --cms-{$degree}-border-{$side}: var(--cms-{$device['code']}-{$degree}-border-{$side});
+                    --cms-{$degree}-border-{$side}: var(--cms-{$screen['code']}-{$degree}-border-{$side});
                 {/}
-                --cms-{$degree}-padding: var(--cms-{$device['code']}-{$degree}-padding-top) var(--cms-{$device['code']}-{$degree}-padding-right) var(--cms-{$device['code']}-{$degree}-padding-bottom) var(--cms-{$device['code']}-{$degree}-padding-left);
-                --cms-{$degree}-border-width: var(--cms-{$device['code']}-{$degree}-border-top) var(--cms-{$device['code']}-{$degree}-border-right) var(--cms-{$device['code']}-{$degree}-border-bottom) var(--cms-{$device['code']}-{$degree}-border-left);
-                --cms-{$degree}-justify-content: var(--cms-{$device['code']}-{$degree}-justify-content);
-                --cms-{$degree}-flex-direction: {if $device[$degree . 'Orientation'] === 'v'}column{else}var(--cms-{$device['code']}-{$degree}-flex-direction){/};
-                --cms-{$degree}-menu-item-flex-direction: var(--cms-{$device['code']}-{$degree}-menu-item-flex-direction);
-                --cms-{$degree}-icon-display: var(--cms-{$device['code']}-{$degree}-icon-display);
-                --cms-{$degree}-icon-font-size: var(--cms-{$device['code']}-{$degree}-icon-font-size);
-                --cms-{$degree}-span-display: var(--cms-{$device['code']}-{$degree}-span-display);
-                --cms-{$degree}-span-font-size: var(--cms-{$device['code']}-{$degree}-span-font-size);
+                --cms-{$degree}-padding: var(--cms-{$screen['code']}-{$degree}-padding-top) var(--cms-{$screen['code']}-{$degree}-padding-right) var(--cms-{$screen['code']}-{$degree}-padding-bottom) var(--cms-{$screen['code']}-{$degree}-padding-left);
+                --cms-{$degree}-border-width: var(--cms-{$screen['code']}-{$degree}-border-top) var(--cms-{$screen['code']}-{$degree}-border-right) var(--cms-{$screen['code']}-{$degree}-border-bottom) var(--cms-{$screen['code']}-{$degree}-border-left);
+                --cms-{$degree}-justify-content: var(--cms-{$screen['code']}-{$degree}-justify-content);
+                --cms-{$degree}-flex-direction: {if $screen[$degree . 'Orientation'] === 'v'}column{else}var(--cms-{$screen['code']}-{$degree}-flex-direction){/};
+                --cms-{$degree}-menu-item-flex-direction: var(--cms-{$screen['code']}-{$degree}-menu-item-flex-direction);
+                --cms-{$degree}-icon-display: var(--cms-{$screen['code']}-{$degree}-icon-display);
+                --cms-{$degree}-icon-font-size: var(--cms-{$screen['code']}-{$degree}-icon-font-size);
+                --cms-{$degree}-span-display: var(--cms-{$screen['code']}-{$degree}-span-display);
+                --cms-{$degree}-span-font-size: var(--cms-{$screen['code']}-{$degree}-span-font-size);
             {/}
 
-            --cms-content-width: var(--cms-{$device['code']}-content-width);
-            --cms-content-margin: var(--cms-{$device['code']}-content-margin-top) var(--cms-{$device['code']}-content-margin-right) var(--cms-{$device['code']}-content-margin-bottom) var(--cms-{$device['code']}-content-margin-left);
+            --cms-content-width: var(--cms-{$screen['code']}-content-width);
+            --cms-content-margin: var(--cms-{$screen['code']}-content-margin-top) var(--cms-{$screen['code']}-content-margin-right) var(--cms-{$screen['code']}-content-margin-bottom) var(--cms-{$screen['code']}-content-margin-left);
             {foreach ['top', 'right', 'bottom', 'left'] as $side}
-                --cms-content-padding-{$side}: var(--cms-{$device['code']}-content-padding-{$side});
+                --cms-content-padding-{$side}: var(--cms-{$screen['code']}-content-padding-{$side});
             {/}
-            --cms-content-padding: var(--cms-{$device['code']}-content-padding-top) var(--cms-{$device['code']}-content-padding-right) var(--cms-{$device['code']}-content-padding-bottom) var(--cms-{$device['code']}-content-padding-left);
-            --cms-content-border-width: var(--cms-{$device['code']}-content-border-top) var(--cms-{$device['code']}-content-border-right) var(--cms-{$device['code']}-content-border-bottom) var(--cms-{$device['code']}-content-border-left);
+            --cms-content-padding: var(--cms-{$screen['code']}-content-padding-top) var(--cms-{$screen['code']}-content-padding-right) var(--cms-{$screen['code']}-content-padding-bottom) var(--cms-{$screen['code']}-content-padding-left);
+            --cms-content-border-width: var(--cms-{$screen['code']}-content-border-top) var(--cms-{$screen['code']}-content-border-right) var(--cms-{$screen['code']}-content-border-bottom) var(--cms-{$screen['code']}-content-border-left);
         }
-        {include 'collapsed.latte' device: $device}
+        {include 'collapsed.latte' screen: $screen}
     }
 {/}
 

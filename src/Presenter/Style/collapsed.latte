@@ -1,4 +1,4 @@
-{if $device['primaryCollapsed'] && $device['primaryOrientation'] === 'h'}
+{if $screen['primaryCollapsed'] && $screen['primaryOrientation'] === 'h'}
 	:root {
 		--cms-layout-primary-menu-item-justify-content: left;
 		--cms-layout-primary-hr-display: block;
@@ -17,7 +17,7 @@
 		position: absolute;
 		top: var(--cms-layout-primary-wrapper-min-height);
 		bottom: 0;
-		left: {if $device['secondaryOrientation'] === 'v'}var(--cms-layout-secondary-wrapper-width){else}0{/};
+		left: {if $screen['secondaryOrientation'] === 'v'}var(--cms-layout-secondary-wrapper-width){else}0{/};
 		right: 0;
 		background: var(--cms-primary-bg);
 		z-index: 1000;
@@ -27,7 +27,7 @@
 		display: flex !important;
 	}
 {/}
-{if $device['secondaryCollapsed'] && $device['secondaryOrientation'] === 'h'}
+{if $screen['secondaryCollapsed'] && $screen['secondaryOrientation'] === 'h'}
 	:root {
 		--cms-layout-secondary-menu-item-justify-content: left;
 		--cms-layout-secondary-hr-display: block;
@@ -44,9 +44,9 @@
 		padding: var(--cms-secondary-padding-top) 0 var(--cms-secondary-padding-bottom) 0;
 		display: none;
 		position: absolute;
-		top: {if $device['primaryOrientation'] === 'h'}calc(var(--cms-layout-primary-wrapper-min-height) + var(--cms-layout-secondary-wrapper-min-height)){else}var(--cms-layout-secondary-wrapper-min-height){/};
+		top: {if $screen['primaryOrientation'] === 'h'}calc(var(--cms-layout-primary-wrapper-min-height) + var(--cms-layout-secondary-wrapper-min-height)){else}var(--cms-layout-secondary-wrapper-min-height){/};
 		bottom: 0;
-		left: {if $device['primaryOrientation'] === 'v'}var(--cms-layout-primary-wrapper-width){else}0{/};
+		left: {if $screen['primaryOrientation'] === 'v'}var(--cms-layout-primary-wrapper-width){else}0{/};
 		right: 0;
 		background: var(--cms-secondary-bg);
 		z-index: 1000;

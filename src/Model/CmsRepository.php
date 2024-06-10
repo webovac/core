@@ -85,10 +85,23 @@ abstract class CmsRepository extends Repository
 				$relatedRepository = $this->getModel()->getRepository($property->relationship->repository);
 				if (isset($property->types[File::class])) {
 					$entity->$name = $data->$name instanceof FileData ? $relatedRepository->getById($data->id) : ($this->getModel()->getRepository(FileRepository::class)->createFile($data->$name, $person, $name === 'iconFile') ?: $entity->$name);
+				} elseif ($data->$name instanceof CmsData) {
+					$related = null;
+					if (method_exists($relatedRepository, 'getByData')) {
+						$related = $relatedRepository->getByData($data->$name);
+					}
+					if (!$related) {
+						$related = $relatedRepository->createFromData($data->$name, person: $person);
+					}
+					$entity->$name = $related;
 				} elseif (is_numeric($data->$name)) {
 					$entity->$name = $data->$name ? $relatedRepository->getById($data->$name) : null;
 				} elseif (method_exists($relatedRepository, 'getByData')) {
-					$entity->$name = $data->$name ? $relatedRepository->getByData($data->$name, $entity) : null;
+					$related = $data->$name ? $relatedRepository->getByData($data->$name, $entity) : null;
+					if (!$related && method_exists($relatedRepository, 'createFromString')) {
+						$related = $relatedRepository->createFromString($data->$name);
+					}
+					$entity->$name = $related;
 				}
 			} elseif ($property->wrapper === ManyHasMany::class) {
 				$relatedRepository = $this->getModel()->getRepository($property->relationship->repository);

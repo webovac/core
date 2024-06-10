@@ -141,13 +141,14 @@ trait CorePresenter
 				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
 				if ($this->preference && $this->preference->language) {
 					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getBy(['language' => $this->preference->language->id])) {
+						$languageData = $this->dataModel->languageRepository->getById($this->preference->language->id);
 						$this->redirect(
 							'Home:',
 							[
 								'pageName' => $this->pageData->name,
-								'id' => $this->entity?->getParameter($this->preference->language),
-								'parentId' => $this->entity?->getParentParameter($this->preference->language),
-								'lang' => $this->preference->language->shortcut,
+								'id' => $this->entity?->getParameter($languageData),
+								'parentId' => $this->entity?->getParentParameter($languageData),
+								'lang' => $languageData->shortcut,
 							]
 						);
 					}
@@ -195,12 +196,12 @@ trait CorePresenter
 			$this->template->bodyClasses[] = 'layout-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->layoutData->code : 'cvut');
 			$this->template->bodyClasses[] = 'theme-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->themeData->code : 'light');
 			if ($this->moduleChecker->isModuleInstalled('style')) {
-				foreach ($this->layoutData->devices as $device) {
-					if ($device->primaryCollapsed) {
-						$this->template->bodyClasses[] = "primary-$device->code-collapsed";
+				foreach ($this->layoutData->screens as $screen) {
+					if ($screen->primaryCollapsed) {
+						$this->template->bodyClasses[] = "primary-$screen->code-collapsed";
 					}
-					if ($device->secondaryCollapsed) {
-						$this->template->bodyClasses[] = "secondary-$device->code-collapsed";
+					if ($screen->secondaryCollapsed) {
+						$this->template->bodyClasses[] = "secondary-$screen->code-collapsed";
 					}
 				}
 			} else {

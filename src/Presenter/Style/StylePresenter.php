@@ -75,7 +75,7 @@ class StylePresenter extends Presenter
 			'info' => '#00b2a9',
 			'light' => '#e6e6e6',
 			'dark' => '#222222',
-			'devices' => [
+			'screens' => [
 				[
 					'code' => 'm',
 					'minWidth' => null,
