@@ -15,6 +15,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property int $id {primary}
  *
  * @property string $shortcut
+ * @property string $name
  * @property int $rank
  *
  * @property DateTimeImmutable $createdAt {default now}
@@ -42,5 +43,12 @@ trait CoreLanguage
 	public function getParameter(?LanguageData $language = null): string
 	{
 		return $this->shortcut;
+	}
+
+
+	public function onAfterInsert(): void
+	{
+		parent::onAfterInsert();
+		$this->getRepository()->createIndex($this);
 	}
 }

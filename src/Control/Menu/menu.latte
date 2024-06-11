@@ -17,6 +17,9 @@
 		</a>
 		<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>
 		<div class="menu" id="menu">
+			<div n:if="isModuleInstalled('search')" class="menu-item">
+				{$presenter->getComponent('search-searchForm')->render()}
+			</div>
 			{foreach $pageDatas as $p}
 				{control 'menuItem-' . $p->id}
 			{/}

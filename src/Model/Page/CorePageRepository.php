@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
+use App\Model\Index\Index;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
@@ -14,6 +15,7 @@ use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
+use Tracy\Dumper;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\Web\WebModuleData;
 
@@ -248,5 +250,13 @@ trait CorePageRepository
 	public function removePage(Page $page): void
 	{
 		$this->getMapper()->removePage($page);
+	}
+
+
+	public function createIndex(Page $page)
+	{
+		$index = new Index;
+		$index->page = $page;
+		$this->getModel()->persist($index);
 	}
 }

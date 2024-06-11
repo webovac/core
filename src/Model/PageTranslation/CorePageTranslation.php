@@ -6,6 +6,7 @@ namespace Webovac\Core\Model\PageTranslation;
 
 use App\Model\Language\Language;
 use App\Model\Page\Page;
+use App\Model\Page\PageRepository;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
@@ -51,5 +52,12 @@ trait CorePageTranslation
 			'pageName' => $this->page->name,
 			'lang' => $this->language->shortcut,
 		];
+	}
+
+
+	public function onAfterPersist(): void
+	{
+		parent::onAfterPersist();
+		$this->getRepository()->getMapper()->createIndexTranslation($this);
 	}
 }

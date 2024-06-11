@@ -15,16 +15,49 @@ CREATE TABLE "public"."file" (
 );
 CREATE INDEX ON "public"."file" ("created_by_person_id");
 
+CREATE SEQUENCE "public"."index_id_seq";
+CREATE TABLE "public"."index" (
+    "id" int4 NOT NULL DEFAULT nextval('index_id_seq'::regclass),
+    "language_id" int4,
+    "module_id" int4,
+    "page_id" int4,
+    "web_id" int4,
+    UNIQUE ("language_id"),
+    UNIQUE ("module_id"),
+    UNIQUE ("page_id"),
+    UNIQUE ("web_id"),
+    PRIMARY KEY ("id")
+);
+CREATE INDEX ON "public"."index" ("language_id");
+CREATE INDEX ON "public"."index" ("module_id");
+CREATE INDEX ON "public"."index" ("page_id");
+CREATE INDEX ON "public"."index" ("web_id");
+
+CREATE SEQUENCE "public"."index_translation_id_seq";
+CREATE TABLE "public"."index_translation" (
+    "id" int4 NOT NULL DEFAULT nextval('index_translation_id_seq'::regclass),
+    "language_id" int4 NOT NULL,
+    "index_id" int4 NOT NULL,
+    "document" tsvector,
+    UNIQUE ("language_id", "index_id"),
+    PRIMARY KEY ("id")
+);
+CREATE INDEX ON "public"."index_translation" ("language_id");
+CREATE INDEX ON "public"."index_translation" ("index_id");
+CREATE INDEX ON "public"."index_translation" USING gin("document");
+
 CREATE SEQUENCE "public"."language_id_seq";
 CREATE TABLE "public"."language" (
     "id" int4 NOT NULL DEFAULT nextval('language_id_seq'::regclass),
     "shortcut" varchar NOT NULL,
+    "name" varchar NOT NULL,
     "rank" int4 NOT NULL,
     "created_by_person_id" int4,
     "updated_by_person_id" int4,
     "created_at" timestamp NOT NULL DEFAULT now(),
     "updated_at" timestamp,
     UNIQUE ("shortcut"),
+    UNIQUE ("name"),
     UNIQUE ("rank"),
     PRIMARY KEY ("id")
 );
@@ -272,8 +305,23 @@ CREATE INDEX ON "public"."web_translation" ("language_id");
 CREATE INDEX ON "public"."web_translation" ("updated_by_person_id");
 CREATE INDEX ON "public"."web_translation" ("web_id");
 
+-- CREATE MATERIALIZED VIEW "public"."word"
+-- AS
+-- SELECT ts_stat.word, unaccent(ts_stat.word) AS unaccented_word
+-- FROM ts_stat('SELECT document FROM public.index'::text) ts_stat(word, ndoc, nentry)
+-- UNION
+-- SELECT ts_stat.word, unaccent(ts_stat.word) AS unaccented_word
+-- FROM ts_stat('SELECT document FROM public.index'::text) ts_stat(word, ndoc, nentry);
 
 ALTER TABLE "public"."file" ADD CONSTRAINT "file_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE "public"."index" ADD CONSTRAINT "file_language_id_fkey" FOREIGN KEY ("language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."index" ADD CONSTRAINT "file_page_id_fkey" FOREIGN KEY ("page_id") REFERENCES "public"."page" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."index" ADD CONSTRAINT "file_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "public"."module" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."index" ADD CONSTRAINT "file_web_id_fkey" FOREIGN KEY ("web_id") REFERENCES "public"."web" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "public"."index_translation" ADD CONSTRAINT "file_language_id_fkey" FOREIGN KEY ("language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."index_translation" ADD CONSTRAINT "file_index_id_fkey" FOREIGN KEY ("index_id") REFERENCES "public"."index" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "public"."language" ADD CONSTRAINT "language_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "public"."language" ADD CONSTRAINT "language_updated_by_person_id_fkey" FOREIGN KEY ("updated_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;

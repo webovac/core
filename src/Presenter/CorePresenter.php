@@ -7,6 +7,7 @@ namespace Webovac\Core\Presenter;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Orm;
+use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationData;
@@ -106,7 +107,7 @@ trait CorePresenter
 				$loginPageName = $this->orm->webRepository->getById($this->webData->id)->modules->has($this->orm->moduleRepository->getBy(['name' => 'FsvAuth']))
 					? 'FsvAuth:Home'
 					: 'Auth:Home';
-				$this->redirect('Home:', ['pageName' => $loginPageName, 'backlink' => $this->storeRequest()]);
+				$this->redirect('this', ['pageName' => $loginPageName, 'backlink' => $this->storeRequest()]);
 			}
 			if ($id = $this->getParameter('id')) {
 				if (!$this->pageData->repository) {
@@ -142,15 +143,7 @@ trait CorePresenter
 				if ($this->preference && $this->preference->language) {
 					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getBy(['language' => $this->preference->language->id])) {
 						$languageData = $this->dataModel->languageRepository->getById($this->preference->language->id);
-						$this->redirect(
-							'Home:',
-							[
-								'pageName' => $this->pageData->name,
-								'id' => $this->entity?->getParameter($languageData),
-								'parentId' => $this->entity?->getParentParameter($languageData),
-								'lang' => $languageData->shortcut,
-							]
-						);
+						$this->lang = $languageData->shortcut;
 					}
 				}
 			}

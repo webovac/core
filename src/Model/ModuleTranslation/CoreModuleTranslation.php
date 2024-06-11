@@ -27,4 +27,9 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
  */
 trait CoreModuleTranslation
 {
+	public function onAfterPersist(): void
+	{
+		parent::onAfterPersist();
+		$this->getRepository()->getMapper()->createIndexTranslation($this);
+	}
 }

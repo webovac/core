@@ -24,4 +24,9 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
  */
 trait CoreLanguageTranslation
 {
+	public function onAfterPersist(): void
+	{
+		parent::onAfterPersist();
+		$this->getRepository()->getMapper()->createIndexTranslation($this);
+	}
 }

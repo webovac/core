@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Page;
 
 use App\Model\File\File;
+use App\Model\Index\Index;
 use App\Model\Language\LanguageData;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
@@ -170,5 +171,12 @@ trait CorePage
 	public function getParentParameter(?LanguageData $language = null): int
 	{
 		return $this->web?->id ?: $this->module->id;
+	}
+
+
+	public function onAfterInsert(): void
+	{
+		parent::onAfterInsert();
+		$this->getRepository()->createIndex($this);
 	}
 }

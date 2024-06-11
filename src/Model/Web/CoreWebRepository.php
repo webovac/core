@@ -6,6 +6,7 @@ namespace Webovac\Core\Model\Web;
 
 use App\Model\File\File;
 use App\Model\File\FileRepository;
+use App\Model\Index\Index;
 use App\Model\Module\ModuleRepository;
 use App\Model\Page\Page;
 use App\Model\Page\PageRepository;
@@ -123,5 +124,13 @@ trait CoreWebRepository
 		$largeIconFile = $this->getModel()->getRepository(FileRepository::class)->createFile($upload, $person);
 //		unlink($path);
 		return $largeIconFile;
+	}
+
+
+	public function createIndex(Web $web)
+	{
+		$index = new Index;
+		$index->web = $web;
+		$this->getModel()->persist($index);
 	}
 }

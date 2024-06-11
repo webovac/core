@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Module;
 
+use App\Model\Index\Index;
 use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
@@ -39,5 +40,13 @@ trait CoreModuleRepository
 	public function getByData(ModuleData|string $data): ?Module
 	{
 		return $this->getBy(['name' => $data instanceof ModuleData ? $data->name : $data]);
+	}
+
+
+	public function createIndex(Module $module)
+	{
+		$index = new Index;
+		$index->module = $module;
+		$this->getModel()->persist($index);
 	}
 }
