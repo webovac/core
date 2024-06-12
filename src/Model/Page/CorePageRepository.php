@@ -16,6 +16,7 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Tracy\Dumper;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\Web\WebModuleData;
 
@@ -250,5 +251,11 @@ trait CorePageRepository
 	public function removePage(Page $page): void
 	{
 		$this->getMapper()->removePage($page);
+	}
+
+
+	public function getIndexFilter(CmsUser $cmsUser): array
+	{
+		return ['page!=' => null];
 	}
 }

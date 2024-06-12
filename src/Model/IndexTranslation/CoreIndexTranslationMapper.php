@@ -39,10 +39,10 @@ trait CoreIndexTranslationMapper
 		$indexTranslation->language = $language;
 		foreach ($documents as $weight => $document) {
 			if ($weight === 'A') {
-				$select[] = "setweight(to_tsvector(COALESCE(%?s, ' ')), %s)";
-				$args = array_merge($args, [$document, $weight]);
+				$select[] = "setweight(to_tsvector(%s,unaccent(COALESCE(%?s::text, ' '))), %s)";
+				$args = array_merge($args, ['english', str_replace([':', '-', '_'], ' ', $document), $weight]);
 			} else {
-				$select[] = "setweight(to_tsvector(%s, COALESCE(%?s, ' ')), %s)";
+				$select[] = "setweight(to_tsvector(%s, unaccent(COALESCE(%?s, ' '))), %s)";
 				$args = array_merge($args, [$language->name, $document, $weight]);
 			}
 			$doc[] = $document;
@@ -50,7 +50,7 @@ trait CoreIndexTranslationMapper
 		}
 
 		if ($this->connection->getPlatform() instanceof PostgreSqlPlatform) {
-			$select = $this->connection->query("SELECT " . implode(' || ', $select) . " AS document;", $args);
+			$select = $this->connection->query("SELECT " . implode(' || ', $select) . " AS document;", ...$args);
 			$indexTranslation->document = $select->fetchField();
 		} elseif ($this->connection->getPlatform() instanceof MySqlPlatform) {
 			$indexTranslation->document = implode(' ', $doc);

@@ -17,6 +17,8 @@ use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
+use Webovac\Cms\Control\WebItem\IWebItemControl;
+use Webovac\Cms\Control\WebItem\WebItemControl;
 
 
 /**
@@ -54,6 +56,8 @@ trait CoreWeb
 	public const string DEFAULT_COMPLEMENTARY_COLOR = '#cccccc';
 	public const string DEFAULT_ICON_BACKGROUND_COLOR = '#d3eafd';
 
+	private IWebItemControl $component;
+
 
 	public function getTitle(LanguageData $language): string
 	{
@@ -89,5 +93,17 @@ trait CoreWeb
 			}
 		}
 		return new ArrayCollection($pages, $this->getRepository());
+	}
+
+
+	public function injectComponent(IWebItemControl $component)
+	{
+		$this->component = $component;
+	}
+
+
+	public function getComponent(LanguageData $languageData, string $templateName): WebItemControl
+	{
+		return $this->component->create($this, $languageData, $templateName);
 	}
 }

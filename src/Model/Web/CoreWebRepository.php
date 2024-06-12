@@ -18,6 +18,7 @@ use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsDataRepository;
 
 
@@ -124,5 +125,11 @@ trait CoreWebRepository
 		$largeIconFile = $this->getModel()->getRepository(FileRepository::class)->createFile($upload, $person);
 //		unlink($path);
 		return $largeIconFile;
+	}
+
+
+	public function getIndexFilter(CmsUser $cmsUser): array
+	{
+		return ['web!=' => null];
 	}
 }

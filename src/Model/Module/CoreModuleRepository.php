@@ -9,6 +9,7 @@ use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
 use App\Model\Person\Person;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsDataRepository;
 
 
@@ -40,5 +41,11 @@ trait CoreModuleRepository
 	public function getByData(ModuleData|string $data): ?Module
 	{
 		return $this->getBy(['name' => $data instanceof ModuleData ? $data->name : $data]);
+	}
+
+
+	public function getIndexFilter(CmsUser $cmsUser): array
+	{
+		return ['module!=' => null];
 	}
 }

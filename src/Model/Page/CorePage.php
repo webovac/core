@@ -18,6 +18,8 @@ use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
+use Webovac\Admin\Control\PageItem\IPageItemControl;
+use Webovac\Admin\Control\PageItem\PageItemControl;
 
 
 /**
@@ -113,6 +115,8 @@ trait CorePage
 		Page::STYLE_DARK => 'Dark',
 	];
 
+	private IPageItemControl $component;
+
 
 	public function getTranslation(LanguageData $language): ?PageTranslation
 	{
@@ -171,5 +175,17 @@ trait CorePage
 	public function getParentParameter(?LanguageData $language = null): int
 	{
 		return $this->web?->id ?: $this->module->id;
+	}
+
+
+	public function injectComponent(IPageItemControl $component)
+	{
+		$this->component = $component;
+	}
+
+
+	public function getComponent(LanguageData $languageData, string $templateName): PageItemControl
+	{
+		return $this->component->create($this, $languageData, $templateName);
 	}
 }

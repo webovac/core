@@ -9,6 +9,8 @@ use App\Model\LanguageTranslation\LanguageTranslation;
 use App\Model\Person\Person;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Relationships\OneHasMany;
+use Webovac\Cms\Control\LanguageItem\ILanguageItemControl;
+use Webovac\Cms\Control\LanguageItem\LanguageItemControl;
 
 
 /**
@@ -28,6 +30,9 @@ use Nextras\Orm\Relationships\OneHasMany;
  */
 trait CoreLanguage
 {
+	private ILanguageItemControl $component;
+
+
 	public function getTranslation(LanguageData $language): ?LanguageTranslation
 	{
 		return $this->translations->toCollection()->getBy(['translationLanguage' => $language->id]);
@@ -43,5 +48,17 @@ trait CoreLanguage
 	public function getParameter(?LanguageData $language = null): string
 	{
 		return $this->shortcut;
+	}
+
+
+	public function injectLanguageItem(ILanguageItemControl $component)
+	{
+		$this->component = $component;
+	}
+
+
+	public function getComponent(LanguageData $languageData, string $templateName): LanguageItemControl
+	{
+		return $this->component->create($this, $languageData, $templateName);
 	}
 }

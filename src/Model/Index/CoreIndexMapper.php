@@ -13,18 +13,17 @@ trait CoreIndexMapper
 {
 	public function filterByText(string $text)
 	{
-
 		if ($this->connection->getPlatform() instanceof PostgreSqlPlatform) {
 			$languages = $this->getRepository()->getModel()->getRepository(LanguageRepository::class)->findAll()->fetchPairs('id', 'name');
 			$where = [];
 			$rank = [];
 			$args = [];
 			foreach ($languages as $id => $name) {
-				$where[] = "(((translations.language_id = %i)) AND (translations.document @@ to_tsquery(%s, %s)))";
+				$where[] = "(((\"translations\".\"language_id\" = %i)) AND (\"translations\".\"document\" @@ to_tsquery(%s, unaccent(%s))))";
 				$args = array_merge($args, [$id, $name, $text]);
 			}
 			foreach ($languages as $id => $name) {
-				$rank[] = "WHEN translations.language_id = %i THEN ts_rank(translations.document, to_tsquery(%s, %s))";
+				$rank[] = "WHEN \"translations\".\"language_id\" = %i THEN ts_rank(\"translations\".\"document\", to_tsquery(%s, unaccent(%s)))";
 				$args = array_merge($args, [$id, $name, $text]);
 			}
 			return $this->toCollection(

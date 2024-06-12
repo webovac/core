@@ -51,6 +51,7 @@ trait CorePageData
 	public int|string|null $updatedByPerson;
 	public ?DateTimeInterface $createdAt;
 	public ?DateTimeInterface $updatedAt;
+
 	### for CachedModel ###
 
 	public ?int $web = null;

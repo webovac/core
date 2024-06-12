@@ -14,11 +14,15 @@ use App\Model\PageTranslation\PageTranslation;
 use App\Model\Person\Person;
 use App\Model\Role\Role;
 use App\Model\Web\Web;
+use Nette\InvalidStateException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
+use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\ManyHasMany;
+use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
+use Nextras\Orm\Relationships\OneHasOne;
 
 
 /**
@@ -33,4 +37,14 @@ use Nextras\Orm\Relationships\OneHasMany;
  */
 trait CoreIndex
 {
+	public function getEntity(): IEntity
+	{
+		foreach ($this->getMetadata()->getProperties() as $property) {
+			$name = $property->name;
+			if (in_array($property->wrapper, [OneHasOne::class, ManyHasOne::class]) && $this->$name) {
+				return $this->$name;
+			}
+		}
+		throw new InvalidStateException;
+	}
 }
