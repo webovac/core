@@ -47,14 +47,14 @@ trait CoreIndexMapper
 					SELECT `index`.*, `match_a`, `match_b`, `match_c`, `match_d`, `match_e`
 					FROM (
 						SELECT `index`.`id`, 
-							   IF(ISNULL(`document_a`), 0, MATCH (`document_a`) AGAINST (%s)) AS match_a, 
-							   IF(ISNULL(`document_b`), 0, MATCH (`document_b`) AGAINST (%s)) AS match_b,
-							   IF(ISNULL(`document_c`), 0, MATCH (`document_c`) AGAINST (%s)) AS match_c,
-							   IF(ISNULL(`document_d`), 0, MATCH (`document_d`) AGAINST (%s)) AS match_d,
-							   IF(ISNULL(`document_e`), 0, MATCH (`document_e`) AGAINST (%s)) AS match_e
+							   IF(ISNULL(`document_a`), 0, MATCH (`document_a`) AGAINST (%s IN BOOLEAN MODE)) AS match_a, 
+							   IF(ISNULL(`document_b`), 0, MATCH (`document_b`) AGAINST (%s IN BOOLEAN MODE)) AS match_b,
+							   IF(ISNULL(`document_c`), 0, MATCH (`document_c`) AGAINST (%s IN BOOLEAN MODE)) AS match_c,
+							   IF(ISNULL(`document_d`), 0, MATCH (`document_d`) AGAINST (%s IN BOOLEAN MODE)) AS match_d,
+							   IF(ISNULL(`document_e`), 0, MATCH (`document_e`) AGAINST (%s IN BOOLEAN MODE)) AS match_e
 						FROM `index`
 						LEFT JOIN `index_translation` ON (`index`.`id` = `index_translation`.`index_id`)
-						WHERE MATCH(`document`) AGAINST (%s)
+						WHERE MATCH(`document`) AGAINST (%s IN BOOLEAN MODE)
 					) s
 					LEFT JOIN `index` ON (s.id = `index`.id)
 					GROUP BY `index`.id
