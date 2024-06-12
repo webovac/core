@@ -106,7 +106,7 @@ trait CoreOrmFunctions
 			$cColumn = $helper->processPropertyExpr($builder, $args[0] . 'C')->args[1];
 			$dColumn = $helper->processPropertyExpr($builder, $args[0] . 'D')->args[1];
 			$eColumn = $helper->processPropertyExpr($builder, $args[0] . 'E')->args[1];
-			$select = "16 * IF(ISNULL(%column), 0, MATCH (%column) AGAINST (%s IN BOOLEAN MODE)) +, 
+			$select = "16 * IF(ISNULL(%column), 0, MATCH (%column) AGAINST (%s IN BOOLEAN MODE)) + 
 						8 * IF(ISNULL(%column), 0, MATCH (%column) AGAINST (%s IN BOOLEAN MODE)) +
 						4 * IF(ISNULL(%column), 0, MATCH (%column) AGAINST (%s IN BOOLEAN MODE)) +
 						2 * IF(ISNULL(%column), 0, MATCH (%column) AGAINST (%s IN BOOLEAN MODE)) +
