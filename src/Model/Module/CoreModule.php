@@ -65,11 +65,4 @@ trait CoreModule
 	{
 		return $this->getTranslation($language)->description;
 	}
-
-
-	public function onAfterInsert(): void
-	{
-		parent::onAfterInsert();
-		$this->getRepository()->createIndex($this);
-	}
 }

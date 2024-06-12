@@ -251,12 +251,4 @@ trait CorePageRepository
 	{
 		$this->getMapper()->removePage($page);
 	}
-
-
-	public function createIndex(Page $page)
-	{
-		$index = new Index;
-		$index->page = $page;
-		$this->getModel()->persist($index);
-	}
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\PageTranslation;
 
+use App\Model\IndexTranslation\IndexTranslationRepository;
 use App\Model\Language\Language;
 use App\Model\Page\Page;
 use App\Model\Page\PageRepository;
@@ -58,6 +59,11 @@ trait CorePageTranslation
 	public function onAfterPersist(): void
 	{
 		parent::onAfterPersist();
-		$this->getRepository()->getMapper()->createIndexTranslation($this);
+		$this->getRepository()->getModel()->getRepository(IndexTranslationRepository::class)->createIndexTranslation(
+			$this->page,
+			'page',
+			$this->language,
+			['A' => $this->page->name, 'B' => $this->title, 'C' => $this->description],
+		);
 	}
 }

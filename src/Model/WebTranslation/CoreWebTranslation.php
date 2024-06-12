@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\WebTranslation;
 
+use App\Model\IndexTranslation\IndexTranslationRepository;
 use App\Model\Language\Language;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
@@ -29,6 +30,11 @@ trait CoreWebTranslation
 	public function onAfterPersist(): void
 	{
 		parent::onAfterPersist();
-		$this->getRepository()->getMapper()->createIndexTranslation($this);
+		$this->getRepository()->getModel()->getRepository(IndexTranslationRepository::class)->createIndexTranslation(
+			$this->web,
+			'web',
+			$this->language,
+			['A' => $this->web->code, 'B' => $this->title],
+		);
 	}
 }

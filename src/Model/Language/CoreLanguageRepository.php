@@ -21,12 +21,4 @@ trait CoreLanguageRepository
 	{
 		return $this->getBy(['shortcut' => $data instanceof LanguageData ? $data->shortcut : $data]);
 	}
-
-
-	public function createIndex(Language $language)
-	{
-		$index = new Index;
-		$index->language = $language;
-		$this->getModel()->persist($index);
-	}
 }

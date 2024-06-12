@@ -39,6 +39,11 @@ CREATE TABLE "public"."index_translation" (
     "language_id" int4 NOT NULL,
     "index_id" int4 NOT NULL,
     "document" tsvector,
+    "document_a" text,
+    "document_b" text,
+    "document_c" text,
+    "document_d" text,
+    "document_e" text,
     UNIQUE ("language_id", "index_id"),
     PRIMARY KEY ("id")
 );

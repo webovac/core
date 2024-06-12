@@ -41,12 +41,4 @@ trait CoreModuleRepository
 	{
 		return $this->getBy(['name' => $data instanceof ModuleData ? $data->name : $data]);
 	}
-
-
-	public function createIndex(Module $module)
-	{
-		$index = new Index;
-		$index->module = $module;
-		$this->getModel()->persist($index);
-	}
 }

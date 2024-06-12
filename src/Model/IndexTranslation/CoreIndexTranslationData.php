@@ -19,5 +19,10 @@ trait CoreIndexTranslationData
 {
 	public ?int $id;
 	public string $document;
+	public ?string $documentA;
+	public ?string $documentB;
+	public ?string $documentC;
+	public ?string $documentD;
+	public ?string $documentE;
 	public int|string $language;
 }

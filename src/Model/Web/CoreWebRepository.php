@@ -125,12 +125,4 @@ trait CoreWebRepository
 //		unlink($path);
 		return $largeIconFile;
 	}
-
-
-	public function createIndex(Web $web)
-	{
-		$index = new Index;
-		$index->web = $web;
-		$this->getModel()->persist($index);
-	}
 }

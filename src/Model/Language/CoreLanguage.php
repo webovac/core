@@ -44,11 +44,4 @@ trait CoreLanguage
 	{
 		return $this->shortcut;
 	}
-
-
-	public function onAfterInsert(): void
-	{
-		parent::onAfterInsert();
-		$this->getRepository()->createIndex($this);
-	}
 }

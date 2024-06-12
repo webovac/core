@@ -172,11 +172,4 @@ trait CorePage
 	{
 		return $this->web?->id ?: $this->module->id;
 	}
-
-
-	public function onAfterInsert(): void
-	{
-		parent::onAfterInsert();
-		$this->getRepository()->createIndex($this);
-	}
 }

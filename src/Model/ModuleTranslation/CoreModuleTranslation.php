@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\ModuleTranslation;
 
+use App\Model\IndexTranslation\IndexTranslationRepository;
 use App\Model\Language\Language;
 use App\Model\Module\Module;
 use App\Model\Person\Person;
@@ -30,6 +31,11 @@ trait CoreModuleTranslation
 	public function onAfterPersist(): void
 	{
 		parent::onAfterPersist();
-		$this->getRepository()->getMapper()->createIndexTranslation($this);
+		$this->getRepository()->getModel()->getRepository(IndexTranslationRepository::class)->createIndexTranslation(
+			$this->module,
+			'module',
+			$this->language,
+			['A' => $this->module->name, 'B' => $this->title, 'C' => $this->description],
+		);
 	}
 }

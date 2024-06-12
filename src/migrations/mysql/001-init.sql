@@ -18,11 +18,57 @@ CREATE TABLE `file`  (
     CONSTRAINT `FK_file_person` FOREIGN KEY (`created_by_person_id`) REFERENCES `person` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB COLLATE = utf8mb4_unicode_520_ci;
 
+CREATE TABLE `index` (
+    `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+    `language_id` int UNSIGNED NULL DEFAULT NULL,
+    `module_id` int UNSIGNED NULL DEFAULT NULL,
+    `page_id` int UNSIGNED NULL DEFAULT NULL,
+    `web_id` int UNSIGNED NULL DEFAULT NULL,
+    UNIQUE INDEX `language_id` (`language_id` ASC),
+    UNIQUE INDEX `module_id` (`module_id`),
+    UNIQUE INDEX `page_id` (`page_id`),
+    UNIQUE INDEX `web_id` (`web_id`),
+    INDEX `index_language_id_idx`(`language_id` ASC),
+    INDEX `index_module_id_idx`(`module_id` ASC),
+    INDEX `index_page_id_idx`(`page_id` ASC),
+    INDEX `index_web_id_idx`(`web_id` ASC),
+    PRIMARY KEY (`id`),
+    CONSTRAINT `FK_index_language` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_index_module` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_index_page` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_index_web` FOREIGN KEY (`web_id`) REFERENCES `web` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE `index_translation` (
+    `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+    `language_id` int UNSIGNED NOT NULL,
+    `index_id` int UNSIGNED NOT NULL,
+    `document` text COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `document_a` text COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,
+    `document_b` text COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,
+    `document_c` text COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,
+    `document_d` text COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,
+    `document_e` text COLLATE utf8mb4_unicode_520_ci NULL DEFAULT NULL,
+    UNIQUE INDEX `language_id_index_id` (`language_id` ASC, `index_id` ASC),
+    INDEX `index_translation_language_id_idx`(`language_id` ASC),
+    INDEX `index_index_id_idx`(`index_id` ASC),
+    FULLTEXT index_document (`document`),
+    FULLTEXT index_document_a (`document_a`),
+    FULLTEXT index_document_b (`document_b`),
+    FULLTEXT index_document_c (`document_c`),
+    FULLTEXT index_document_d (`document_d`),
+    FULLTEXT index_document_e (`document_e`),
+    PRIMARY KEY (`id`),
+    CONSTRAINT `FK_index_translation_language` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_index_translation_index` FOREIGN KEY (`index_id`) REFERENCES `index` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB COLLATE = utf8mb4_unicode_520_ci;
+
 CREATE TABLE `language`  (
     `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
     `created_by_person_id` int UNSIGNED NULL DEFAULT NULL,
     `updated_by_person_id` int UNSIGNED NULL DEFAULT NULL,
     `shortcut` varchar(50) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `name` varchar(50) COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `rank` int UNSIGNED NOT NULL,
     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,

@@ -90,11 +90,4 @@ trait CoreWeb
 		}
 		return new ArrayCollection($pages, $this->getRepository());
 	}
-
-
-	public function onAfterInsert(): void
-	{
-		parent::onAfterInsert();
-		$this->getRepository()->createIndex($this);
-	}
 }

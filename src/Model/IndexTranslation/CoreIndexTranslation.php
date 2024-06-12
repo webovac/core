@@ -26,6 +26,11 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property int $id {primary}
  *
  * @property string $document
+ * @property string|null $documentA
+ * @property string|null $documentB
+ * @property string|null $documentC
+ * @property string|null $documentD
+ * @property string|null $documentE
  *
  * @property Index $index {m:1 Index::$translations}
  * @property Language $language {m:1 Language, oneSided=true}
