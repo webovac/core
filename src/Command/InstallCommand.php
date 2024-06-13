@@ -12,7 +12,6 @@ use Nette\Utils\FileInfo;
 use Nette\Utils\Finder;
 use ReflectionClass;
 use Stepapo\Dataset\Utils;
-use Tracy\Dumper;
 use Webovac\Core\InstallGroup;
 use Webovac\Core\Lib\CmsPrinter;
 use Webovac\Core\Model\CmsDataRepository;

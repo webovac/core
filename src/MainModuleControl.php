@@ -7,6 +7,5 @@ namespace Webovac\Core;
 
 interface MainModuleControl
 {
-	public static function getComponentList(): array;
 }
 

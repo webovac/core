@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Page;
 
 use App\Model\File\File;
-use App\Model\Index\Index;
 use App\Model\Language\LanguageData;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
@@ -18,8 +17,8 @@ use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
-use Webovac\Admin\Control\PageItem\IPageItemControl;
-use Webovac\Admin\Control\PageItem\PageItemControl;
+use Webovac\Core\Control\PageItem\IPageItemControl;
+use Webovac\Core\Control\PageItem\PageItemControl;
 
 
 /**
@@ -178,14 +177,14 @@ trait CorePage
 	}
 
 
-	public function injectComponent(IPageItemControl $component)
+	public function injectComponent(IPageItemControl $component): void
 	{
 		$this->component = $component;
 	}
 
 
-	public function getComponent(LanguageData $languageData, string $templateName): PageItemControl
+	public function getComponent(LanguageData $languageData, string $moduleClass, string $templateName): PageItemControl
 	{
-		return $this->component->create($this, $languageData, $templateName);
+		return $this->component->create($this, $languageData, $moduleClass, $templateName);
 	}
 }

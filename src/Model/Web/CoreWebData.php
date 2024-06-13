@@ -6,7 +6,6 @@ namespace Webovac\Core\Model\Web;
 
 use App\Model\File\File;
 use App\Model\File\FileData;
-use App\Model\Language\LanguageData;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageData;
 use App\Model\Web\Web;

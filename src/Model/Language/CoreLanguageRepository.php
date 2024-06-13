@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Language;
 
-use App\Model\Index\Index;
 use App\Model\Language\Language;
 use App\Model\Language\LanguageData;
-use App\Model\Web\WebData;
-use Nextras\Orm\Collection\ICollection;
-use Webovac\Core\Lib\CmsUser;
 
 
 trait CoreLanguageRepository
@@ -23,11 +19,5 @@ trait CoreLanguageRepository
 	public function getByData(LanguageData|string $data): ?Language
 	{
 		return $this->getBy(['shortcut' => $data instanceof LanguageData ? $data->shortcut : $data]);
-	}
-
-
-	public function getIndexFilter(WebData $webData, CmsUser $cmsUser): array
-	{
-		return ['language!=' => null];
 	}
 }

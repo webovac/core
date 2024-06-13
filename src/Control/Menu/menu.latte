@@ -1,23 +1,28 @@
 {templateType Webovac\Core\Control\Menu\MenuTemplate}
 <div class="wrapper navigation-wrapper primary-navigation-wrapper" n:snippet>
 	<div class="navigation primary-navigation">
-		<a class="logo clearfix" href="{plink Home:, $homePageData->name}">
-			{if $layoutData->code === 'cvut'}
-				<img src="{$baseUrl}/dist/images/logo-lion.svg">
-				<div class="logo-wrapper d-none d-xxl-block">
-					<img src="{$baseUrl}/dist/images/logo-cvut-text.svg">
-					<span n:class="logo-text, strlen($title) > 4 ? logo-text-long : logo-text-short">{$title}</span>
-				</div>
-				<div class="logo-wrapper d-block d-xxl-none">
-					<img src="{$baseUrl}/dist/images/logo-fsv-text.svg">
-				</div>
-			{else}
-				<img src="{$baseUrl}/{$logoUrl}">
-			{/}
-		</a>
-		<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>
-		<div class="menu" id="menu">
-			<div n:if="isModuleInstalled('search') && in_array($searchModuleData->id, $webData->modules, true)" class="menu-item">
+		<div class="d-flex flex-row">
+			<a class="logo clearfix" href="{plink '//default', $homePageData->name}">
+				{if $layoutData->code === 'cvut'}
+					<img src="{$baseUrl}/dist/images/logo-lion.svg">
+					<div class="logo-wrapper d-none d-xxl-block">
+						<img src="{$baseUrl}/dist/images/logo-cvut-text.svg">
+						<span n:class="logo-text, strlen($title) > 4 ? logo-text-long : logo-text-short">{$title}</span>
+					</div>
+					<div class="logo-wrapper d-block d-xxl-none">
+						<img src="{$baseUrl}/dist/images/logo-fsv-text.svg">
+					</div>
+				{else}
+					<img src="{$baseUrl}/{$logoUrl}">
+				{/}
+			</a>
+			<div n:if="$hasSearch" class="search mobile-search align-items-center flex-grow-1">
+				{$presenter->getComponent('search-searchForm')->render()}
+			</div>
+			<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>
+		</div>
+		<div class="menu flex-grow-1" id="menu">
+			<div n:if="$hasSearch" class="search desktop-search menu-item">
 				{$presenter->getComponent('search-searchForm')->render()}
 			</div>
 			{foreach $pageDatas as $p}
@@ -29,11 +34,11 @@
 				{var $t = $l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id]) ?: $l->getCollection('translations')->getBy(['translationLanguage' => $webData->defaultLanguage])}
 				{ifset $availableTranslations[$l->id]}
 					{if $cmsUser->isLoggedIn()}
-						<a n:if="$t" href="{plink setLanguage!, $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+						<a n:if="$t" href="{plink '//setLanguage!', $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
 							<img src="/dist/images/languages/{$l->shortcut}.svg">
 						</a>
 					{else}
-						<a href="{plink Home:, $pageData->name, $entity?->getParameter($languageData), $entity?->getParentParameter($languageData), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+						<a href="{plink '//default', $pageData->name, $entity?->getParameter($languageData), $entity?->getParentParameter($languageData), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
 							<img src="/dist/images/languages/{$l->shortcut}.svg">
 						</a>
 					{/}
@@ -45,7 +50,7 @@
 			</div>
 			<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && ($layoutData->themes) > 1 && !$isError" n:inner-foreach="$layoutData->themes as $theme">
 				{var $translation = $theme->getCollection('translations')->getBy(['language' => $languageData->id]) ?: $theme->getCollection('translations')->getBy(['language' => $webData->defaultLanguage])}
-				<a n:if="$translation" href="{plink setTheme!, $theme->id}" data-tooltip="{$translation->title}" data-tooltip-position="right">
+				<a n:if="$translation" href="{plink '//setTheme!', $theme->id}" data-tooltip="{$translation->title}" data-tooltip-position="right">
 					<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $theme->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
 				</a>
 			</div>

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model;
 
 use App\Model\File\FileRepository;
-use App\Model\Index\IndexRepository;
-use App\Model\IndexTranslation\IndexTranslationRepository;
 use App\Model\Language\LanguageRepository;
 use App\Model\LanguageTranslation\LanguageTranslationRepository;
 use App\Model\Module\ModuleRepository;
@@ -22,8 +20,6 @@ use App\Model\WebTranslation\WebTranslationRepository;
 
 /**
  * @property-read FileRepository $fileRepository
- * @property-read IndexRepository $indexRepository
- * @property-read IndexTranslationRepository $indexTranslationRepository
  * @property-read LanguageRepository $languageRepository
  * @property-read LanguageTranslationRepository $languageTranslationRepository
  * @property-read ModuleRepository $moduleRepository

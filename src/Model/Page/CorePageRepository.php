@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
-use App\Model\Index\Index;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
@@ -12,12 +11,9 @@ use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationRepository;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
-use App\Model\Web\WebData;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
-use Tracy\Dumper;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\Web\WebModuleData;
 
@@ -252,25 +248,5 @@ trait CorePageRepository
 	public function removePage(Page $page): void
 	{
 		$this->getMapper()->removePage($page);
-	}
-
-
-	public function getIndexFilter(WebData $webData, CmsUser $cmsUser): array
-	{
-		return [
-			ICollection::AND,
-			['page->hasParameter' => false],
-			['page->type' => [Page::TYPE_PAGE, Page::TYPE_SIGNAL]],
-			['page!=' => null],
-			[
-				ICollection::OR,
-				['page->web' => $webData->id],
-				[
-					ICollection::AND,
-					'page->web' => null,
-					'page->module->webs->id' => $webData->id,
-				]
-			]
-		];
 	}
 }

@@ -13,8 +13,6 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
-use Webovac\Admin\Control\ModuleItem\IModuleItemControl;
-use Webovac\Admin\Control\ModuleItem\ModuleItemControl;
 
 
 /**
@@ -37,9 +35,6 @@ use Webovac\Admin\Control\ModuleItem\ModuleItemControl;
  */
 trait CoreModule
 {
-	private IModuleItemControl $component;
-
-
 	public function getTranslation(LanguageData $language): ?ModuleTranslation
 	{
 		return $this->translations->toCollection()->getBy(['language' => $language->id]);
@@ -69,17 +64,5 @@ trait CoreModule
 	public function getDescription(LanguageData $language): string
 	{
 		return $this->getTranslation($language)->description;
-	}
-
-
-	public function injectComponent(IModuleItemControl $component)
-	{
-		$this->component = $component;
-	}
-
-
-	public function getComponent(LanguageData $languageData, string $templateName): ModuleItemControl
-	{
-		return $this->component->create($this, $languageData, $templateName);
 	}
 }

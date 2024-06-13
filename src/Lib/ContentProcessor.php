@@ -29,7 +29,7 @@ class ContentProcessor
 				$page = $m[3];
 				$id = $m[4];
 				$text = $m[5];
-				$href = $url ?: ("{plink 'Home:default', pageName: '" . $page . "'" . ($id ? ", id: '" . $id . "'" : "") . "}");
+				$href = $url ?: ("{plink '//default', pageName: '" . $page . "'" . ($id ? ", id: '" . $id . "'" : "") . "}");
 				return '<a' . $class . ' href="' . $href . '">' . $text . '</a>';
 			}
 		], $editor);
@@ -46,7 +46,7 @@ class ContentProcessor
 			'/<a href="(.*?)">(.*?)<\/a>/' => function (array $m) {
 				$href = $m[1];
 				$text = $m[2];
-				if (preg_match("/{plink 'Home:default', pageName: '(.+?)?'(?:, id: '?(.+?)'?)?}/", $href, $matches)) {
+				if (preg_match("/{plink '//default', pageName: '(.+?)?'(?:, id: '?(.+?)'?)?}/", $href, $matches)) {
 					$href = '';
 					$pageName = $matches[1];
 					$id = $matches[2] ?? '';

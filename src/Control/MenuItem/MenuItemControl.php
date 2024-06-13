@@ -31,6 +31,8 @@ class MenuItemControl extends BaseControl
 		private ?PageData $activePageData,
 		private string $context,
 		private bool $checkActive,
+		private string $moduleClass,
+		private string $templateName,
 		private DataModel $dataModel,
 	) {}
 
@@ -59,7 +61,7 @@ class MenuItemControl extends BaseControl
 		$this->template->tag = $this->pageData->type === Page::TYPE_TEXT ? 'div' : 'a';
 		$this->template->iconHasWrapper = $this->context === 'signpost';
 		$this->template->iconStyle = $this->dataModel->layoutRepository->getById($this->webData->layout)->{$this->context . 'Icon'};
-		$this->template->render(__DIR__ . '/menuItem.latte');
+		$this->template->renderFile($this->moduleClass, self::class, $this->templateName);
 	}
 
 

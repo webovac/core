@@ -7,7 +7,6 @@ namespace Webovac\Core\Presenter;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Orm;
-use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationData;
@@ -26,6 +25,7 @@ use Nette\Utils\Arrays;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
+use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Core;
@@ -76,8 +76,7 @@ trait CorePresenter
 					$this->redirect('this');
 				}
 			}
-			$this->addComponents(Core::getModuleName(), CoreControl::getComponentList());
-			$this->setupCoreOrmEvents();
+			$this->addComponents(Core::getModuleName(), CoreControl::class);
 			$this->languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 			if (!$this->languageData) {
 				$this->error();
@@ -256,9 +255,9 @@ trait CorePresenter
 	}
 
 
-	private function addComponents(string $module, array $components): void
+	private function addComponents(string $module, string $className): void
 	{
-		foreach ($components as $key => $value) {
+		foreach ($this->getComponentList($className) as $key => $value) {
 			$this->components[] = [
 				'name' => $module . '-' . (is_numeric($key) ? $value : $key),
 				'requires' => is_numeric($key) ? null : Arrays::last(explode('\\', $value)),
@@ -267,18 +266,21 @@ trait CorePresenter
 	}
 
 
-	private function setupCoreOrmEvents(): void
+	private function getComponentList(string $className): array
 	{
-		$cache = new Cache($this->storage);
-		foreach (['onAfterPersist', 'onAfterRemove'] as $property) {
-			$this->orm->languageRepository->$property[] = fn() => $cache->remove('language');
-			$this->orm->languageTranslationRepository->$property[] = fn() => $cache->remove('language');
-			$this->orm->moduleRepository->$property[] = fn() => $cache->remove('page');
-			$this->orm->moduleTranslationRepository->$property[] = fn() => $cache->remove('page');
-			$this->orm->pageRepository->$property[] = fn() => $cache->remove('page');
-			$this->orm->pageTranslationRepository->$property[] = fn() => $cache->remove('page');
-			$this->orm->webRepository->$property[] = fn() => $cache->remove('web');
-			$this->orm->webTranslationRepository->$property[] = fn() => $cache->remove('web');
+		$return = [];
+		$rf = new \ReflectionClass($className);
+		foreach ($rf->getMethods() as $method) {
+			preg_match('/createComponent(.+)/', $method->getName(), $m);
+			if (!isset($m[1])) {
+				continue;
+			}
+			if ($ar = $method->getAttributes(RequiresEntity::class)) {
+				$return[lcfirst($m[1])] = $ar[0]->getArguments()[0];
+			} else {
+				$return[] = lcfirst($m[1]);
+			}
 		}
+		return $return;
 	}
 }

@@ -50,10 +50,10 @@
 				</div>
 				<div class="footer small" n:if="$showAdmin">
 					<p n:if="$showAdmin">
-						<a href="{plink Home:, 'Admin:PageDetail', $pageData->id, lang: $adminLang}">Administrace</a>
+						<a href="{plink '//default', 'Admin:PageDetail', $pageData->id, lang: $adminLang}">Administrace</a>
 						<br>
 						{foreach $webDatas as $w}
-							<a href="{plink Home:, 'Home', host: $w->host, basePath: $w->basePath, lang: $languageShortcuts[$w->defaultLanguage]}" class="link-secondary">
+							<a href="{plink '//default', 'Home', host: $w->host, basePath: $w->basePath, lang: $languageShortcuts[$w->defaultLanguage]}" class="link-secondary">
 								{$w->host}{if $w->basePath}/{$w->basePath}{/}
 							</a>
 							{sep} · {/}

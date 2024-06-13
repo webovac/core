@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\LanguageTranslation;
 
-use App\Model\IndexTranslation\IndexTranslationRepository;
 use App\Model\Language\Language;
 use App\Model\Person\Person;
 use Nextras\Dbal\Utils\DateTimeImmutable;
@@ -25,14 +24,4 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
  */
 trait CoreLanguageTranslation
 {
-	public function onAfterPersist(): void
-	{
-		parent::onAfterPersist();
-		$this->getRepository()->getModel()->getRepository(IndexTranslationRepository::class)->createIndexTranslation(
-			$this->language,
-			'language',
-			$this->translationLanguage,
-			['A' => $this->language->name, 'B' => $this->title],
-		);
-	}
 }

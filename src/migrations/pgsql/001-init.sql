@@ -33,24 +33,6 @@ CREATE INDEX ON "public"."index" ("module_id");
 CREATE INDEX ON "public"."index" ("page_id");
 CREATE INDEX ON "public"."index" ("web_id");
 
-CREATE SEQUENCE "public"."index_translation_id_seq";
-CREATE TABLE "public"."index_translation" (
-    "id" int4 NOT NULL DEFAULT nextval('index_translation_id_seq'::regclass),
-    "language_id" int4 NOT NULL,
-    "index_id" int4 NOT NULL,
-    "document" tsvector,
-    "document_a" text,
-    "document_b" text,
-    "document_c" text,
-    "document_d" text,
-    "document_e" text,
-    UNIQUE ("language_id", "index_id"),
-    PRIMARY KEY ("id")
-);
-CREATE INDEX ON "public"."index_translation" ("language_id");
-CREATE INDEX ON "public"."index_translation" ("index_id");
-CREATE INDEX ON "public"."index_translation" USING gin("document");
-
 CREATE SEQUENCE "public"."language_id_seq";
 CREATE TABLE "public"."language" (
     "id" int4 NOT NULL DEFAULT nextval('language_id_seq'::regclass),
@@ -318,15 +300,13 @@ CREATE INDEX ON "public"."web_translation" ("web_id");
 -- SELECT ts_stat.word, unaccent(ts_stat.word) AS unaccented_word
 -- FROM ts_stat('SELECT document FROM public.index'::text) ts_stat(word, ndoc, nentry);
 
+
 ALTER TABLE "public"."file" ADD CONSTRAINT "file_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE "public"."index" ADD CONSTRAINT "file_language_id_fkey" FOREIGN KEY ("language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "public"."index" ADD CONSTRAINT "file_page_id_fkey" FOREIGN KEY ("page_id") REFERENCES "public"."page" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "public"."index" ADD CONSTRAINT "file_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "public"."module" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "public"."index" ADD CONSTRAINT "file_web_id_fkey" FOREIGN KEY ("web_id") REFERENCES "public"."web" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE "public"."index_translation" ADD CONSTRAINT "file_language_id_fkey" FOREIGN KEY ("language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."index_translation" ADD CONSTRAINT "file_index_id_fkey" FOREIGN KEY ("index_id") REFERENCES "public"."index" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "public"."language" ADD CONSTRAINT "language_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "public"."language" ADD CONSTRAINT "language_updated_by_person_id_fkey" FOREIGN KEY ("updated_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;

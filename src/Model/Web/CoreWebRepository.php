@@ -6,7 +6,6 @@ namespace Webovac\Core\Model\Web;
 
 use App\Model\File\File;
 use App\Model\File\FileRepository;
-use App\Model\Index\Index;
 use App\Model\Module\ModuleRepository;
 use App\Model\Page\Page;
 use App\Model\Page\PageRepository;
@@ -18,7 +17,6 @@ use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsDataRepository;
 
 
@@ -125,11 +123,5 @@ trait CoreWebRepository
 		$largeIconFile = $this->getModel()->getRepository(FileRepository::class)->createFile($upload, $person);
 //		unlink($path);
 		return $largeIconFile;
-	}
-
-
-	public function getIndexFilter(WebData $webData, CmsUser $cmsUser): array
-	{
-		return ['web!=' => null];
 	}
 }

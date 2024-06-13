@@ -51,15 +51,6 @@ class CoreControl extends BaseControl implements MainModuleControl
 	}
 
 
-	public static function getComponentList(): array
-	{
-		return [
-			'buttons',
-			'signpost',
-		];
-	}
-
-
 	public function render(): void
 	{
 		$this->template->render(__DIR__ . '/core.latte');

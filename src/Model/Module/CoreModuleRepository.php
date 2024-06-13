@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Module;
 
-use App\Model\Index\Index;
 use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
 use App\Model\Person\Person;
-use App\Model\Web\WebData;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsDataRepository;
 
 
@@ -42,11 +39,5 @@ trait CoreModuleRepository
 	public function getByData(ModuleData|string $data): ?Module
 	{
 		return $this->getBy(['name' => $data instanceof ModuleData ? $data->name : $data]);
-	}
-
-
-	public function getIndexFilter(WebData $webData, CmsUser $cmsUser): array
-	{
-		return ['module!=' => null];
 	}
 }

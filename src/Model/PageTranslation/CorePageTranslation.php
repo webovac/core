@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\PageTranslation;
 
-use App\Model\IndexTranslation\IndexTranslationRepository;
 use App\Model\Language\Language;
 use App\Model\Page\Page;
-use App\Model\Page\PageRepository;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
@@ -53,17 +51,5 @@ trait CorePageTranslation
 			'pageName' => $this->page->name,
 			'lang' => $this->language->shortcut,
 		];
-	}
-
-
-	public function onAfterPersist(): void
-	{
-		parent::onAfterPersist();
-		$this->getRepository()->getModel()->getRepository(IndexTranslationRepository::class)->createIndexTranslation(
-			$this->page,
-			'page',
-			$this->language,
-			['A' => $this->page->name, 'B' => $this->title, 'C' => $this->description],
-		);
 	}
 }
