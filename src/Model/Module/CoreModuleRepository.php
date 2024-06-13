@@ -9,6 +9,7 @@ use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
 use App\Model\Person\Person;
+use App\Model\Web\WebData;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsDataRepository;
 
@@ -44,7 +45,7 @@ trait CoreModuleRepository
 	}
 
 
-	public function getIndexFilter(CmsUser $cmsUser): array
+	public function getIndexFilter(WebData $webData, CmsUser $cmsUser): array
 	{
 		return ['module!=' => null];
 	}

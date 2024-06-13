@@ -81,9 +81,9 @@ class MenuItemControl extends BaseControl
 			$targetParentParameter = $p->hasParentParameter ? $this->entity?->getParentParameter($this->languageData) : null;
 		}
 		return match($p->type) {
-			Page::TYPE_SIGNAL => $this->presenter->link($p->targetSignal . '!'),
+			Page::TYPE_SIGNAL => $this->presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $this->presenter->link('Home:', [$p->name, $targetParameter, $targetParentParameter, 'lang' => $this->targetLanguageData->shortcut]),
+			Page::TYPE_PAGE => $this->presenter->link('//Home:', [$p->name, $targetParameter, $targetParentParameter, 'lang' => $this->targetLanguageData->shortcut]),
 			default => null,
 		};
 	}

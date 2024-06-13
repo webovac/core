@@ -128,7 +128,7 @@ trait CoreWebRepository
 	}
 
 
-	public function getIndexFilter(CmsUser $cmsUser): array
+	public function getIndexFilter(WebData $webData, CmsUser $cmsUser): array
 	{
 		return ['web!=' => null];
 	}

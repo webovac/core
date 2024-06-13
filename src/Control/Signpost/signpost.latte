@@ -1,6 +1,4 @@
 {templateType Webovac\Core\Control\Signpost\SignpostTemplate}
-<div class="grid signpost text-center">
-	{foreach $pageDatas as $p}
-		{control 'menuItem-' . $p->id}
-	{/}
+<div class="grid signpost text-center" n:inner-foreach="$pageDatas as $p">
+	{control 'menuItem-' . $p->id}
 </div>

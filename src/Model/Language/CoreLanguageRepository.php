@@ -7,6 +7,8 @@ namespace Webovac\Core\Model\Language;
 use App\Model\Index\Index;
 use App\Model\Language\Language;
 use App\Model\Language\LanguageData;
+use App\Model\Web\WebData;
+use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Lib\CmsUser;
 
 
@@ -24,7 +26,7 @@ trait CoreLanguageRepository
 	}
 
 
-	public function getIndexFilter(CmsUser $cmsUser): array
+	public function getIndexFilter(WebData $webData, CmsUser $cmsUser): array
 	{
 		return ['language!=' => null];
 	}

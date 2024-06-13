@@ -12,6 +12,7 @@ use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationRepository;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
@@ -254,8 +255,22 @@ trait CorePageRepository
 	}
 
 
-	public function getIndexFilter(CmsUser $cmsUser): array
+	public function getIndexFilter(WebData $webData, CmsUser $cmsUser): array
 	{
-		return ['page!=' => null];
+		return [
+			ICollection::AND,
+			['page->hasParameter' => false],
+			['page->type' => [Page::TYPE_PAGE, Page::TYPE_SIGNAL]],
+			['page!=' => null],
+			[
+				ICollection::OR,
+				['page->web' => $webData->id],
+				[
+					ICollection::AND,
+					'page->web' => null,
+					'page->module->webs->id' => $webData->id,
+				]
+			]
+		];
 	}
 }

@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\Web;
 use App\Model\File\File;
 use App\Model\File\FileData;
 use App\Model\Language\LanguageData;
+use App\Model\Module\ModuleData;
 use App\Model\Page\PageData;
 use App\Model\Web\Web;
 use App\Model\WebTranslation\WebTranslationData;
@@ -32,6 +33,7 @@ trait CoreWebData
 	/** @var array<WebTranslationData|array> */ public array $translations;
 	/** @var array<PageData|array> */ public array $pages;
 	/** @var array<WebModuleData|string> */ public array $webModules;
+	/** @var array<ModuleData|string> */ public array $modules;
 	public string $basePath;
 	public array $tree;
 	public int|string|null $createdByPerson;
