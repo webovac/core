@@ -115,6 +115,13 @@
 		color: var(--cms-active-link-color);
 	}
 }
+.mobile-search {
+	display: flex;
+	padding-right: var(--cms-primary-padding-right);
+}
+.desktop-search {
+	display: none !important;
+}
 @media (max-width: 991.8px) {
 	:root {
 		--cms-layout-primary-menu-item-padding: 0 12px;
@@ -153,13 +160,6 @@
 		height: 48px;
 		background: var(--cms-content-bg);
 		z-index: 100;
-	}
-	.mobile-search {
-		display: flex;
-		padding-right: var(--cms-primary-padding-right);
-	}
-	.desktop-search {
-		display: none !important;
 	}
 }
 
