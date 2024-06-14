@@ -46,7 +46,7 @@ class ContentProcessor
 			'/<a href="(.*?)">(.*?)<\/a>/' => function (array $m) {
 				$href = $m[1];
 				$text = $m[2];
-				if (preg_match("/{plink '//default', pageName: '(.+?)?'(?:, id: '?(.+?)'?)?}/", $href, $matches)) {
+				if (preg_match("/{plink '\/\/default', pageName: '(.+?)?'(?:, id: '?(.+?)'?)?}/", $href, $matches)) {
 					$href = '';
 					$pageName = $matches[1];
 					$id = $matches[2] ?? '';

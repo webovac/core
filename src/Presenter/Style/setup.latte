@@ -53,7 +53,7 @@
         --cms-{$th['code']}-layout-bg: {$th['layoutBg']};
         --cms-{$th['code']}-layout-border-color: {$th['layoutBorderColor']};
 
-        {foreach ['primary', 'secondary'] as $degree}
+        {foreach ['primary', 'secondary', 'side'] as $degree}
             --cms-{$th['code']}-{$degree}-bg: {$th[$degree . 'Bg']};
             --cms-{$th['code']}-{$degree}-border-color: {$th[$degree . 'BorderColor']};
             --cms-{$th['code']}-{$degree}-link-color: {$th[$degree . 'LinkColor']};
@@ -77,7 +77,7 @@
             --cms-active-link-color-rgb: var(--cms-{$th['code']}-active-link-color-rgb);
             --cms-layout-bg: var(--cms-{$th['code']}-layout-bg);
             --cms-layout-border-color: var(--cms-{$th['code']}-layout-border-color);
-            {foreach ['primary', 'secondary'] as $degree}
+            {foreach ['primary', 'secondary', 'side'] as $degree}
                 --cms-{$degree}-bg: var(--cms-{$th['code']}-{$degree}-bg);
                 --cms-{$degree}-border-color: var(--cms-{$th['code']}-{$degree}-border-color);
                 --cms-{$degree}-link-color: var(--cms-{$th['code']}-{$degree}-link-color);
@@ -99,7 +99,7 @@
             {/}
         {/}
 
-        {foreach ['primary', 'secondary'] as $degree}
+        {foreach ['primary', 'secondary', 'side'] as $degree}
             --cms-{$screen['code']}-{$degree}-width: {$screen[$degree . 'Width'] ? ($screen[$degree . 'Width'] . 'px') : 'initial'};
             --cms-{$screen['code']}-{$degree}-height: {$screen[$degree . 'Height']}px;
             {foreach ['margin', 'border', 'padding'] as $property}
@@ -123,6 +123,20 @@
             {/}
         {/}
     {/}
+
+    --cms-layout-side-wrapper-overflow-y: auto;
+    --cms-layout-side-wrapper-overflow-x: hidden;
+    --cms-layout-side-wrapper-width: var(--cms-side-width);
+    --cms-layout-side-wrapper-min-width: var(--cms-side-width);
+    --cms-layout-side-wrapper-min-height: initial;
+    --cms-layout-side-max-width: initial;
+    --cms-layout-side-justify-content: initial;
+    --cms-layout-side-menu-item-justify-content: var(--cms-primary-justify-content);
+    --cms-layout-side-menu-item-align-items: center;
+    --cms-layout-side-menu-item-padding: var(--cms-menu-item-padding-y) var(--cms-primary-padding-right) var(--cms-menu-item-padding-y) var(--cms-primary-padding-left);
+    --cms-layout-side-hr-display: block;
+    --cms-side-menu-flex-direction: column;
+    --cms-side-white-space: initial;
 }
 {foreach $l['screens'] as $screen}
     @media{if $screen['minWidth']} (min-width: {$screen['minWidth'] . 'px'}){/}{if $screen['minWidth'] && $screen['maxWidth']} and{/}{if $screen['maxWidth']} (max-width: {$screen['maxWidth'] . 'px'}){/} {
@@ -132,8 +146,8 @@
             --cms-layout-margin: var(--cms-{$screen['code']}-layout-margin-top) var(--cms-{$screen['code']}-layout-margin-right) var(--cms-{$screen['code']}-layout-margin-bottom) var(--cms-{$screen['code']}-layout-margin-left);
             --cms-layout-border-width: var(--cms-{$screen['code']}-layout-border-top) var(--cms-{$screen['code']}-layout-border-right) var(--cms-{$screen['code']}-layout-border-bottom) var(--cms-{$screen['code']}-layout-border-left);
 
-            {foreach ['primary', 'secondary'] as $degree}
-                --cms-layout-{$degree}-justify-content: {if $screen[$degree . 'Orientation'] === 'v' || $screen[$degree . 'FlexDirection']}initial{else}flex-end{/};
+            {foreach ['primary', 'secondary', 'side'] as $degree}
+                --cms-layout-{$degree}-justify-content: {if !isset($screen[$degree . 'Orientation']) || $screen[$degree . 'Orientation'] === 'v' || $screen[$degree . 'FlexDirection']}initial{else}flex-end{/};
                 --cms-{$degree}-height: var(--cms-{$screen['code']}-{$degree}-height);
                 --cms-{$degree}-width: var(--cms-{$screen['code']}-{$degree}-width);
                 --cms-{$degree}-margin: var(--cms-{$screen['code']}-{$degree}-margin-top) var(--cms-{$screen['code']}-{$degree}-margin-right) var(--cms-{$screen['code']}-{$degree}-margin-bottom) var(--cms-{$screen['code']}-{$degree}-margin-left);
@@ -146,7 +160,7 @@
                 --cms-{$degree}-padding: var(--cms-{$screen['code']}-{$degree}-padding-top) var(--cms-{$screen['code']}-{$degree}-padding-right) var(--cms-{$screen['code']}-{$degree}-padding-bottom) var(--cms-{$screen['code']}-{$degree}-padding-left);
                 --cms-{$degree}-border-width: var(--cms-{$screen['code']}-{$degree}-border-top) var(--cms-{$screen['code']}-{$degree}-border-right) var(--cms-{$screen['code']}-{$degree}-border-bottom) var(--cms-{$screen['code']}-{$degree}-border-left);
                 --cms-{$degree}-justify-content: var(--cms-{$screen['code']}-{$degree}-justify-content);
-                --cms-{$degree}-flex-direction: {if $screen[$degree . 'Orientation'] === 'v'}column{else}var(--cms-{$screen['code']}-{$degree}-flex-direction){/};
+                --cms-{$degree}-flex-direction: {if !isset($screen[$degree . 'Orientation']) || $screen[$degree . 'Orientation'] === 'v'}column{else}var(--cms-{$screen['code']}-{$degree}-flex-direction){/};
                 --cms-{$degree}-menu-item-flex-direction: var(--cms-{$screen['code']}-{$degree}-menu-item-flex-direction);
                 --cms-{$degree}-icon-display: var(--cms-{$screen['code']}-{$degree}-icon-display);
                 --cms-{$degree}-icon-font-size: var(--cms-{$screen['code']}-{$degree}-icon-font-size);
@@ -178,7 +192,7 @@
         --cms-active-link-color-rgb: var(--cms-{$th['code']}-active-link-color-rgb);
         --cms-layout-bg: var(--cms-{$th['code']}-layout-bg);
         --cms-layout-border-color: var(--cms-{$th['code']}-layout-border-color);
-        {foreach ['primary', 'secondary'] as $degree}
+        {foreach ['primary', 'secondary', 'side'] as $degree}
             --cms-{$degree}-bg: var(--cms-{$th['code']}-{$degree}-bg);
             --cms-{$degree}-border-color: var(--cms-{$th['code']}-{$degree}-border-color);
             --cms-{$degree}-link-color: var(--cms-{$th['code']}-{$degree}-link-color);

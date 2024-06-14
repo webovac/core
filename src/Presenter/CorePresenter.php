@@ -31,6 +31,7 @@ use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Core;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
@@ -220,6 +221,7 @@ trait CorePresenter
 						->allowProperties(stdClass::class, SecurityPolicy::All)
 						->allowProperties(IEntity::class, SecurityPolicy::All)
 						->allowProperties(CmsData::class, SecurityPolicy::All)
+						->allowMethods(CmsUser::class, SecurityPolicy::All)
 						->allowMethods(IEntity::class, SecurityPolicy::All)
 						->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)
 						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'core'])

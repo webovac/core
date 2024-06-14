@@ -18,6 +18,8 @@ use Webovac\Core\Control\Menu\IMenuControl;
 use Webovac\Core\Control\Menu\MenuControl;
 use Webovac\Core\Control\Navigation\INavigationControl;
 use Webovac\Core\Control\Navigation\NavigationControl;
+use Webovac\Core\Control\SidePanel\ISidePanelControl;
+use Webovac\Core\Control\SidePanel\SidePanelControl;
 use Webovac\Core\Control\Signpost\ISignpostControl;
 use Webovac\Core\Control\Signpost\SignpostControl;
 use Webovac\Core\MainModuleControl;
@@ -40,6 +42,7 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private INavigationControl $navigation,
 		private IButtonsControl $buttons,
 		private ISignpostControl $signpost,
+		private ISidePanelControl $sidePanel,
 		private IBreadcrumbsControl $breadcrumbs,
 		private MigrateAndInstallCommand $command,
 	) {}
@@ -89,6 +92,12 @@ class CoreControl extends BaseControl implements MainModuleControl
 	public function createComponentSignpost(): SignpostControl
 	{
 		return $this->signpost->create($this->webData, $this->pageData, $this->languageData, $this->entity);
+	}
+
+
+	public function createComponentSidePanel(): SidePanelControl
+	{
+		return $this->sidePanel->create($this->webData, $this->pageData, $this->languageData, $this->entity);
 	}
 
 

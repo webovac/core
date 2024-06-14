@@ -1,0 +1,43 @@
+{templateType Webovac\Core\Control\SidePanel\SidePanelTemplate}
+<div class="side-panel" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn()">
+	<div n:if="$hasSearch" class="search menu-item" style="height: 57px; min-height: 57px;">
+		{$presenter->getComponent('search-searchForm')->render()}
+	</div>
+	<div class="user menu-item mt-2">
+		<div class="user-icon" style="height: 48px;">
+			<i class="fad fa-fw fa-circle-user" style="font-size: 48px; line-height: 1"></i>
+		</div>
+		<div class="user-name mt-2">
+			{$cmsUser->getPerson()->name}
+		</div>
+	</div>
+	<hr>
+{*	<a class="menu-item" href="#"><i class="fass fa-fw fa-cog"></i><span class="ms-2">Nastavení</span></a>*}
+	<a class="menu-item" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}"><i class="fass fa-fw fa-sign-out"></i><span class="ms-2">Odhlásit</span></a>
+	<hr>
+	<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
+		{var $l = $dataModel->getLanguageData($translation->language)}
+				{var $t = $l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id]) ?: $l->getCollection('translations')->getBy(['translationLanguage' => $webData->defaultLanguage])}
+				{ifset $availableTranslations[$l->id]}
+			{if $cmsUser->isLoggedIn()}
+				<a n:if="$t" href="{plink '//setLanguage!', $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+					<img src="/dist/images/languages/{$l->shortcut}.svg">
+				</a>
+			{else}
+				<a href="{plink '//default', $pageData->name, $entity?->getParameter($languageData), $entity?->getParentParameter($languageData), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+					<img src="/dist/images/languages/{$l->shortcut}.svg">
+				</a>
+			{/}
+		{else}
+			<div n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id])->title} nedostupné" data-tooltip-position="right">
+				<img src="/dist/images/languages/{$l->shortcut}.svg">
+			</div>
+		{/}
+	</div>
+	<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && ($layoutData->themes) > 1 && !$isError" n:inner-foreach="$layoutData->themes as $theme">
+		{var $translation = $theme->getCollection('translations')->getBy(['language' => $languageData->id]) ?: $theme->getCollection('translations')->getBy(['language' => $webData->defaultLanguage])}
+		<a n:if="$translation" href="{plink '//setTheme!', $theme->id}" data-tooltip="{$translation->title}" data-tooltip-position="right">
+			<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $theme->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
+		</a>
+	</div>
+</div>
