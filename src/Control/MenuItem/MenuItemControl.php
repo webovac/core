@@ -11,8 +11,8 @@ use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Model\CmsEntity;
 
 /**
  * @property MenuItemTemplate $template
@@ -27,7 +27,7 @@ class MenuItemControl extends BaseControl
 		private PageData $pageData,
 		private WebData $webData,
 		private LanguageData $languageData,
-		private ?IEntity $entity,
+		private ?CmsEntity $entity,
 		private ?PageData $activePageData,
 		private string $context,
 		private bool $checkActive,

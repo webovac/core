@@ -11,7 +11,6 @@ use App\Model\File\FileRepository;
 use App\Model\Person\Person;
 use DateTimeInterface;
 use Nette\DI\Attributes\Inject;
-use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Entity\ToArrayConverter;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\ManyHasOne;
@@ -42,13 +41,13 @@ abstract class CmsRepository extends Repository
 	}
 
 
-	public function getByParameter(mixed $parameter): ?IEntity
+	public function getByParameter(mixed $parameter): ?CmsEntity
 	{
 		return $this->getBy(['id' => $parameter]);
 	}
 
 
-	public function delete(IEntity $entity): void
+	public function delete(CmsEntity $entity): void
 	{
 		$this->mapper->delete($entity);
 	}
@@ -56,14 +55,14 @@ abstract class CmsRepository extends Repository
 
 	public function createFromData(
 		CmsData $data,
-		?IEntity $original = null,
-		?IEntity $parent = null,
+		?CmsEntity $original = null,
+		?CmsEntity $parent = null,
 		?string $parentName = null,
 		?Person $person = null,
 		?DateTimeInterface $date = null,
 		string $mode = CmsDataRepository::MODE_INSTALL,
 		bool $getOriginalByData = false,
-	): IEntity
+	): CmsEntity
 	{
 		if ($getOriginalByData) {
 			$original ??= method_exists($this, 'getByData') ? $this->getByData($data, $parent) : null;
@@ -125,21 +124,13 @@ abstract class CmsRepository extends Repository
 		if ($parent && $parentName) {
 			$entity->$parentName = $parent;
 		}
+		$isChanged = $entity->isChanged($old);
 		if (!$original) {
 			if ($metadata->hasProperty('createdByPerson')) {
 				$entity->createdByPerson = $person;
 			}
 			$this->persist($entity);
-		} elseif ($entity->isChanged($old)) {
-			if ($metadata->hasProperty('updatedByPerson')) {
-				$entity->updatedByPerson = $person;
-			}
-			if ($metadata->hasProperty('updatedAt')) {
-				$entity->updatedAt = $date;
-			}
-			$this->persist($entity);
 		}
-
 		foreach ($data as $name => $value) {
 			$property = $metadata->hasProperty($name) ? $metadata->getProperty($name) : null;
 			if (!$property) {
@@ -148,8 +139,14 @@ abstract class CmsRepository extends Repository
 				$ids = [];
 				$relatedRepository = $this->getModel()->getRepository($property->relationship->repository);
 				foreach ($data->$name as $relatedData) {
-					$original = method_exists($relatedRepository, 'getByData') ? $relatedRepository->getByData($relatedData, $entity) : null;
-					$related = $relatedRepository->createFromData($relatedData, $original, $entity, $property->relationship->property, person: $person, date: $date);
+					$originalRelated = method_exists($relatedRepository, 'getByData') ? $relatedRepository->getByData($relatedData, $entity) : null;
+					if (!$isChanged) {
+						$oldRelated = $originalRelated?->toArray(ToArrayConverter::RELATIONSHIP_AS_ID);
+					}
+					$related = $relatedRepository->createFromData($relatedData, $originalRelated, $entity, $property->relationship->property, person: $person, date: $date);
+					if (!$isChanged) {
+						$isChanged = $related->isChanged($oldRelated);
+					}
 					$ids[] = $related->getPersistedId();
 				}
 				/** Promazat zrušené entity */
@@ -161,6 +158,15 @@ abstract class CmsRepository extends Repository
 					}
 				}
 			}
+		}
+		if ($original && $isChanged) {
+			if ($metadata->hasProperty('updatedByPerson')) {
+				$entity->updatedByPerson = $person;
+			}
+			if ($metadata->hasProperty('updatedAt')) {
+				$entity->updatedAt = $date;
+			}
+			$this->persist($entity);
 		}
 		return $entity;
 	}

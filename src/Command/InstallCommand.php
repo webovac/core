@@ -71,13 +71,8 @@ class InstallCommand implements Command
 		if (!$files->collect()) {
 			return;
 		}
-		if ($group->iteration < 2) {
-			$this->printer->printSeparator();
-			$this->printer->printLine("$print $group->title");
-		}
-		if ($group->iteration) {
-			$this->printer->printLine("$group->iteration:");
-		}
+		$this->printer->printSeparator();
+		$this->printer->printLine("$print $group->title");
 		foreach ($files as $file) {
 			$text = str_replace(["$group->name.", ".neon"], "", $file->getFilename());
 			if ($text === 'dev' && !$this->debugMode) {
@@ -86,7 +81,7 @@ class InstallCommand implements Command
 			$config = (array) Neon::decode($file->read());
 			$this->printer->printText("- " . $text);
 			$parsedConfig = Utils::replaceParams($config, $this->params);
-			$this->dataModel->{$group->name . 'Repository'}->createFromConfig($parsedConfig, $mode, $group->iteration);
+			$this->dataModel->{$group->name . 'Repository'}->createFromConfig($parsedConfig, $mode);
 			$this->printer->printDone();
 		}
 		$this->printer->printOk();
@@ -112,9 +107,6 @@ class InstallCommand implements Command
 				));
 			} else {
 				$cmp = strcmp($a->name, $b->name);
-				if ($cmp === 0 && $a !== $b) {
-					$cmp = $a->iteration <=> $b->iteration;
-				}
 			}
 			return $cmp;
 		});

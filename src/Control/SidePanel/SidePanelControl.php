@@ -8,9 +8,9 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\ModuleChecker;
+use Webovac\Core\Model\CmsEntity;
 
 
 /**
@@ -22,7 +22,7 @@ class SidePanelControl extends BaseControl
 		private WebData $webData,
 		private PageData $pageData,
 		private LanguageData $languageData,
-		private ?IEntity $entity,
+		private ?CmsEntity $entity,
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
 	) {}

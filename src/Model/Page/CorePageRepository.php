@@ -13,8 +13,8 @@ use App\Model\Person\Person;
 use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Model\CmsDataRepository;
+use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\Web\WebModuleData;
 
 
@@ -228,7 +228,7 @@ trait CorePageRepository
 			return null;
 		}
 		$code = $data instanceof PageData ? $data->name : $data;
-		assert($hasPages instanceof IEntity);
+		assert($hasPages instanceof CmsEntity);
 		if (!$hasPages->isPersisted()) {
 			return is_int($code) ? $this->getById($code) : null;
 		}

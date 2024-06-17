@@ -24,7 +24,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property Person|null $createdByPerson {m:1 Person, oneSided=true}
  * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
  *
- * @property OneHasMany|LanguageTranslation[] $translations {1:m LanguageTranslation::$language, orderBy=language->rank}
+ * @property OneHasMany|LanguageTranslation[] $translations {1:m LanguageTranslation::$language, orderBy=translationLanguage->rank}
  */
 trait CoreLanguage
 {

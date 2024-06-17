@@ -40,8 +40,7 @@ class Core implements Module
 		return [
 			new InstallGroup('role', 'Roles'),
 			new InstallGroup('person', 'Persons', ['role']),
-			new InstallGroup('language', 'Languages', iteration: 1),
-			new InstallGroup('language', 'Languages', iteration: 2),
+			new InstallGroup('language', 'Languages'),
 			new InstallGroup('module', 'Modules', ['language']),
 			new InstallGroup('web', 'Webs', ['language', 'layout']),
 		];

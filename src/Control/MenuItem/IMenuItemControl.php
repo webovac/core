@@ -7,8 +7,8 @@ namespace Webovac\Core\Control\MenuItem;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Core;
+use Webovac\Core\Model\CmsEntity;
 
 interface IMenuItemControl
 {
@@ -16,7 +16,7 @@ interface IMenuItemControl
 		PageData $pageData,
 		WebData $webData,
 		LanguageData $languageData,
-		?IEntity $entity,
+		?CmsEntity $entity,
 		?PageData $activePageData,
 		string $context,
 		bool $checkActive = true,

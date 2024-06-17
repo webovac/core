@@ -7,7 +7,6 @@ namespace Webovac\Core\Control\Core;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Command\MigrateAndInstallCommand;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\Breadcrumbs\BreadcrumbsControl;
@@ -23,6 +22,7 @@ use Webovac\Core\Control\SidePanel\SidePanelControl;
 use Webovac\Core\Control\Signpost\ISignpostControl;
 use Webovac\Core\Control\Signpost\SignpostControl;
 use Webovac\Core\MainModuleControl;
+use Webovac\Core\Model\CmsEntity;
 
 
 /**
@@ -36,8 +36,8 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private ?PageData $pageData,
 		private ?PageData $navigationPageData,
 		private ?PageData $buttonsPageData,
-		private ?IEntity $entity,
-		private ?IEntity $parentEntity,
+		private ?CmsEntity $entity,
+		private ?CmsEntity $parentEntity,
 		private IMenuControl $menu,
 		private INavigationControl $navigation,
 		private IButtonsControl $buttons,

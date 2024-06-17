@@ -10,8 +10,8 @@ use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationData;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Lib\Collection;
+use Webovac\Core\Model\CmsEntity;
 
 
 trait CorePresenterTemplate
@@ -27,7 +27,7 @@ trait CorePresenterTemplate
 	public PageTranslationData $pageTranslationData;
 	/** @var Collection<WebData> */ public Collection $webDatas;
 	public bool $hasSideMenu;
-	public ?IEntity $entity;
+	public ?CmsEntity $entity;
 	public ?string $entityName;
 	public string $title;
 	public string $metaTitle;

@@ -8,7 +8,7 @@ namespace Webovac\Core\Control\Core;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Nextras\Orm\Entity\IEntity;
+use Webovac\Core\Model\CmsEntity;
 
 interface ICoreControl
 {
@@ -18,7 +18,7 @@ interface ICoreControl
 		?PageData $pageData,
 		?PageData $navigationPageData,
 		?PageData $buttonsPageData,
-		?IEntity $entity = null,
-		?IEntity $parentEntity = null
+		?CmsEntity $entity = null,
+		?CmsEntity $parentEntity = null
 	): CoreControl;
 }

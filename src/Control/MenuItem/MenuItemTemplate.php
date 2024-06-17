@@ -8,7 +8,7 @@ use App\Control\BaseTemplate;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
-use Nextras\Orm\Entity\IEntity;
+use Webovac\Core\Model\CmsEntity;
 
 
 class MenuItemTemplate extends BaseTemplate
@@ -16,7 +16,7 @@ class MenuItemTemplate extends BaseTemplate
 	public PageData $pageData;
 	public ?PageTranslationData $pageTranslationData;
 	public WebData $webData;
-	public ?IEntity $entity;
+	public ?CmsEntity $entity;
 	public PageData $activePageData;
 	public string $context;
 	public ?string $href;

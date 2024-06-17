@@ -8,8 +8,8 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Model\CmsEntity;
 
 
 /**
@@ -25,8 +25,8 @@ class BreadcrumbsControl extends BaseControl
 		private WebData $webData,
 		private PageData $pageData,
 		private LanguageData $languageData,
-		private ?IEntity $entity,
-		private ?IEntity $parentEntity,
+		private ?CmsEntity $entity,
+		private ?CmsEntity $parentEntity,
 		private DataModel $dataModel,
 	) {}
 

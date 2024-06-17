@@ -22,7 +22,6 @@ use Nette\Caching\Storage;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
-use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Webovac\Core\Attribute\RequiresEntity;
@@ -36,6 +35,7 @@ use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Model\CmsData;
+use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
 
 
@@ -62,8 +62,8 @@ trait CorePresenter
 	private ?PageData $navigationPageData;
 	private ?PageData $buttonsPageData;
 	private ?Preference $preference;
-	private ?IEntity $entity = null;
-	private ?IEntity $parentEntity = null;
+	private ?CmsEntity $entity = null;
+	private ?CmsEntity $parentEntity = null;
 	private string $title;
 	public array $components = [];
 
@@ -219,10 +219,10 @@ trait CorePresenter
 						->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox'])
 						->allowFilters(['noescape', 'mTime'])
 						->allowProperties(stdClass::class, SecurityPolicy::All)
-						->allowProperties(IEntity::class, SecurityPolicy::All)
+						->allowProperties(CmsEntity::class, SecurityPolicy::All)
 						->allowProperties(CmsData::class, SecurityPolicy::All)
 						->allowMethods(CmsUser::class, SecurityPolicy::All)
-						->allowMethods(IEntity::class, SecurityPolicy::All)
+						->allowMethods(CmsEntity::class, SecurityPolicy::All)
 						->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)
 						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'core'])
 				);

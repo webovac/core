@@ -16,7 +16,7 @@ trait CoreModuleDataRepository
 	#[Inject] public PageDataRepository $pageDataRepository;
 
 
-	public function createDataFromConfig(array $config, string $mode, ?int $iteration = null): ModuleData
+	public function createDataFromConfig(array $config, string $mode): ModuleData
 	{
 		/** @var ModuleData $data */
 		$data = $this->processor->process($this->getSchema($mode), $config);

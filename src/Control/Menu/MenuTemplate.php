@@ -12,8 +12,8 @@ use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Lib\Collection;
+use Webovac\Core\Model\CmsEntity;
 
 
 class MenuTemplate extends BaseTemplate
@@ -26,7 +26,7 @@ class MenuTemplate extends BaseTemplate
 	public LayoutData $layoutData;
 	public ?PageData $homePageData;
 	public DataModel $dataModel;
-	public ?IEntity $entity;
+	public ?CmsEntity $entity;
 	public string $title;
 	public string $wwwDir;
 	public bool $isError;

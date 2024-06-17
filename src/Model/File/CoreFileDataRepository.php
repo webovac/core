@@ -14,14 +14,10 @@ trait CoreFileDataRepository
 	#[Inject] public LanguageTranslationDataRepository $languageTranslationDataRepository;
 
 
-	public function createDataFromConfig(array $config, string $mode, ?int $iteration = null): LanguageData
+	public function createDataFromConfig(array $config, string $mode): LanguageData
 	{
 		/** @var LanguageData $data */
 		$data = $this->processor->process($this->getSchema($mode), $config);
-		if ($iteration === 1) {
-			unset($data->translations);
-			return $data;
-		}
 		foreach ($data->translations as $key => $translationConfig) {
 			$translationConfig['translationLanguage'] ??= $key;
 			unset($data->translations[$key]);

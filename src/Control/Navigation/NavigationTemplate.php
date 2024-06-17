@@ -8,8 +8,8 @@ use App\Control\BaseTemplate;
 use App\Model\Language\LanguageData;
 use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Lib\Collection;
+use Webovac\Core\Model\CmsEntity;
 
 
 class NavigationTemplate extends BaseTemplate
@@ -18,7 +18,7 @@ class NavigationTemplate extends BaseTemplate
 	public ?PageData $pageData;
 	public LanguageData $languageData;
 	public LayoutData $layoutData;
-	public ?IEntity $entity;
+	public ?CmsEntity $entity;
 	public PageData $activePageData;
 	/** @var Collection<PageData> */ public Collection $pageDatas;
 }

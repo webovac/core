@@ -11,7 +11,6 @@ class InstallGroup
 		public string $name,
 		public string $title,
 		public array $dependencies = [],
-		public ?int $iteration = null,
 	) {}
 
 

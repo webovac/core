@@ -9,7 +9,6 @@ use Nette\Caching\Cache;
 use Nette\InvalidArgumentException;
 use Nette\Schema\Processor;
 use Nette\Schema\Schema;
-use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Webovac\Core\Lib\CmsExpect;
 use Webovac\Core\Lib\Collection;
@@ -49,9 +48,9 @@ abstract class CmsDataRepository
 	}
 
 
-	public function createFromConfig(array $config, string $mode = self::MODE_INSTALL, ?int $iteration = null): IEntity
+	public function createFromConfig(array $config, string $mode = self::MODE_INSTALL): CmsEntity
 	{
-		$data = $this->createDataFromConfig($config, $mode, $iteration);
+		$data = $this->createDataFromConfig($config, $mode);
 		$entity = $this->getOrmRepository()->createFromData($data, mode: $mode, getOriginalByData: true);
 		if (method_exists($this->getOrmRepository(), 'postProcessFromData')) {
 			return $this->getOrmRepository()->postProcessFromData($data, $entity, mode: $mode);
@@ -60,7 +59,7 @@ abstract class CmsDataRepository
 	}
 
 
-	public function createDataFromConfig(array $config, string $mode, ?int $iteration = null): CmsData
+	public function createDataFromConfig(array $config, string $mode): CmsData
 	{
 		$schema = $this->getSchema($mode);
 		if (!$schema) {

@@ -36,7 +36,7 @@ trait CoreWebDataRepository
 	}
 
 
-	public function createDataFromConfig(array $config, string $mode, ?int $iteration = null): WebData
+	public function createDataFromConfig(array $config, string $mode): WebData
 	{
 		if (!$this->moduleChecker->isModuleInstalled('style')) {
 			unset($config['layout']);

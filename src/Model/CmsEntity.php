@@ -20,21 +20,6 @@ use ReflectionProperty;
 
 abstract class CmsEntity extends Entity
 {
-	public Cache $cache;
-
-
-	public function injectCache(Cache $cache): void
-	{
-		$this->cache = $cache;
-	}
-
-
-	protected function getCache(): Cache
-	{
-		return $this->cache;
-	}
-
-
 	abstract public function getDataClass(): string;
 
 
@@ -50,8 +35,11 @@ abstract class CmsEntity extends Entity
 	}
 
 
-	public function isChanged(array $old): bool
+	public function isChanged(?array $old): bool
 	{
+		if (!$old) {
+			return true;
+		}
 		$new = $this->toArray(ToArrayConverter::RELATIONSHIP_AS_ID);
 		foreach ($old as $key => $value) {
 			if ($value instanceof DateTimeImmutable) {

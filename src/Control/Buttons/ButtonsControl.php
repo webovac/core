@@ -9,11 +9,11 @@ use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\Multiplier;
-use Nextras\Orm\Entity\IEntity;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\MenuItem\IMenuItemControl;
 use Webovac\Core\Control\MenuItem\MenuItemControl;
 use Webovac\Core\Lib\ModuleChecker;
+use Webovac\Core\Model\CmsEntity;
 
 
 /**
@@ -25,7 +25,7 @@ class ButtonsControl extends BaseControl
 		private WebData $webData,
 		private ?PageData $pageData,
 		private LanguageData $languageData,
-		private ?IEntity $entity,
+		private ?CmsEntity $entity,
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
 		private IMenuItemControl $menuItem,

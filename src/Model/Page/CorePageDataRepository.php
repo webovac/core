@@ -85,7 +85,7 @@ trait CorePageDataRepository
 	}
 
 
-	public function createDataFromConfig(array $config, string $mode, ?int $iteration = null): PageData
+	public function createDataFromConfig(array $config, string $mode): PageData
 	{
 		/** @var PageData $data */
 		$data = $this->processor->process($this->getSchema($mode), $config);
