@@ -3,6 +3,7 @@
 		--cms-layout-primary-menu-item-justify-content: left;
 		--cms-layout-primary-hr-display: block;
 		--cms-layout-primary-menu-item-padding: var(--cms-menu-item-padding-y) var(--cms-primary-padding-right) var(--cms-menu-item-padding-y) var(--cms-primary-padding-left);
+		--cms-primary-flex-direction: row;
 	}
 	.layout .primary-navigation-wrapper .navigation {
 		justify-content: space-between;
@@ -32,6 +33,7 @@
 		--cms-layout-secondary-menu-item-justify-content: left;
 		--cms-layout-secondary-hr-display: block;
 		--cms-layout-secondary-menu-item-padding: var(--cms-menu-item-padding-y) var(--cms-secondary-padding-right) var(--cms-menu-item-padding-y) var(--cms-secondary-padding-left);
+		--cms-secondary-flex-direction: row;
 	}
 	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation {
 		justify-content: space-between;
@@ -53,6 +55,38 @@
 	}
 {else}
 	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .menu {
+		display: flex !important;
+	}
+{/}
+{if $screen['sideCollapsed'] && $screen['primaryOrientation'] === 'h'}
+	:root {
+		--cms-layout-side-menu-item-justify-content: left;
+		--cms-layout-side-hr-display: block;
+		--cms-layout-side-menu-item-padding: var(--cms-menu-item-padding-y) var(--cms-secondary-padding-right) var(--cms-menu-item-padding-y) var(--cms-secondary-padding-left);
+		--cms-primary-flex-direction: row;
+	}
+	.layout .primary-navigation-wrapper .navigation {
+		justify-content: space-between;
+		align-items: stretch;
+		flex-direction: row;
+	}
+	.layout .primary-navigation-wrapper .navigation .side-button {
+		display: flex;
+	}
+	.layout .side-panel {
+		padding: var(--cms-side-padding-top) 0 var(--cms-side-padding-bottom) 0;
+		display: none;
+		position: absolute;
+		top: var(--cms-layout-primary-wrapper-min-height);
+		bottom: 0;
+		{if $screen['secondaryOrientation'] === 'h'}
+			left: 0;
+		{/}
+		right: 0;
+		z-index: 1000;
+	}
+{else}
+	.layout .side-panel {
 		display: flex !important;
 	}
 {/}

@@ -107,7 +107,7 @@ trait CorePresenter
 				$loginPageName = $this->orm->webRepository->getById($this->webData->id)->modules->has($this->orm->moduleRepository->getBy(['name' => 'FsvAuth']))
 					? 'FsvAuth:Home'
 					: 'Auth:Home';
-				$this->redirect('this', ['pageName' => $loginPageName, 'backlink' => $this->storeRequest()]);
+				$this->redirect('default', ['pageName' => $loginPageName, 'backlink' => $this->storeRequest()]);
 			}
 			if ($id = $this->getParameter('id')) {
 				if (!$this->pageData->repository) {

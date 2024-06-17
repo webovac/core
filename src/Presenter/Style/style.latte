@@ -1,6 +1,6 @@
 {contentType text/css}
-{spaceless}
+{*{spaceless}*}
 	{include 'setup.latte'|noescape}
 	{if file_exists(__DIR__ . '/web-' . $webData->code . '.latte')}{include 'web-' . $webData->code . '.latte'|noescape}{/}
 	{if file_exists(__DIR__ . '/layout-' . $l['code'] . '.latte')}{include 'layout-' . $l['code'] . '.latte'|noescape}{/}
-{/spaceless}
+{*{/spaceless}*}

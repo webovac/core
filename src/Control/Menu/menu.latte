@@ -15,8 +15,11 @@
 				<img src="{$baseUrl}/{$logoUrl}">
 			{/}
 		</a>
-		<a href="#" class="menu-button" id="sidepanel-button"><i class="fa-fw fas fa-magnifying-glass"></i></a>
-		<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>
+		<div class="d-flex">
+			<a href="#" class="menu-button side-button user-button" n:if="$cmsUser->isLoggedIn()"><i class="fas fa-fw fa-circle-user"></i></a>
+			<a href="#" class="menu-button side-button search-button" n:if="$hasSearch"><i class="fas fa-fw fa-magnifying-glass"></i></a>
+			<a href="#" class="menu-button" id="menu-button"><i class="fas fa-fw fa-bars"></i></a>
+		</div>
 		<div class="menu flex-grow-1" id="menu">
 			{foreach $pageDatas as $p}
 				{control 'menuItem-' . $p->id}
