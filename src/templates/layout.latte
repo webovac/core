@@ -28,7 +28,7 @@
 	<link rel="apple-touch-icon" n:ifset="$largeIconUrl" href="{$baseUrl}/{$largeIconUrl}?m={=$largeIconUrl|mTime}">
 	<link rel="manifest" href="{plink '//Manifest:', host: $webData->host, basePath: $webData->basePath, lang: $languageData->shortcut}?m={$webTranslationData->updatedAt ?: $webTranslationData->createdAt|date:'U'}">
 	<link rel="stylesheet" href="{$baseUrl}/dist-pro/css/bundle.css?m={='dist/css/bundle.css'|mTime}">
-	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $themeData->updatedAt ?: $themeData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
+	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
 	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
 </head>
 <body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? $themeData->code : 'light'}"{ifset $logStepUrl} data-log-step-url="{$logStepUrl}"{/}>

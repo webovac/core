@@ -51,13 +51,9 @@ class Core implements Module
 	{
 		foreach (['onAfterPersist', 'onAfterRemove'] as $property) {
 			$this->orm->languageRepository->$property[] = fn() => $this->cache->remove('language');
-			$this->orm->languageTranslationRepository->$property[] = fn() => $this->cache->remove('language');
 			$this->orm->moduleRepository->$property[] = fn() => $this->cache->remove('page');
-			$this->orm->moduleTranslationRepository->$property[] = fn() => $this->cache->remove('page');
 			$this->orm->pageRepository->$property[] = fn() => $this->cache->remove('page');
-			$this->orm->pageTranslationRepository->$property[] = fn() => $this->cache->remove('page');
 			$this->orm->webRepository->$property[] = fn() => $this->cache->remove('web');
-			$this->orm->webTranslationRepository->$property[] = fn() => $this->cache->remove('web');
 		}
 		if ($this->orm->hasRepositoryByName('indexTranslationRepository')) {
 			$this->orm->languageTranslationRepository->onAfterPersist[] = function (LanguageTranslation $languageTranslation) {
