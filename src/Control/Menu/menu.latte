@@ -1,31 +1,23 @@
 {templateType Webovac\Core\Control\Menu\MenuTemplate}
 <div class="wrapper navigation-wrapper primary-navigation-wrapper" n:snippet>
 	<div class="navigation primary-navigation">
-		<div class="d-flex flex-row">
-			<a class="logo clearfix" href="{plink '//default', $homePageData->name}">
-				{if $layoutData->code === 'cvut'}
-					<img src="{$baseUrl}/dist/images/logo-lion.svg">
-					<div class="logo-wrapper d-none d-xxl-block">
-						<img src="{$baseUrl}/dist/images/logo-cvut-text.svg">
-						<span n:class="logo-text, strlen($title) > 4 ? logo-text-long : logo-text-short">{$title}</span>
-					</div>
-					<div class="logo-wrapper d-block d-xxl-none">
-						<img src="{$baseUrl}/dist/images/logo-fsv-text.svg">
-					</div>
-				{else}
-					<img src="{$baseUrl}/{$logoUrl}">
-				{/}
-			</a>
-			<div n:if="$hasSearch" class="search mobile-search align-items-center flex-grow-1">
-{*				{$presenter->getComponent('search-searchForm')->render()}*}
-			</div>
-			<a href="#" class="menu-button" id="sidepanel-button"><i class="fa-fw fas fa-magnifying-glass"></i></a>
-			<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>
-		</div>
+		<a class="logo clearfix" href="{plink '//default', $homePageData->name}">
+			{if $layoutData->code === 'cvut'}
+				<img src="{$baseUrl}/dist/images/logo-lion.svg">
+				<div class="logo-wrapper d-none d-xxl-block">
+					<img src="{$baseUrl}/dist/images/logo-cvut-text.svg">
+					<span n:class="logo-text, strlen($title) > 4 ? logo-text-long : logo-text-short">{$title}</span>
+				</div>
+				<div class="logo-wrapper d-block d-xxl-none">
+					<img src="{$baseUrl}/dist/images/logo-fsv-text.svg">
+				</div>
+			{else}
+				<img src="{$baseUrl}/{$logoUrl}">
+			{/}
+		</a>
+		<a href="#" class="menu-button" id="sidepanel-button"><i class="fa-fw fas fa-magnifying-glass"></i></a>
+		<a href="#" class="menu-button" id="menu-button"><i class="fa-fw fas fa-bars"></i></a>
 		<div class="menu flex-grow-1" id="menu">
-			<div n:if="$hasSearch" class="search desktop-search menu-item">
-{*				{$presenter->getComponent('search-searchForm')->render()}*}
-			</div>
 			{foreach $pageDatas as $p}
 				{control 'menuItem-' . $p->id}
 			{/}

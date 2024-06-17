@@ -114,12 +114,11 @@
 .signpost a:hover > h3 {
 	color: var(--cms-active-link-color);
 }
-.mobile-search {
-	display: flex;
-	padding-right: var(--cms-primary-padding-right);
-}
-.desktop-search {
-	display: none !important;
+@media (min-width: 992px) {
+	.logo {
+		border-bottom: 1px solid var(--cms-primary-border-color);
+		margin-bottom: 0.5rem;
+	}
 }
 @media (max-width: 991.8px) {
 	:root {
