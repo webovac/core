@@ -12,14 +12,18 @@ Recommended way is to initialize project from [webovac/project](https://www.gith
 composer require webovac/core
 php vendor/webovac/core/src/install.php
 ```
+
 2. config.neon
 
 ```neon
 extensions:
-    webovac.core: Webovac\Core\DI\CoreExtension(%rootDir%, %webovac%)
+    webovac.core: Webovac\Core\DI\CoreExtension
 
-parameters:
-    webovac:
-        # cmsHost: cms.example.com
-        # add other custom parameters such as hosts for installation of webovac web modules
+webovac.core:
+    host: # example.com
+    db:
+        driver: # mysql|pqsql
+        database: # webovac
+        username: # webovac_user
+        password: # webovac_password
 ```

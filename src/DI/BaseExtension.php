@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\DI;
 
 use Nette\DI\CompilerExtension;
-use Nette\DI\ContainerBuilder;
 use Nette\DI\Extensions\SearchExtension;
 use Nette\DI\InvalidConfigurationException;
 use Nette\PhpGenerator\ClassType;
@@ -19,11 +18,11 @@ abstract class BaseExtension extends CompilerExtension
 	private SearchExtension $searchExtension;
 
 
-	protected function createSearchExtension(ContainerBuilder $builder): void
+	protected function createSearchExtension(): void
 	{
-		$name = 'webovac.' . $this->getModuleName() . '.search';
-		$this->searchExtension = new SearchExtension($builder->parameters['tempDir'] . '/cache/' . $name);
-		$this->searchExtension->setCompiler($this->compiler, $this->prefix($name));
+		$rootDir = $this->getContainerBuilder()->parameters['rootDir'];
+		$this->searchExtension = new SearchExtension("$rootDir/temp/cache/{$this->name}.search");
+		$this->searchExtension->setCompiler($this->compiler, $this->prefix('search'));
 		$config = $this->processSchema($this->searchExtension->getConfigSchema(), $this->getSearchConfig());
 		$this->searchExtension->setConfig($config);
 		$this->searchExtension->loadConfiguration();

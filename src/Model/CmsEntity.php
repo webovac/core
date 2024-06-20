@@ -6,7 +6,6 @@ namespace Webovac\Core\Model;
 
 use App\Model\Language\LanguageData;
 use DateTimeImmutable;
-use Nette\Caching\Cache;
 use Nette\Utils\Type;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Entity\ToArrayConverter;

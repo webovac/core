@@ -1,5 +1,7 @@
 services:
 	- Nette\Caching\Cache
+	- App\Model\DataModel
+	latte.templateFactory: App\Lib\TemplateFactory
 	routerFactory: Webovac\Core\Router\RouterFactory()
 	router:
 		type: Nette\Routing\Router
