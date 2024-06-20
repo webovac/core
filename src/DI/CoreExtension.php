@@ -57,7 +57,7 @@ class CoreExtension extends BaseExtension
 		$builder->addDefinition($this->prefix('dir'))
 			->setFactory(Dir::class, [$rootDir]);
 		$builder->addDefinition($this->prefix('installer'))
-			->setFactory(InstallCommand::class, [[$this->config->host], $builder->parameters['debugMode']]);
+			->setFactory(InstallCommand::class, [['host' => $this->config->host], $builder->parameters['debugMode']]);
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
 		$this->createDecoratorExtension();
@@ -74,7 +74,7 @@ class CoreExtension extends BaseExtension
 	protected function createProjectSearchExtension(): void
 	{
 		$rootDir = $this->getContainerBuilder()->parameters['rootDir'];
-		$this->projectSearchExtension = new SearchExtension("$rootDir/temp/cache/project.search");
+		$this->projectSearchExtension = new SearchExtension("$rootDir/temp/cache/nette.search");
 		$this->projectSearchExtension->setCompiler($this->compiler, 'nette.search');
 		$config = $this->processSchema($this->projectSearchExtension->getConfigSchema(), $this->getProjectSearchConfig());
 		$this->projectSearchExtension->setConfig($config);
