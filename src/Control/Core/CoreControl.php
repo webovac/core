@@ -48,12 +48,6 @@ class CoreControl extends BaseControl implements MainModuleControl
 	) {}
 
 
-	public static function getModuleName(): string
-	{
-		return 'core';
-	}
-
-
 	public function render(): void
 	{
 		$this->template->render(__DIR__ . '/core.latte');

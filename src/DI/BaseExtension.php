@@ -11,17 +11,39 @@ use Nette\PhpGenerator\ClassType;
 use Nette\Schema\Processor;
 use Nette\Schema\Schema;
 use Nette\Schema\ValidationException;
+use Webovac\Core\Command\Command;
+use Webovac\Core\Factory;
+use Webovac\Core\Module;
+use Webovac\Search\Control\IndexDataset\IndexDatasetControl;
 
 
 abstract class BaseExtension extends CompilerExtension
 {
+	private string $moduleDir;
+	private Processor $processor;
 	private SearchExtension $searchExtension;
+
+
+	public function __construct()
+	{
+		$this->moduleDir = dirname((new \ReflectionClass($this))->getFileName()) . '/../';
+		$this->processor = new Processor;
+	}
+
+
+	public function loadConfiguration()
+	{
+		$this->createSearchExtension();
+		$this->compiler->loadDefinitionsFromConfig(
+			(array) $this->loadFromFile("$this->moduleDir/DI/config.neon")['services'],
+		);
+	}
 
 
 	protected function createSearchExtension(): void
 	{
 		$rootDir = $this->getContainerBuilder()->parameters['rootDir'];
-		$this->searchExtension = new SearchExtension("$rootDir/temp/cache/{$this->name}.search");
+		$this->searchExtension = new SearchExtension("$rootDir/temp/cache/$this->name.search");
 		$this->searchExtension->setCompiler($this->compiler, $this->prefix('search'));
 		$config = $this->processSchema($this->searchExtension->getConfigSchema(), $this->getSearchConfig());
 		$this->searchExtension->setConfig($config);
@@ -31,9 +53,8 @@ abstract class BaseExtension extends CompilerExtension
 
 	protected function processSchema(Schema $schema, array $config)
 	{
-		$processor = new Processor;
 		try {
-			return $processor->process($schema, $config);
+			return $this->processor->process($schema, $config);
 		} catch (ValidationException $e) {
 			throw new InvalidConfigurationException($e->getMessage());
 		}
@@ -52,8 +73,25 @@ abstract class BaseExtension extends CompilerExtension
 	}
 
 
-	abstract protected function getModuleName(): string;
-
-
-	abstract protected function getSearchConfig(): array;
+	protected function getSearchConfig(): array
+	{
+		return [
+			'module' => [
+				'in' => $this->moduleDir,
+				'implements' => Module::class,
+			],
+			'command' => [
+				'in' => $this->moduleDir,
+				'implements' => Command::class,
+			],
+			'control' => [
+				'in' => $this->moduleDir,
+				'extends' => Factory::class,
+			],
+			'lib' => [
+				'in' => "$this->moduleDir/Lib/",
+				'classes' => '*',
+			],
+		];
+	}
 }

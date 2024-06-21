@@ -7,7 +7,7 @@
             <i n:class="$iconStyle, fa-fw, 'fa-' . $pageData->icon, $context === 'signpost' ? fs-2, $context === 'signpost' ? lh-sm"></i>
         </div>
         <h3 n:if="$context === 'signpost'" class="mt-2 mb-0">{$pageTranslationData->title}</h3>
-        <span n:else>{$pageTranslationData->title|replacePlaceholder}</span>
+        <span n:else>{$pageTranslationData->title}</span>
         <span class="text-danger" n:if="$languageData->id !== $targetLanguageData->id" data-tooltip="Nedostupný překlad"><i class="fas fa-circle-exclamation fa-fw" ></i></span>
     </a>
 {/}

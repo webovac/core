@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Control\MenuItem;
 
 use App\Control\BaseTemplate;
+use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
@@ -15,9 +16,8 @@ class MenuItemTemplate extends BaseTemplate
 {
 	public PageData $pageData;
 	public ?PageTranslationData $pageTranslationData;
-	public WebData $webData;
-	public ?CmsEntity $entity;
-	public PageData $activePageData;
+	public LanguageData $languageData;
+	public LanguageData $targetLanguageData;
 	public string $context;
 	public ?string $href;
 	public string $class;

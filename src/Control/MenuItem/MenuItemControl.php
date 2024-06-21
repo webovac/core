@@ -28,7 +28,6 @@ class MenuItemControl extends BaseControl
 		private WebData $webData,
 		private LanguageData $languageData,
 		private ?CmsEntity $entity,
-		private ?PageData $activePageData,
 		private string $context,
 		private bool $checkActive,
 		private string $moduleClass,
@@ -51,10 +50,7 @@ class MenuItemControl extends BaseControl
 		$this->template->pageData = $this->pageData;
 		$this->template->pageTranslationData = $this->pageTranslationData;
 		$this->template->targetLanguageData = $this->targetLanguageData;
-		$this->template->webData = $this->webData;
 		$this->template->languageData = $this->languageData;
-		$this->template->entity = $this->entity;
-		$this->template->activePageData = $this->activePageData;
 		$this->template->context = $this->context;
 		$this->template->href = $this->getHref();
 		$this->template->class = $this->getClass();

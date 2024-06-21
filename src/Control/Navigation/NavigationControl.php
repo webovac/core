@@ -41,8 +41,6 @@ class NavigationControl extends BaseControl
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$this->template->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
 		}
-		$this->template->languageData = $this->languageData;
-		$this->template->entity = $this->entity;
 		$this->template->activePageData = $this->pageData;
 		$this->template->title = $this->entity && $this->pageData->hasParameter
 			? $this->entity->getTitle($this->languageData)
@@ -53,7 +51,7 @@ class NavigationControl extends BaseControl
 
 	public function createComponentActiveMenuItem(): MenuItemControl
 	{
-		return $this->menuItem->create($this->pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'secondary', false);
+		return $this->menuItem->create($this->pageData, $this->webData, $this->languageData, $this->entity, 'secondary', false);
 	}
 
 
@@ -61,7 +59,7 @@ class NavigationControl extends BaseControl
 	{
 		return new Multiplier(function ($id): MenuItemControl {
 			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
-			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'secondary');
+			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, 'secondary');
 		});
 	}
 }

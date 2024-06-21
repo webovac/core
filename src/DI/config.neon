@@ -1,8 +1,9 @@
 services:
-	- Nette\Caching\Cache
 	- App\Model\DataModel
+	- Nette\Caching\Cache
+	- Webovac\Core\Lib\Dir(%rootDir%)
 	latte.templateFactory: App\Lib\TemplateFactory
-	routerFactory: Webovac\Core\Router\RouterFactory()
+	routerFactory: Webovac\Core\Router\RouterFactory
 	router:
 		type: Nette\Routing\Router
 		create: @routerFactory::create

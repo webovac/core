@@ -50,16 +50,11 @@ class MenuControl extends BaseControl
 		$searchModuleData = $this->dataModel->moduleRepository->getBy(['name' => 'Search']);
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& in_array($searchModuleData->id, $this->webData->modules, true);
-		$this->template->hasAuth = $this->moduleChecker->isModuleInstalled('search')
-			&& in_array($searchModuleData->id, $this->webData->modules, true);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$this->template->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
 		}
 		$this->template->entity = $this->entity;
 		$this->template->title = $this->webData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
-		foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->getCollection('translations') as $translationData) {
-			$this->template->availableTranslations[$translationData->language] = $translationData->language;
-		}
 		$this->template->wwwDir = $this->dir->getWwwDir();
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
 		$this->template->render(__DIR__ . '/menu.latte');
@@ -70,7 +65,7 @@ class MenuControl extends BaseControl
 	{
 		return new Multiplier(function ($id): MenuItemControl {
 			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
-			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'primary', $this->webData->homePage !== $pageData->id);
+			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, 'primary', $this->webData->homePage !== $pageData->id);
 		});
 	}
 }

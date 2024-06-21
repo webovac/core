@@ -20,6 +20,7 @@ use Webovac\Core\Command\Command;
 use Webovac\Core\Command\InstallCommand;
 use Webovac\Core\Core;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
+use Webovac\Core\Factory;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsRepository;
@@ -52,22 +53,16 @@ class CoreExtension extends BaseExtension
 
 	public function loadConfiguration(): void
 	{
+		parent::loadConfiguration();
 		$builder = $this->getContainerBuilder();
-		$rootDir = $builder->parameters['rootDir'];
-		$builder->addDefinition($this->prefix('dir'))
-			->setFactory(Dir::class, [$rootDir]);
 		$builder->addDefinition($this->prefix('installer'))
 			->setFactory(InstallCommand::class, [['host' => $this->config->host], $builder->parameters['debugMode']]);
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
 		$this->createDecoratorExtension();
 		$this->createProjectSearchExtension();
-		$this->createSearchExtension();
 		$this->createDbalExtension();
 		$this->createMigrationsExtension();
-		$this->compiler->loadDefinitionsFromConfig(
-			(array) $this->loadFromFile(__DIR__ . '/config.neon')['services'],
-		);
 	}
 
 
@@ -176,55 +171,30 @@ class CoreExtension extends BaseExtension
 	}
 
 
-	protected function getModuleName(): string
-	{
-		return Core::getModuleName();
-	}
-
-
 	protected function getProjectSearchConfig(): array
 	{
 		$rootDir = $this->getContainerBuilder()->parameters['rootDir'];
 		$appDir = "$rootDir/app";
 		return [
+			'module' => [
+				'in' => $appDir,
+				'implements' => Module::class,
+			],
+			'command' => [
+				'in' => $appDir,
+				'implements' => Command::class,
+			],
 			'control' => [
 				'in' => $appDir,
-				'classes' => 'I*Control',
+				'extends' => Factory::class,
 			],
 			'lib' => [
 				'in' => $appDir,
 				'classes' => 'App\**\Lib\**',
 			],
-			'module' => [
-				'in' => $appDir,
-				'implements' => Module::class,
-			],
 			'dataRepository' => [
 				'in' => $appDir,
 				'extends' => CmsDataRepository::class,
-			],
-		];
-	}
-
-
-	protected function getSearchConfig(): array
-	{
-		return [
-			'main' => [
-				'in' => __DIR__ . '/../',
-				'implements' => Module::class,
-			],
-			'command' => [
-				'in' => __DIR__ . '/../',
-				'implements' => Command::class,
-			],
-			'control' => [
-				'in' => __DIR__ . '/../',
-				'classes' => 'I*Control',
-			],
-			'lib' => [
-				'in' => __DIR__ . '/../',
-				'classes' => 'Webovac\Core\**\Lib\**\**',
 			],
 		];
 	}

@@ -7,9 +7,10 @@ namespace Webovac\Core\Control\PageItem;
 use App\Model\Language\LanguageData;
 use App\Model\Page\Page;
 use Webovac\Core\Core;
+use Webovac\Core\Factory;
 
 
-interface IPageItemControl
+interface IPageItemControl extends Factory
 {
 	function create(
 		Page $page,

@@ -12,7 +12,6 @@ use Nette\Application\UI\Multiplier;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\MenuItem\IMenuItemControl;
 use Webovac\Core\Control\MenuItem\MenuItemControl;
-use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -27,21 +26,13 @@ class SignpostControl extends BaseControl
 		private LanguageData $languageData,
 		private ?CmsEntity $entity,
 		private DataModel $dataModel,
-		private ModuleChecker $moduleChecker,
 		private IMenuItemControl $menuItem,
 	) {}
 
 
 	public function render(): void
 	{
-		$this->template->pageData = $this->pageData;
 		$this->template->pageDatas = $this->dataModel->getChildPageDatas($this->webData, $this->pageData, $this->languageData);
-		$this->template->dataModel = $this->dataModel;
-		$this->template->languageData = $this->languageData;
-		if ($this->moduleChecker->isModuleInstalled('style')) {
-			$this->template->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
-		}
-		$this->template->entity = $this->entity;
 		$this->template->render(__DIR__ . '/signpost.latte');
 	}
 
@@ -50,7 +41,7 @@ class SignpostControl extends BaseControl
 	{
 		return new Multiplier(function ($id): MenuItemControl {
 			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
-			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, $this->pageData, 'signpost');
+			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, 'signpost');
 		});
 	}
 }
