@@ -14,7 +14,6 @@ use Nette\Schema\ValidationException;
 use Webovac\Core\Command\Command;
 use Webovac\Core\Factory;
 use Webovac\Core\Module;
-use Webovac\Search\Control\IndexDataset\IndexDatasetControl;
 
 
 abstract class BaseExtension extends CompilerExtension

@@ -8,8 +8,6 @@ use App\Control\BaseTemplate;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
-use App\Model\Web\WebData;
-use Webovac\Core\Model\CmsEntity;
 
 
 class MenuItemTemplate extends BaseTemplate

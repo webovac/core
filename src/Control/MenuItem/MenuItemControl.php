@@ -94,10 +94,9 @@ class MenuItemControl extends BaseControl
 			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->pageData->style ? ($this->pageData->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->pageData->style ? ' btn btn-subtle-' . $this->pageData->style : ''),
 		} . (
-			$this->pageData->id === $this->presenter->pageData->id
-			|| ($this->checkActive && $this->isActive($this->pageData->id))
-			|| ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage))
-				? ' active' : ''
-		);
+			($this->pageData->id === $this->presenter->pageData->id)
+				|| ($this->checkActive && $this->isActive($this->pageData->id))
+				|| ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage)) ? ' active' : ''
+			);
 	}
 }

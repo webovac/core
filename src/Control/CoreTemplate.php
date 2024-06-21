@@ -8,7 +8,6 @@ use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
 use Nette\InvalidArgumentException;
 use Nette\Security\User;
-use Nette\Utils\Arrays;
 
 
 trait CoreTemplate
