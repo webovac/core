@@ -87,7 +87,7 @@ class CoreExtension extends BaseExtension
 
 	private function createOrmExtension(): void
 	{
-		$this->ormExtension = new OrmExtension();
+		$this->ormExtension = new OrmExtension;
 		$this->ormExtension->setCompiler($this->compiler, $this->prefix('orm'));
 		$config = $this->processSchema($this->ormExtension->getConfigSchema(), [
 			'model' => Orm::class,
@@ -100,7 +100,7 @@ class CoreExtension extends BaseExtension
 
 	private function createMultiplierExtension(): void
 	{
-		$this->multiplierExtension = new MultiplierExtension();
+		$this->multiplierExtension = new MultiplierExtension;
 		$this->multiplierExtension->setCompiler($this->compiler, $this->prefix('multiplier'));
 		$config = $this->processSchema($this->multiplierExtension->getConfigSchema(), [
 			'name' => 'addMultiplier',
@@ -112,7 +112,7 @@ class CoreExtension extends BaseExtension
 
 	private function createDbalExtension(): void
 	{
-		$this->dbalExtension = new DbalExtension();
+		$this->dbalExtension = new DbalExtension;
 		$this->dbalExtension->setCompiler($this->compiler, $this->prefix('dbal'));
 		$config = $this->processSchema($this->dbalExtension->getConfigSchema(), [
 			'driver' => $this->config->db->driver === 'mysql' ? 'mysqli' : $this->config->db->driver,
@@ -132,7 +132,7 @@ class CoreExtension extends BaseExtension
 	private function createMigrationsExtension(): void
 	{
 		$rootDir = $this->getContainerBuilder()->parameters['rootDir'];
-		$this->migrationsExtension = new MigrationsExtension();
+		$this->migrationsExtension = new MigrationsExtension;
 		$this->migrationsExtension->setCompiler($this->compiler, $this->prefix('migrations'));
 		$config = $this->processSchema($this->migrationsExtension->getConfigSchema(), [
 			'dir' => "$rootDir/migrations",
