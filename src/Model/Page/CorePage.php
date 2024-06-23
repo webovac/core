@@ -187,4 +187,16 @@ trait CorePage
 	{
 		return $this->component->create($this, $languageData, $moduleClass, $templateName);
 	}
+
+
+	public function getPageName(): string
+	{
+		return 'Admin:PageDetail';
+	}
+
+
+	public function getEntityIcon(): string
+	{
+		return 'file';
+	}
 }

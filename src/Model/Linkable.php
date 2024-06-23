@@ -10,4 +10,6 @@ use App\Model\Language\LanguageData;
 interface Linkable
 {
 	function getParameter(?LanguageData $language = null);
+	function getPageName(): string;
+	function getEntityIcon(): ?string;
 }
