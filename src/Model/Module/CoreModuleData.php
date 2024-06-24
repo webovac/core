@@ -14,8 +14,8 @@ trait CoreModuleData
 	public ?int $id;
 	public string $name;
 	public int|string $homePage;
-	/** @var array<ModuleTranslationData|array> */ public array $translations;
-	/** @var array<PageData|array> */ public array $pages;
+	/** @var ModuleTranslationData[]|array */ public array $translations;
+	/** @var PageData[]|array */ public array $pages;
 	public ?string $icon;
 	public array $tree;
 	public int|string|null $createdByPerson;

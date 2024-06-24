@@ -29,10 +29,10 @@ trait CoreWebData
 	public FileUpload|FileData|string|int|null $largeIconFile;
 	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $logoFile;
 	public FileUpload|FileData|string|int|null $backgroundFile;
-	/** @var array<WebTranslationData|array> */ public array $translations;
-	/** @var array<PageData|array> */ public array $pages;
-	/** @var array<WebModuleData|string> */ public array $webModules;
-	/** @var array<ModuleData|string> */ public array $modules;
+	/** @var WebTranslationData[]|array */ public array $translations;
+	/** @var PageData[]|array */ public array $pages;
+	/** @var WebModuleData[]|string[] */ public array $webModules;
+	/** @var ModuleData[]|string[] */ public array $modules;
 	public string $basePath;
 	public array $tree;
 	public int|string|null $createdByPerson;

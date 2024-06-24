@@ -72,31 +72,20 @@ CREATE INDEX ON "public"."language_translation" ("updated_by_person_id");
 CREATE SEQUENCE "public"."log_id_seq";
 CREATE TABLE "public"."log" (
     "id" int4 NOT NULL DEFAULT nextval('index_id_seq'::regclass),
-    "created_language_id" int4,
-    "updated_language_id" int4,
-    "created_module_id" int4,
-    "updated_module_id" int4,
-    "created_page_id" int4,
-    "updated_page_id" int4,
-    "created_web_id" int4,
-    "updated_web_id" int4,
-    "person_id" int4,
+    "language_id" int4,
+    "module_id" int4,
+    "page_id" int4,
+    "web_id" int4,
+    "type" varchar NOT NULL,
+    "created_by_person_id" int4,
     "date" timestamp NOT NULL,
-    UNIQUE ("created_language_id"),
-    UNIQUE ("created_module_id"),
-    UNIQUE ("created_page_id"),
-    UNIQUE ("created_web_id"),
     PRIMARY KEY ("id")
 );
-CREATE INDEX ON "public"."log" ("created_language_id");
-CREATE INDEX ON "public"."log" ("updated_language_id");
-CREATE INDEX ON "public"."log" ("created_module_id");
-CREATE INDEX ON "public"."log" ("updated_module_id");
-CREATE INDEX ON "public"."log" ("created_page_id");
-CREATE INDEX ON "public"."log" ("updated_page_id");
-CREATE INDEX ON "public"."log" ("created_web_id");
-CREATE INDEX ON "public"."log" ("updated_web_id");
-CREATE INDEX ON "public"."log" ("person_id");
+CREATE INDEX ON "public"."log" ("language_id");
+CREATE INDEX ON "public"."log" ("module_id");
+CREATE INDEX ON "public"."log" ("page_id");
+CREATE INDEX ON "public"."log" ("web_id");
+CREATE INDEX ON "public"."log" ("created_by_person_id");
 
 CREATE SEQUENCE "public"."module_id_seq";
 CREATE TABLE "public"."module" (
@@ -345,15 +334,11 @@ ALTER TABLE "public"."language_translation" ADD CONSTRAINT "language_translation
 ALTER TABLE "public"."language_translation" ADD CONSTRAINT "language_translation_translation_language_id_fkey" FOREIGN KEY ("translation_language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "public"."language_translation" ADD CONSTRAINT "language_translation_updated_by_person_id_fkey" FOREIGN KEY ("updated_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_created_language_id_fkey" FOREIGN KEY ("created_language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_updated_language_id_fkey" FOREIGN KEY ("updated_language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_created_page_id_fkey" FOREIGN KEY ("created_page_id") REFERENCES "public"."page" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_updated_page_id_fkey" FOREIGN KEY ("updated_page_id") REFERENCES "public"."page" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_created_module_id_fkey" FOREIGN KEY ("created_module_id") REFERENCES "public"."module" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_updated_module_id_fkey" FOREIGN KEY ("updated_module_id") REFERENCES "public"."module" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_created_web_id_fkey" FOREIGN KEY ("created_web_id") REFERENCES "public"."web" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_updated_web_id_fkey" FOREIGN KEY ("updated_web_id") REFERENCES "public"."web" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."log" ADD CONSTRAINT "log_person_id_fkey" FOREIGN KEY ("person_id") REFERENCES "public"."person" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."log" ADD CONSTRAINT "log_language_id_fkey" FOREIGN KEY ("language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."log" ADD CONSTRAINT "log_page_id_fkey" FOREIGN KEY ("page_id") REFERENCES "public"."page" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."log" ADD CONSTRAINT "log_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "public"."module" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."log" ADD CONSTRAINT "log_web_id_fkey" FOREIGN KEY ("web_id") REFERENCES "public"."web" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."log" ADD CONSTRAINT "log_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "public"."module" ADD CONSTRAINT "module_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "public"."module" ADD CONSTRAINT "module_home_page_id_fkey" FOREIGN KEY ("home_page_id") REFERENCES "public"."page" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;

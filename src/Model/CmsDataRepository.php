@@ -53,7 +53,7 @@ abstract class CmsDataRepository
 		$data = $this->createDataFromConfig($config, $mode);
 		$entity = $this->getOrmRepository()->createFromData($data, mode: $mode, getOriginalByData: true);
 		if (method_exists($this->getOrmRepository(), 'postProcessFromData')) {
-			return $this->getOrmRepository()->postProcessFromData($data, $entity, mode: $mode);
+			$this->getOrmRepository()->postProcessFromData($data, $entity, mode: $mode);
 		}
 		return $entity;
 	}

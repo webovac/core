@@ -181,10 +181,10 @@ trait CorePageRepository
 					is_int($data->targetPage)
 						? ['id' => $data->targetPage]
 						: [
-						ICollection::AND,
-						['name' => $data->targetPage],
-						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
-					]
+							ICollection::AND,
+							['name' => $data->targetPage],
+							[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+						]
 				);
 			}
 		}
@@ -193,10 +193,10 @@ trait CorePageRepository
 				is_int($data->parentPage)
 					? ['id' => $data->parentPage]
 					: [
-					ICollection::AND,
-					['name' => $data->parentPage],
-					[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
-				]
+						ICollection::AND,
+						['name' => $data->parentPage],
+						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+					]
 			);
 		}
 		$this->persist($page);

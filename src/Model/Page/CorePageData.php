@@ -25,9 +25,9 @@ trait CorePageData
 	public ?string $authorizingTag;
 	public ?string $authorizingParentTag;
 	public ?string $style;
-	/** @var array<PageTranslationData|array> */ public array $translations;
-	/** @var array<int> */ public array $authorizedRoles;
-	/** @var array<int> */ public array $authorizedPersons;
+	/** @var PageTranslationData[]|array */ public array $translations;
+	/** @var int[] */ public array $authorizedRoles;
+	/** @var int[] */ public array $authorizedPersons;
 	public bool $hasParameter;
 	public bool $hasParentParameter;
 	public bool $hideInNavigation;
@@ -57,11 +57,11 @@ trait CorePageData
 	public ?int $web = null;
 	public ?string $host = null;
 	public ?string $basePath = null;
-	/** @var array<AccessSetup> */ public array $accessSetups;
+	/** @var AccessSetup[] */ public array $accessSetups;
 	public bool $isHomePage = false;
 	public ?int $navigationPage = null;
 	public ?int $buttonsPage = null;
-	/** @var array<int> */ public array $parentPages;
+	/** @var int[] */ public array $parentPages;
 
 
 	/**
