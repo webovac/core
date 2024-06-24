@@ -78,6 +78,43 @@ CREATE TABLE `language_translation`  (
     CONSTRAINT `FK_language_translation_person_2` FOREIGN KEY (`updated_by_person_id`) REFERENCES `person` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB COLLATE = utf8mb4_unicode_520_ci;
 
+CREATE TABLE `log` (
+    `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+    `created_language_id` int UNSIGNED NULL DEFAULT NULL,
+    `updated_language_id` int UNSIGNED NULL DEFAULT NULL,
+    `created_module_id` int UNSIGNED NULL DEFAULT NULL,
+    `updated_module_id` int UNSIGNED NULL DEFAULT NULL,
+    `created_page_id` int UNSIGNED NULL DEFAULT NULL,
+    `updated_page_id` int UNSIGNED NULL DEFAULT NULL,
+    `created_web_id` int UNSIGNED NULL DEFAULT NULL,
+    `updated_web_id` int UNSIGNED NULL DEFAULT NULL,
+    `person_id` int UNSIGNED NULL DEFAULT NULL,
+    `date` timestamp NOT NULL,
+    UNIQUE INDEX `created_language_id` (`created_language_id` ASC),
+    UNIQUE INDEX `created_module_id` (`created_module_id`),
+    UNIQUE INDEX `created_page_id` (`created_page_id`),
+    UNIQUE INDEX `created_web_id` (`created_web_id`),
+    INDEX `log_created_language_id_idx`(`created_language_id` ASC),
+    INDEX `log_updated_language_id_idx`(`updated_language_id` ASC),
+    INDEX `log_created_module_id_idx`(`created_module_id` ASC),
+    INDEX `log_updated_module_id_idx`(`updated_module_id` ASC),
+    INDEX `log_created_page_id_idx`(`created_page_id` ASC),
+    INDEX `log_updated_page_id_idx`(`updated_page_id` ASC),
+    INDEX `log_created_web_id_idx`(`created_web_id` ASC),
+    INDEX `log_updated_web_id_idx`(`updated_web_id` ASC),
+    INDEX `log_person_id_idx`(`person_id` ASC),
+    PRIMARY KEY (`id`),
+    CONSTRAINT `FK_log_created_language` FOREIGN KEY (`created_language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_log_updated_language` FOREIGN KEY (`updated_language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_log_created_module` FOREIGN KEY (`created_module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_log_updated_module` FOREIGN KEY (`updated_module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_log_created_page` FOREIGN KEY (`created_page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_log_updated_page` FOREIGN KEY (`updated_page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_log_created_web` FOREIGN KEY (`created_web_id`) REFERENCES `web` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_log_updated_web` FOREIGN KEY (`updated_web_id`) REFERENCES `web` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_log_person` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE `module`  (
     `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
     `home_page_id` int UNSIGNED NULL DEFAULT NULL,
