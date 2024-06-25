@@ -20,6 +20,7 @@ use Webovac\Generator\CmsGenerator;
 (new CmsGenerator)->installModule(
 	name: 'core',
 	entities: [
+		'Log',
 		'Person',
 		'File',
 		'Language' => [Linkable::class, HasTranslations::class],
