@@ -31,6 +31,8 @@ use Webovac\Generator\CmsGenerator;
 		'PageTranslation' => [Translation::class],
 		'Preference',
 		'Role',
+		'Text' => [HasTranslations::class],
+		'TextTranslation' => [Translation::class],
 		'Web' => [Linkable::class, HasPages::class, HasTranslations::class],
 		'WebTranslation' => [Translation::class],
 	],

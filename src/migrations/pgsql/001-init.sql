@@ -257,6 +257,38 @@ CREATE TABLE "public"."role2person" (
 CREATE INDEX ON "public"."role2person" ("role_id");
 CREATE INDEX ON "public"."role2person" ("person_id");
 
+CREATE SEQUENCE "public"."text_id_seq";
+CREATE TABLE "public"."text" (
+    "id" int4 NOT NULL DEFAULT nextval('text_id_seq'::regclass),
+    "created_by_person_id" int4,
+    "updated_by_person_id" int4,
+    "name" varchar NOT NULL,
+    "created_at" timestamp DEFAULT now(),
+    "updated_at" timestamp,
+    UNIQUE ("name"),
+    PRIMARY KEY ("id")
+);
+CREATE INDEX ON "public"."text" ("created_by_person_id");
+CREATE INDEX ON "public"."text" ("updated_by_person_id");
+
+CREATE SEQUENCE "public"."text_translation_id_seq";
+CREATE TABLE "public"."text_translation" (
+    "id" int4 NOT NULL DEFAULT nextval('text_translation_id_seq'::regclass),
+    "text_id" int4,
+    "language_id" int4,
+    "created_by_person_id" int4,
+    "updated_by_person_id" int4,
+    "string" varchar NOT NULL,
+    "created_at" timestamp NOT NULL DEFAULT now(),
+    "updated_at" timestamp,
+    UNIQUE ("text_id", "language_id"),
+    PRIMARY KEY ("id")
+);
+CREATE INDEX ON "public"."text_translation" ("created_by_person_id");
+CREATE INDEX ON "public"."text_translation" ("language_id");
+CREATE INDEX ON "public"."text_translation" ("text_id");
+CREATE INDEX ON "public"."text_translation" ("updated_by_person_id");
+
 CREATE SEQUENCE "public"."web_id_seq";
 CREATE TABLE "public"."web" (
     "id" int4 NOT NULL DEFAULT nextval('web_id_seq'::regclass),
@@ -379,6 +411,14 @@ ALTER TABLE "public"."preference" ADD CONSTRAINT "preference_web_id_fkey" FOREIG
 
 ALTER TABLE "public"."role2person" ADD CONSTRAINT "role2person_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "public"."role" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "public"."role2person" ADD CONSTRAINT "role2person_person_id_fkey" FOREIGN KEY ("person_id") REFERENCES "public"."person" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "public"."text" ADD CONSTRAINT "text_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."text" ADD CONSTRAINT "text_updated_by_person_id_fkey" FOREIGN KEY ("updated_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE "public"."text_translation" ADD CONSTRAINT "text_translation_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."text_translation" ADD CONSTRAINT "text_translation_language_id_fkey" FOREIGN KEY ("language_id") REFERENCES "public"."language" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."text_translation" ADD CONSTRAINT "text_translation_text_id_fkey" FOREIGN KEY ("text_id") REFERENCES "public"."text" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."text_translation" ADD CONSTRAINT "text_translation_updated_by_person_id_fkey" FOREIGN KEY ("updated_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE "public"."web" ADD CONSTRAINT "web_created_by_person_id_fkey" FOREIGN KEY ("created_by_person_id") REFERENCES "public"."person" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "public"."web" ADD CONSTRAINT "web_default_language_id_fkey" FOREIGN KEY ("default_language_id") REFERENCES "public"."language" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;

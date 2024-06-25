@@ -298,6 +298,42 @@ CREATE TABLE `role2person` (
     CONSTRAINT `FK_role2person_person` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB COLLATE = utf8mb4_unicode_520_ci;
 
+CREATE TABLE `text`  (
+    `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+    `created_by_person_id` int UNSIGNED NULL DEFAULT NULL,
+    `updated_by_person_id` int UNSIGNED NULL DEFAULT NULL,
+    `name` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `name`(`name` ASC),
+    INDEX `text_created_by_person_id_idx`(`created_by_person_id` ASC),
+    INDEX `text_updated_by_person_id_idx`(`updated_by_person_id` ASC),
+    CONSTRAINT `FK_text_person` FOREIGN KEY (`created_by_person_id`) REFERENCES `person` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `FK_text_person_2` FOREIGN KEY (`updated_by_person_id`) REFERENCES `person` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB COLLATE = utf8mb4_unicode_520_ci;
+
+CREATE TABLE `text_translation`  (
+    `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+    `text_id` int UNSIGNED NOT NULL,
+    `language_id` int UNSIGNED NOT NULL,
+    `created_by_person_id` int UNSIGNED NULL DEFAULT NULL,
+    `updated_by_person_id` int UNSIGNED NULL DEFAULT NULL,
+    `string` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `text_id_language_id`(`text_id` ASC, `language_id` ASC),
+    INDEX `text_translation_created_by_person_id_idx`(`created_by_person_id` ASC),
+    INDEX `text_translation_language_id_idx`(`language_id` ASC),
+    INDEX `text_translation_text_id_idx`(`text_id` ASC),
+    INDEX `text_translation_updated_by_person_id_idx`(`updated_by_person_id` ASC),
+    CONSTRAINT `FK_text_translation_language` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_text_translation_text` FOREIGN KEY (`text_id`) REFERENCES `text` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_text_translation_person` FOREIGN KEY (`created_by_person_id`) REFERENCES `person` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `FK_text_translation_person_2` FOREIGN KEY (`updated_by_person_id`) REFERENCES `person` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB COLLATE = utf8mb4_unicode_520_ci;
+
 CREATE TABLE `web`  (
     `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
     `home_page_id` int UNSIGNED NULL DEFAULT NULL,

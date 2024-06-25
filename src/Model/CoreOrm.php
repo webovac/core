@@ -14,6 +14,8 @@ use App\Model\PageTranslation\PageTranslationRepository;
 use App\Model\Person\PersonRepository;
 use App\Model\Preference\PreferenceRepository;
 use App\Model\Role\RoleRepository;
+use App\Model\Text\TextRepository;
+use App\Model\TextTranslation\TextTranslationRepository;
 use App\Model\Web\WebRepository;
 use App\Model\WebTranslation\WebTranslationRepository;
 
@@ -29,6 +31,8 @@ use App\Model\WebTranslation\WebTranslationRepository;
  * @property-read PageTranslationRepository $pageTranslationRepository
  * @property-read PersonRepository $personRepository
  * @property-read RoleRepository $roleRepository
+ * @property-read TextRepository $textRepository
+ * @property-read TextTranslationRepository $textTranslationRepository
  * @property-read WebRepository $webRepository
  * @property-read WebTranslationRepository $webTranslationRepository
  */

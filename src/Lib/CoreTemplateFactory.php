@@ -14,10 +14,14 @@ trait CoreTemplateFactory
 {
 	#[Inject] public Dir $dir;
 	#[Inject] public ModuleChecker $moduleChecker;
+	#[Inject] public CmsTranslator $translator;
+
+
 	public function injectCoreCreate(): void
 	{
 		$this->onCreate[] = function (Template $template) {
 			if ($template instanceof BaseTemplate) {
+				$template->setTranslator($this->translator);
 				$template->addFilter('plural', [Filters::class, 'plural']);
 				$template->addFilter('intlDate', [Filters::class, 'intlDate']);
 				$template->addFilter('mTime', fn($path) => filemtime($this->dir->getWwwDir() . DIRECTORY_SEPARATOR . $path));

@@ -12,6 +12,8 @@ use App\Model\Page\PageData;
 use App\Model\Page\PageDataRepository;
 use App\Model\Person\PersonDataRepository;
 use App\Model\Role\RoleDataRepository;
+use App\Model\Text\TextDataRepository;
+use App\Model\TextTranslation\TextTranslationData;
 use App\Model\Web\WebData;
 use App\Model\Web\WebDataRepository;
 use Nette\DI\Attributes\Inject;
@@ -24,6 +26,7 @@ trait CoreDataModel
 	#[Inject] public LanguageDataRepository $languageRepository;
 	#[Inject] public ModuleDataRepository $moduleRepository;
 	#[Inject] public PageDataRepository $pageRepository;
+	#[Inject] public TextDataRepository $textRepository;
 	#[Inject] public WebDataRepository $webRepository;
 	#[Inject] public PersonDataRepository $personRepository;
 	#[Inject] public RoleDataRepository $roleRepository;
@@ -69,6 +72,18 @@ trait CoreDataModel
 	public function getLanguageDataByShortcut(string $shortcut): ?LanguageData
 	{
 		return $this->languageRepository->getBy(['shortcut' => $shortcut]);
+	}
+
+
+	public function getTextTranslation(?string $name, LanguageData $languageData): ?TextTranslationData
+	{
+		if (!$name) {
+			return null;
+		}
+		return $this->textRepository
+			->getBy(['name' => $name])
+			?->getCollection('translations')
+			->getBy(['language' => $languageData->id]);
 	}
 
 

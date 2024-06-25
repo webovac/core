@@ -21,6 +21,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
+use Nette\Localization\Translator;
 use Nette\Utils\Arrays;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
@@ -30,6 +31,7 @@ use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Core;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
+use Webovac\Core\Lib\CmsTranslator;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
@@ -53,6 +55,7 @@ trait CorePresenter
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public ModuleChecker $moduleChecker;
 	#[Inject] public Cache $cache;
+	#[Inject] public CmsTranslator $translator;
 	private ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -82,6 +85,7 @@ trait CorePresenter
 			if (!$this->languageData) {
 				$this->error();
 			}
+			$this->translator->setLanguageData($this->languageData);
 			$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
 			if (!$this->webData) {
 				$this->error();
@@ -217,7 +221,7 @@ trait CorePresenter
 				->setPolicy(
 					SecurityPolicy::createSafePolicy()
 						->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox'])
-						->allowFilters(['noescape', 'mTime'])
+						->allowFilters(['noescape', 'mTime', 'translate'])
 						->allowProperties(stdClass::class, SecurityPolicy::All)
 						->allowProperties(CmsEntity::class, SecurityPolicy::All)
 						->allowProperties(CmsData::class, SecurityPolicy::All)

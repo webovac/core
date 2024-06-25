@@ -12,6 +12,7 @@ use Nette\Utils\FileInfo;
 use Nette\Utils\Finder;
 use ReflectionClass;
 use Stepapo\Dataset\Utils;
+use Tracy\Dumper;
 use Webovac\Core\InstallGroup;
 use Webovac\Core\Lib\CmsPrinter;
 use Webovac\Core\Model\CmsDataRepository;
@@ -79,9 +80,21 @@ class InstallCommand implements Command
 				continue;
 			}
 			$config = (array) Neon::decode($file->read());
-			$this->printer->printText("- " . $text);
+			if ($text !== 'all') {
+				$this->printer->printText("- " . $text);
+			}
 			$parsedConfig = Utils::replaceParams($config, $this->params);
-			$this->dataModel->{$group->name . 'Repository'}->createFromConfig($parsedConfig, $mode);
+			if ($group->name === 'text') {
+				foreach ($parsedConfig as $key => $value) {
+					$translations = [];
+					foreach ($value as $lang => $string) {
+						$translations[$lang] = ['string' => $string];
+					}
+					$this->dataModel->{$group->name . 'Repository'}->createFromConfig(['name' => $key, 'translations' => $translations], $mode);
+				}
+			} else {
+				$this->dataModel->{$group->name . 'Repository'}->createFromConfig($parsedConfig, $mode);
+			}
 			$this->printer->printDone();
 		}
 		$this->printer->printOk();

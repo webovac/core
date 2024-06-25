@@ -1,25 +1,25 @@
 <form n:name="form" class="small values">
 	<div n:if="$form->errors" class="alert alert-danger">
-		<p class="mb-1"><b>Chyba:</b></p>
+		<p class="mb-1"><b>{_'Chyba'}:</b></p>
 		<p n:inner-foreach="$form->errors as $error">
 			{$error}{sep}<br>{/}
 		</p>
 	</div>
     <div n:class="$input->getOption('type') === 'checkbox' ? 'mb-2 form-check' : 'mb-3', form-group" n:foreach="$form->controls as $input" n:if="!in_array($input->getOption('type'), ['hidden', 'button'], true)" id="{$input->getHtmlId()}-container">
 		{if $input->getOption('type') === 'checkbox'}
-			<label class="form-check-label" n:name="$input->getName()">{$input->caption}</label>
+			<label class="form-check-label" n:name="$input->getName()">{_$input->caption}</label>
 			<input class="form-check-input" n:name="$input->getName()">
 		{elseif in_array($input->getOption('type'), ['checkboxList', 'radioList'], true)}
 			{label $input class => "form-label" /}<br>
 			<div n:foreach="$input->items as $key => $caption" class="form-check">
 				<input class="form-check-input" n:name="$input->getName():$key">
-				<label class="form-check-label" n:name="$input->getName():$key">{$caption}</label>
+				<label class="form-check-label" n:name="$input->getName():$key">{_$caption}</label>
 			</div>
 		{else}
 			{label $input class: "form-label"/}
 			<div n:tag-if="$input->getOption('type') === 'select'">{input $input class: "form-control form-control-sm"}</div>
 		{/}
-        <small n:if="$input->getOption('description')" class="form-text text-muted">{$input->getOption('description')}</small>
+        <small n:if="$input->getOption('description')" class="form-text text-muted">{_$input->getOption('description')}</small>
     </div>
     {input send class: "btn btn-primary"}
 </form>

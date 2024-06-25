@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib\Dataset;
 
+use Contributte\ImageStorage\ImageStorage;
 use Stepapo\Dataset\UI\Dataset\Dataset;
+use Webovac\Core\Lib\CmsTranslator;
 
 
 class CmsDatasetFactory
 {
-	public function __construct() {}
+	public function __construct(
+		private CmsTranslator $translator,
+		private ImageStorage $imageStorage,
+	) {}
 
 
 	public function create(string $file, array $params = []): Dataset
 	{
 		$dataset = Dataset::createFromNeon($file, $params);
+		$dataset->setTranslator($this->translator);
 		if (isset($dataset->getViews()['table'])) {
 			$dataset->getViews()['table']
 				->setSortingTemplate(__DIR__ . '/templates/sorting.latte')
