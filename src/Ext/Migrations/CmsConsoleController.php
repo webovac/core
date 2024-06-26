@@ -7,6 +7,8 @@ namespace Webovac\Core\Ext\Migrations;
 use Nextras\Migrations\Controllers\ConsoleController;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\IDriver;
+use Tracy\Dumper;
+use Webovac\Core\Model\CmsDataRepository;
 
 
 class CmsConsoleController extends ConsoleController
@@ -40,6 +42,22 @@ class CmsConsoleController extends ConsoleController
 	}
 
 
+	/**
+	 * @param  list<string>  $dependencies
+	 */
+	public function addCmsGroup(string $name, array $files, array $dependencies = [], ?string $mode = null): self
+	{
+		$group = new CmsGroup;
+		$group->name = $name;
+		$group->files = $files;
+		$group->dependencies = $dependencies;
+		$group->enabled = false;
+		$group->mode = $mode;
+		$this->groups[$name] = $group;
+		return $this;
+	}
+
+
 	/** PRIVATE PARENT */
 	private function processArguments(): void
 	{
@@ -63,9 +81,6 @@ class CmsConsoleController extends ConsoleController
 				if (isset($this->groups[$argument])) {
 					$this->groups[$argument]->enabled = true;
 					$groups = true;
-				} else {
-					fprintf(STDERR, "Error: Unknown group '%s'\n", $argument);
-					$error = true;
 				}
 			}
 		}

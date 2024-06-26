@@ -9,7 +9,6 @@ class InstallGroup
 {
 	public function __construct(
 		public string $name,
-		public string $title,
 		public array $dependencies = [],
 	) {}
 

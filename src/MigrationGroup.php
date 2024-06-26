@@ -9,7 +9,7 @@ class MigrationGroup
 {
 	public function __construct(
 		public string $name,
-		public string $dir,
+		public string $moduleClass,
 		public array $dependencies = [],
 	) {}
 }

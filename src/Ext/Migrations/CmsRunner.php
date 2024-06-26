@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Ext\Migrations;
 
 use DateTime;
+use Nette\Utils\FileInfo;
 use Nextras\Migrations\Engine\Finder;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\Entities\File;
@@ -18,12 +19,12 @@ use Nextras\Migrations\IExtensionHandler;
 use Nextras\Migrations\IPrinter;
 use Nextras\Migrations\LockException;
 use Nextras\Migrations\LogicException;
+use Tracy\Dumper;
 
 
 class CmsRunner extends Runner
 {
 	private CmsOrderResolver $orderResolver;
-	private Finder $finder;
 	/** @var list<Group> */ private $groups = [];
 	/** @var array<string, IExtensionHandler> (extension => IExtensionHandler) */ private $extensionsHandlers = [];
 
@@ -33,7 +34,6 @@ class CmsRunner extends Runner
 		private IPrinter $printer,
 	) {
 		parent::__construct($driver, $printer);
-		$this->finder = new Finder;
 		$this->orderResolver = new CmsOrderResolver;
 	}
 
@@ -74,7 +74,7 @@ class CmsRunner extends Runner
 		if ($mode === self::MODE_INIT) {
 			$this->driver->setupConnection();
 			$this->printer->printSource($this->driver->getInitTableSource() . "\n");
-			$files = $this->finder->find($this->groups, array_keys($this->extensionsHandlers));
+			$files = $this->getFiles();
 			$files = $this->orderResolver->resolve([], $this->groups, $files, self::MODE_RESET);
 			$this->printer->printSource($this->driver->getInitMigrationsSource($files));
 			return;
@@ -92,7 +92,7 @@ class CmsRunner extends Runner
 
 			$this->driver->createTable();
 			$migrations = $this->driver->getAllMigrations();
-			$files = $this->finder->find($this->groups, array_keys($this->extensionsHandlers));
+			$files = $this->getFiles();
 			$toExecute = $this->orderResolver->resolve($migrations, $this->groups, $files, $mode);
 			$this->printer->printToExecute($toExecute);
 
@@ -152,5 +152,23 @@ class CmsRunner extends Runner
 		$this->driver->commitTransaction();
 
 		return $queriesCount;
+	}
+
+
+	private function getFiles(): array
+	{
+		foreach ($this->groups as $group) {
+			/** @var FileInfo $f */
+			foreach ($group->files as $f) {
+				$file = new File;
+				$file->group = $group;
+				$file->name = $f->getFilename();
+				$file->path = $f->getPathname();
+				$file->extension = $f->getExtension();
+				$file->checksum = md5(str_replace(["\r\n", "\r"], "\n", @file_get_contents($f->getPathname())));
+				$files[] = $file;
+			}
+		}
+		return $files;
 	}
 }

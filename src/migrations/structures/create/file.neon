@@ -1,0 +1,17 @@
+name: file
+columns:
+	id: [type: int, null: false, auto: true]
+	created_by_person_id: [type: int, null: true, default: null]
+	identifier: [type: string, null: false]
+	modern_identifier: [type: string, null: false]
+	compatible_identifier: [type: string, null: true, default: null]
+	name: [type: string, null: false]
+	extension: [type: string, null: false]
+	content_type: [type: string, null: false]
+	type: [type: string, null: false]
+	created_at: [type: datetime, null: false, default: now]
+primary: id
+unique: [identifier]
+index: [created_by_person]
+fkey:
+	created_by_person_id: [table: person, column: id, onDelete: restrict, onUpdate: cascade]

@@ -8,6 +8,7 @@ use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Webovac\Core\Command\MigrateAndInstallCommand;
+use Webovac\Core\Command\MigrateCommand;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\Breadcrumbs\BreadcrumbsControl;
 use Webovac\Core\Control\Breadcrumbs\IBreadcrumbsControl;
@@ -44,7 +45,7 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private ISignpostControl $signpost,
 		private ISidePanelControl $sidePanel,
 		private IBreadcrumbsControl $breadcrumbs,
-		private MigrateAndInstallCommand $command,
+		private MigrateCommand $command,
 	) {}
 
 

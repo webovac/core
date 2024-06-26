@@ -18,6 +18,8 @@ use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
 use Webovac\Core\Command\Command;
 use Webovac\Core\Command\InstallCommand;
+use Webovac\Core\Command\InstallNewCommand;
+use Webovac\Core\Command\MigrateCommand;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Factory;
 use Webovac\Core\Model\CmsDataRepository;
@@ -53,8 +55,8 @@ class CoreExtension extends BaseExtension
 	{
 		parent::loadConfiguration();
 		$builder = $this->getContainerBuilder();
-		$builder->addDefinition($this->prefix('installer'))
-			->setFactory(InstallCommand::class, [['host' => $this->config->host], $builder->parameters['debugMode']]);
+		$builder->addDefinition($this->prefix('migrateCommand'))
+			->setFactory(MigrateCommand::class, [['host' => $this->config->host], $builder->parameters['debugMode']]);
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
 		$this->createDecoratorExtension();

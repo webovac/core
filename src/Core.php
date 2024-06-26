@@ -34,19 +34,19 @@ class Core implements Module
 
 	public function getMigrationGroup(): MigrationGroup
 	{
-		return new MigrationGroup(Core::getModuleName(), __DIR__ . '/migrations');
+		return new MigrationGroup(Core::getModuleName(), Core::class);
 	}
 
 
 	public function getInstallGroups(): array
 	{
 		return [
-			new InstallGroup('role', 'Roles'),
-			new InstallGroup('person', 'Persons', ['role']),
-			new InstallGroup('language', 'Languages'),
-			new InstallGroup('text', 'Texts', ['language']),
-			new InstallGroup('module', 'Modules', ['language']),
-			new InstallGroup('web', 'Webs', ['language', 'layout']),
+			new InstallGroup('role'),
+			new InstallGroup('person', ['role-install']),
+			new InstallGroup('language'),
+			new InstallGroup('text', ['language-install']),
+			new InstallGroup('module', ['language-install']),
+			new InstallGroup('web', ['language-install', 'layout-install']),
 		];
 	}
 
