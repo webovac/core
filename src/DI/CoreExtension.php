@@ -25,6 +25,7 @@ use Webovac\Core\Factory;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsRepository;
 use Webovac\Core\Module;
+use Webovac\Core\Structure\PqsqlStructureGenerator;
 
 
 class CoreExtension extends BaseExtension
@@ -176,26 +177,11 @@ class CoreExtension extends BaseExtension
 		$rootDir = $this->getContainerBuilder()->parameters['rootDir'];
 		$appDir = "$rootDir/app";
 		return [
-			'module' => [
-				'in' => $appDir,
-				'implements' => Module::class,
-			],
-			'command' => [
-				'in' => $appDir,
-				'implements' => Command::class,
-			],
-			'control' => [
-				'in' => $appDir,
-				'extends' => Factory::class,
-			],
-			'lib' => [
-				'in' => $appDir,
-				'classes' => 'App\**\Lib\**',
-			],
-			'dataRepository' => [
-				'in' => $appDir,
-				'extends' => CmsDataRepository::class,
-			],
+			'module' => ['in' => $appDir, 'implements' => Module::class],
+			'command' => ['in' => $appDir, 'implements' => Command::class],
+			'control' => ['in' => $appDir, 'extends' => Factory::class],
+			'lib' => ['in' => $appDir, 'classes' => 'App\**\Lib\**'],
+			'dataRepository' => ['in' => $appDir, 'extends' => CmsDataRepository::class],
 		];
 	}
 

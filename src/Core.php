@@ -41,9 +41,9 @@ class Core implements Module
 	public function getInstallGroups(): array
 	{
 		return [
-			new InstallGroup('role'),
+			new InstallGroup('role', ['core-alter']),
 			new InstallGroup('person', ['role-install']),
-			new InstallGroup('language'),
+			new InstallGroup('language', ['core-alter']),
 			new InstallGroup('text', ['language-install']),
 			new InstallGroup('module', ['language-install']),
 			new InstallGroup('web', ['language-install', 'layout-install']),

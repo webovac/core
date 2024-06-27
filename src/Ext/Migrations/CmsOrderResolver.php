@@ -8,6 +8,7 @@ use Nextras\Migrations\Engine\OrderResolver;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\Entities\Group;
 use Nextras\Migrations\LogicException;
+use Tracy\Dumper;
 
 
 class CmsOrderResolver extends OrderResolver
@@ -35,11 +36,6 @@ class CmsOrderResolver extends OrderResolver
 						'Unable to determine order for migrations "%s" and "%s".',
 						$names[0], $names[1]
 					));
-				} else {
-					if ($a->group->mode xor $b->group->mode) {
-						return $a->group->mode ? 1 : -1;
-					}
-					return strcmp($a->group->name, $b->group->name);
 				}
 			}
 			return strcmp($a->name, $b->name);
@@ -47,5 +43,4 @@ class CmsOrderResolver extends OrderResolver
 
 		return $files;
 	}
-
 }

@@ -7,9 +7,12 @@ namespace Nextras\Migrations\Extensions;
 use App\Model\DataModel;
 use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
+use Nextras\Migrations\IDriver;
 use Nextras\Migrations\IExtensionHandler;
 use Stepapo\Dataset\Utils;
 use Tracy\Dumper;
+use Webovac\Core\Structure\StructureConfig;
+use Webovac\Core\Structure\PqsqlStructureGenerator;
 
 
 /**
@@ -21,7 +24,9 @@ class NeonHandler implements IExtensionHandler
 		private array $params,
 		private bool $debugMode,
 		private DataModel $dataModel,
+		private PqsqlStructureGenerator $structureProcessor,
 	) {}
+
 
 	public function execute(File $file): int
 	{
@@ -30,25 +35,25 @@ class NeonHandler implements IExtensionHandler
 		if ($text === 'dev' && !$this->debugMode) {
 			return $count;
 		}
-
 		$config = (array) Neon::decode(@file_get_contents($file->path));
-		if ($text !== 'all') {
-			//$this->printer->printText("- " . $text);
-		}
 		$parsedConfig = Utils::replaceParams($config, $this->params);
-		$repository = str_replace(['-install', '-update'], '', $file->group->name);
-		if ($repository === 'text') {
-			foreach ($parsedConfig as $key => $value) {
-				$translations = [];
-				foreach ($value as $lang => $string) {
-					$translations[$lang] = ['string' => $string];
+		if (in_array($file->group->mode, ['install', 'update'], true)) {
+			$repository = str_replace(['-install', '-update'], '', $file->group->name);
+			if ($repository === 'text') {
+				foreach ($parsedConfig as $key => $value) {
+					$translations = [];
+					foreach ($value as $lang => $string) {
+						$translations[$lang] = ['string' => $string];
+					}
+					$this->dataModel->{$repository . 'Repository'}->createFromConfig(['name' => $key, 'translations' => $translations], $file->group->mode);
+					$count++;
 				}
-				$this->dataModel->{$repository . 'Repository'}->createFromConfig(['name' => $key, 'translations' => $translations], $file->group->mode);
+			} else {
+				$this->dataModel->{$repository . 'Repository'}->createFromConfig($parsedConfig, $file->group->mode);
 				$count++;
 			}
 		} else {
-			$this->dataModel->{$repository . 'Repository'}->createFromConfig($parsedConfig, $file->group->mode);
-			$count++;
+			$count = $this->structureProcessor->process(StructureConfig::createFromArray($parsedConfig));
 		}
 		return $count;
 	}

@@ -18,6 +18,7 @@ use Webovac\Core\InstallGroup;
 use Webovac\Core\MigrationGroup;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Module;
+use Webovac\Core\Structure\PqsqlStructureGenerator;
 
 
 class MigrateCommand implements Command
@@ -33,6 +34,7 @@ class MigrateCommand implements Command
 		private DataModel $dataModel,
 		private Orm $orm,
 		private IDriver $driver,
+		private PqsqlStructureGenerator $structureProcessor,
 		private array $modules
 	) {
 		foreach ($modules as $module) {
@@ -67,7 +69,7 @@ class MigrateCommand implements Command
 			$controller = $this->prepareInstalls($group, $controller, CmsDataRepository::MODE_UPDATE);
 		}
 		$controller->addExtension('sql', new SqlHandler($this->driver));
-		$controller->addExtension('neon', new NeonHandler($this->params, $this->debugMode, $this->dataModel));
+		$controller->addExtension('neon', new NeonHandler($this->params, $this->debugMode, $this->dataModel, $this->structureProcessor));
 		$controller->run();
 		$this->orm->flush();
 		return 0;
@@ -77,10 +79,34 @@ class MigrateCommand implements Command
 	public function prepareMigrations(MigrationGroup $migrationGroup, CmsConsoleController $controller): CmsConsoleController
 	{
 		$reflection = new \ReflectionClass($migrationGroup->moduleClass);
+		if (file_exists($dir = dirname($reflection->getFileName()) . "/migrations/structures/create")) {
+			$files = Finder::findFiles("*.neon")->from($dir);
+			if ($files->collect()) {
+				$controller->addCmsGroup($migrationGroup->name . '-create', $files->collect(), $migrationGroup->dependencies, 'create');
+			}
+		} else {
+			$controller->addCmsGroup($migrationGroup->name . '-create', [], $migrationGroup->dependencies, 'create');
+		}
+		$_SERVER['argv'][] = $migrationGroup->name . '-create';
+		if (file_exists($dir = dirname($reflection->getFileName()) . "/migrations/structures/alter")) {
+			$files = Finder::findFiles("*.neon")->from($dir);
+			if ($files->collect()) {
+				$migrationGroup->dependencies[] = $migrationGroup->name . '-create';
+				$controller->addCmsGroup($migrationGroup->name . '-alter', $files->collect(), $migrationGroup->dependencies, 'alter');
+			}
+		} else {
+			$controller->addCmsGroup($migrationGroup->name . '-alter', [], $migrationGroup->dependencies, 'alter');
+		}
+		$_SERVER['argv'][] = $migrationGroup->name . '-alter';
 		$db = $this->driver instanceof PgSqlDriver ? 'pgsql' : 'mysql';
-		$files = Finder::findFiles("*.sql")->from(dirname($reflection->getFileName()) . "/migrations/structures/$db");
-		if ($files->collect()) {
-			$controller->addCmsGroup($migrationGroup->name, $files->collect(), $migrationGroup->dependencies);
+		if (file_exists($dir = dirname($reflection->getFileName()) . "/migrations/structures/$db")) {
+			$files = Finder::findFiles("*.sql")->from($dir);
+			if ($files->collect()) {
+				$migrationGroup->dependencies[] = $migrationGroup->name . '-alter';
+				$controller->addCmsGroup($migrationGroup->name, $files->collect(), $migrationGroup->dependencies);
+			}
+		} else {
+			$controller->addCmsGroup($migrationGroup->name, [], $migrationGroup->dependencies);
 		}
 		$_SERVER['argv'][] = $migrationGroup->name;
 

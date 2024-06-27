@@ -75,22 +75,10 @@ abstract class BaseExtension extends CompilerExtension
 	protected function getSearchConfig(): array
 	{
 		return [
-			'module' => [
-				'in' => $this->moduleDir,
-				'implements' => Module::class,
-			],
-			'command' => [
-				'in' => $this->moduleDir,
-				'implements' => Command::class,
-			],
-			'control' => [
-				'in' => $this->moduleDir,
-				'extends' => Factory::class,
-			],
-			'lib' => [
-				'in' => "$this->moduleDir/Lib/",
-				'classes' => '*',
-			],
+			'module' => ['in' => $this->moduleDir, 'implements' => Module::class],
+			'command' => ['in' => $this->moduleDir, 'implements' => Command::class],
+			'control' => ['in' => $this->moduleDir, 'extends' => Factory::class],
+			'lib' => ['in' => "$this->moduleDir/Lib/", 'classes' => '*'],
 		];
 	}
 }

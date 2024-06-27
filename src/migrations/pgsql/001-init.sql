@@ -115,7 +115,7 @@ CREATE SEQUENCE "public"."module_translation_id_seq";
 CREATE TABLE "public"."module_translation" (
     "id" int4 NOT NULL DEFAULT nextval('module_translation_id_seq'::regclass),
     "module_id" int4,
-    "language_id" int4,
+    "language_id" int4 NOT NULL,
     "created_by_person_id" int4,
     "updated_by_person_id" int4,
     "title" varchar NOT NULL,
