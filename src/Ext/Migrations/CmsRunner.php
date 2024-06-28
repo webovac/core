@@ -6,7 +6,6 @@ namespace Webovac\Core\Ext\Migrations;
 
 use DateTime;
 use Nette\Utils\FileInfo;
-use Nextras\Migrations\Engine\Finder;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\Entities\Group;
@@ -19,7 +18,6 @@ use Nextras\Migrations\IExtensionHandler;
 use Nextras\Migrations\IPrinter;
 use Nextras\Migrations\LockException;
 use Nextras\Migrations\LogicException;
-use Tracy\Dumper;
 
 
 class CmsRunner extends Runner

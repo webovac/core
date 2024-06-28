@@ -5,7 +5,7 @@ namespace Webovac\Core\Ext\Migrations;
 use Nette\Utils\FileInfo;
 use Nextras\Migrations\Entities\Group;
 use Nextras\Migrations\IDiffGenerator;
-use Webovac\Core\InstallGroup;
+use Webovac\Core\MigrationGroup;
 
 
 class CmsGroup extends Group
@@ -25,8 +25,7 @@ class CmsGroup extends Group
 	/** @var IDiffGenerator|null */
 	public $generator;
 
-	/** @var ?string */
-	public $mode;
+	public MigrationGroup $migrationGroup;
 
 
 	public function isDependentOn(CmsGroup $group): bool

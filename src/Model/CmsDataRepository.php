@@ -6,7 +6,6 @@ namespace Webovac\Core\Model;
 
 use App\Model\Orm;
 use Nette\Caching\Cache;
-use Nette\InvalidArgumentException;
 use Nette\Schema\Processor;
 use Nette\Schema\Schema;
 use Nextras\Orm\Repository\IRepository;
@@ -48,25 +47,25 @@ abstract class CmsDataRepository
 	}
 
 
-	public function createFromConfig(array $config, string $mode = self::MODE_INSTALL): CmsEntity
-	{
-		$data = $this->createDataFromConfig($config, $mode);
-		$entity = $this->getOrmRepository()->createFromData($data, mode: $mode, getOriginalByData: true);
-		if (method_exists($this->getOrmRepository(), 'postProcessFromData')) {
-			$this->getOrmRepository()->postProcessFromData($data, $entity, mode: $mode);
-		}
-		return $entity;
-	}
-
-
-	public function createDataFromConfig(array $config, string $mode): CmsData
-	{
-		$schema = $this->getSchema($mode);
-		if (!$schema) {
-			throw new InvalidArgumentException();
-		}
-		return $this->processor->process($schema, $config);
-	}
+//	public function createFromConfig(array $config, string $mode = self::MODE_INSTALL): CmsEntity
+//	{
+//		$data = $this->createDataFromConfig($config, $mode);
+//		$entity = $this->getOrmRepository()->createFromData($data, mode: $mode, getOriginalByData: true);
+//		if (method_exists($this->getOrmRepository(), 'postProcessFromData')) {
+//			$this->getOrmRepository()->postProcessFromData($data, $entity, mode: $mode);
+//		}
+//		return $entity;
+//	}
+//
+//
+//	public function createDataFromConfig(array $config, string $mode): CmsData
+//	{
+//		$schema = $this->getSchema($mode);
+//		if (!$schema) {
+//			throw new InvalidArgumentException();
+//		}
+//		return $this->processor->process($schema, $config);
+//	}
 
 
 	protected function getName(): string

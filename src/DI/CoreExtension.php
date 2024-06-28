@@ -15,21 +15,19 @@ use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Nextras\Dbal\Bridges\NetteDI\DbalExtension;
 use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
-use Nextras\Migrations\Extensions\SqlHandler;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
 use Webovac\Core\Command\Command;
 use Webovac\Core\Command\InstallCommand;
 use Webovac\Core\Command\InstallNewCommand;
-use Webovac\Core\Command\MigrateCommand;
 use Webovac\Core\Definition\MysqlDefinitionProcessor;
 use Webovac\Core\Definition\PgsqlDefinitionProcessor;
+use Webovac\Core\Definition\PqsqlStructureGenerator;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Factory;
 use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsRepository;
 use Webovac\Core\Module;
-use Webovac\Core\Definition\PqsqlStructureGenerator;
 
 
 class CoreExtension extends BaseExtension

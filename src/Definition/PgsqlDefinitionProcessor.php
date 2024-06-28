@@ -12,8 +12,8 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	private int $count = 0;
 	private array $createSequence = [];
 	private array $createTable = [];
-	private array $createIndex = [];
 	private array $alterTable = [];
+	private array $createIndex = [];
 
 
 	public function __construct(
@@ -35,14 +35,14 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 			$this->dbal->query($createTable);
 			$this->count++;
 		}
-		foreach ($this->createIndex as $createIndex) {
-//			Dumper::dump($createIndex);
-			$this->dbal->query($createIndex);
-			$this->count++;
-		}
 		foreach ($this->alterTable as $alterTable) {
 //			Dumper::dump($alterTable);
 			$this->dbal->query($alterTable);
+			$this->count++;
+		}
+		foreach ($this->createIndex as $createIndex) {
+//			Dumper::dump($createIndex);
+			$this->dbal->query($createIndex);
 			$this->count++;
 		}
 		return $this->count;
@@ -53,7 +53,11 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	{
 		$this->reset();
 		foreach ($this->definition->tables as $table) {
-			$this->addCreateTable($table);
+			if ($table->type === 'create') {
+				$this->addCreateTable($table);
+			} elseif ($table->type === 'alter') {
+				$this->alterTable($table);
+			}
 		}
 	}
 
@@ -75,7 +79,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 		}
 		$c[] = $this->primary($table->primaryKey);
 		foreach ($table->uniqueKeys as $uniqueKey) {
-			$c[] = $this->unique($uniqueKey);
+			$c[] = $this->unique($table, $uniqueKey);
 		}
 		$t['columns'] = implode(', ', $c);
 		$t['end'] = ');';
@@ -89,7 +93,24 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function addCreateIndex(Table $table, KeyConfig $key): void
+	private function alterTable(Table $table): void
+	{
+		foreach ($table->columns as $column) {
+			$this->addAlterTableWithColumn($table, $column);
+		}
+		foreach ($table->uniqueKeys as $uniqueKey) {
+			$this->addAlterTableWithUnique($table, $uniqueKey);
+		}
+		foreach ($table->indexes as $index) {
+			$this->addCreateIndex($table, $index);
+		}
+		foreach ($table->foreignKeys as $foreignKey) {
+			$this->addAlterTableWithForeignKey($table, $foreignKey);
+		}
+	}
+
+
+	private function addCreateIndex(Table $table, Key $key): void
 	{
 		$schema = $table->schema ?: $this->defaultSchema;
 		$c = [];
@@ -104,6 +125,20 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	{
 		$schema = $table->schema ?: $this->defaultSchema;
 		$this->createIndex[] = "CREATE INDEX ON \"$schema\".\"$table->name\" USING gin(\"$column->name\");";
+	}
+
+
+	private function addAlterTableWithColumn(Table $table, Column $column): void
+	{
+		$schema = $table->schema ?: $this->defaultSchema;
+		$this->alterTable[] = "ALTER TABLE \"$schema\".\"$table->name\" ADD COLUMN " . $this->column($table, $column) . ";";
+	}
+
+
+	private function addAlterTableWithUnique(Table $table, Key $key): void
+	{
+		$schema = $table->schema ?: $this->defaultSchema;
+		$this->alterTable[] = "ALTER TABLE \"$schema\".\"$table->name\" ADD " . $this->unique($table, $key) . ";";
 	}
 
 
@@ -143,7 +178,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function primary(KeyConfig $key)
+	private function primary(Key $key)
 	{
 		$c = [];
 		foreach ($key->columns as $column) {
@@ -153,7 +188,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function unique(KeyConfig $key)
+	private function unique(Table $table, Key $key)
 	{
 		$c = [];
 		foreach ($key->columns as $column) {

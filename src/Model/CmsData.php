@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Webovac\Core\Model;
 
 use InvalidArgumentException;
-use Nette\Utils\ArrayHash;
 use ReflectionClass;
 use ReflectionNamedType;
 use Webovac\Core\Lib\Collection;
+use Webovac\Core\Lib\Schematic;
 
 
-class CmsData extends ArrayHash
+class CmsData extends Schematic
 {
 	public function getCollection(string $name): Collection
 	{

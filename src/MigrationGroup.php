@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Webovac\Core;
 
 
-class MigrationGroup
+abstract class MigrationGroup
 {
 	public function __construct(
 		public string $name,
-		public string $moduleClass,
+		public string $class,
 		public array $dependencies = [],
 	) {}
 }

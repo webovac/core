@@ -3,18 +3,20 @@
 namespace Webovac\Core\Definition;
 
 use Webovac\Core\Lib\Schematic;
+use Webovac\Core\Model\CmsData;
 use Webovac\Core\Model\CmsDataRepository;
 
 
-class Definition extends Schematic
+class Manipulation extends Schematic
 {
-	/** @var Table[]|array */ public array $tables;
+	/** @var CmsData[]|array */ public array $inserts;
+	/** @var CmsData[]|array */ public array $updates;
 
 
 	public static function createFromArray(array $config, string $mode = CmsDataRepository::MODE_INSTALL): static
 	{
 		$config = parent::createFromArray($config, $mode);
-		foreach ($config->tables as $tableName => $tableConfig) {
+		foreach ($config->inserts as $tableName => $tableConfig) {
 			$config->tables[$tableName]['name'] ??= $tableName;
 			$config->tables[$tableName] = Table::createFromArray(
 				$config->tables[$tableName],

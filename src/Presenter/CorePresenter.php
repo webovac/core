@@ -21,7 +21,6 @@ use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
-use Nette\Localization\Translator;
 use Nette\Utils\Arrays;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;

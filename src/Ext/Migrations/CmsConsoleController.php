@@ -7,8 +7,7 @@ namespace Webovac\Core\Ext\Migrations;
 use Nextras\Migrations\Controllers\ConsoleController;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\IDriver;
-use Tracy\Dumper;
-use Webovac\Core\Model\CmsDataRepository;
+use Webovac\Core\MigrationGroup;
 
 
 class CmsConsoleController extends ConsoleController
@@ -45,14 +44,14 @@ class CmsConsoleController extends ConsoleController
 	/**
 	 * @param  list<string>  $dependencies
 	 */
-	public function addCmsGroup(string $name, array $files, array $dependencies = [], ?string $mode = null): self
+	public function addCmsGroup(string $name, MigrationGroup $migrationGroup, array $files, array $dependencies = [], ?string $mode = null): self
 	{
 		$group = new CmsGroup;
 		$group->name = $name;
+		$group->migrationGroup = $migrationGroup;
 		$group->files = $files;
 		$group->dependencies = $dependencies;
 		$group->enabled = false;
-		$group->mode = $mode;
 		$this->groups[$name] = $group;
 		return $this;
 	}

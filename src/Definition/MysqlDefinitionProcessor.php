@@ -3,7 +3,6 @@
 namespace Webovac\Core\Definition;
 
 use Nextras\Dbal\Connection;
-use Tracy\Dumper;
 
 
 class MysqlDefinitionProcessor implements DefinitionProcessor
@@ -12,8 +11,8 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	private Definition $definition;
 	private int $count = 0;
 	private array $createTable = [];
-	private array $createIndex = [];
 	private array $alterTable = [];
+	private array $createIndex = [];
 
 
 	public function __construct(
@@ -27,18 +26,18 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 		$this->prepare();
 		$this->dbal->query("SET NAMES utf8mb4;");
 		foreach ($this->createTable as $createTable) {
-			Dumper::dump($createTable);
+//			Dumper::dump($createTable);
 			$this->dbal->query($createTable);
 			$this->count++;
 		}
-		foreach ($this->createIndex as $createIndex) {
-			Dumper::dump($createIndex);
-			$this->dbal->query($createIndex);
+		foreach ($this->alterTable as $alterTable) {
+//			Dumper::dump($alterTable);
+			$this->dbal->query($alterTable);
 			$this->count++;
 		}
-		foreach ($this->alterTable as $alterTable) {
-			Dumper::dump($alterTable);
-			$this->dbal->query($alterTable);
+		foreach ($this->createIndex as $createIndex) {
+//			Dumper::dump($createIndex);
+			$this->dbal->query($createIndex);
 			$this->count++;
 		}
 		return $this->count;
@@ -48,8 +47,12 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	private function prepare(): void
 	{
 		$this->reset();
-		foreach ($this->definition->tables as $table) {
-			$this->addCreateTable($table);
+		foreach ($this->definition->creates as $table) {
+			if ($table->type === 'create') {
+				$this->addCreateTable($table);
+			} elseif ($table->type === 'alter') {
+				$this->alterTable($table);
+			}
 		}
 	}
 
@@ -79,7 +82,24 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function addCreateIndex(Table $table, KeyConfig $key): void
+	private function alterTable(Table $table): void
+	{
+		foreach ($table->columns as $column) {
+			$this->addAlterTableWithColumn($table, $column);
+		}
+		foreach ($table->uniqueKeys as $uniqueKey) {
+			$this->addAlterTableWithUnique($table, $uniqueKey);
+		}
+		foreach ($table->indexes as $index) {
+			$this->addCreateIndex($table, $index);
+		}
+		foreach ($table->foreignKeys as $foreignKey) {
+			$this->addAlterTableWithForeignKey($table, $foreignKey);
+		}
+	}
+
+
+	private function addCreateIndex(Table $table, Key $key): void
 	{
 		$schema = $table->schema ?: $this->defaultSchema;
 		$c = [];
@@ -113,6 +133,20 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
+	private function addAlterTableWithColumn(Table $table, Column $column): void
+	{
+		$schema = $table->schema ?: $this->defaultSchema;
+		$this->alterTable[] = "ALTER TABLE `$schema`.`$table->name` ADD COLUMN " . $this->column($table, $column) . ";";
+	}
+
+
+	private function addAlterTableWithUnique(Table $table, Key $key): void
+	{
+		$schema = $table->schema ?: $this->defaultSchema;
+		$this->alterTable[] = "ALTER TABLE `$schema`.`$table->name` ADD " . $this->unique($table, $key) . ";";
+	}
+
+
 	private function column(Table $table, Column $column): string
 	{
 		$c = [];
@@ -135,7 +169,7 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function primary(KeyConfig $key)
+	private function primary(Key $key)
 	{
 		$c = [];
 		foreach ($key->columns as $column) {
@@ -145,7 +179,7 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function unique(Table $table, KeyConfig $key)
+	private function unique(Table $table, Key $key)
 	{
 		$c = [];
 		$n = [];

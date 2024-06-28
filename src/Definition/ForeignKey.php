@@ -2,6 +2,8 @@
 
 namespace Webovac\Core\Definition;
 
+use Webovac\Core\Lib\Schematic;
+
 
 class ForeignKey extends Schematic
 {

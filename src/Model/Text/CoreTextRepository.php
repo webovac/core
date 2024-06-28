@@ -6,9 +6,6 @@ namespace Webovac\Core\Model\Text;
 
 use App\Model\Text\Text;
 use App\Model\Text\TextData;
-use App\Model\Page\PageRepository;
-use App\Model\Person\Person;
-use Webovac\Core\Model\CmsDataRepository;
 
 
 trait CoreTextRepository

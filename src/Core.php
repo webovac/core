@@ -5,13 +5,19 @@ declare(strict_types=1);
 namespace Webovac\Core;
 
 use App\Model\Language\Language;
+use App\Model\Language\LanguageData;
 use App\Model\LanguageTranslation\LanguageTranslation;
 use App\Model\Log\Log;
+use App\Model\Module\ModuleData;
 use App\Model\ModuleTranslation\ModuleTranslation;
 use App\Model\Orm;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslation;
+use App\Model\Person\PersonData;
+use App\Model\Role\RoleData;
+use App\Model\Text\TextData;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslation;
 use Nette\Caching\Cache;
 
@@ -32,21 +38,21 @@ class Core implements Module
 	}
 
 
-	public function getMigrationGroup(): MigrationGroup
+	public function getDefinitionGroup(): MigrationGroup
 	{
-		return new MigrationGroup(Core::getModuleName(), Core::class);
+		return new DefinitionGroup(Core::getModuleName(), Core::class);
 	}
 
 
-	public function getInstallGroups(): array
+	public function getManipulationGroups(): array
 	{
 		return [
-			new InstallGroup('role', ['core-alter']),
-			new InstallGroup('person', ['role-install']),
-			new InstallGroup('language', ['core-alter']),
-			new InstallGroup('text', ['language-install']),
-			new InstallGroup('module', ['language-install']),
-			new InstallGroup('web', ['language-install', 'layout-install']),
+			new ManipulationGroup('role', RoleData::class),
+			new ManipulationGroup('person', PersonData::class, ['role']),
+			new ManipulationGroup('language', LanguageData::class),
+			new ManipulationGroup('text', TextData::class, ['language']),
+			new ManipulationGroup('module', ModuleData::class, ['language']),
+			new ManipulationGroup('web', WebData::class, ['language', 'layout']),
 		];
 	}
 

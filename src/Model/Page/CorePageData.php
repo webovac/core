@@ -9,6 +9,7 @@ use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslationData;
 use DateTimeInterface;
 use Nette\Http\FileUpload;
+use Webovac\Core\Attribute\ArrayOfType;
 use Webovac\Core\Attribute\DefaultValue;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
@@ -25,7 +26,7 @@ trait CorePageData
 	public ?string $authorizingTag;
 	public ?string $authorizingParentTag;
 	public ?string $style;
-	/** @var PageTranslationData[]|array */ public array $translations;
+	#[ArrayOfType(PageTranslationData::class, 'language')] /** @var PageTranslationData[] */ public array $translations;
 	/** @var int[] */ public array $authorizedRoles;
 	/** @var int[] */ public array $authorizedPersons;
 	public bool $hasParameter;

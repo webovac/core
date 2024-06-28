@@ -16,8 +16,10 @@ use Webovac\Core\Model\CmsData;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsEntity;
 
+
 class CmsEntityProcessor
 {
+	public bool $isPersisted = false;
 	public bool $isModified = false;
 
 
@@ -55,7 +57,8 @@ class CmsEntityProcessor
 			}
 		}
 		$this->isModified = $this->entity->isModified();
-		if (!$this->entity->isPersisted()) {
+		$this->isPersisted = $this->entity->isPersisted();
+		if (!$this->isPersisted) {
 			if ($metadata->hasProperty('createdByPerson')) {
 				$this->entity->createdByPerson = $this->person;
 			}
@@ -70,7 +73,7 @@ class CmsEntityProcessor
 			}
 		}
 
-		if ($this->entity->isPersisted() && $this->isModified) {
+		if ($this->isPersisted && $this->isModified) {
 			if ($metadata->hasProperty('updatedByPerson')) {
 				$this->entity->updatedByPerson = $this->person;
 			}
@@ -86,7 +89,7 @@ class CmsEntityProcessor
 	{
 		$name = $property->name;
 		$value = $this->data->$name;
-		if (!isset($this->entity->$name) || $this->entity->$name !== $value) {
+		if ((empty($this->entity->$name) && $value !== null) || $this->entity->$name !== $value) {
 			$this->entity->$name = $value;
 		}
 	}

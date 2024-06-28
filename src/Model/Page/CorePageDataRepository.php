@@ -83,26 +83,4 @@ trait CorePageDataRepository
 			}
 		}
 	}
-
-
-	public function createDataFromConfig(array $config, string $mode): PageData
-	{
-		/** @var PageData $data */
-		$data = $this->processor->process($this->getSchema($mode), $config);
-		if (isset($data->translations)) {
-			foreach ($data->translations as $key => $translationConfig) {
-				$translationConfig['language'] ??= $key;
-				unset($data->translations[$key]);
-				$data->translations[$translationConfig['language']] = $this->pageTranslationDataRepository->createDataFromConfig($translationConfig, $mode);
-			}
-		}
-		if (isset($data->pages)) {
-			foreach ($data->pages as $key => $pageConfig) {
-				$pageConfig['name'] ??= $key;
-				unset($data->pages[$key]);
-				$data->pages[$pageConfig['name']] = $this->createDataFromConfig($pageConfig, $mode);
-			}
-		}
-		return $data;
-	}
 }
