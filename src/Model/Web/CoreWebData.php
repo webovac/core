@@ -116,7 +116,7 @@ trait CoreWebData
 			foreach ($data->webModules as $key => $webModuleConfig) {
 				$webModuleConfig['name'] ??= $key;
 				unset($data->webModules[$key]);
-				$data->webModules[$webModuleConfig['name']] = (new Processor)->process(CmsExpect::fromDataClass(WebModuleData::class, $mode), $webModuleConfig);
+				$data->webModules[$webModuleConfig['name']] = (new Processor)->process(CmsExpect::fromSchematic(WebModuleData::class, $mode), $webModuleConfig);
 			}
 		}
 		return $data;

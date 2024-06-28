@@ -47,7 +47,7 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	private function prepare(): void
 	{
 		$this->reset();
-		foreach ($this->definition->creates as $table) {
+		foreach ($this->definition->tables as $table) {
 			if ($table->type === 'create') {
 				$this->addCreateTable($table);
 			} elseif ($table->type === 'alter') {

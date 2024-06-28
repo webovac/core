@@ -15,12 +15,10 @@ use Webovac\Core\Model\CmsDataRepository;
 
 class CmsExpect
 {
-	public static function fromDataClass(string $class, string $mode, array $items = []): Structure
+	public static function fromSchematic(string $class, string $mode, array $items = []): Structure
 	{
 		$rc = new ReflectionClass($class);
-		$props = $rc->hasMethod('__construct')
-			? $rc->getMethod('__construct')->getParameters()
-			: $rc->getProperties();
+		$props = $rc->getProperties();
 
 		foreach ($props as $prop) {
 			$item = &$items[$prop->getName()];

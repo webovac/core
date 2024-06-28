@@ -94,7 +94,7 @@ abstract class CmsDataRepository
 	protected function getSchema(string $mode): ?Schema
 	{
 		$dataClass = $this->getDataClass();
-		return $dataClass ? CmsExpect::fromDataClass($dataClass, $mode) : null;
+		return $dataClass ? CmsExpect::fromSchematic($dataClass, $mode) : null;
 	}
 
 

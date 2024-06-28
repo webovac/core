@@ -47,7 +47,7 @@ class Schematic extends ArrayHash
 				foreach ($data->$name as $key => $subConfig) {
 					if ($keyProperty) {
 						$subConfig[$keyProperty] ??= $key;
-						unset($key);
+						unset($data->$name[$key]);
 						$key = $subConfig[$keyProperty];
 					}
 					$data->$name[$key] = $class::createFromArray($subConfig, $mode);
@@ -60,6 +60,6 @@ class Schematic extends ArrayHash
 
 	protected static function getSchema(string $mode = CmsDataRepository::MODE_INSTALL): ?Schema
 	{
-		return CmsExpect::fromDataClass(static::class, $mode);
+		return CmsExpect::fromSchematic(static::class, $mode);
 	}
 }
