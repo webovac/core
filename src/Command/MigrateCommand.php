@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Command;
 
-use App\Model\DataModel;
 use App\Model\Orm;
 use Nette\Utils\FileInfo;
 use Nette\Utils\Finder;
-use Nextras\Migrations\Controllers\ConsoleController;
 use Nextras\Migrations\Drivers\PgSqlDriver;
-use Nextras\Migrations\Extensions\NeonHandler;
 use Nextras\Migrations\Extensions\SqlHandler;
 use Nextras\Migrations\IDriver;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\InstallGroup;
+use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\MigrationGroup;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Module;
-use Webovac\Core\Structure\PqsqlStructureGenerator;
 
 
 class MigrateCommand implements Command
@@ -29,12 +26,10 @@ class MigrateCommand implements Command
 
 	/** @param Module[] $modules */ 
 	public function __construct(
-		private array $params,
-		private bool $debugMode,
-		private DataModel $dataModel,
 		private Orm $orm,
 		private IDriver $driver,
-		private PqsqlStructureGenerator $structureProcessor,
+		private SqlHandler $sqlHandler,
+		private NeonHandler $neonHandler,
 		private array $modules
 	) {
 		foreach ($modules as $module) {
@@ -68,8 +63,8 @@ class MigrateCommand implements Command
 		foreach($this->groups as $group) {
 			$controller = $this->prepareInstalls($group, $controller, CmsDataRepository::MODE_UPDATE);
 		}
-		$controller->addExtension('sql', new SqlHandler($this->driver));
-		$controller->addExtension('neon', new NeonHandler($this->params, $this->debugMode, $this->dataModel, $this->structureProcessor));
+		$controller->addExtension('sql', $this->sqlHandler);
+		$controller->addExtension('neon', $this->neonHandler);
 		$controller->run();
 		$this->orm->flush();
 		return 0;

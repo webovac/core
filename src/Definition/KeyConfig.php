@@ -1,11 +1,11 @@
 <?php
 
-namespace Webovac\Core\Structure;
+namespace Webovac\Core\Definition;
 
 
 use Webovac\Core\Model\CmsDataRepository;
 
-class KeyConfig extends BaseConfig
+class KeyConfig extends Schematic
 {
 	/** @var string[] */ public array $columns;
 }

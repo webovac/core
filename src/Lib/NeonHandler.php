@@ -2,17 +2,15 @@
 
 declare(strict_types = 1);
 
-namespace Nextras\Migrations\Extensions;
+namespace Webovac\Core\Lib;
 
 use App\Model\DataModel;
 use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
-use Nextras\Migrations\IDriver;
 use Nextras\Migrations\IExtensionHandler;
 use Stepapo\Dataset\Utils;
-use Tracy\Dumper;
-use Webovac\Core\Structure\StructureConfig;
-use Webovac\Core\Structure\PqsqlStructureGenerator;
+use Webovac\Core\Definition\Definition;
+use Webovac\Core\Definition\DefinitionProcessor;
 
 
 /**
@@ -24,7 +22,7 @@ class NeonHandler implements IExtensionHandler
 		private array $params,
 		private bool $debugMode,
 		private DataModel $dataModel,
-		private PqsqlStructureGenerator $structureProcessor,
+		private DefinitionProcessor $structureProcessor,
 	) {}
 
 
@@ -53,7 +51,7 @@ class NeonHandler implements IExtensionHandler
 				$count++;
 			}
 		} else {
-			$count = $this->structureProcessor->process(StructureConfig::createFromArray($parsedConfig));
+			$count = $this->structureProcessor->process(Definition::createFromArray($parsedConfig));
 		}
 		return $count;
 	}

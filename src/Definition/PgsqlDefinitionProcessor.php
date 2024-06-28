@@ -1,15 +1,14 @@
 <?php
 
-namespace Webovac\Core\Structure;
+namespace Webovac\Core\Definition;
 
 use Nextras\Dbal\Connection;
-use Nextras\Migrations\IDriver;
-use Tracy\Dumper;
 
 
-class PqsqlStructureGenerator
+class PgsqlDefinitionProcessor implements DefinitionProcessor
 {
-	private StructureConfig $structure;
+	private string $defaultSchema = 'public';
+	private Definition $definition;
 	private int $count = 0;
 	private array $createSequence = [];
 	private array $createTable = [];
@@ -18,14 +17,13 @@ class PqsqlStructureGenerator
 
 
 	public function __construct(
-		private IDriver $driver,
 		private Connection $dbal,
 	) {}
 
 
-	public function process(StructureConfig $structure): int
+	public function process(Definition $structure): int
 	{
-		$this->structure = $structure;
+		$this->definition = $structure;
 		$this->prepare();
 		foreach ($this->createSequence as $createSequence) {
 //			Dumper::dump($createSequence);
@@ -54,22 +52,23 @@ class PqsqlStructureGenerator
 	private function prepare(): void
 	{
 		$this->reset();
-		foreach ($this->structure->tables as $table) {
+		foreach ($this->definition->tables as $table) {
 			$this->addCreateTable($table);
 		}
 	}
 
 
-	private function addCreateSequence(TableConfig $table): void
+	private function addCreateSequence(Table $table): void
 	{
 		$this->createSequence[] = "CREATE SEQUENCE \"{$table->name}_id_seq\";";
 	}
 
 
-	private function addCreateTable(TableConfig $table): void
+	private function addCreateTable(Table $table): void
 	{
+		$schema = $table->schema ?: $this->defaultSchema;
 		$t = [];
-		$t['create'] = "CREATE TABLE \"public\".\"$table->name\" (";
+		$t['create'] = "CREATE TABLE \"$schema\".\"$table->name\" (";
 		$c = [];
 		foreach ($table->columns as $column) {
 			$c[] = $this->column($table, $column);
@@ -90,36 +89,39 @@ class PqsqlStructureGenerator
 	}
 
 
-	private function addCreateIndex(TableConfig $table, KeyConfig $key): void
+	private function addCreateIndex(Table $table, KeyConfig $key): void
 	{
+		$schema = $table->schema ?: $this->defaultSchema;
 		$c = [];
 		foreach ($key->columns as $column) {
 			$c[] = "\"$column\"";
 		}
-		$this->createIndex[] = "CREATE INDEX ON \"public\".\"$table->name\" (" . implode(", ", $c) . ");";
+		$this->createIndex[] = "CREATE INDEX ON \"$schema\".\"$table->name\" (" . implode(", ", $c) . ");";
 	}
 
 
-	private function addCreateFulltext(TableConfig $table, ColumnConfig $column): void
+	private function addCreateFulltext(Table $table, Column $column): void
 	{
-		$this->createIndex[] = "CREATE INDEX ON \"public\".\"$table->name\" USING gin(\"$column->name\");";
+		$schema = $table->schema ?: $this->defaultSchema;
+		$this->createIndex[] = "CREATE INDEX ON \"$schema\".\"$table->name\" USING gin(\"$column->name\");";
 	}
 
 
-	private function addAlterTableWithForeignKey(TableConfig $table, ForeignKeyConfig $foreignKey): void
+	private function addAlterTableWithForeignKey(Table $table, ForeignKey $foreignKey): void
 	{
+		$schema = $table->schema ?: $this->defaultSchema;
 		$k = [];
-		$k['alter'] = "ALTER TABLE \"public\".\"$table->name\"";
-		$k['constraint'] = "ADD CONSTRAINT \"{$table->name}_{$foreignKey->name}_fkey\"";
+		$k['alter'] = "ALTER TABLE \"$schema\".\"$table->name\"";
+		$k['constraint'] = "ADD CONSTRAINT \"{$table->name}_{$foreignKey->name}\"";
 		$k['foreignKey'] = "FOREIGN KEY (\"$foreignKey->name\")";
-		$k['references'] = "REFERENCES \"public\".\"$foreignKey->table\" (\"$foreignKey->column\")";
+		$k['references'] = "REFERENCES \"$schema\".\"$foreignKey->table\" (\"$foreignKey->column\")";
 		$k['onDelete'] = "ON DELETE " . strtoupper($foreignKey->onDelete);
 		$k['onUpdate'] = "ON UPDATE " . strtoupper($foreignKey->onUpdate);
 		$this->alterTable[] = implode(' ', $k);
 	}
 
 
-	private function column(TableConfig $table, ColumnConfig $column): string
+	private function column(Table $table, Column $column): string
 	{
 		$c = [];
 		$c['name'] = "\"$column->name\"";
@@ -131,7 +133,7 @@ class PqsqlStructureGenerator
 			$c['null'] = 'NOT NULL';
 		}
 		if ($column->default) {
-			$c['null'] = "DEFAULT " . $this->getDefault($column->default, $column->type);
+			$c['default'] = "DEFAULT " . $this->getDefault($column->default, $column->type);
 		}
 		if ($column->auto) {
 			$this->addCreateSequence($table);

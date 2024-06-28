@@ -1,9 +1,9 @@
 <?php
 
-namespace Webovac\Core\Structure;
+namespace Webovac\Core\Definition;
 
 
-class ForeignKeyConfig extends BaseConfig
+class ForeignKey extends Schematic
 {
 	public string $name;
 	public string $table;

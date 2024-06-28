@@ -1,9 +1,9 @@
 <?php
 
-namespace Webovac\Core\Structure;
+namespace Webovac\Core\Definition;
 
 
-class ColumnConfig extends BaseConfig
+class Column extends Schematic
 {
 	public string $name;
 	public string $type;

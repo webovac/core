@@ -15,17 +15,21 @@ use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Nextras\Dbal\Bridges\NetteDI\DbalExtension;
 use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
+use Nextras\Migrations\Extensions\SqlHandler;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
 use Webovac\Core\Command\Command;
 use Webovac\Core\Command\InstallCommand;
 use Webovac\Core\Command\InstallNewCommand;
 use Webovac\Core\Command\MigrateCommand;
+use Webovac\Core\Definition\MysqlDefinitionProcessor;
+use Webovac\Core\Definition\PgsqlDefinitionProcessor;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Factory;
+use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsRepository;
 use Webovac\Core\Module;
-use Webovac\Core\Structure\PqsqlStructureGenerator;
+use Webovac\Core\Definition\PqsqlStructureGenerator;
 
 
 class CoreExtension extends BaseExtension
@@ -56,8 +60,13 @@ class CoreExtension extends BaseExtension
 	{
 		parent::loadConfiguration();
 		$builder = $this->getContainerBuilder();
-		$builder->addDefinition($this->prefix('migrateCommand'))
-			->setFactory(MigrateCommand::class, [['host' => $this->config->host], $builder->parameters['debugMode']]);
+		$builder->addDefinition($this->prefix('neonHandler'))
+			->setFactory(NeonHandler::class, [['host' => $this->config->host], $builder->parameters['debugMode']]);
+		$definitionProcessor = $builder->addDefinition($this->prefix('definitionProcessor'))
+			->setFactory($this->config->db->driver === 'pgsql' ? PgsqlDefinitionProcessor::class : MysqlDefinitionProcessor::class);
+		if ($this->config->db->driver === 'mysql') {
+			$definitionProcessor->addSetup('setDefaultSchema', [$this->config->db->database]);
+		}
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
 		$this->createDecoratorExtension();

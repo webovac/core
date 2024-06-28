@@ -1,6 +1,7 @@
 services:
 	- App\Model\DataModel
 	- Nette\Caching\Cache
+	- Nextras\Migrations\Extensions\SqlHandler
 	- Webovac\Core\Lib\Dir(%rootDir%)
 	latte.templateFactory: App\Lib\TemplateFactory
 	routerFactory: Webovac\Core\Router\RouterFactory

@@ -1,6 +1,6 @@
 <?php
 
-namespace Webovac\Core\Structure;
+namespace Webovac\Core\Definition;
 
 use Nette\InvalidArgumentException;
 use Nette\Schema\Processor;
@@ -8,7 +8,7 @@ use Nette\Schema\Schema;
 use Webovac\Core\Lib\CmsExpect;
 use Webovac\Core\Model\CmsDataRepository;
 
-class BaseConfig
+class Schematic
 {
 	public static function createFromArray(array $config, string $mode = CmsDataRepository::MODE_INSTALL): static
 	{

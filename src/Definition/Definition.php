@@ -1,19 +1,19 @@
 <?php
 
-namespace Webovac\Core\Structure;
+namespace Webovac\Core\Definition;
 
 use Nette\Neon\Neon;
 use Nette\Utils\FileSystem;
 use Webovac\Core\Model\CmsDataRepository;
 
 
-class StructureConfig extends BaseConfig
+class Definition extends Schematic
 {
 	public string $type;
-	/** @var TableConfig[]|array */ public array $tables;
+	/** @var Table[]|array */ public array $tables;
 
 
-	public static function createFromNeon(string $file): StructureConfig
+	public static function createFromNeon(string $file): Definition
 	{
 		$config = (array) Neon::decode(FileSystem::read($file));
 		return self::createFromArray($config, $config['type'] === 'create' ? CmsDataRepository::MODE_INSTALL : CmsDataRepository::MODE_UPDATE);
@@ -25,7 +25,7 @@ class StructureConfig extends BaseConfig
 		$config = parent::createFromArray($config, $mode);
 		foreach ($config->tables as $tableName => $tableConfig) {
 			$config->tables[$tableName]['name'] ??= $tableName;
-			$config->tables[$tableName] = TableConfig::createFromArray($config->tables[$tableName]);
+			$config->tables[$tableName] = Table::createFromArray($config->tables[$tableName]);
 		}
 		return $config;
 	}
