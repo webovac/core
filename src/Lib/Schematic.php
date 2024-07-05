@@ -37,7 +37,7 @@ class Schematic extends ArrayHash
 			$name = $prop->getName();
 			if ($attr = $prop->getAttributes(Type::class)) {
 				$class = $attr[0]->getArguments()[0];
-				if (isset($config['primaryKey'])) {
+				if (isset($config[$name])) {
 					$data->$name = $class::createFromArray($config[$name], $mode);
 				}
 			}
