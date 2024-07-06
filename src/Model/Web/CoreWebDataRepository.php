@@ -8,8 +8,8 @@ use App\Model\Page\PageDataRepository;
 use App\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
-use Webovac\Core\Lib\Collection;
-use Webovac\Core\Model\CmsData;
+use Stepapo\Utils\Model\Collection;
+use Stepapo\Utils\Model\Item;
 
 
 trait CoreWebDataRepository
@@ -18,7 +18,7 @@ trait CoreWebDataRepository
 	#[Inject] public PageDataRepository $pageDataRepository;
 
 
-	/** @return Collection<CmsData> */
+	/** @return Collection<Item> */
 	protected function getCollection(): Collection
 	{
 		if (!isset($this->collection)) {

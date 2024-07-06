@@ -18,7 +18,7 @@ use App\Model\Web\WebData;
 use App\Model\Web\WebDataRepository;
 use Nette\DI\Attributes\Inject;
 use Webovac\Core\Lib\CmsUser;
-use Webovac\Core\Lib\Collection;
+use Stepapo\Utils\Model\Collection;
 
 
 trait CoreDataModel

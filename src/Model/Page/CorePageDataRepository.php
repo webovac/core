@@ -8,7 +8,7 @@ use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationDataRepository;
 use Nette\DI\Attributes\Inject;
-use Webovac\Core\Lib\Collection;
+use Stepapo\Utils\Model\Collection;
 
 
 trait CorePageDataRepository

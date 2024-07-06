@@ -15,6 +15,7 @@ use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
 use ReflectionClass;
 use ReflectionProperty;
+use Stepapo\Utils\Model\Item;
 
 
 abstract class CmsEntity extends Entity
@@ -55,7 +56,7 @@ abstract class CmsEntity extends Entity
 	}
 
 
-	public function getData(): CmsData
+	public function getData(): Item
 	{
 		$class = new ReflectionClass($this->getDataClass());
 		$data = $class->newInstance();
@@ -89,7 +90,7 @@ abstract class CmsEntity extends Entity
 			if (!$type->isClass()) {
 				continue;
 			}
-			if ((new ReflectionClass($type->getSingleName()))->isSubclassOf(CmsData::class)) {
+			if ((new ReflectionClass($type->getSingleName()))->isSubclassOf(Item::class)) {
 				return true;
 			}
 		}

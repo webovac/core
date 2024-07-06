@@ -10,7 +10,7 @@ use App\Model\Text\TextData;
 use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\IExtensionHandler;
-use Stepapo\Dataset\Utils;
+use Stepapo\Utils\ConfigProcessor;
 use Webovac\Core\Definition\Definition;
 use Webovac\Core\Definition\DefinitionProcessor;
 use Webovac\Core\ManipulationGroup;
@@ -40,7 +40,7 @@ class NeonHandler implements IExtensionHandler
 		if ($file->group->migrationGroup instanceof ManipulationGroup) {
 			$mode = str_contains($file->name, 'update') ? CmsDataRepository::MODE_UPDATE : CmsDataRepository::MODE_INSTALL;
 			$config = (array) Neon::decode(@file_get_contents($file->path));
-			$parsedConfig = Utils::replaceParams($config, $this->params);
+			$parsedConfig = ConfigProcessor::replaceParams($config, $this->params);
 			$repositoryName = $file->group->name;
 			if ($repositoryName === 'text') {
 				foreach ($parsedConfig as $key => $value) {

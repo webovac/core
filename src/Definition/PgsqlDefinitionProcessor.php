@@ -26,22 +26,18 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 		$this->definition = $structure;
 		$this->prepare();
 		foreach ($this->createSequence as $createSequence) {
-//			Dumper::dump($createSequence);
 			$this->dbal->query($createSequence);
 			$this->count++;
 		}
 		foreach ($this->createTable as $createTable) {
-//			Dumper::dump($createTable);
 			$this->dbal->query($createTable);
 			$this->count++;
 		}
 		foreach ($this->alterTable as $alterTable) {
-//			Dumper::dump($alterTable);
 			$this->dbal->query($alterTable);
 			$this->count++;
 		}
 		foreach ($this->createIndex as $createIndex) {
-//			Dumper::dump($createIndex);
 			$this->dbal->query($createIndex);
 			$this->count++;
 		}

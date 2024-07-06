@@ -11,6 +11,7 @@ use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Repository\Repository;
 use Nextras\Orm\StorageReflection\StringHelper;
 use ReflectionClass;
+use Stepapo\Utils\Model\Item;
 use Webovac\Core\CmsEntityProcessor;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
@@ -47,7 +48,7 @@ abstract class CmsRepository extends Repository
 
 
 	public function createFromData(
-		CmsData $data,
+		Item $data,
 		?CmsEntity $original = null,
 		?CmsEntity $parent = null,
 		?string $parentName = null,

@@ -6,7 +6,7 @@ namespace Webovac\Core\Control\Buttons;
 
 use App\Control\BaseTemplate;
 use App\Model\Page\PageData;
-use Webovac\Core\Lib\Collection;
+use Stepapo\Utils\Model\Collection;
 
 
 class ButtonsTemplate extends BaseTemplate

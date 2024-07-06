@@ -27,7 +27,8 @@
 		"nextras/migrations": "^3.3",
 		"nextras/orm": "^4.0",
 		"choowx/rasterize-svg": "^0.1",
-		"stepapo/dataset": "^1.2"
+		"stepapo/dataset": "dev-main",
+		"stepapo/utils": "dev-main"
 	},
 	"require-dev": {
 		"webovac/generator": "dev-main"

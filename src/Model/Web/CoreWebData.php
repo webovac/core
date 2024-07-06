@@ -14,9 +14,9 @@ use App\Model\WebTranslation\WebTranslationData;
 use DateTimeInterface;
 use Nette\Http\FileUpload;
 use Nette\Schema\Processor;
-use Webovac\Core\Attribute\ArrayOfType;
-use Webovac\Core\Attribute\DefaultValue;
-use Webovac\Core\Lib\CmsExpect;
+use Stepapo\Utils\Attribute\ArrayOfType;
+use Stepapo\Utils\Attribute\DefaultValue;
+use Stepapo\Utils\Expect;
 use Webovac\Core\Model\CmsDataRepository;
 
 
@@ -116,7 +116,7 @@ trait CoreWebData
 			foreach ($data->webModules as $key => $webModuleConfig) {
 				$webModuleConfig['name'] ??= $key;
 				unset($data->webModules[$key]);
-				$data->webModules[$webModuleConfig['name']] = (new Processor)->process(CmsExpect::fromSchematic(WebModuleData::class, $mode), $webModuleConfig);
+				$data->webModules[$webModuleConfig['name']] = (new Processor)->process(Expect::fromSchematic(WebModuleData::class, $mode), $webModuleConfig);
 			}
 		}
 		return $data;

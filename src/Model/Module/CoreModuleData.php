@@ -8,7 +8,7 @@ use App\Model\Module\ModuleData;
 use App\Model\ModuleTranslation\ModuleTranslationData;
 use App\Model\Page\PageData;
 use DateTimeInterface;
-use Webovac\Core\Attribute\ArrayOfType;
+use Stepapo\Utils\Attribute\ArrayOfType;
 use Webovac\Core\Model\CmsDataRepository;
 
 

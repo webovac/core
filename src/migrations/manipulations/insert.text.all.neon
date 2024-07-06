@@ -32,6 +32,8 @@ language: [cs: jazyk, en: language]
 layout: [cs: layout, en: layout]
 Vytvořeno: [cs: Vytvořeno, en: Created]
 Upraveno: [cs: Upraveno, en: Updated]
+Obsah: [cs: Obsah, en: Content]
+Nastavení: [cs: Nastavení, en: Settings]
 
 Vyplňte pole %label: [cs: Vyplňte pole %label, en: Fill %label]
 The size of the uploaded file can be up to %d bytes.: [cs: Velikost nahraného souboru může být nejvíce %d bytů., en: The size of the uploaded file can be up to %d bytes.]

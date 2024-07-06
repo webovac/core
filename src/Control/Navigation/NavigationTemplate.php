@@ -7,7 +7,7 @@ namespace Webovac\Core\Control\Navigation;
 use App\Control\BaseTemplate;
 use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
-use Webovac\Core\Lib\Collection;
+use Stepapo\Utils\Model\Collection;
 
 
 class NavigationTemplate extends BaseTemplate

@@ -1,4 +1,4 @@
-{templateType Stepapo\Dataset\UI\Sorting\SortingTemplate}
+{templateType Stepapo\Dataset\Control\Sorting\SortingTemplate}
 <thead n:snippet>
 <tr>
 	<th n:foreach="$columns as $column" n:if="!$column->hide" n:class="'text-' . str_replace('left', 'start', str_replace('right', 'end', $column->align))" n:attr='style: $column->width ? "width: {$column->width}px"'>

@@ -10,7 +10,7 @@ use App\Model\Language\LanguageData;
 use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Webovac\Core\Lib\Collection;
+use Stepapo\Utils\Model\Collection;
 use Webovac\Core\Model\CmsEntity;
 
 

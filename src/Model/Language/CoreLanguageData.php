@@ -6,7 +6,7 @@ namespace Webovac\Core\Model\Language;
 
 use App\Model\LanguageTranslation\LanguageTranslationData;
 use DateTimeInterface;
-use Webovac\Core\Attribute\ArrayOfType;
+use Stepapo\Utils\Attribute\ArrayOfType;
 
 
 trait CoreLanguageData

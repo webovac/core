@@ -2,9 +2,9 @@
 
 namespace Webovac\Core\Definition;
 
-use Webovac\Core\Attribute\ArrayOfType;
-use Webovac\Core\Attribute\Type;
-use Webovac\Core\Lib\Schematic;
+use Stepapo\Utils\Attribute\ArrayOfType;
+use Stepapo\Utils\Attribute\Type;
+use Stepapo\Utils\Schematic;
 
 
 class Table extends Schematic

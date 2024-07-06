@@ -2,7 +2,7 @@
 
 namespace Webovac\Core\Definition;
 
-use Webovac\Core\Lib\Schematic;
+use Stepapo\Utils\Schematic;
 
 
 class Column extends Schematic

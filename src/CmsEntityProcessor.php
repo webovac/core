@@ -12,7 +12,7 @@ use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
-use Webovac\Core\Model\CmsData;
+use Stepapo\Utils\Model\Item;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsEntity;
 
@@ -25,7 +25,7 @@ class CmsEntityProcessor
 
 	public function __construct(
 		public CmsEntity $entity,
-		private CmsData $data,
+		private Item $data,
 		private ?Person $person,
 		private ?\DateTimeInterface $date,
 		private string $mode,
@@ -106,7 +106,7 @@ class CmsEntityProcessor
 					$this->model->getRepository(FileRepository::class)->createFile($this->data->$name, $this->person, $name === 'iconFile')
 						?: $this->entity->$name
 				);
-		} elseif ($this->data->$name instanceof CmsData) {
+		} elseif ($this->data->$name instanceof Item) {
 			$related = null;
 			if (method_exists($relatedRepository, 'getByData')) {
 				$related = $relatedRepository->getByData($this->data->$name);

@@ -6,11 +6,9 @@ namespace Webovac\Core\Model;
 
 use App\Model\Orm;
 use Nette\Caching\Cache;
-use Nette\Schema\Processor;
-use Nette\Schema\Schema;
 use Nextras\Orm\Repository\IRepository;
-use Webovac\Core\Lib\CmsExpect;
-use Webovac\Core\Lib\Collection;
+use Stepapo\Utils\Model\Collection;
+use Stepapo\Utils\Model\Item;
 use Webovac\Core\Lib\ModuleChecker;
 
 
@@ -18,20 +16,17 @@ abstract class CmsDataRepository
 {
 	public const string MODE_INSTALL = 'install';
 	public const string MODE_UPDATE = 'update';
-	/** @var Collection<CmsData> */ protected Collection $collection;
-	protected Processor $processor;
+	/** @var Collection<Item> */ protected Collection $collection;
 
 
 	public function __construct(
 		protected Orm $orm,
 		protected ModuleChecker $moduleChecker,
 		protected Cache $cache,
-	) {
-		$this->processor = new Processor;
-	}
+	) {}
 
 
-	/** @return Collection<CmsData> */
+	/** @return Collection<Item> */
 	protected function getCollection(): Collection
 	{
 		if (!isset($this->collection)) {
@@ -45,27 +40,6 @@ abstract class CmsDataRepository
 		}
 		return $this->collection;
 	}
-
-
-//	public function createFromConfig(array $config, string $mode = self::MODE_INSTALL): CmsEntity
-//	{
-//		$data = $this->createDataFromConfig($config, $mode);
-//		$entity = $this->getOrmRepository()->createFromData($data, mode: $mode, getOriginalByData: true);
-//		if (method_exists($this->getOrmRepository(), 'postProcessFromData')) {
-//			$this->getOrmRepository()->postProcessFromData($data, $entity, mode: $mode);
-//		}
-//		return $entity;
-//	}
-//
-//
-//	public function createDataFromConfig(array $config, string $mode): CmsData
-//	{
-//		$schema = $this->getSchema($mode);
-//		if (!$schema) {
-//			throw new InvalidArgumentException();
-//		}
-//		return $this->processor->process($schema, $config);
-//	}
 
 
 	protected function getName(): string
@@ -83,42 +57,27 @@ abstract class CmsDataRepository
 	}
 
 
-	protected function getDataClass(): ?string
-	{
-		$name = $this->getName();
-		$className = "App\\Model\\$name\\{$name}Data";
-		return class_exists($className) ? $className : null;
-	}
-
-
-	protected function getSchema(string $mode): ?Schema
-	{
-		$dataClass = $this->getDataClass();
-		return $dataClass ? CmsExpect::fromSchematic($dataClass, $mode) : null;
-	}
-
-
-	/** @return Collection<CmsData> */ 
+	/** @return Collection<Item> */
 	public function findAll(): Collection
 	{
 		return $this->getCollection()->findAll();
 	}
 
 
-	/** @return Collection<CmsData> */ 
+	/** @return Collection<Item> */
 	public function findBy(array $conds): Collection
 	{
 		return $this->getCollection()->findBy($conds);
 	}
 
 
-	public function getById(mixed $id): ?CmsData
+	public function getById(mixed $id): ?Item
 	{
 		return $this->getCollection()->getById($id);
 	}
 
 
-	public function getBy(array $conds): ?CmsData
+	public function getBy(array $conds): ?Item
 	{
 		return $this->getCollection()->getBy($conds);
 	}

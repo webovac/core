@@ -35,7 +35,7 @@ use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
-use Webovac\Core\Model\CmsData;
+use Stepapo\Utils\Model\Item;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
 
@@ -223,7 +223,7 @@ trait CorePresenter
 						->allowFilters(['noescape', 'mTime', 'translate'])
 						->allowProperties(stdClass::class, SecurityPolicy::All)
 						->allowProperties(CmsEntity::class, SecurityPolicy::All)
-						->allowProperties(CmsData::class, SecurityPolicy::All)
+						->allowProperties(Item::class, SecurityPolicy::All)
 						->allowMethods(CmsUser::class, SecurityPolicy::All)
 						->allowMethods(CmsEntity::class, SecurityPolicy::All)
 						->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)

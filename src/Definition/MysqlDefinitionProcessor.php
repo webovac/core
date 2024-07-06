@@ -26,17 +26,14 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 		$this->prepare();
 		$this->dbal->query("SET NAMES utf8mb4;");
 		foreach ($this->createTable as $createTable) {
-//			Dumper::dump($createTable);
 			$this->dbal->query($createTable);
 			$this->count++;
 		}
 		foreach ($this->alterTable as $alterTable) {
-//			Dumper::dump($alterTable);
 			$this->dbal->query($alterTable);
 			$this->count++;
 		}
 		foreach ($this->createIndex as $createIndex) {
-//			Dumper::dump($createIndex);
 			$this->dbal->query($createIndex);
 			$this->count++;
 		}
