@@ -53,7 +53,10 @@ trait CoreOrmFunctions
 	{
 		assert(count($args) === 1 && is_string($args[0]));
 		return new DbalExpressionResult([
-			$platform->getName() === 'pgsql' ? "LOWER(last_name || ' ' || first_name) LIKE %_like_" : "CONCAT(last_name, ' ', first_name) LIKE %_like_",
+			($platform->getName() === 'pgsql'
+				? "LOWER(last_name || ' ' || first_name)"
+				: "LOWER(CONCAT(last_name, ' ', first_name)")
+				. "LIKE %_like_",
 			Strings::lower($args[0]),
 		]);
 	}
