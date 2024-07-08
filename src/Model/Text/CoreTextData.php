@@ -7,15 +7,22 @@ namespace Webovac\Core\Model\Text;
 use App\Model\TextTranslation\TextTranslationData;
 use DateTimeInterface;
 use Stepapo\Utils\Attribute\ArrayOfType;
+use Stepapo\Utils\Attribute\KeyProperty;
 
 
 trait CoreTextData
 {
 	public ?int $id;
-	public string $name;
-	#[ArrayOfType(TextTranslationData::class, 'language')] /** @var TextTranslationData[] */ public array $translations;
+	#[KeyProperty] public string $name;
+	#[ArrayOfType(TextTranslationData::class)] /** @var TextTranslationData[] */ public array|null $translations;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
 	public ?DateTimeInterface $createdAt;
 	public ?DateTimeInterface $updatedAt;
+
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
+	{
+		$config = isset($config['translations']) ? $config : ['translations' => (array) $config];
+		return parent::createFromArray($config, $key, $skipDefaults);
+	}
 }

@@ -3,7 +3,6 @@
 namespace Webovac\Core\Definition;
 
 use Stepapo\Utils\Schematic;
-use Webovac\Core\Model\CmsDataRepository;
 
 
 class Definition extends Schematic
@@ -11,16 +10,16 @@ class Definition extends Schematic
 	/** @var Table[]|array */ public array $tables;
 
 
-	public static function createFromArray(array $config, string $mode = CmsDataRepository::MODE_INSTALL): static
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
 	{
-		$config = parent::createFromArray($config, $mode);
-		foreach ($config->tables as $tableName => $tableConfig) {
-			$config->tables[$tableName]['name'] ??= $tableName;
-			$config->tables[$tableName] = Table::createFromArray(
-				$config->tables[$tableName],
-				isset($tableConfig['type']) && $tableConfig['type'] === 'alter' ? CmsDataRepository::MODE_UPDATE : CmsDataRepository::MODE_INSTALL
+		$definition = parent::createFromArray($config, $key, $skipDefaults);
+		foreach ($definition->tables as $tableKey => $tableConfig) {
+			$definition->tables[$tableKey] = Table::createFromArray(
+				$tableConfig,
+				$tableKey,
+				isset($tableConfig['type']) && $tableConfig['type'] === 'alter'
 			);
 		}
-		return $config;
+		return $definition;
 	}
 }

@@ -13,7 +13,6 @@ use App\Model\Person\Person;
 use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
-use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\Web\WebModuleData;
 
@@ -162,7 +161,7 @@ trait CorePageRepository
 	}
 
 
-	public function postProcessFromData(PageData $data, Page $page, ?Person $person = null, string $mode = CmsDataRepository::MODE_INSTALL): Page
+	public function postProcessFromData(PageData $data, Page $page, ?Person $person = null, bool $skipDefaults = false): Page
 	{
 		if (isset($data->redirectPage)) {
 			$page->redirectPage = $this->getBy(

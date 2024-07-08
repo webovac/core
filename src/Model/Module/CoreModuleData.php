@@ -9,7 +9,6 @@ use App\Model\ModuleTranslation\ModuleTranslationData;
 use App\Model\Page\PageData;
 use DateTimeInterface;
 use Stepapo\Utils\Attribute\ArrayOfType;
-use Webovac\Core\Model\CmsDataRepository;
 
 
 trait CoreModuleData
@@ -17,8 +16,8 @@ trait CoreModuleData
 	public ?int $id;
 	public string $name;
 	public int|string $homePage;
-	#[ArrayOfType(ModuleTranslationData::class, 'language')] /** @var ModuleTranslationData[] */ public array $translations;
-	/** @var PageData[]|array */ public array $pages;
+	#[ArrayOfType(ModuleTranslationData::class)] /** @var ModuleTranslationData[] */ public array|null $translations;
+	/** @var PageData[]|array */ public array|null $pages;
 	public ?string $icon;
 	public array $tree;
 	public int|string|null $createdByPerson;
@@ -27,21 +26,19 @@ trait CoreModuleData
 	public ?DateTimeInterface $updatedAt;
 
 
-	public static function createFromArray(array $config, string $mode = CmsDataRepository::MODE_INSTALL): static
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
 	{
-		$data = parent::createFromArray($config, $mode);
+		$data = parent::createFromArray($config, $key, $skipDefaults);
 		$rank = 1;
 		foreach ($data->tree as $parentPage => $pages) {
 			ModuleData::processTree((array) $pages, $parentPage, $rank++, $data);
 		}
-		foreach ($data->pages as $key => $pageConfig) {
-			if (!ModuleData::checkPage($key, $data)) {
-				unset($data->pages[$key]);
+		foreach ($data->pages as $pageKey => $pageConfig) {
+			if (!ModuleData::checkPage($pageKey, $data)) {
+				unset($data->pages[$pageKey]);
 				continue;
 			}
-			$pageConfig['name'] ??= $key;
-			unset($data->pages[$key]);
-			$data->pages[$pageConfig['name']] = PageData::createFromArray($pageConfig, $mode);
+			$data->pages[$pageKey] = PageData::createFromArray($pageConfig, $pageKey, $skipDefaults);
 		}
 		return $data;
 	}

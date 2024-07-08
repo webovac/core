@@ -54,7 +54,7 @@ abstract class CmsRepository extends Repository
 		?string $parentName = null,
 		?Person $person = null,
 		?DateTimeInterface $date = null,
-		string $mode = CmsDataRepository::MODE_INSTALL,
+		bool $skipDefaults = false,
 		bool $getOriginalByData = false,
 	): CmsEntity
 	{
@@ -63,7 +63,7 @@ abstract class CmsRepository extends Repository
 		}
 		$class = new ReflectionClass($this->getEntityClassName([]));
 		$entity = $original ?: $class->newInstance();
-		$processor = new CmsEntityProcessor($entity, $data, $person, $date, $mode, $this->getModel());
+		$processor = new CmsEntityProcessor($entity, $data, $person, $date, $skipDefaults, $this->getModel());
 		$processor->processEntity($parent, $parentName);
 		return $entity;
 	}

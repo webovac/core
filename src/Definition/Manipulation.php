@@ -2,27 +2,27 @@
 
 namespace Webovac\Core\Definition;
 
-use Stepapo\Utils\Schematic;
 use Stepapo\Utils\Model\Item;
-use Webovac\Core\Model\CmsDataRepository;
+use Stepapo\Utils\Schematic;
 
 
 class Manipulation extends Schematic
 {
-	/** @var Item[]|array */ public array $inserts;
-	/** @var Item[]|array */ public array $updates;
+	public string $class;
+	public string $type = 'insert';
+	/** @var Item[]|array */ public array $items;
 
 
-	public static function createFromArray(array $config, string $mode = CmsDataRepository::MODE_INSTALL): static
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
 	{
-		$config = parent::createFromArray($config, $mode);
-		foreach ($config->inserts as $tableName => $tableConfig) {
-			$config->tables[$tableName]['name'] ??= $tableName;
-			$config->tables[$tableName] = Table::createFromArray(
-				$config->tables[$tableName],
-				isset($tableConfig['type']) && $tableConfig['type'] === 'alter' ? CmsDataRepository::MODE_UPDATE : CmsDataRepository::MODE_INSTALL,
+		$manipulation = parent::createFromArray($config, $key, $skipDefaults);
+		foreach ($manipulation->items as $itemKey => $itemConfig) {
+			$manipulation->items[$itemKey] = $manipulation->class::createFromArray(
+				$itemConfig,
+				$itemKey,
+				isset($config['type']) && $config['type'] === 'update'
 			);
 		}
-		return $config;
+		return $manipulation;
 	}
 }

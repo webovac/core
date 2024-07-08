@@ -17,7 +17,6 @@ use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
-use Webovac\Core\Model\CmsDataRepository;
 
 
 trait CoreWebRepository
@@ -28,7 +27,7 @@ trait CoreWebRepository
 	}
 
 
-	public function postProcessFromData(WebData $data, Web $web, ?Person $person = null, string $mode = CmsDataRepository::MODE_INSTALL): Web
+	public function postProcessFromData(WebData $data, Web $web, ?Person $person = null, bool $skipDefaults = false): Web
 	{
 		if (isset($data->homePage)) {
 			$web->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['web' => $web, 'name' => $data->homePage]);
@@ -50,12 +49,12 @@ trait CoreWebRepository
 			/** @var Page $page */
 			foreach ($web->pages->toCollection()->findBy(['module' => null]) as $page) {
 				if (!array_key_exists($page->name, $data->pages)) {
-					if ($mode === CmsDataRepository::MODE_INSTALL) {
+					if (!$skipDefaults) {
 						$this->getModel()->getRepository(PageRepository::class)->delete($page);
 					}
 					continue;
 				}
-				$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, mode: $mode);
+				$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, skipDefaults: $skipDefaults);
 			}
 		}
 		if (isset($data->webModules)) {
@@ -67,12 +66,12 @@ trait CoreWebRepository
 				$this->getModel()->getRepository(PageRepository::class)->postProcessModulePageFromData($data->webModules[$page->module->name], $page);
 			}
 		}
-		if ((isset($data->iconFile) && (($data->iconFile instanceof FileUpload && $data->iconFile->hasFile()) || is_string($data->iconFile))) || ($mode === CmsDataRepository::MODE_UPDATE && (isset($data->color) || isset($data->complementaryColor)))) {
+		if ((isset($data->iconFile) && (($data->iconFile instanceof FileUpload && $data->iconFile->hasFile()) || is_string($data->iconFile))) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
 			$web->iconFile = $this->styleFile($web->iconFile, $data->complementaryColor, $data->color, $person, true);
 			$web->largeIconFile = $this->createLargeIcon($web, $data, $person);
 			$this->persist($web);
 		}
-		if ((isset($data->logoFile) && (($data->logoFile instanceof FileUpload && $data->logoFile->hasFile()) || is_string($data->logoFile))) || ($mode === CmsDataRepository::MODE_UPDATE && (isset($data->color) || isset($data->complementaryColor)))) {
+		if ((isset($data->logoFile) && (($data->logoFile instanceof FileUpload && $data->logoFile->hasFile()) || is_string($data->logoFile))) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
 			$web->logoFile = $this->styleFile($web->logoFile, $data->complementaryColor, $data->color, $person);
 			$this->persist($web);
 		}

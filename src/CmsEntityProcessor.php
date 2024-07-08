@@ -13,7 +13,6 @@ use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
 use Stepapo\Utils\Model\Item;
-use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -28,7 +27,7 @@ class CmsEntityProcessor
 		private Item $data,
 		private ?Person $person,
 		private ?\DateTimeInterface $date,
-		private string $mode,
+		private bool $skipDefaults,
 		private IModel $model,
 	) {}
 
@@ -89,7 +88,7 @@ class CmsEntityProcessor
 	{
 		$name = $property->name;
 		$value = $this->data->$name;
-		if ((empty($this->entity->$name) && $value !== null) || $this->entity->$name !== $value) {
+		if ((empty($this->entity->$name) && !empty($value)) || $this->entity->$name !== $value) {
 			$this->entity->$name = $value;
 		}
 	}
@@ -135,7 +134,7 @@ class CmsEntityProcessor
 		$name = $property->name;
 		$relatedRepository = $this->model->getRepository($property->relationship->repository);
 		$array = [];
-		foreach ($this->data->$name as $item) {
+		foreach ((array) $this->data->$name as $item) {
 			if (isset($property->types[File::class])) {
 				$array[] = $this->model->getRepository(FileRepository::class)->createFile($item, $this->person);
 			} elseif (is_numeric($item)) {
@@ -164,17 +163,17 @@ class CmsEntityProcessor
 		$ids = [];
 		$relatedRepository = $this->model->getRepository($property->relationship->repository);
 		$relatedClass = new \ReflectionClass($relatedRepository->getEntityClassName([]));
-		foreach ($this->data->$name as $relatedData) {
+		foreach ((array) $this->data->$name as $relatedData) {
 			$relatedOriginal = method_exists($relatedRepository, 'getByData') ? $relatedRepository->getByData($relatedData, $this->entity) : null;
 			$relatedEntity = $relatedOriginal ?: $relatedClass->newInstance();
-			$processor = new self($relatedEntity, $relatedData, $this->person, $this->date, $this->mode, $this->model);
+			$processor = new self($relatedEntity, $relatedData, $this->person, $this->date, $this->skipDefaults, $this->model);
 			$processor->processEntity(parent: $this->entity, parentName: $property->relationship->property);
 			if (!$this->isModified) {
 				$this->isModified = $processor->isModified;
 			}
 			$ids[] = $relatedEntity->getPersistedId();
 		}
-		if ($this->mode === CmsDataRepository::MODE_INSTALL) {
+		if (!$this->skipDefaults) {
 			foreach ($this->entity->$name as $related) {
 				if (!in_array($related->getPersistedId(), $ids, true)) {
 					$this->isModified = true;

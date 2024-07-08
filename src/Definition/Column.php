@@ -2,12 +2,13 @@
 
 namespace Webovac\Core\Definition;
 
+use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Schematic;
 
 
 class Column extends Schematic
 {
-	public string $name;
+	#[KeyProperty] public string $name;
 	public string $type;
 	public bool $null;
 	public bool $auto = false;

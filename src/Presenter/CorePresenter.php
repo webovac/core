@@ -24,6 +24,7 @@ use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
+use Stepapo\Utils\Model\Item;
 use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
@@ -35,7 +36,6 @@ use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
-use Stepapo\Utils\Model\Item;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
 

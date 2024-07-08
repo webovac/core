@@ -11,6 +11,7 @@ use DateTimeInterface;
 use Nette\Http\FileUpload;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
+use Stepapo\Utils\Attribute\KeyProperty;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsUser;
@@ -19,24 +20,24 @@ use Webovac\Core\Lib\CmsUser;
 trait CorePageData
 {
 	public ?int $id;
-	public string $name;
+	#[KeyProperty] public string $name;
 	public int $rank;
 	#[DefaultValue(Page::TYPE_PAGE)] public string $type;
 	#[DefaultValue(Page::ACCESS_FOR_ALL)] public string $accessFor;
 	public ?string $authorizingTag;
 	public ?string $authorizingParentTag;
 	public ?string $style;
-	#[ArrayOfType(PageTranslationData::class, 'language')] /** @var PageTranslationData[] */ public array $translations;
-	/** @var int[] */ public array $authorizedRoles;
-	/** @var int[] */ public array $authorizedPersons;
-	public bool $hasParameter;
-	public bool $hasParentParameter;
-	public bool $hideInNavigation;
-	public bool $providesNavigation;
-	public bool $providesButtons;
-	public bool $stretched;
-	public bool $dontInheritPath;
-	public bool $dontInheritAccessSetup;
+	#[ArrayOfType(PageTranslationData::class)] /** @var PageTranslationData[] */ public array|null $translations;
+	/** @var int[] */ public array|null $authorizedRoles;
+	/** @var int[] */ public array|null $authorizedPersons;
+	#[DefaultValue(false)] public bool $hasParameter;
+	#[DefaultValue(false)] public bool $hasParentParameter;
+	#[DefaultValue(false)] public bool $hideInNavigation;
+	#[DefaultValue(false)] public bool $providesNavigation;
+	#[DefaultValue(false)] public bool $providesButtons;
+	#[DefaultValue(false)] public bool $stretched;
+	#[DefaultValue(false)] public bool $dontInheritPath;
+	#[DefaultValue(false)] public bool $dontInheritAccessSetup;
 	public ?string $icon;
 	public ?string $repository;
 	public ?string $parentRepository;
@@ -55,14 +56,14 @@ trait CorePageData
 
 	### for CachedModel ###
 
-	public ?int $web = null;
-	public ?string $host = null;
-	public ?string $basePath = null;
-	/** @var AccessSetup[] */ public array $accessSetups;
-	public bool $isHomePage = false;
-	public ?int $navigationPage = null;
-	public ?int $buttonsPage = null;
-	/** @var int[] */ public array $parentPages;
+	public ?int $web;
+	public ?string $host;
+	public ?string $basePath;
+	/** @var AccessSetup[] */ public array|null $accessSetups;
+	#[DefaultValue(false)] public bool $isHomePage;
+	public ?int $navigationPage;
+	public ?int $buttonsPage;
+	/** @var int[] */ public array|null $parentPages;
 
 
 	/**

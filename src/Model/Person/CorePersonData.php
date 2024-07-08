@@ -13,7 +13,7 @@ trait CorePersonData
 	public ?string $email;
 	public string $firstName;
 	public string $lastName;
-	/** @var string[] */ public array $roles;
+	/** @var string[] */ public array|null $roles;
 	public ?DateTimeInterface $createdAt;
 	public ?DateTimeInterface $updatedAt;
 }

@@ -10,5 +10,6 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]
 class RequiresEntity
 {
-	public function __construct(public mixed $value) {}
+	public function __construct(public mixed $value)
+	{}
 }

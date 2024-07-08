@@ -17,7 +17,6 @@ use Nette\Schema\Processor;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Stepapo\Utils\Expect;
-use Webovac\Core\Model\CmsDataRepository;
 
 
 trait CoreWebData
@@ -29,16 +28,16 @@ trait CoreWebData
 	#[DefaultValue(Web::DEFAULT_COLOR)] public string $color;
 	#[DefaultValue(Web::DEFAULT_COMPLEMENTARY_COLOR)] public string $complementaryColor;
 	#[DefaultValue(Web::DEFAULT_ICON_BACKGROUND_COLOR)] public string $iconBackgroundColor;
-	#[DefaultValue('cs')] public int|string $defaultLanguage = 'cs';
+	#[DefaultValue('cs')] public int|string $defaultLanguage;
 	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $iconFile;
 	public FileUpload|FileData|string|int|null $largeIconFile;
 	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $logoFile;
 	public FileUpload|FileData|string|int|null $backgroundFile;
-	#[ArrayOfType(WebTranslationData::class, 'language')] /** @var WebTranslationData[] */ public array $translations;
-	/** @var PageData[]|array */ public array $pages;
-	/** @var WebModuleData[]|string[] */ public array $webModules;
-	/** @var ModuleData[]|string[] */ public array $modules;
-	public string $basePath;
+	#[ArrayOfType(WebTranslationData::class)] /** @var WebTranslationData[] */ public array|null $translations;
+	/** @var PageData[]|array */ public array|null $pages;
+	/** @var WebModuleData[]|string[] */ public array|null $webModules;
+	/** @var ModuleData[]|string[] */ public array|null $modules;
+	#[DefaultValue('')] public string $basePath;
 	public array $tree;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
@@ -88,9 +87,9 @@ trait CoreWebData
 	}
 
 
-	public static function createFromArray(array $config, string $mode = CmsDataRepository::MODE_INSTALL): static
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
 	{
-		$data = parent::createFromArray($config, $mode);
+		$data = parent::createFromArray($config, $key, $skipDefaults);
 		$rank = 1;
 		WebData::processWebModules($data);
 		if (isset($data->tree)) {
@@ -102,21 +101,19 @@ trait CoreWebData
 			}
 		}
 		if (isset($data->pages)) {
-			foreach ($data->pages as $key => $pageConfig) {
-				if (!WebData::checkPage($key, $data)) {
-					unset($data->pages[$key]);
+			foreach ($data->pages as $pageKey => $pageConfig) {
+				if (!WebData::checkPage($pageKey, $data)) {
+					unset($data->pages[$pageKey]);
 					continue;
 				}
-				$pageConfig['name'] ??= $key;
-				unset($data->pages[$key]);
-				$data->pages[$pageConfig['name']] = PageData::createFromArray($pageConfig, $mode);
+				$data->pages[$pageKey] = PageData::createFromArray($pageConfig, $pageKey, $skipDefaults);
 			}
 		}
 		if (isset($data->webModules)) {
-			foreach ($data->webModules as $key => $webModuleConfig) {
-				$webModuleConfig['name'] ??= $key;
-				unset($data->webModules[$key]);
-				$data->webModules[$webModuleConfig['name']] = (new Processor)->process(Expect::fromSchematic(WebModuleData::class, $mode), $webModuleConfig);
+			foreach ($data->webModules as $webModuleKey => $webModuleConfig) {
+				$webModuleConfig['name'] ??= $webModuleKey;
+				unset($data->webModules[$webModuleKey]);
+				$data->webModules[$webModuleKey] = (new Processor)->process(Expect::fromSchematic(WebModuleData::class, $skipDefaults), $webModuleConfig);
 			}
 		}
 		return $data;

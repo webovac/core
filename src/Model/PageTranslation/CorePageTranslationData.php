@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\PageTranslation;
 
 use DateTimeInterface;
+use Stepapo\Utils\Attribute\KeyProperty;
 
 
 trait CorePageTranslationData
 {
 	public ?int $id;
-	public int|string $language;
+	#[KeyProperty] public int|string $language;
 	public string $title;
 	public ?string $description;
 	public ?string $onclick;

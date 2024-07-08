@@ -9,16 +9,12 @@ use Nette\Caching\Cache;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Utils\Model\Collection;
 use Stepapo\Utils\Model\Item;
+use Stepapo\Utils\Model\Repository;
 use Webovac\Core\Lib\ModuleChecker;
 
 
-abstract class CmsDataRepository
+class CmsDataRepository extends Repository
 {
-	public const string MODE_INSTALL = 'install';
-	public const string MODE_UPDATE = 'update';
-	/** @var Collection<Item> */ protected Collection $collection;
-
-
 	public function __construct(
 		protected Orm $orm,
 		protected ModuleChecker $moduleChecker,
@@ -54,31 +50,5 @@ abstract class CmsDataRepository
 	{
 		$name = $this->getName();
 		return $this->orm->getRepository("App\\Model\\$name\\{$name}Repository");
-	}
-
-
-	/** @return Collection<Item> */
-	public function findAll(): Collection
-	{
-		return $this->getCollection()->findAll();
-	}
-
-
-	/** @return Collection<Item> */
-	public function findBy(array $conds): Collection
-	{
-		return $this->getCollection()->findBy($conds);
-	}
-
-
-	public function getById(mixed $id): ?Item
-	{
-		return $this->getCollection()->getById($id);
-	}
-
-
-	public function getBy(array $conds): ?Item
-	{
-		return $this->getCollection()->getBy($conds);
 	}
 }

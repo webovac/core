@@ -44,7 +44,7 @@ class CmsConsoleController extends ConsoleController
 	/**
 	 * @param  list<string>  $dependencies
 	 */
-	public function addCmsGroup(string $name, MigrationGroup $migrationGroup, array $files, array $dependencies = [], ?string $mode = null): self
+	public function addCmsGroup(string $name, MigrationGroup $migrationGroup, array $files, array $dependencies = []): self
 	{
 		$group = new CmsGroup;
 		$group->name = $name;

@@ -17,8 +17,8 @@ use App\Model\TextTranslation\TextTranslationData;
 use App\Model\Web\WebData;
 use App\Model\Web\WebDataRepository;
 use Nette\DI\Attributes\Inject;
-use Webovac\Core\Lib\CmsUser;
 use Stepapo\Utils\Model\Collection;
+use Webovac\Core\Lib\CmsUser;
 
 
 trait CoreDataModel
