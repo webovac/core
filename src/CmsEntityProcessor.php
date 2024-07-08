@@ -71,7 +71,6 @@ class CmsEntityProcessor
 				$this->processOneHasMany($property);
 			}
 		}
-
 		if ($this->isPersisted && $this->isModified) {
 			if ($metadata->hasProperty('updatedByPerson')) {
 				$this->entity->updatedByPerson = $this->person;
