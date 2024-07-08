@@ -78,7 +78,6 @@ class MigrateCommand implements Command
 		}
 		$controller->addCmsGroup($migrationGroup->name, $migrationGroup, $files, $migrationGroup->dependencies, 'create');
 		$_SERVER['argv'][] = $migrationGroup->name;
-
 		return $controller;
 	}
 
