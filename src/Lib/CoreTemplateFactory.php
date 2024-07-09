@@ -20,17 +20,15 @@ trait CoreTemplateFactory
 	public function injectCoreCreate(): void
 	{
 		$this->onCreate[] = function (Template $template) {
-			if ($template instanceof BaseTemplate) {
-				$template->setTranslator($this->translator);
-				$template->addFilter('plural', [Filters::class, 'plural']);
-				$template->addFilter('intlDate', [Filters::class, 'intlDate']);
-				$template->addFilter('mTime', fn($path) => filemtime($this->dir->getWwwDir() . DIRECTORY_SEPARATOR . $path));
-				$template->addFilter('rgb', [$this, 'rgb']);
-				$template->addFilter('tint', [$this, 'tint']);
-				$template->addFilter('shade', [$this, 'shade']);
-				$template->addFunction('isModuleInstalled', fn(string $name) => $this->moduleChecker->isModuleInstalled($name));
-				$template->addFunction('core', fn(string $name) => __DIR__ . '/../templates/' . $name . '.latte');
-			}
+			$template->setTranslator($this->translator);
+			$template->addFilter('plural', [Filters::class, 'plural']);
+			$template->addFilter('intlDate', [Filters::class, 'intlDate']);
+			$template->addFilter('mTime', fn($path) => filemtime($this->dir->getWwwDir() . DIRECTORY_SEPARATOR . $path));
+			$template->addFilter('rgb', [$this, 'rgb']);
+			$template->addFilter('tint', [$this, 'tint']);
+			$template->addFilter('shade', [$this, 'shade']);
+			$template->addFunction('isModuleInstalled', fn(string $name) => $this->moduleChecker->isModuleInstalled($name));
+			$template->addFunction('core', fn(string $name) => __DIR__ . '/../templates/' . $name . '.latte');
 		};
 	}
 

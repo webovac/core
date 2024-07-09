@@ -1,6 +1,6 @@
 {templateType Stepapo\Dataset\Control\ItemList\ItemListTemplate}
 <div n:class="$itemListClass" n:snippet>
-	{if $control->getDatasetControl()->getCollectionCount() > 0}
+	{if $main->getCollectionCount() > 0}
 		{foreach $items as $item}
 			{control 'item-' . $item->getValue($idColumnName)}
 		{/}

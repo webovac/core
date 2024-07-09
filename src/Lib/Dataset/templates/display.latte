@@ -2,7 +2,7 @@
 <div class="my-1 table-responsive clearfix" n:snippet>
 	<div class="input-group input-group-sm">
 		<div class="btn btn-sm btn-label">{translate}Zobrazit{/}:</div>
-		<a n:foreach="$views as $view" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name === $control->getSelectedView()->name ? btn-primary : btn-secondary">
+		<a n:foreach="$views as $view" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name === $main->getView()->name ? btn-primary : btn-secondary">
 			{_$view->label}
 		</a>
 	</div>
