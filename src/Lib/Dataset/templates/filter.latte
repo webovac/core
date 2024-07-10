@@ -1,4 +1,4 @@
-{templateType Stepapo\Dataset\Control\Filter\FilterTemplate}
+{templateType Stepapo\Data\Control\Filter\FilterTemplate}
 <div n:class="my-1, !$column->filter->collapse ? table-responsive, clearfix" n:snippet>
 	<div class="input-group input-group-sm">
 		<div class="btn btn-sm btn-label">{_$column->label ?: $column->name}:</div>
@@ -16,7 +16,7 @@
 							{_$column->filter->prompt}
 						</a>
 						<a n:foreach="$column->filter->options as $name => $option" n:href="filter! value: $name" n:class="dropdown-item, ajax">
-							{$option instanceof Stepapo\Dataset\Option ? (string) $option->label : $option}
+							{$option instanceof Stepapo\Data\Option ? (string) $option->label : $option}
 						</a>
 					</div>
 				</div>
@@ -31,7 +31,7 @@
 							{var $selected = $name == $value}
 						{/}
 						<a n:href="filter! value: $name" n:class="btn, btn-sm, text-left, ajax, $name == $value ? btn-primary : btn-secondary">
-							{$option instanceof Stepapo\Dataset\Option ? (string) $option->label : $option}
+							{$option instanceof Stepapo\Data\Option ? (string) $option->label : $option}
 						</a>
 					{elseif $iterator->counter + 1 == $column->filter->collapse}
 						<a n:href="filter! value: !$selected ? $value : $option->name" n:class="btn, btn-sm, !$selected ? btn-primary : btn-secondary, text-left, ajax">{$selected ? $option->label : $column->filter->options[$value]->label}</a>
@@ -41,7 +41,7 @@
 							</button>
 							<div class="dropdown-menu">
 								<a n:foreach="$column->filter->options as $name => $option" n:if="$iterator->counter + 1 >= $column->filter->collapse" n:href="filter! value: $name" n:class="dropdown-item, ajax">
-									{$option instanceof Stepapo\Dataset\Option ? (string) $option->label : $option}
+									{$option instanceof Stepapo\Data\Option ? (string) $option->label : $option}
 								</a>
 							</div>
 						</div>
@@ -54,7 +54,7 @@
 				{_$column->filter->prompt}
 			</a>
 			<a n:foreach="$column->filter->options as $name => $option" n:href="filter! value => $name" n:class="btn, btn-sm, ajax, $name == $value ? btn-primary : btn-secondary">
-				{_$option instanceof Stepapo\Dataset\Option ? $option->label : $option}
+				{_$option instanceof Stepapo\Data\Option ? $option->label : $option}
 			</a>
 		{/}
 	</div>
