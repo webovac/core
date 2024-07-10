@@ -13,7 +13,7 @@
 		</table>
 	</div>
 	<p n:if="isset($term, $suggestedTerm)" class="mt-4">
-		{translate}Mysleli jste{/} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
+		{_$text->didYouMean} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
 	</p>
 	{if $showPagination}
 		{control pagination}

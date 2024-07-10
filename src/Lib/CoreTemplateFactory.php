@@ -23,6 +23,8 @@ trait CoreTemplateFactory
 			$template->setTranslator($this->translator);
 			$template->addFilter('plural', [Filters::class, 'plural']);
 			$template->addFilter('intlDate', [Filters::class, 'intlDate']);
+			$template->addFilter('monthName', [Filters::class, 'monthName']);
+			$template->addFilter('duration', [Filters::class, 'duration']);
 			$template->addFilter('mTime', fn($path) => filemtime($this->dir->getWwwDir() . DIRECTORY_SEPARATOR . $path));
 			$template->addFilter('rgb', [$this, 'rgb']);
 			$template->addFilter('tint', [$this, 'tint']);

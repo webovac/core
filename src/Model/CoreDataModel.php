@@ -75,7 +75,7 @@ trait CoreDataModel
 	}
 
 
-	public function getTextTranslation(?string $name, LanguageData $languageData): ?TextTranslationData
+	public function getTextTranslation(mixed $name, LanguageData $languageData): ?TextTranslationData
 	{
 		if (!$name) {
 			return null;

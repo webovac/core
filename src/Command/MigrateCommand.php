@@ -76,7 +76,7 @@ class MigrateCommand implements Command
 			$sqlFiles = Finder::findFiles("*.sql")->from($dir);
 			$files = array_merge($files, $sqlFiles->collect());
 		}
-		$controller->addCmsGroup($migrationGroup->name, $migrationGroup, $files, $migrationGroup->dependencies, 'create');
+		$controller->addCmsGroup($migrationGroup->name, $migrationGroup, $files, $migrationGroup->dependencies);
 		$_SERVER['argv'][] = $migrationGroup->name;
 		return $controller;
 	}
