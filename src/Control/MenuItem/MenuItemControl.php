@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\MenuItem;
 
-
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\Page;
