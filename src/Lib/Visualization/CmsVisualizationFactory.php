@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Webovac\Core\Lib\Dataset;
+namespace Webovac\Core\Lib\Visualization;
 
 use App\Model\Orm;
 use Stepapo\Visualization\Control\Visualization\VisualizationControl;
