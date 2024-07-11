@@ -23,6 +23,7 @@ use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
 use Nextras\Orm\Relationships\IRelationshipCollection;
+use ReflectionClass;
 use stdClass;
 use Stepapo\Utils\Model\Item;
 use Webovac\Core\Attribute\RequiresEntity;
@@ -55,7 +56,7 @@ trait CorePresenter
 	#[Inject] public ModuleChecker $moduleChecker;
 	#[Inject] public Cache $cache;
 	#[Inject] public CmsTranslator $translator;
-	private ?WebData $webData;
+	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
 	public ?PageData $pageData;
@@ -271,10 +272,13 @@ trait CorePresenter
 	}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	private function getComponentList(string $className): array
 	{
 		$return = [];
-		$rf = new \ReflectionClass($className);
+		$rf = new ReflectionClass($className);
 		foreach ($rf->getMethods() as $method) {
 			preg_match('/createComponent(.+)/', $method->getName(), $m);
 			if (!isset($m[1])) {

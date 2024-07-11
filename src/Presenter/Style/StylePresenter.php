@@ -25,7 +25,7 @@ class StylePresenter extends Presenter
 	#[Inject] public DataModel $dataModel;
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public ModuleChecker $moduleChecker;
-	private ?WebData $webData;
+	public ?WebData $webData;
 
 
 	public function actionDefault(): void

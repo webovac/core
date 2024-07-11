@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Buttons;
 
+use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
@@ -25,6 +26,7 @@ class ButtonsControl extends BaseControl
 		private LanguageData $languageData,
 		private ?CmsEntity $entity,
 		private IMenuItemControl $menuItem,
+		private DataModel $dataModel,
 	) {}
 
 

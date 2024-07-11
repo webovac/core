@@ -11,6 +11,7 @@ use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
+use Nette\Application\UI\InvalidLinkException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Model\CmsEntity;
 
@@ -36,6 +37,9 @@ class MenuItemControl extends BaseControl
 	) {}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function loadState(array $params): void
 	{
 		parent::loadState($params);
@@ -67,6 +71,9 @@ class MenuItemControl extends BaseControl
 	}
 
 
+	/**
+	 * @throws InvalidLinkException
+	 */
 	private function getHref(): ?string
 	{
 		if ($this->pageData->type === Page::TYPE_INTERNAL_LINK && $this->pageData->targetPage) {

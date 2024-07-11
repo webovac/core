@@ -47,6 +47,9 @@ abstract class CmsRepository extends Repository
 	}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function createFromData(
 		Item $data,
 		?CmsEntity $original = null,

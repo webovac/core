@@ -3,6 +3,7 @@
 namespace Webovac\Core\Definition;
 
 use Nextras\Dbal\Connection;
+use Nextras\Dbal\QueryException;
 
 
 class PgsqlDefinitionProcessor implements DefinitionProcessor
@@ -21,6 +22,9 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	) {}
 
 
+	/**
+	 * @throws QueryException
+	 */
 	public function process(Definition $structure): int
 	{
 		$this->definition = $structure;
@@ -143,7 +147,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 		$schema = $table->schema ?: $this->defaultSchema;
 		$k = [];
 		$k['alter'] = "ALTER TABLE \"$schema\".\"$table->name\"";
-		$k['constraint'] = "ADD CONSTRAINT \"{$table->name}_{$foreignKey->name}\"";
+		$k['constraint'] = "ADD CONSTRAINT \"{$table->name}_$foreignKey->name\"";
 		$k['foreignKey'] = "FOREIGN KEY (\"$foreignKey->name\")";
 		$k['references'] = "REFERENCES \"$schema\".\"$foreignKey->table\" (\"$foreignKey->column\")";
 		$k['onDelete'] = "ON DELETE " . strtoupper($foreignKey->onDelete);
@@ -174,7 +178,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function primary(Key $key)
+	private function primary(Key $key): string
 	{
 		$c = [];
 		foreach ($key->columns as $column) {
@@ -184,7 +188,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function unique(Table $table, Key $key)
+	private function unique(Table $table, Key $key): string
 	{
 		$c = [];
 		foreach ($key->columns as $column) {

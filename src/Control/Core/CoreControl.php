@@ -7,7 +7,6 @@ namespace Webovac\Core\Control\Core;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Webovac\Core\Command\MigrateAndInstallCommand;
 use Webovac\Core\Command\MigrateCommand;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\Breadcrumbs\BreadcrumbsControl;

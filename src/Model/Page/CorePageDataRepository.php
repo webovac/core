@@ -16,6 +16,9 @@ trait CorePageDataRepository
 	#[Inject] public PageTranslationDataRepository $pageTranslationDataRepository;
 
 
+	/**
+	 * @throws \Throwable
+	 */
 	protected function getCollection(): Collection
 	{
 		if (!isset($this->collection)) {
@@ -36,6 +39,10 @@ trait CorePageDataRepository
 
 	/**
 	 * @param Collection<PageData> $collection
+	 * @param HasPages|null $hasPages
+	 * @param PageData|null $parentPageData
+	 * @param int $rank
+	 * @throws \ReflectionException
 	 */
 	private function buildCollection(
 		Collection &$collection,

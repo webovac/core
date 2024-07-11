@@ -33,7 +33,7 @@ trait CoreWebData
 	public FileUpload|FileData|string|int|null $largeIconFile;
 	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $logoFile;
 	public FileUpload|FileData|string|int|null $backgroundFile;
-	#[ArrayOfType(WebTranslationData::class)] /** @var WebTranslationData[] */ public array|null $translations;
+	/** @var WebTranslationData[] */ #[ArrayOfType(WebTranslationData::class)] public array|null $translations;
 	/** @var PageData[]|array */ public array|null $pages;
 	/** @var WebModuleData[]|string[] */ public array|null $webModules;
 	/** @var ModuleData[]|string[] */ public array|null $modules;
@@ -87,6 +87,9 @@ trait CoreWebData
 	}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
 	{
 		$data = parent::createFromArray($config, $key, $skipDefaults);

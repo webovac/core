@@ -32,6 +32,9 @@ class NavigationControl extends BaseControl
 	) {}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function render(): void
 	{
 		if (!$this->pageData) {

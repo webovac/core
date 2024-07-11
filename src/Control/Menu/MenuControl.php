@@ -36,6 +36,9 @@ class MenuControl extends BaseControl
 	) {}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function render(): void
 	{
 		$this->template->webData = $this->webData;

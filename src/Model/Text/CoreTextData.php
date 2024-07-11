@@ -14,7 +14,7 @@ trait CoreTextData
 {
 	public ?int $id;
 	#[KeyProperty] public string $name;
-	#[ArrayOfType(TextTranslationData::class)] /** @var TextTranslationData[] */ public array|null $translations;
+	/** @var TextTranslationData[] */ #[ArrayOfType(TextTranslationData::class)] public array|null $translations;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
 	public ?DateTimeInterface $createdAt;

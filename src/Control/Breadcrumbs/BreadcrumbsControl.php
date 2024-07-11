@@ -8,6 +8,7 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
+use Nette\Application\UI\InvalidLinkException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Model\CmsEntity;
 
@@ -31,6 +32,10 @@ class BreadcrumbsControl extends BaseControl
 	) {}
 
 
+	/**
+	 * @throws \ReflectionException
+	 * @throws InvalidLinkException
+	 */
 	public function loadState(array $params): void
 	{
 		parent::loadState($params);

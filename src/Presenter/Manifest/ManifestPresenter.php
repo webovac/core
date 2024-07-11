@@ -21,10 +21,13 @@ class ManifestPresenter extends Presenter
 	#[Persistent] public string $basePath;
 	#[Persistent] public string $lang;
 	#[Inject] public DataModel $dataModel;
-	private ?WebData $webData;
+	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function actionDefault(): void
 	{
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);

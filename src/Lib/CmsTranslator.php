@@ -23,9 +23,7 @@ class CmsTranslator implements Translator
 	{
 		$lang = $this->languageData->shortcut;
 		$string = $this->dataModel->getTextTranslation($message, $this->languageData)?->string;
-		$dumped = [];
-		if (!$string && !isset($dumped[$message])) {
-			$dumped[$message] = true;
+		if (!$string) {
 			bdump("$message : $lang");
 		}
 		return (string) ($string ?: $message);

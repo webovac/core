@@ -6,12 +6,14 @@ use App\Model\File\File;
 use App\Model\File\FileData;
 use App\Model\File\FileRepository;
 use App\Model\Person\Person;
+use DateTimeInterface;
 use Nextras\Orm\Entity\Reflection\PropertyMetadata;
 use Nextras\Orm\Model\IModel;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
+use ReflectionClass;
 use Stepapo\Utils\Model\Item;
 use Webovac\Core\Model\CmsEntity;
 
@@ -26,13 +28,13 @@ class CmsEntityProcessor
 		public CmsEntity $entity,
 		private Item $data,
 		private ?Person $person,
-		private ?\DateTimeInterface $date,
+		private ?DateTimeInterface $date,
 		private bool $skipDefaults,
 		private IModel $model,
 	) {}
 
 
-	public function processEntity(?CmsEntity $parent = null, ?string $parentName = null)
+	public function processEntity(?CmsEntity $parent = null, ?string $parentName = null): void
 	{
 		$metadata = $this->entity->getMetadata();
 		if ($parent && $parentName) {
@@ -83,7 +85,7 @@ class CmsEntityProcessor
 	}
 
 
-	public function processScalar(PropertyMetadata $property)
+	public function processScalar(PropertyMetadata $property): void
 	{
 		$name = $property->name;
 		$value = $this->data->$name;
@@ -93,7 +95,7 @@ class CmsEntityProcessor
 	}
 
 
-	public function processHasOne(PropertyMetadata $property)
+	public function processHasOne(PropertyMetadata $property): void
 	{
 		$name = $property->name;
 		$relatedRepository = $this->model->getRepository($property->relationship->repository);
@@ -128,7 +130,7 @@ class CmsEntityProcessor
 	}
 
 
-	public function processManyHasMany(PropertyMetadata $property)
+	public function processManyHasMany(PropertyMetadata $property): void
 	{
 		$name = $property->name;
 		$relatedRepository = $this->model->getRepository($property->relationship->repository);
@@ -156,12 +158,15 @@ class CmsEntityProcessor
 	}
 
 
-	public function processOneHasMany(PropertyMetadata $property)
+	/**
+	 * @throws \ReflectionException
+	 */
+	public function processOneHasMany(PropertyMetadata $property): void
 	{
 		$name = $property->name;
 		$ids = [];
 		$relatedRepository = $this->model->getRepository($property->relationship->repository);
-		$relatedClass = new \ReflectionClass($relatedRepository->getEntityClassName([]));
+		$relatedClass = new ReflectionClass($relatedRepository->getEntityClassName([]));
 		foreach ((array) $this->data->$name as $relatedData) {
 			$relatedOriginal = method_exists($relatedRepository, 'getByData') ? $relatedRepository->getByData($relatedData, $this->entity) : null;
 			$relatedEntity = $relatedOriginal ?: $relatedClass->newInstance();

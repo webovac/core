@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
-use App\Control\BaseTemplate;
 use Nette\Application\UI\Template;
 use Nette\DI\Attributes\Inject;
 use Stepapo\Utils\Latte\Filters;

@@ -8,6 +8,7 @@ use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
 use Nette\InvalidArgumentException;
 use Nette\Security\User;
+use ReflectionClass;
 
 
 trait CoreTemplate
@@ -20,11 +21,14 @@ trait CoreTemplate
 	public array $flashes = [];
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function renderFile(string $moduleClass, string $componentClass, string $templateName, array $params = []): void
 	{
-		$moduleRf = new \ReflectionClass($moduleClass);
+		$moduleRf = new ReflectionClass($moduleClass);
 		$dir = dirname($moduleRf->getFileName());
-		$componentRf = new \ReflectionClass($componentClass);
+		$componentRf = new ReflectionClass($componentClass);
 		$componentName = lcfirst(str_replace('Control', '', $componentRf->getShortName()));
 		if (!file_exists($path = "$dir/templates/$componentName.$templateName.latte")) {
 			throw new InvalidArgumentException("Template '$path' does not exist.");

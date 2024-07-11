@@ -11,8 +11,10 @@ use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
+use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
+use Nette\Utils\UnknownImageFileException;
 
 
 trait CoreFileRepository
@@ -68,6 +70,10 @@ trait CoreFileRepository
 	}
 
 
+	/**
+	 * @throws ImageException
+	 * @throws UnknownImageFileException
+	 */
 	private function image2webp(FileUpload $upload, bool $forceSquare): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
@@ -76,6 +82,10 @@ trait CoreFileRepository
 	}
 
 
+	/**
+	 * @throws ImageException
+	 * @throws UnknownImageFileException
+	 */
 	private function image2jpeg(FileUpload $upload, bool $forceSquare): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
@@ -84,6 +94,10 @@ trait CoreFileRepository
 	}
 
 
+	/**
+	 * @throws ImageException
+	 * @throws UnknownImageFileException
+	 */
 	public function image2square(FileUpload $upload): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();

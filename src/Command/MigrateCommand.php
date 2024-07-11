@@ -10,6 +10,7 @@ use Nette\Utils\Finder;
 use Nextras\Migrations\Drivers\PgSqlDriver;
 use Nextras\Migrations\Extensions\SqlHandler;
 use Nextras\Migrations\IDriver;
+use ReflectionClass;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\MigrationGroup;
@@ -31,7 +32,7 @@ class MigrateCommand implements Command
 		private array $modules
 	) {
 		foreach ($modules as $module) {
-			$reflection = new \ReflectionClass($module);
+			$reflection = new ReflectionClass($module);
 			if (file_exists($path = dirname($reflection->getFileName()) . '/migrations/manipulations')) {
 				$this->paths[] = $path;
 			}
@@ -63,9 +64,12 @@ class MigrateCommand implements Command
 	}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function prepareDefinitions(MigrationGroup $migrationGroup, CmsConsoleController $controller): CmsConsoleController
 	{
-		$reflection = new \ReflectionClass($migrationGroup->class);
+		$reflection = new ReflectionClass($migrationGroup->class);
 		$files = [];
 		if (file_exists($dir = dirname($reflection->getFileName()) . "/migrations/definitions")) {
 			$neonFiles = Finder::findFiles("*.neon")->from($dir);

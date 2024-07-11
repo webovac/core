@@ -23,8 +23,8 @@ use Nextras\Migrations\LogicException;
 class CmsRunner extends Runner
 {
 	private CmsOrderResolver $orderResolver;
-	/** @var list<Group> */ private $groups = [];
-	/** @var array<string, IExtensionHandler> (extension => IExtensionHandler) */ private $extensionsHandlers = [];
+	/** @var list<Group> */ private array $groups = [];
+	/** @var array<string, IExtensionHandler> (extension => IExtensionHandler) */ private array $extensionsHandlers = [];
 
 
 	public function __construct(
@@ -155,6 +155,7 @@ class CmsRunner extends Runner
 
 	private function getFiles(): array
 	{
+		$files = [];
 		foreach ($this->groups as $group) {
 			/** @var FileInfo $f */
 			foreach ($group->files as $f) {

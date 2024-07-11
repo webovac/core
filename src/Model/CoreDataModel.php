@@ -75,6 +75,9 @@ trait CoreDataModel
 	}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function getTextTranslation(mixed $name, LanguageData $languageData): ?TextTranslationData
 	{
 		if (!$name) {

@@ -15,8 +15,10 @@ use App\Model\Web\WebData;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
+use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
+use Nette\Utils\UnknownImageFileException;
 
 
 trait CoreWebRepository
@@ -101,6 +103,10 @@ trait CoreWebRepository
 	}
 
 
+	/**
+	 * @throws ImageException
+	 * @throws UnknownImageFileException
+	 */
 	public function createLargeIcon(Web $web, WebData $data, ?Person $person = null): File
 	{
 		$iconFile = Image::fromFile($this->fileUploader->getPath($web->iconFile->getIconIdentifier()));

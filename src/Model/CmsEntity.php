@@ -56,6 +56,9 @@ abstract class CmsEntity extends Entity
 	}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function getData(): Item
 	{
 		$class = new ReflectionClass($this->getDataClass());
@@ -83,6 +86,9 @@ abstract class CmsEntity extends Entity
 	}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	private function shouldGetData(ReflectionProperty $property): bool
 	{
 		$types = Type::fromReflection($property)->getTypes();

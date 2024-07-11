@@ -15,7 +15,7 @@ trait CoreLanguageData
 	public string $shortcut;
 	public string $name;
 	public int $rank;
-	#[ArrayOfType(LanguageTranslationData::class)] /** @var LanguageTranslationData[] */ public array|null $translations;
+	/** @var LanguageTranslationData[] */ #[ArrayOfType(LanguageTranslationData::class)] public array|null $translations;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
 	public ?DateTimeInterface $createdAt;

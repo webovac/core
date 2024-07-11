@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Page;
 
 use App\Model\Page\Page;
+use Nextras\Dbal\QueryException;
 use Nextras\Orm\Entity\Reflection\PropertyMetadata;
 use Nextras\Orm\Mapper\Dbal\DbalMapper;
 
@@ -30,6 +31,9 @@ trait CorePageMapper
 	}
 
 
+	/**
+	 * @throws QueryException
+	 */
 	public function movePage(Page $movedPage, ?Page $oldParentPage, int $oldRank, ?Page $newParentPage, int $newRank): void
 	{
 		$filter = $movedPage->web
@@ -86,6 +90,9 @@ trait CorePageMapper
 	}
 
 
+	/**
+	 * @throws QueryException
+	 */
 	public function removePage(Page $page): void
 	{
 		$this->getDatabasePlatform();

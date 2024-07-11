@@ -17,8 +17,8 @@ use Nextras\Orm\Collection\Helpers\DbalQueryBuilderHelper;
 
 trait CoreOrmFunctions
 {
-	public const LIKE_FILTER = 'likeFilter';
-	public const PERSON_FILTER = 'personFilter';
+	public const string LIKE_FILTER = 'likeFilter';
+	public const string PERSON_FILTER = 'personFilter';
 
 
 	public function __construct(
@@ -27,7 +27,7 @@ trait CoreOrmFunctions
 	) {}
 
 
-	public function call(string $name)
+	public function call(string $name): IQueryBuilderFunction
 	{
 		return new class($name, $this->connection) implements IQueryBuilderFunction {
 			public function __construct(private string $name, private IConnection $connection)

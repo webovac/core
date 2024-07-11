@@ -3,6 +3,7 @@
 namespace Webovac\Core\Definition;
 
 use Nextras\Dbal\Connection;
+use Nextras\Dbal\QueryException;
 
 
 class MysqlDefinitionProcessor implements DefinitionProcessor
@@ -20,6 +21,9 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	) {}
 
 
+	/**
+	 * @throws QueryException
+	 */
 	public function process(Definition $structure): int
 	{
 		$this->definition = $structure;
@@ -166,7 +170,7 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function primary(Key $key)
+	private function primary(Key $key): string
 	{
 		$c = [];
 		foreach ($key->columns as $column) {
@@ -176,7 +180,7 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function unique(Table $table, Key $key)
+	private function unique(Table $table, Key $key): string
 	{
 		$c = [];
 		$n = [];

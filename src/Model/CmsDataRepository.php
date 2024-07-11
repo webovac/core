@@ -22,7 +22,10 @@ class CmsDataRepository extends Repository
 	) {}
 
 
-	/** @return Collection<Item> */
+	/**
+	 * @return Collection<Item>
+	 * @throws \Throwable
+	 */
 	protected function getCollection(): Collection
 	{
 		if (!isset($this->collection)) {

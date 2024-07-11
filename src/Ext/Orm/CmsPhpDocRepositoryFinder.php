@@ -17,10 +17,10 @@ use ReflectionClass;
 class CmsPhpDocRepositoryFinder extends PhpDocRepositoryFinder
 {
 	/**
-	 * @return array<string, string>
 	 * @phpstan-param class-string<IModel> $modelClass
-	 * @phpstan-return array<string, class-string<IRepository>>
-	 */ 
+	 * @return array<string, string>
+	 * @throws \ReflectionException
+	 */
 	public function findRepositories(string $modelClass): array
 	{
 		if ($modelClass === Model::class) {

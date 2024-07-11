@@ -229,7 +229,7 @@ trait CorePageRepository
 		$code = $data instanceof PageData ? $data->name : $data;
 		assert($hasPages instanceof CmsEntity);
 		if (!$hasPages->isPersisted()) {
-			return is_int($code) ? $this->getById($code) : null;
+			return is_numeric($code) ? $this->getById($code) : null;
 		}
 		return $this->getBy([
 			'name' => $data instanceof PageData ? $data->name : $data,

@@ -9,5 +9,5 @@ use Stepapo\Utils\Schematic;
 
 class Key extends Schematic
 {
-	#[ValueProperty, ToArray] /** @var string[] */ public array $columns;
+	/** @var string[] */ #[ValueProperty, ToArray] public array $columns;
 }

@@ -27,7 +27,7 @@ trait CorePageData
 	public ?string $authorizingTag;
 	public ?string $authorizingParentTag;
 	public ?string $style;
-	#[ArrayOfType(PageTranslationData::class)] /** @var PageTranslationData[] */ public array|null $translations;
+	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
 	/** @var int[] */ public array|null $authorizedRoles;
 	/** @var int[] */ public array|null $authorizedPersons;
 	#[DefaultValue(false)] public bool $hasParameter;
@@ -89,6 +89,9 @@ trait CorePageData
 	}
 
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function getLanguageIds(): array
 	{
 		$return = [];

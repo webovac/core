@@ -11,6 +11,7 @@ use Nette\PhpGenerator\ClassType;
 use Nette\Schema\Processor;
 use Nette\Schema\Schema;
 use Nette\Schema\ValidationException;
+use ReflectionClass;
 use Webovac\Core\Command\Command;
 use Webovac\Core\Factory;
 use Webovac\Core\Module;
@@ -25,12 +26,12 @@ abstract class BaseExtension extends CompilerExtension
 
 	public function __construct()
 	{
-		$this->moduleDir = dirname((new \ReflectionClass($this))->getFileName()) . '/../';
+		$this->moduleDir = dirname((new ReflectionClass($this))->getFileName()) . '/../';
 		$this->processor = new Processor;
 	}
 
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$this->createSearchExtension();
 		$this->compiler->loadDefinitionsFromConfig(

@@ -6,6 +6,7 @@ namespace Webovac\Core\Lib;
 
 use App\Model\Orm;
 use App\Model\Person\Person;
+use Nette\Security\AuthenticationException;
 use Nette\Security\IIdentity;
 use Nette\Security\User;
 
@@ -54,6 +55,9 @@ class CmsUser
 	}
 
 
+	/**
+	 * @throws AuthenticationException
+	 */
 	public function login(string $login, string $password): void
 	{
 		$this->user->login($login, $password);

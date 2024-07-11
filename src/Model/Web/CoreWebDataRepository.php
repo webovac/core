@@ -18,7 +18,10 @@ trait CoreWebDataRepository
 	#[Inject] public PageDataRepository $pageDataRepository;
 
 
-	/** @return Collection<Item> */
+	/**
+	 * @return Collection<Item>
+	 * @throws \Throwable
+	 */
 	protected function getCollection(): Collection
 	{
 		if (!isset($this->collection)) {
