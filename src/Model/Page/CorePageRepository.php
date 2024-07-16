@@ -110,14 +110,11 @@ trait CorePageRepository
 		$page->type = $templatePage->type;
 		$page->stretched = $templatePage->stretched;
 		$page->hasParameter = $templatePage->hasParameter;
-		$page->hasParentParameter = $templatePage->hasParentParameter;
 		$page->providesNavigation = $templatePage->providesNavigation;
 		$page->providesButtons = $templatePage->providesButtons;
 		$page->hideInNavigation = $templatePage->hideInNavigation;
 		$page->repository = $templatePage->repository;
-		$page->parentRepository = $templatePage->parentRepository;
 		$page->targetParameter = $templatePage->targetParameter;
-		$page->targetParentParameter = $templatePage->targetParentParameter;
 		$page->targetSignal = $templatePage->targetSignal;
 		$page->targetUrl = $templatePage->targetUrl;
 		$page->rank = $templatePage->parentPage ? $templatePage->rank : ($templatePage->rank + $count);

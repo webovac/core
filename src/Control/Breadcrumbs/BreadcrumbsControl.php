@@ -9,6 +9,7 @@ use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\InvalidLinkException;
+use Nette\Utils\Arrays;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Model\CmsEntity;
 
@@ -45,17 +46,21 @@ class BreadcrumbsControl extends BaseControl
 				$this->addActivePage($id);
 				$pageData = $this->dataModel->getPageData($this->webData->id, $id);
 				$entity = $this->pageData->repository === $pageData->repository ? $this->entity : $this->parentEntity;
-				$title = $pageData->hasParameter  && ($pageData->providesNavigation || $pageData->providesButtons)
+				$title = $pageData->hasParameter && $pageData->isDetailRoot
 					? $entity->getTitle($this->languageData)
 					: $pageData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
+				if ($pageData->hasParameter) {
+					$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($pageData->parentDetailRootPages));
+				}
 				$this->addCrumb(
 					($pageData->isHomePage ? '<i class="fasl fa-fw fa-home"></i> ' : '') . $title,
 					$this->presenter->link(
 						'Home:',
-						$pageData->name,
-						$pageData->hasParameter ? $entity?->getParameter($this->languageData) : null,
-						$pageData->hasParentParameter ? $entity?->getParentParameter($this->languageData) : null
-					)
+						[
+							'pageName' => $pageData->name,
+							'id' => $pageData->hasParameter ? [$lastDetailRootPage->name => $this->entity->{$lastDetailRootPage->parameterName}] : [],
+						],
+					),
 				);
 			}
 		}

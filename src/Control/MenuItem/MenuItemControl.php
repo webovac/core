@@ -11,6 +11,7 @@ use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\InvalidLinkException;
+use Nette\Utils\Arrays;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Model\CmsEntity;
 
@@ -78,16 +79,22 @@ class MenuItemControl extends BaseControl
 		if ($this->pageData->type === Page::TYPE_INTERNAL_LINK && $this->pageData->targetPage) {
 			$p = $this->dataModel->getPageData($this->webData->id, $this->pageData->targetPage);
 			$targetParameter = $this->pageData->targetParameter;
-			$targetParentParameter = $this->pageData->targetParentParameter;
 		} else {
 			$p = $this->pageData;
 			$targetParameter = $p->hasParameter ? $this->entity?->getParameter($this->languageData) : null;
-			$targetParentParameter = $p->hasParentParameter ? $this->entity?->getParentParameter($this->languageData) : null;
+		}
+		if ($p->hasParameter) {
+			$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($p->parentDetailRootPages));
 		}
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $this->presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $this->presenter->link('//Home:', [$p->name, $targetParameter, $targetParentParameter, 'lang' => $this->targetLanguageData->shortcut]),
+			Page::TYPE_PAGE => $this->presenter->link('//Home:', [
+					'pageName' => $p->name,
+					'lang' => $this->targetLanguageData->shortcut,
+					'id' => $p->hasParameter ? [$lastDetailRootPage->name => $this->entity->{$lastDetailRootPage->parameterName}] : [],
+				],
+			),
 			default => null,
 		};
 	}

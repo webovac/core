@@ -134,7 +134,6 @@ trait CoreDataModel
 			if ($pageData->type === Page::TYPE_PAGE && (
 //					!$pageData->getCollection('translations')->getBy(['language' => $languageData->id]) ||
 					$pageData->hasParameter !== $parentPageData->hasParameter
-					|| $pageData->hasParentParameter !== $parentPageData->hasParentParameter
 				)) {
 				return false;
 			}

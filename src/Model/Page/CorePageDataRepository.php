@@ -27,8 +27,8 @@ trait CorePageDataRepository
 				$this->buildCollection($collection);
 				$array = (array) $collection;
 				uasort($array, function(PageData $a, PageData $b) {
-					return [$a->host, $a->basePath, $a->hasParentParameter, $a->hasParameter]
-						<=> [$b->host, $b->basePath, $b->hasParentParameter, $b->hasParameter];
+					return [$a->host, $a->basePath, $a->hasParameter]
+						<=> [$b->host, $b->basePath, $b->hasParameter];
 				});
 				return new Collection($array);
 			});
@@ -74,12 +74,14 @@ trait CorePageDataRepository
 			$pageData->navigationPage = $page->providesNavigation ? $page->id : ($parentPageData->navigationPage ?? null);
 			$pageData->buttonsPage = $page->providesButtons ? $page->id : ($parentPageData->buttonsPage ?? null);
 			$pageData->parentPages = array_merge($parentPageData->parentPages ?? [], $page->type === Page::TYPE_MODULE ? [] : [$page->id]);
+			$pageData->parentDetailRootPages = array_merge($parentPageData->parentPages ?? [], $page->isDetailRoot ? [$page->id] : []);
 			$pageData->parentPage = $page->parentPage?->id ?: ($parentPageData->parentPage ?? null);
 			foreach ($page->translations as $translation) {
 				$parentPath = !$pageData->dontInheritPath && $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])
 					? $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])->fullPath
 					: '//' . $pageData->host . ($pageData->basePath ? ('/' . $pageData->basePath) : '');
-				$pageData->translations[$translation->id]->fullPath = $parentPath . ($translation->path ? '/' . $translation->path : '');
+				$path = $translation->path ? preg_replace('/<(.*)>/', "<id[" . $pageData->name . "]>", $translation->path) : null;
+				$pageData->translations[$translation->id]->fullPath = $parentPath . ($path ? '/' . $path : '');
 			}
 			if ($page->type === Page::TYPE_MODULE) {
 				$this->buildCollection($collection, $page->module, $pageData, $rank);

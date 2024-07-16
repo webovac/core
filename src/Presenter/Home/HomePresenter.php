@@ -12,7 +12,7 @@ use App\Presenter\BasePresenter;
  */
 class HomePresenter extends BasePresenter
 {
-	public function renderDefault(string $pageName, mixed $id = null, mixed $parentId = null): void
+	public function renderDefault(string $pageName, array $id = []): void
 	{
 	}
 }

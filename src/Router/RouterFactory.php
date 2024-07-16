@@ -16,9 +16,9 @@ final class RouterFactory
 	) {}
 
 
-	public function create(): RouteList
+	public function create(): CmsRouteList
 	{
-		$routeList = new RouteList;
+		$routeList = new CmsRouteList;
 		foreach ($this->dataModel->webRepository->findAll() as $webData) {
 			$routeList->addRoute(
 				mask: $webData->getStyleRouteMask(),
@@ -38,9 +38,6 @@ final class RouterFactory
 			}
 			foreach ($pageData->translations as $translationData) {
 				$languageData = $this->dataModel->languageRepository->getById($translationData->language);
-				if ($pageData->hasParentParameter) {
-					$translationData->fullPath = preg_replace('/(<id>)(\/.*\/<id>)/', '<parentId>$2', $translationData->fullPath);
-				}
 				if ($pageData->redirectPage) {
 					$p = $this->dataModel->pageRepository->getById($pageData->web . '-' . $pageData->redirectPage);
 				} else {

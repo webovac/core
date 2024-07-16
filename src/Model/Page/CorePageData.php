@@ -30,23 +30,22 @@ trait CorePageData
 	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
 	/** @var int[] */ public array|null $authorizedRoles;
 	/** @var int[] */ public array|null $authorizedPersons;
-	#[DefaultValue(false)] public bool $hasParameter;
-	#[DefaultValue(false)] public bool $hasParentParameter;
 	#[DefaultValue(false)] public bool $hideInNavigation;
 	#[DefaultValue(false)] public bool $providesNavigation;
 	#[DefaultValue(false)] public bool $providesButtons;
 	#[DefaultValue(false)] public bool $stretched;
 	#[DefaultValue(false)] public bool $dontInheritPath;
 	#[DefaultValue(false)] public bool $dontInheritAccessSetup;
+	#[DefaultValue(false)] public bool $hasParameter;
+	#[DefaultValue(false)] public bool $isDetailRoot;
+	public ?string $parameterName;
 	public ?string $icon;
 	public ?string $repository;
-	public ?string $parentRepository;
 	public int|string|null $parentPage;
 	public int|string|null $redirectPage;
 	public int|string|null $targetPage;
 	public FileUpload|FileData|string|int|null $imageFile;
 	public ?string $targetParameter;
-	public ?string $targetParentParameter;
 	public ?string $targetUrl;
 	public ?string $targetSignal;
 	public int|string|null $createdByPerson;
@@ -64,6 +63,7 @@ trait CorePageData
 	public ?int $navigationPage;
 	public ?int $buttonsPage;
 	/** @var int[] */ public array|null $parentPages;
+	/** @var int[] */ public array|null $parentDetailRootPages;
 
 
 	/**

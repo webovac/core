@@ -31,18 +31,17 @@ use Webovac\Core\Control\PageItem\PageItemControl;
  * @property string|null $authorizingTag
  * @property string|null $authorizingParentTag
  * @property string|null $style {enum Page::STYLE_*}
- * @property bool $hasParameter {default false}
- * @property bool $hasParentParameter {default false}
  * @property bool $providesNavigation {default false}
  * @property bool $providesButtons {default false}
  * @property bool $hideInNavigation {default false}
  * @property bool $stretched {default false}
  * @property bool $dontInheritPath {default false}
  * @property bool $dontInheritAccessSetup {default false}
+ * @property bool $hasParameter {default false}
+ * @property bool $isDetailRoot {default false}
+ * @property string|null $parameterName
  * @property string|null $repository
- * @property string|null $parentRepository
  * @property mixed|null $targetParameter
- * @property mixed|null $targetParentParameter
  * @property string|null $targetSignal
  * @property string|null $targetUrl
  * @property int $rank

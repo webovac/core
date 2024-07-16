@@ -16,6 +16,7 @@ use App\Model\WebTranslation\WebTranslationData;
 use Latte\Loaders\StringLoader;
 use Latte\Sandbox\SecurityPolicy;
 use Nette\Application\Attributes\Persistent;
+use Nette\Application\BadRequestException;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
@@ -106,40 +107,33 @@ trait CorePresenter
 			try {
 				$this->pageData->checkRequirements($this->cmsUser);
 			} catch (MissingPermissionException $e) {
-				throw new ForbiddenRequestException();
+				throw new ForbiddenRequestException;
 			} catch (LoginRequiredException $e) {
 				$loginPageName = $this->orm->webRepository->getById($this->webData->id)->modules->has($this->orm->moduleRepository->getBy(['name' => 'FsvAuth']))
 					? 'FsvAuth:Home'
 					: 'Auth:Home';
 				$this->redirect('default', ['pageName' => $loginPageName, 'backlink' => $this->storeRequest()]);
 			}
-			if ($id = $this->getParameter('id')) {
-				if (!$this->pageData->repository) {
-					throw new InvalidStateException();
+			if ($this->pageData->hasParameter) {
+				if (!$this->pageData->parentDetailRootPages) {
+					throw new InvalidStateException;
 				}
-				if ($parentId = $this->getParameter('parentId')) {
-					$this->entity = $this->orm
-						->getRepositoryByName($this->pageData->repository . 'Repository')
-						->getByParameters($id, $parentId, $this->pageData->parentRepository);
-					$this->parentEntity = $this->orm
-						->getRepositoryByName($this->pageData->parentRepository . 'Repository')
-						->getByParameter($parentId);
-					if (!$this->parentEntity) {
-						$this->error();
-					}
-					if ($this->parentEntity instanceof HasRequirements && !$this->parentEntity->checkRequirements($this->cmsUser, $this->pageData->authorizingParentTag)) {
-						throw new ForbiddenRequestException();
-					}
-				} else {
-					$this->entity = $this->orm
-						->getRepositoryByName($this->pageTranslation->page->repository . 'Repository')
-						->getByParameter($id);
+				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
+				if (!$lastDetailRootPage) {
+					throw new InvalidStateException;
 				}
+				$parameterValue = $this->getParameter('id')[$lastDetailRootPage->name];
+				if (!$lastDetailRootPage) {
+					$this->error();
+				}
+				$this->entity = $this->orm
+					->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
+					->getByParameter($parameterValue);
 				if (!$this->entity) {
 					$this->error();
 				}
 				if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->pageData->authorizingTag)) {
-					throw new ForbiddenRequestException();
+					throw new ForbiddenRequestException;
 				}
 			}
 			if ($this->cmsUser->isLoggedIn()) {
@@ -182,7 +176,14 @@ trait CorePresenter
 				. ($this->entity && !$this->pageData->providesNavigation && !$this->pageData->providesButtons ? ' | ' : '' )
 				. ($this->entity ? $this->entity->getTitle($this->languageData) : '');
 			$this->template->metaType = $this->entity?->getRepository()->getMapper()->getTableName() ?: 'page';
-			$this->template->metaUrl = $this->link('//Home:', $this->pageData->name, $this->entity?->getParameter(), $this->entity?->getParentParameter());
+			if ($this->pageData->hasParameter) {
+				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
+				$parameterValue = $this->getParameter('id')[$lastDetailRootPage->name];
+				$params = [$lastDetailRootPage->name => $parameterValue];
+			} else {
+				$params = [];
+			}
+			$this->template->metaUrl = $this->link('//this');
 			$this->template->webDatas = $this->dataModel->getWebDatas();
 			$adminPageData = $this->dataModel->getPageDataByName($this->webData->id, 'Admin:Home');
 			$this->template->showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser) ?: false;
