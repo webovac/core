@@ -9,6 +9,7 @@ use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslationData;
 use DateTimeInterface;
 use Nette\Http\FileUpload;
+use ReflectionException;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Stepapo\Utils\Attribute\KeyProperty;
@@ -25,7 +26,6 @@ trait CorePageData
 	#[DefaultValue(Page::TYPE_PAGE)] public string $type;
 	#[DefaultValue(Page::ACCESS_FOR_ALL)] public string $accessFor;
 	public ?string $authorizingTag;
-	public ?string $authorizingParentTag;
 	public ?string $style;
 	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
 	/** @var int[] */ public array|null $authorizedRoles;
@@ -56,6 +56,7 @@ trait CorePageData
 	### for CachedModel ###
 
 	public ?int $web;
+	public ?int $module;
 	public ?string $host;
 	public ?string $basePath;
 	/** @var AccessSetup[] */ public array|null $accessSetups;
@@ -90,7 +91,7 @@ trait CorePageData
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function getLanguageIds(): array
 	{

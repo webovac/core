@@ -162,10 +162,10 @@ tables:
 			type: [type: string, null: false, default: page]
 			access_for: [type: string, null: false, default: all]
 			authorizing_tag: [type: string, null: true]
-			authorizing_parent_tag: [type: string, null: true]
 			target_signal: [type: string, null: true]
 			stretched: [type: bool, null: false, default: false]
 		primaryKey: id
+		uniqueKeys: [[web_id, name]]
 		indexes: [created_by_person_id, updated_by_person_id, has_parameter, module_id, parent_page_id, redirect_page_id, target_page_id, template_page_id, image_file_id, web_id]
 		foreignKeys:
 			created_by_person_id: [table: person, column: id, onDelete: restrict]

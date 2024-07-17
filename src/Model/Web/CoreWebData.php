@@ -14,6 +14,7 @@ use App\Model\WebTranslation\WebTranslationData;
 use DateTimeInterface;
 use Nette\Http\FileUpload;
 use Nette\Schema\Processor;
+use ReflectionException;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Stepapo\Utils\Expect;
@@ -88,7 +89,7 @@ trait CoreWebData
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
 	{

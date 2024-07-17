@@ -14,6 +14,7 @@ use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
 use ReflectionClass;
+use ReflectionException;
 use Stepapo\Utils\Model\Item;
 use Webovac\Core\Model\CmsEntity;
 
@@ -159,7 +160,7 @@ class CmsEntityProcessor
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function processOneHasMany(PropertyMetadata $property): void
 	{

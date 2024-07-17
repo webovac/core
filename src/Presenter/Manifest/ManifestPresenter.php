@@ -10,6 +10,7 @@ use App\Model\WebTranslation\WebTranslationData;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Attributes\Inject;
+use ReflectionException;
 
 
 /**
@@ -26,7 +27,7 @@ class ManifestPresenter extends Presenter
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function actionDefault(): void
 	{

@@ -12,20 +12,20 @@ use Nette\Utils\Strings;
 class CmsRoute extends Route
 {
 	/** key used in metadata */
-	private const
+	private const string
 		Default = 'defOut',
 		Fixity = 'fixity',
 		FilterTableOut = 'filterTO',
 		Metadata = 'metadata';
 
 	/** url type */
-	private const
+	private const int
 		Host = 1,
 		Path = 2,
 		Relative = 3;
 
 	/** fixity types - has default value and is: */
-	private const
+	private const int
 		InQuery = 0,
 		InPath = 1, // in brackets is default value = null
 		Constant = 2;
@@ -236,7 +236,7 @@ class CmsRoute extends Route
 	}
 
 
-	private function preprocessParams(array &$params, ?array $metadata = null): array|false
+	private function preprocessParams(array $params, ?array $metadata = null): array|false
 	{
 		$metadata ??= $this->metadata;
 		$filter = $metadata[null][self::FilterOut] ?? null;

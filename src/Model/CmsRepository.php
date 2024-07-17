@@ -8,9 +8,11 @@ use App\Lib\OrmFunctions;
 use App\Model\Person\Person;
 use DateTimeInterface;
 use Nette\DI\Attributes\Inject;
+use Nette\Utils\Arrays;
 use Nextras\Orm\Repository\Repository;
 use Nextras\Orm\StorageReflection\StringHelper;
 use ReflectionClass;
+use ReflectionException;
 use Stepapo\Utils\Model\Item;
 use Webovac\Core\CmsEntityProcessor;
 use Webovac\Core\Lib\Dir;
@@ -35,9 +37,9 @@ abstract class CmsRepository extends Repository
 	}
 
 
-	public function getByParameter(mixed $parameter): ?CmsEntity
+	public function getByParameters(array $parameters): ?CmsEntity
 	{
-		return $this->getBy(['id' => $parameter]);
+		return $this->getBy(['id' => Arrays::first($parameters)]);
 	}
 
 
@@ -48,7 +50,7 @@ abstract class CmsRepository extends Repository
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function createFromData(
 		Item $data,

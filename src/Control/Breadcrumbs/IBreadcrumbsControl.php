@@ -13,5 +13,5 @@ use Webovac\Core\Model\CmsEntity;
 
 interface IBreadcrumbsControl extends Factory
 {
-	function create(WebData $webData, PageData $pageData, LanguageData $languageData, ?CmsEntity $entity = null, ?CmsEntity $parentEntity = null): BreadcrumbsControl;
+	function create(WebData $webData, PageData $pageData, LanguageData $languageData): BreadcrumbsControl;
 }

@@ -9,6 +9,7 @@ use Nette\Application\UI\Presenter;
 use Nette\InvalidArgumentException;
 use Nette\Security\User;
 use ReflectionClass;
+use ReflectionException;
 
 
 trait CoreTemplate
@@ -22,7 +23,7 @@ trait CoreTemplate
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function renderFile(string $moduleClass, string $componentClass, string $templateName, array $params = []): void
 	{

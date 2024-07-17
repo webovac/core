@@ -12,12 +12,6 @@ use App\Model\Person\Person;
 
 trait CoreModuleRepository
 {
-	public function getByParameter(mixed $parameter): ?Module
-	{
-		return $this->getBy(['id' => $parameter]);
-	}
-
-
 	public function postProcessFromData(ModuleData $data, Module $module, ?Person $person = null, bool $skipDefaults = false): Module
 	{
 		$module->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['module' => $module, 'name' => $data->homePage]);

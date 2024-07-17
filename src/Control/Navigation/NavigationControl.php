@@ -9,6 +9,7 @@ use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\Multiplier;
+use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\MenuItem\IMenuItemControl;
 use Webovac\Core\Control\MenuItem\MenuItemControl;
@@ -33,7 +34,7 @@ class NavigationControl extends BaseControl
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function render(): void
 	{

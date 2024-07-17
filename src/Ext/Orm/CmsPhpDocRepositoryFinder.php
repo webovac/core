@@ -12,6 +12,7 @@ use Nextras\Orm\Model\IModel;
 use Nextras\Orm\Model\Model;
 use Nextras\Orm\Repository\IRepository;
 use ReflectionClass;
+use ReflectionException;
 
 
 class CmsPhpDocRepositoryFinder extends PhpDocRepositoryFinder
@@ -19,7 +20,7 @@ class CmsPhpDocRepositoryFinder extends PhpDocRepositoryFinder
 	/**
 	 * @phpstan-param class-string<IModel> $modelClass
 	 * @return array<string, string>
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function findRepositories(string $modelClass): array
 	{

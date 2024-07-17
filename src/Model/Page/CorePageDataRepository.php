@@ -8,7 +8,9 @@ use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationDataRepository;
 use Nette\DI\Attributes\Inject;
+use ReflectionException;
 use Stepapo\Utils\Model\Collection;
+use Throwable;
 
 
 trait CorePageDataRepository
@@ -17,7 +19,7 @@ trait CorePageDataRepository
 
 
 	/**
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	protected function getCollection(): Collection
 	{
@@ -42,7 +44,7 @@ trait CorePageDataRepository
 	 * @param HasPages|null $hasPages
 	 * @param PageData|null $parentPageData
 	 * @param int $rank
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	private function buildCollection(
 		Collection &$collection,
@@ -67,6 +69,7 @@ trait CorePageDataRepository
 			unset($pageData);
 			$pageData = $page->getData();
 			$pageData->web = $parentPageData ? $parentPageData->web : $page->web->id;
+			$pageData->module = $page->module?->id;
 			$pageData->host = $parentPageData ? $parentPageData->host : $page->web->host;
 			$pageData->basePath = $parentPageData ? $parentPageData->basePath : $page->web->basePath;
 			$pageData->accessSetups = $pageData->dontInheritAccessSetup ? [$accessSetup] : array_merge($parentPageData->accessSetups ?? [], [$accessSetup]);

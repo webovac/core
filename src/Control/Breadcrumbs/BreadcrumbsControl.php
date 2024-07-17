@@ -6,10 +6,12 @@ namespace Webovac\Core\Control\Breadcrumbs;
 
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
+use App\Model\Orm;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\InvalidLinkException;
 use Nette\Utils\Arrays;
+use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Model\CmsEntity;
 
@@ -27,14 +29,13 @@ class BreadcrumbsControl extends BaseControl
 		private WebData $webData,
 		private PageData $pageData,
 		private LanguageData $languageData,
-		private ?CmsEntity $entity,
-		private ?CmsEntity $parentEntity,
 		private DataModel $dataModel,
+		private Orm $orm,
 	) {}
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 * @throws InvalidLinkException
 	 */
 	public function loadState(array $params): void
@@ -42,15 +43,22 @@ class BreadcrumbsControl extends BaseControl
 		parent::loadState($params);
 
 		if ($this->pageData) {
+			$parameters = [];
 			foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->parentPages as $id) {
 				$this->addActivePage($id);
 				$pageData = $this->dataModel->getPageData($this->webData->id, $id);
-				$entity = $this->pageData->repository === $pageData->repository ? $this->entity : $this->parentEntity;
-				$title = $pageData->hasParameter && $pageData->isDetailRoot
-					? $entity->getTitle($this->languageData)
-					: $pageData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
+				$title = $pageData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
 				if ($pageData->hasParameter) {
 					$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($pageData->parentDetailRootPages));
+					if (!isset($parameters[$lastDetailRootPage->name])) {
+						$parameters[$lastDetailRootPage->name] = $this->presenter->getParameter('id')[$lastDetailRootPage->name];
+					}
+					if ($pageData->isDetailRoot) {
+						$entity = $this->orm
+							->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
+							->getByParameters($parameters);
+						$title = $entity->getTitle($this->languageData);
+					}
 				}
 				$this->addCrumb(
 					($pageData->isHomePage ? '<i class="fasl fa-fw fa-home"></i> ' : '') . $title,
@@ -58,7 +66,7 @@ class BreadcrumbsControl extends BaseControl
 						'Home:',
 						[
 							'pageName' => $pageData->name,
-							'id' => $pageData->hasParameter ? [$lastDetailRootPage->name => $this->entity->{$lastDetailRootPage->parameterName}] : [],
+							'id' => $pageData->hasParameter ? $parameters : [],
 						],
 					),
 				);

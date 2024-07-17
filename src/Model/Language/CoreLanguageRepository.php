@@ -10,9 +10,9 @@ use App\Model\Language\LanguageData;
 
 trait CoreLanguageRepository
 {
-	public function getByParameter(mixed $parameter): ?Language
+	public function getByParameters(array $parameters): ?Language
 	{
-		return $this->getBy(['shortcut' => $parameter]);
+		return $this->getBy(['shortcut' => $parameters['LanguageDetail']]);
 	}
 
 

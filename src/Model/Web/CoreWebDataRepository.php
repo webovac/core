@@ -10,6 +10,7 @@ use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Utils\Model\Collection;
 use Stepapo\Utils\Model\Item;
+use Throwable;
 
 
 trait CoreWebDataRepository
@@ -20,7 +21,7 @@ trait CoreWebDataRepository
 
 	/**
 	 * @return Collection<Item>
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	protected function getCollection(): Collection
 	{

@@ -6,7 +6,6 @@ namespace Webovac\Core\Router;
 
 use App\Model\DataModel;
 use App\Model\Page\Page;
-use Nette\Application\Routers\RouteList;
 
 
 final class RouterFactory

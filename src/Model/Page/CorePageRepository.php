@@ -19,12 +19,12 @@ use Webovac\Core\Model\Web\WebModuleData;
 
 trait CorePageRepository
 {
-	public function getByParameters(mixed $parameter, mixed $parentParameter, ?string $parentRepository = null): ?Page
+	public function getByParameters(array $parameters): ?Page
 	{
-		if ($parentRepository === 'module') {
-			return $this->getBy(['module->id' => $parentParameter, 'id' => $parameter]);
+		if (isset($parameters['ModuleDetail'])) {
+			return $this->getBy(['module->id' => $parameters['ModuleDetail'], 'id' => $parameters['TemplateDetail']]);
 		}
-		return $this->getBy(['web->id' => $parentParameter, 'id' => $parameter]);
+		return $this->getBy(['id' => $parameters['Admin:PageDetail']]);
 	}
 
 

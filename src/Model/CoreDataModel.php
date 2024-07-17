@@ -17,6 +17,7 @@ use App\Model\TextTranslation\TextTranslationData;
 use App\Model\Web\WebData;
 use App\Model\Web\WebDataRepository;
 use Nette\DI\Attributes\Inject;
+use ReflectionException;
 use Stepapo\Utils\Model\Collection;
 use Webovac\Core\Lib\CmsUser;
 
@@ -76,7 +77,7 @@ trait CoreDataModel
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function getTextTranslation(mixed $name, LanguageData $languageData): ?TextTranslationData
 	{

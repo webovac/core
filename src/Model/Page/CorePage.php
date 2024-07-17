@@ -29,7 +29,6 @@ use Webovac\Core\Control\PageItem\PageItemControl;
  * @property string $type {enum Page::TYPE_*} {default Page::TYPE_PAGE}
  * @property string $accessFor {enum Page::ACCESS_FOR_*} {default Page::ACCESS_FOR_ALL}
  * @property string|null $authorizingTag
- * @property string|null $authorizingParentTag
  * @property string|null $style {enum Page::STYLE_*}
  * @property bool $providesNavigation {default false}
  * @property bool $providesButtons {default false}
@@ -188,9 +187,17 @@ trait CorePage
 	}
 
 
+	public function getParameters(): array
+	{
+		return $this->web
+			? ['Admin:PageDetail' => $this->id]
+			: ['ModuleDetail' => $this->module->id, 'TemplateDetail' => $this->id];
+	}
+
+
 	public function getPageName(): string
 	{
-		return 'Admin:PageDetail';
+		return $this->web ? 'Admin:PageDetail' : 'TemplateDetail';
 	}
 
 

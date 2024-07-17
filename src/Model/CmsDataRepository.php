@@ -10,6 +10,7 @@ use Nextras\Orm\Repository\IRepository;
 use Stepapo\Utils\Model\Collection;
 use Stepapo\Utils\Model\Item;
 use Stepapo\Utils\Model\Repository;
+use Throwable;
 use Webovac\Core\Lib\ModuleChecker;
 
 
@@ -24,7 +25,7 @@ class CmsDataRepository extends Repository
 
 	/**
 	 * @return Collection<Item>
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	protected function getCollection(): Collection
 	{

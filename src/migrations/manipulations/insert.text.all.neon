@@ -123,8 +123,6 @@ items:
 	Obsahuje tlačítka: [cs: Obsahuje tlačítka, en: Provides buttons]
 	Stránka s parametrem: [cs: Stránka s parametrem, en: Page with parameter]
 	Repozitář: [cs: Repozitář, en: Repository]
-	Stránka se dvěma parametry: [cs: Stránka se dvěma parametry, en: Page with two parameters]
-	Repozitář rodiče: [cs: Repozitář rodiče, en: Parent repository]
 	Ignorovat cestu nadřazených stránek: [cs: Ignorovat cestu nadřazených stránek, en: Ignore parent path]
 	Ignorovat oprávnění nadřazených stránek: [cs: Ignorovat oprávnění nadřazených stránek, en: Ignore parent requirements]
 	Zobrazit/zpřístupnit pro: [cs: Zobrazit/zpřístupnit pro, en: Show/allow for]
@@ -135,4 +133,3 @@ items:
 	Oprávněné role: [cs: Oprávněné role, en: Authorized roles]
 	Oprávněné osoby: [cs: Oprávněné osoby, en: Authorized persons]
 	Tag: [cs: Tag, en: Tag]
-	Tag rodiče: [cs: Tag rodiče, en: Parent tag]

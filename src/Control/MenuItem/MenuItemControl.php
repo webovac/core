@@ -12,6 +12,7 @@ use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\InvalidLinkException;
 use Nette\Utils\Arrays;
+use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Model\CmsEntity;
 
@@ -38,7 +39,7 @@ class MenuItemControl extends BaseControl
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function loadState(array $params): void
 	{
@@ -81,7 +82,7 @@ class MenuItemControl extends BaseControl
 			$targetParameter = $this->pageData->targetParameter;
 		} else {
 			$p = $this->pageData;
-			$targetParameter = $p->hasParameter ? $this->entity?->getParameter($this->languageData) : null;
+			$targetParameter = $p->hasParameter ? $this->entity?->getParameters() : null;
 		}
 		if ($p->hasParameter) {
 			$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($p->parentDetailRootPages));
@@ -92,7 +93,7 @@ class MenuItemControl extends BaseControl
 			Page::TYPE_PAGE => $this->presenter->link('//Home:', [
 					'pageName' => $p->name,
 					'lang' => $this->targetLanguageData->shortcut,
-					'id' => $p->hasParameter ? [$lastDetailRootPage->name => $this->entity->{$lastDetailRootPage->parameterName}] : [],
+					'id' => $p->hasParameter ? $this->entity->getParameters() : [],
 				],
 			),
 			default => null,

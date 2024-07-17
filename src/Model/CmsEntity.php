@@ -14,6 +14,7 @@ use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionProperty;
 use Stepapo\Utils\Model\Item;
 
@@ -57,7 +58,7 @@ abstract class CmsEntity extends Entity
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function getData(): Item
 	{
@@ -87,7 +88,7 @@ abstract class CmsEntity extends Entity
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	private function shouldGetData(ReflectionProperty $property): bool
 	{

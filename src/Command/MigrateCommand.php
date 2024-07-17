@@ -11,6 +11,7 @@ use Nextras\Migrations\Drivers\PgSqlDriver;
 use Nextras\Migrations\Extensions\SqlHandler;
 use Nextras\Migrations\IDriver;
 use ReflectionClass;
+use ReflectionException;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\MigrationGroup;
@@ -65,7 +66,7 @@ class MigrateCommand implements Command
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function prepareDefinitions(MigrationGroup $migrationGroup, CmsConsoleController $controller): CmsConsoleController
 	{

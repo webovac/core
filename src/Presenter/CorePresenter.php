@@ -16,7 +16,6 @@ use App\Model\WebTranslation\WebTranslationData;
 use Latte\Loaders\StringLoader;
 use Latte\Sandbox\SecurityPolicy;
 use Nette\Application\Attributes\Persistent;
-use Nette\Application\BadRequestException;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
@@ -25,6 +24,7 @@ use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use ReflectionClass;
+use ReflectionException;
 use stdClass;
 use Stepapo\Utils\Model\Item;
 use Webovac\Core\Attribute\RequiresEntity;
@@ -67,7 +67,6 @@ trait CorePresenter
 	private ?PageData $buttonsPageData;
 	private ?Preference $preference;
 	private ?CmsEntity $entity = null;
-	private ?CmsEntity $parentEntity = null;
 	private string $title;
 	public array $components = [];
 
@@ -120,15 +119,11 @@ trait CorePresenter
 				}
 				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
 				if (!$lastDetailRootPage) {
-					throw new InvalidStateException;
-				}
-				$parameterValue = $this->getParameter('id')[$lastDetailRootPage->name];
-				if (!$lastDetailRootPage) {
 					$this->error();
 				}
 				$this->entity = $this->orm
 					->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
-					->getByParameter($parameterValue);
+					->getByParameters($this->getParameter('id'));
 				if (!$this->entity) {
 					$this->error();
 				}
@@ -176,13 +171,13 @@ trait CorePresenter
 				. ($this->entity && !$this->pageData->providesNavigation && !$this->pageData->providesButtons ? ' | ' : '' )
 				. ($this->entity ? $this->entity->getTitle($this->languageData) : '');
 			$this->template->metaType = $this->entity?->getRepository()->getMapper()->getTableName() ?: 'page';
-			if ($this->pageData->hasParameter) {
-				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
-				$parameterValue = $this->getParameter('id')[$lastDetailRootPage->name];
-				$params = [$lastDetailRootPage->name => $parameterValue];
-			} else {
-				$params = [];
-			}
+//			if ($this->pageData->hasParameter) {
+//				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
+//				$parameterValue = $this->getParameter('id')[$lastDetailRootPage->name];
+//				$params = [$lastDetailRootPage->name => $parameterValue];
+//			} else {
+//				$params = [];
+//			}
 			$this->template->metaUrl = $this->link('//this');
 			$this->template->webDatas = $this->dataModel->getWebDatas();
 			$adminPageData = $this->dataModel->getPageDataByName($this->webData->id, 'Admin:Home');
@@ -246,7 +241,6 @@ trait CorePresenter
 			$this->navigationPageData,
 			$this->buttonsPageData,
 			$this->entity,
-			$this->parentEntity
 		);
 	}
 
@@ -274,7 +268,7 @@ trait CorePresenter
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	private function getComponentList(string $className): array
 	{

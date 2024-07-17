@@ -8,6 +8,7 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
+use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Model\CmsEntity;
@@ -29,7 +30,7 @@ class SidePanelControl extends BaseControl
 
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function render(): void
 	{

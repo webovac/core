@@ -37,7 +37,6 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private ?PageData $navigationPageData,
 		private ?PageData $buttonsPageData,
 		private ?CmsEntity $entity,
-		private ?CmsEntity $parentEntity,
 		private IMenuControl $menu,
 		private INavigationControl $navigation,
 		private IButtonsControl $buttons,
@@ -97,6 +96,6 @@ class CoreControl extends BaseControl implements MainModuleControl
 
 	public function createComponentBreadcrumbs(): BreadcrumbsControl
 	{
-		return $this->breadcrumbs->create($this->webData, $this->pageData, $this->languageData, $this->entity, $this->parentEntity);
+		return $this->breadcrumbs->create($this->webData, $this->pageData, $this->languageData);
 	}
 }

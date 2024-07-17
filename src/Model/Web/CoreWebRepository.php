@@ -23,12 +23,6 @@ use Nette\Utils\UnknownImageFileException;
 
 trait CoreWebRepository
 {
-	public function getByParameter(mixed $parameter): ?Web
-	{
-		return $this->getBy(['id' => $parameter]);
-	}
-
-
 	public function postProcessFromData(WebData $data, Web $web, ?Person $person = null, bool $skipDefaults = false): Web
 	{
 		if (isset($data->homePage)) {
