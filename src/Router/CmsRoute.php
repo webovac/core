@@ -15,7 +15,8 @@ class CmsRoute extends Route
 	private const
 		Default = 'defOut',
 		Fixity = 'fixity',
-		FilterTableOut = 'filterTO';
+		FilterTableOut = 'filterTO',
+		Metadata = 'metadata';
 
 	/** url type */
 	private const
@@ -71,24 +72,31 @@ class CmsRoute extends Route
 	/**
 	 * Returns default values.
 	 */
-	public function getDefaults(): array
+	public function getDefaults(?array $metadata = null): array
 	{
+		$metadata ??= $this->metadata;
 		$defaults = [];
-		foreach ($this->metadata as $name => $meta) {
+		foreach ($metadata as $name => $meta) {
+			if (isset($meta[self::Metadata])) {
+				$defaults[$name] = $this->getDefaults($meta[self::Metadata]);
+			}
 			if (isset($meta[self::Fixity])) {
 				$defaults[$name] = $meta[self::Value];
 			}
 		}
-
 		return $defaults;
 	}
 
 
 	/** @internal */
-	public function getConstantParameters(): array
+	public function getConstantParameters(?array $metadata = null): array
 	{
+		$metadata ??= $this->metadata;
 		$res = [];
-		foreach ($this->metadata as $name => $meta) {
+		foreach ($metadata as $name => $meta) {
+			if (isset($meta[self::Metadata])) {
+				$res[$name] = $this->getConstantParameters($meta[self::Metadata]);
+			}
 			if (isset($meta[self::Fixity]) && $meta[self::Fixity] === self::Constant) {
 				$res[$name] = $meta[self::Value];
 			}
@@ -157,66 +165,14 @@ class CmsRoute extends Route
 		}
 
 		// 2) CONSTANT FIXITY
-		foreach ($this->metadata as $name => $meta) {
-			if (isset($meta['metadata'])) {
-				foreach($meta['metadata'] as $n => $m) {
-					if (!isset($params[$name][$n]) && isset($meta[self::Fixity]) && $meta[self::Fixity] !== self::InQuery) {
-						$params[$name][$n] = null; // cannot be overwriten in 3) and detected by isset() in 4)
-					}
-				}
-			} else {
-				if (!isset($params[$name]) && isset($meta[self::Fixity]) && $meta[self::Fixity] !== self::InQuery) {
-					$params[$name] = null; // cannot be overwriten in 3) and detected by isset() in 4)
-				}
-			}
-		}
+		$params = $this->constantFixity($params);
 
 		// 3) QUERY
 		$params += self::renameKeys($httpRequest->getQuery(), array_flip($this->xlat));
 
 		// 4) APPLY FILTERS & FIXITY
-		foreach ($this->metadata as $name => $meta) {
-			if (isset($meta['metadata'])) {
-				foreach($meta['metadata'] as $n => $m) {
-					if (isset($params[$name][$n])) {
-						if (!is_scalar($params[$name][$n])) {
-							// do nothing
-						} elseif (isset($m[self::FilterTable][$params[$name][$n]])) { // applies filterTable only to scalar parameters
-							$params[$name][$n] = $meta[self::FilterTable][$params[$name][$n]];
-
-						} elseif (isset($m[self::FilterTable]) && !empty($m[self::FilterStrict])) {
-							return null; // rejected by filterTable
-
-						} elseif (isset($m[self::FilterIn])) { // applies filterIn only to scalar parameters
-							$params[$name][$n] = $m[self::FilterIn]((string) $params[$name][$n]);
-							if ($params[$name][$n] === null && !isset($m[self::Fixity])) {
-								return null; // rejected by filter
-							}
-						}
-					} elseif (isset($m[self::Fixity])) {
-						$params[$name][$n] = $m[self::Value];
-					}
-				}
-			} else {
-				if (isset($params[$name])) {
-					if (!is_scalar($params[$name])) {
-						// do nothing
-					} elseif (isset($meta[self::FilterTable][$params[$name]])) { // applies filterTable only to scalar parameters
-						$params[$name] = $meta[self::FilterTable][$params[$name]];
-
-					} elseif (isset($meta[self::FilterTable]) && !empty($meta[self::FilterStrict])) {
-						return null; // rejected by filterTable
-
-					} elseif (isset($meta[self::FilterIn])) { // applies filterIn only to scalar parameters
-						$params[$name] = $meta[self::FilterIn]((string) $params[$name]);
-						if ($params[$name] === null && !isset($meta[self::Fixity])) {
-							return null; // rejected by filter
-						}
-					}
-				} elseif (isset($meta[self::Fixity])) {
-					$params[$name] = $meta[self::Value];
-				}
-			}
+		if (($params = $this->applyFiltersAndFixity($params)) === false) {
+			return null;
 		}
 
 		if (isset($this->metadata[null][self::FilterIn])) {
@@ -235,7 +191,7 @@ class CmsRoute extends Route
 	 */
 	public function constructUrl(array $params, UrlScript $refUrl): ?string
 	{
-		if (!$this->preprocessParams($params)) {
+		if (($params = $this->preprocessParams($params)) === false) {
 			return null;
 		}
 		$this->renameArrayParams($params);
@@ -280,9 +236,10 @@ class CmsRoute extends Route
 	}
 
 
-	private function preprocessParams(array &$params): bool
+	private function preprocessParams(array &$params, ?array $metadata = null): array|false
 	{
-		$filter = $this->metadata[null][self::FilterOut] ?? null;
+		$metadata ??= $this->metadata;
+		$filter = $metadata[null][self::FilterOut] ?? null;
 		if ($filter) {
 			$params = $filter($params);
 			if ($params === null) {
@@ -290,47 +247,10 @@ class CmsRoute extends Route
 			}
 		}
 
-		foreach ($this->metadata as $name => $meta) {
-			if (isset($meta['metadata'])) {
-				foreach ($meta['metadata'] as $n => $m) {
-					$fixity = $m[self::Fixity] ?? null;
-
-					if (!isset($params[$name][$n])) {
-						continue; // retains null values
-					}
-
-					if (is_scalar($params[$name][$n])) {
-						$params[$name][$n] = $params[$name][$n] === false
-							? '0'
-							: (string) $params[$name][$n];
-					}
-
-					if ($fixity !== null) {
-						if ($params[$name][$n] === $m[self::Value]) { // remove default values; null values are retain
-							unset($params[$name][$n]);
-							continue;
-
-						} elseif ($fixity === self::Constant) {
-							return false; // wrong parameter value
-						}
-					}
-
-					if (is_scalar($params[$name][$n]) && isset($m[self::FilterTableOut][$params[$name][$n]])) {
-						$params[$name][$n] = $m[self::FilterTableOut][$params[$name][$n]];
-
-					} elseif (isset($m[self::FilterTableOut]) && !empty($m[self::FilterStrict])) {
-						return false;
-
-					} elseif (isset($m[self::FilterOut])) {
-						$params[$name][$n] = $m[self::FilterOut]($params[$name][$n]);
-					}
-
-					if (
-						isset($m[self::Pattern])
-						&& !preg_match("#(?:{$m[self::Pattern]})$#DA", rawurldecode((string) $params[$name][$n]))
-					) {
-						return false; // pattern not match
-					}
+		foreach ($metadata as $name => $meta) {
+			if (isset($meta[self::Metadata])) {
+				if (($params[$name] = $this->preprocessParams($params[$name], $meta[self::Metadata])) === false) {
+					return false;
 				}
 			} else {
 				$fixity = $meta[self::Fixity] ?? null;
@@ -374,7 +294,7 @@ class CmsRoute extends Route
 			}
 		}
 
-		return true;
+		return $params;
 	}
 
 
@@ -463,8 +383,8 @@ class CmsRoute extends Route
 	private function normalizeMetadata(array $metadata): array
 	{
 		foreach ($metadata as $name => $meta) {
-			if (isset($meta['metadata'])) {
-				foreach ($meta['metadata'] as $n => $m) {
+			if (isset($meta[self::Metadata])) {
+				foreach ($meta[self::Metadata] as $n => $m) {
 					$metadata[$n] = $this->normalizeMetadata($m);
 				}
 			} else {
@@ -484,6 +404,53 @@ class CmsRoute extends Route
 		}
 
 		return $metadata;
+	}
+
+
+	private function constantFixity(array $params, ?array $metadata = null): array
+	{
+		$metadata ??= $this->metadata;
+		foreach ($metadata as $name => $meta) {
+			if (isset($meta[self::Metadata])) {
+				$params[$name] = $this->constantFixity($params[$name], $meta[self::Metadata]);
+			} else {
+				if (!isset($params[$name]) && isset($meta[self::Fixity]) && $meta[self::Fixity] !== self::InQuery) {
+					$params[$name] = null; // cannot be overwriten in 3) and detected by isset() in 4)
+				}
+			}
+		}
+		return $params;
+	}
+
+
+	private function applyFiltersAndFixity(array $params, ?array $metadata = null): array|false
+	{
+		$metadata ??= $this->metadata;
+		foreach ($metadata as $name => $meta) {
+			if (isset($meta[self::Metadata])) {
+				$params[$name] = $this->applyFiltersAndFixity($params[$name], $meta[self::Metadata]);
+			} else {
+				if (isset($params[$name])) {
+					if (!is_scalar($params[$name])) {
+						// do nothing
+					} elseif (isset($meta[self::FilterTable][$params[$name]])) { // applies filterTable only to scalar parameters
+						$params[$name] = $meta[self::FilterTable][$params[$name]];
+
+					} elseif (isset($meta[self::FilterTable]) && !empty($meta[self::FilterStrict])) {
+						return false; // rejected by filterTable
+
+					} elseif (isset($meta[self::FilterIn])) { // applies filterIn only to scalar parameters
+						$params[$name] = $meta[self::FilterIn]((string)$params[$name]);
+						if ($params[$name] === null && !isset($meta[self::Fixity])) {
+							return false; // rejected by filter
+						}
+					}
+				} elseif (isset($meta[self::Fixity])) {
+					$params[$name] = $meta[self::Value];
+				}
+			}
+		}
+		return $params;
 	}
 
 
@@ -599,8 +566,8 @@ class CmsRoute extends Route
 				$autoOptional = false;
 			}
 
-			if (preg_match('/(.*)\[(.*)\]/', $name, $m)) {
-				$this->metadata[$m[1]]['metadata'][$m[2]] = $meta;
+			if (preg_match('/(.*)\[(.*)]/', $name, $m)) {
+				$this->metadata[$m[1]][self::Metadata][$m[2]] = $meta;
 			} else {
 				$this->metadata[$name] = $meta;
 			}
