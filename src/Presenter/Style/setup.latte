@@ -1,4 +1,5 @@
 {varType array $l}
+{varType array $t}
 {varType App\Model\Web\WebData $webData}
 
 :root {
@@ -41,7 +42,7 @@
         --cms-{$color}-darker: {$l[$color]|shade:0.67};
     {/}
 
-    {foreach $l['themes'] as $th}
+    {foreach $t as $th}
         --cms-{$th['code']}-body-bg: {$th['bodyBg']};
         --cms-{$th['code']}-heading-color: {$th['headingColor']};
         --cms-{$th['code']}-color: {$th['color']};
@@ -180,7 +181,7 @@
     }
 {/}
 
-{foreach $l['themes'] as $th}
+{foreach $t as $th}
     [data-bs-theme={$th['code']}] {
         --cms-body-bg: var(--cms-{$th['code']}-body-bg);
         --cms-heading-color: var(--cms-{$th['code']}-heading-color);

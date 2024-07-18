@@ -47,12 +47,12 @@ class Core implements Module
 	public function getManipulationGroups(): array
 	{
 		return [
+			new ManipulationGroup('web', WebData::class, ['layout']),
 			new ManipulationGroup('role', RoleData::class),
 			new ManipulationGroup('person', PersonData::class, ['role']),
 			new ManipulationGroup('language', LanguageData::class),
 			new ManipulationGroup('text', TextData::class, ['language']),
 			new ManipulationGroup('module', ModuleData::class, ['language']),
-			new ManipulationGroup('web', WebData::class, ['language', 'layout']),
 		];
 	}
 

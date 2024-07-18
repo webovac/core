@@ -28,7 +28,7 @@ class CmsGroup extends Group
 	public MigrationGroup $migrationGroup;
 
 
-	public function isDependentOn(CmsGroup $group): bool
+	public function isDependentOn(Group $group): bool
 	{
 		return in_array($group->name, $this->dependencies, true);
 	}

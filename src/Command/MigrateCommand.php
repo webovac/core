@@ -12,6 +12,7 @@ use Nextras\Migrations\Extensions\SqlHandler;
 use Nextras\Migrations\IDriver;
 use ReflectionClass;
 use ReflectionException;
+use Tracy\Dumper;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\MigrationGroup;
@@ -48,13 +49,13 @@ class MigrateCommand implements Command
 	public function run(): int
 	{
 		$controller = new CmsConsoleController($this->driver);
-		foreach($this->modules as $module) {
+		foreach ($this->modules as $module) {
 			if (!method_exists($module, 'getDefinitionGroup')) {
 				continue;
 			}
 			$controller = $this->prepareDefinitions($module->getDefinitionGroup(), $controller);
 		}
-		foreach($this->groups as $group) {
+		foreach ($this->groups as $group) {
 			$controller = $this->prepareManipulations($group, $controller);
 		}
 		$controller->addExtension('sql', $this->sqlHandler);

@@ -31,7 +31,7 @@
 	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}2">
 	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
 </head>
-<body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? $themeData->code : 'light'}"{ifset $logStepUrl} data-log-step-url="{$logStepUrl}"{/}>
+<body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? (str_contains($themeData->code, 'dark') ? 'dark' : 'light') : 'light'}"{ifset $logStepUrl} data-log-step-url="{$logStepUrl}"{/}>
 <div n:class="layout, $pageData->stretched ? stretched">
 	{control core-menu}
 	<div class="horizontal-wrapper">

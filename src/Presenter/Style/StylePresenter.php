@@ -47,10 +47,17 @@ class StylePresenter extends Presenter
 			? $this->fileUploader->getUrl($this->webData->backgroundFile->getBackgroundIdentifier(), '2160x2160', null, 50)
 			: 'dist/images/fsv_background.webp';
 		$this->template->colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
-
-		$this->template->l = $this->moduleChecker->isModuleInstalled('style')
-			? $this->dataModel->layoutRepository->getById($this->webData->layout)
-			: $this->getDefaultLayoutData();
+		if ($this->moduleChecker->isModuleInstalled('style')) {
+			$layout = $this->dataModel->getLayoutData($this->webData->layout);
+			$this->template->l = $layout;
+			foreach ($layout->themes as $themeId) {
+				$theme = $this->dataModel->getThemeData($themeId);
+				$this->template->t[$theme->code] = $theme;
+			}
+		} else {
+			$this->template->l = $this->getDefaultLayoutData();
+			$this->template->t = ['light' => $this->getDefaultThemeData()];
+		}
 		$this->template->setFile(__DIR__ . '/style.latte');
 		$this->getHttpResponse()->setExpiration('1 month');
 	}
@@ -278,42 +285,45 @@ class StylePresenter extends Presenter
 					'secondaryOrientation' => 'v',
 				],
 			],
-			'themes' => [
+		];
+	}
+
+
+	public function getDefaultThemeData(): array
+	{
+		return [
+			'code' => 'light',
+			'translations' => [
 				[
-					'code' => 'light',
-					'translations' => [
-						[
-							'language' => 1,
-							'title' => 'Světlý režim',
-						],
-						[
-							'language' => 2,
-							'title' => 'Light mode',
-						],
-					],
-					'bodyBg' => '#ffffff',
-					'color' => '#000000',
-					'headingColor' => '#000000',
-					'linkColor' => '#0065bd',
-					'activeLinkColor' => '#000000',
-					'layoutBg' => '#ffffff',
-					'layoutBorderColor' => '#ffffff',
-					'primaryBg' => '#0065bd',
-					'primaryColor' => '#ffffff',
-					'primaryBorderColor' => '#ffffff',
-					'primaryLinkColor' => '#ffffff',
-					'primaryActiveLinkBg' => '#ffffff',
-					'primaryActiveLinkColor' => '#0065bd',
-					'secondaryBg' => '#e6e6e6',
-					'secondaryColor' => '#000000',
-					'secondaryBorderColor' => '#ffffff',
-					'secondaryLinkColor' => '#0065bd',
-					'secondaryActiveLinkBg' => '#ffffff',
-					'secondaryActiveLinkColor' => '#0065bd',
-					'contentBg' => '#ffffff',
-					'contentBorderColor' => '#dddddd',
+					'language' => 1,
+					'title' => 'Světlý režim',
 				],
-			]
+				[
+					'language' => 2,
+					'title' => 'Light mode',
+				],
+			],
+			'bodyBg' => '#ffffff',
+			'color' => '#000000',
+			'headingColor' => '#000000',
+			'linkColor' => '#0065bd',
+			'activeLinkColor' => '#000000',
+			'layoutBg' => '#ffffff',
+			'layoutBorderColor' => '#ffffff',
+			'primaryBg' => '#0065bd',
+			'primaryColor' => '#ffffff',
+			'primaryBorderColor' => '#ffffff',
+			'primaryLinkColor' => '#ffffff',
+			'primaryActiveLinkBg' => '#ffffff',
+			'primaryActiveLinkColor' => '#0065bd',
+			'secondaryBg' => '#e6e6e6',
+			'secondaryColor' => '#000000',
+			'secondaryBorderColor' => '#ffffff',
+			'secondaryLinkColor' => '#0065bd',
+			'secondaryActiveLinkBg' => '#ffffff',
+			'secondaryActiveLinkColor' => '#0065bd',
+			'contentBg' => '#ffffff',
+			'contentBorderColor' => '#dddddd',
 		];
 	}
 }

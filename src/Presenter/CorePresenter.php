@@ -224,7 +224,7 @@ trait CorePresenter
 						->allowMethods(CmsUser::class, SecurityPolicy::All)
 						->allowMethods(CmsEntity::class, SecurityPolicy::All)
 						->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)
-						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'core'])
+						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'str_contains', 'core'])
 				);
 
 			$this->template->setFile('@layout.latte');

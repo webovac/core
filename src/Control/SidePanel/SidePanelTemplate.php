@@ -9,7 +9,9 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
+use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
+use Stepapo\Utils\Model\Collection;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -19,6 +21,7 @@ class SidePanelTemplate extends BaseTemplate
 	public PageData $pageData;
 	public LanguageData $languageData;
 	public LayoutData $layoutData;
+	/** @var ThemeData[] */ public Collection $themeDatas;
 	public DataModel $dataModel;
 	public ?CmsEntity $entity;
 	public bool $isError;

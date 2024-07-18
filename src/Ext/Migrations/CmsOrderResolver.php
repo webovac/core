@@ -19,38 +19,42 @@ class CmsOrderResolver extends OrderResolver
 	 */
 	protected function sortFiles(array $files, array $groups): array
 	{
-		usort($files, function (File $a, File $b) use ($groups): int {
-			if ($a->group !== $b->group) {
-				$aIsDefinition = $a->group->migrationGroup instanceof DefinitionGroup;
-				$bIsDefinition = $b->group->migrationGroup instanceof DefinitionGroup;
-				if ($aIsDefinition xor $bIsDefinition) {
-					return $bIsDefinition ? 1 : -1;
+		uasort($files, fn(File $a, File $b): int =>
+			[$a->group->name, str_contains($b->name, 'insert'), $a->name]
+			<=>
+			[$b->group->name, str_contains($a->name, 'insert'), $b->name]
+		);
+		$sortedFiles = [];
+		$doneFiles = [];
+		$doneGroups = [];
+		while(count($files) > count($sortedFiles)) {
+			$resolvable = false;
+			foreach ($files as $key => $file) {
+				if (isset($doneFiles[$key])) {
+					continue;
 				}
-				$cmpA = $a->group->isDependentOn($b->group);
-				$cmpB = $b->group->isDependentOn($a->group);
-				if ($cmpA xor $cmpB) {
-					return $cmpA ? 1 : -1;
-				} elseif ($cmpA && $cmpB) {
-					$names = [
-						"$a->name",
-						"$b->name",
-					];
-					sort($names);
-					throw new LogicException(sprintf(
-						'Unable to determine order for migrations "%s" and "%s".',
-						$names[0], $names[1]
-					));
+				$resolved = true;
+				if ($file->group->dependencies) {
+					foreach ($file->group->dependencies as $dependency) {
+						if (!isset($doneGroups[$dependency])) {
+							$resolved = false;
+							break;
+						}
+					}
 				}
-				return strcmp($a->group->name, $b->group->name);
+				if ($resolved) {
+					$doneFiles[$key] = true;
+					$doneGroups[$file->group->name] = true;
+					$sortedFiles[$key] = $file;
+					$resolvable = true;
+				}
 			}
-			$aIsInsert = str_contains($a->name, 'insert');
-			$bIsInsert = str_contains($b->name, 'insert');
-			if ($aIsInsert xor $bIsInsert) {
-				return $bIsInsert ? 1 : -1;
+			if (!$resolvable) {
+				throw new LogicException("Order of file \"$file->name\" in group \"{$file->group->name}\" could not be resolved.");
 			}
-			return strcmp($a->name, $b->name);
-		});
-
+		}
+		$files = $sortedFiles;
+		uasort($files, fn(File $a, File $b): int => $b->group->migrationGroup instanceof DefinitionGroup <=> $a->group->migrationGroup instanceof DefinitionGroup);
 		return $files;
 	}
 }

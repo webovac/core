@@ -7,6 +7,8 @@ namespace Webovac\Core\Control\SidePanel;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
+use App\Model\Theme\Theme;
+use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
@@ -42,7 +44,10 @@ class SidePanelControl extends BaseControl
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& in_array($searchModuleData->id, $this->webData->modules, true);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
-			$this->template->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
+			$layoutData = $this->dataModel->getLayoutData($this->webData->layout);
+			$this->template->layoutData = $layoutData;
+			$this->template->themeDatas = $this->dataModel->themeRepository->findBy(['id' => $layoutData->themes]);
+			$this->template->themeDatas->uasort(fn(ThemeData $a, ThemeData $b) => str_contains('dark', $a->code) !== str_contains('dark', $b->code) ? -1 : 1);
 		}
 		foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->getCollection('translations') as $translationData) {
 			$this->template->availableTranslations[$translationData->language] = $translationData->language;

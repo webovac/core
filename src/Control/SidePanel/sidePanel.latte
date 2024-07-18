@@ -35,10 +35,10 @@
 			</div>
 		{/}
 	</div>
-	<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && ($layoutData->themes) > 1 && !$isError" n:inner-foreach="$layoutData->themes as $theme">
-		{var $translation = $theme->getCollection('translations')->getBy(['language' => $languageData->id]) ?: $theme->getCollection('translations')->getBy(['language' => $webData->defaultLanguage])}
-		<a n:if="$translation" href="{plink '//setTheme!', $theme->id}" data-tooltip="{$translation->title}" data-tooltip-position="right">
-			<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $theme->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
+	<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && count($themeDatas) > 1 && !$isError" n:inner-foreach="$themeDatas as $themeData">
+		{var $translation = $themeData->getCollection('translations')->getBy(['language' => $languageData->id]) ?: $themeData->getCollection('translations')->getBy(['language' => $webData->defaultLanguage])}
+		<a n:if="$translation" href="{plink '//setTheme!', $themeData->id}" data-tooltip="{$translation->title}" data-tooltip-position="right">
+			<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $themeData->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
 		</a>
 	</div>
 </div>
