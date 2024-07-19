@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Webovac\Core\Presenter\Style;
 
 use App\Model\DataModel;
+use App\Model\Layout\LayoutData;
 use App\Model\Orm;
+use App\Model\Preference\Preference;
+use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Attributes\Inject;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
 
@@ -25,7 +29,11 @@ class StylePresenter extends Presenter
 	#[Inject] public DataModel $dataModel;
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public ModuleChecker $moduleChecker;
+	#[Inject] public CmsUser $cmsUser;
+	private ?Preference $preference;
 	public ?WebData $webData;
+	public LayoutData $layoutData;
+	public ThemeData $themeData;
 
 
 	public function actionDefault(): void
@@ -37,12 +45,32 @@ class StylePresenter extends Presenter
 		if (!$this->webData) {
 			$this->error();
 		}
+		$this->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
+		if ($this->cmsUser->isLoggedIn()) {
+			$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
+			if ($this->preference && $this->preference->language) {
+				if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getBy(['language' => $this->preference->language->id])) {
+					$languageData = $this->dataModel->languageRepository->getById($this->preference->language->id);
+					$this->lang = $languageData->shortcut;
+				}
+			}
+		}
+		if (
+			$this->cmsUser->isLoggedIn()
+			&& ($themeId = $this->preference?->theme?->id)
+			&& in_array($themeId, $this->layoutData->themes)
+		) {
+			$this->themeData = $this->dataModel->getThemeData($themeId);
+		} else {
+			$this->themeData = $this->dataModel->getThemeData($this->layoutData->defaultTheme);
+		}
 	}
 
 
 	public function renderDefault(): void
 	{
 		$this->template->webData = $this->webData;
+		$this->template->themeData = $this->themeData;
 		$this->template->backgroundUrl = $this->webData->backgroundFile
 			? $this->fileUploader->getUrl($this->webData->backgroundFile->getBackgroundIdentifier(), '2160x2160', null, 50)
 			: 'dist/images/fsv_background.webp';

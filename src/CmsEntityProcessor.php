@@ -37,6 +37,7 @@ class CmsEntityProcessor
 
 	public function processEntity(?CmsEntity $parent = null, ?string $parentName = null): void
 	{
+		bdump($this->data);
 		$metadata = $this->entity->getMetadata();
 		if ($parent && $parentName) {
 			if (!isset($this->entity->$parentName) || $this->entity->$parentName !== $parent) {
@@ -58,7 +59,7 @@ class CmsEntityProcessor
 				$this->processManyHasMany($property);
 			}
 		}
-		$this->isModified = $this->entity->isModified();
+		$this->isModified = $this->isModified || $this->entity->isModified();
 		$this->isPersisted = $this->entity->isPersisted();
 		if (!$this->isPersisted) {
 			if ($metadata->hasProperty('createdByPerson')) {
@@ -149,11 +150,13 @@ class CmsEntityProcessor
 				}
 			}
 		}
+		bdump($array);
 		$oldIds = $this->entity->$name?->toCollection()->fetchPairs(null, 'id');
 		$newIds = array_map(fn($v) => $v->id, $array);
 		sort($oldIds);
 		sort($newIds);
 		if (!isset($this->entity->$name) || $oldIds !== $newIds) {
+			$this->isModified = true;
 			$this->entity->$name->set($array);
 		}
 	}

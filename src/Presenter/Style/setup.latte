@@ -181,31 +181,31 @@
     }
 {/}
 
-{foreach $t as $th}
-    [data-bs-theme={$th['code']}] {
-        --cms-body-bg: var(--cms-{$th['code']}-body-bg);
-        --cms-heading-color: var(--cms-{$th['code']}-heading-color);
-        --cms-color: var(--cms-{$th['code']}-color);
-        --cms-color-rgb: var(--cms-{$th['code']}-color-rgb);
-        --cms-link-color: var(--cms-{$th['code']}-link-color);
-        --cms-link-color-rgb: var(--cms-{$th['code']}-link-color-rgb);
-        --cms-active-link-color: var(--cms-{$th['code']}-active-link-color);
-        --cms-active-link-color-rgb: var(--cms-{$th['code']}-active-link-color-rgb);
-        --cms-layout-bg: var(--cms-{$th['code']}-layout-bg);
-        --cms-layout-border-color: var(--cms-{$th['code']}-layout-border-color);
-        {foreach ['primary', 'secondary', 'side'] as $degree}
-            --cms-{$degree}-bg: var(--cms-{$th['code']}-{$degree}-bg);
-            --cms-{$degree}-border-color: var(--cms-{$th['code']}-{$degree}-border-color);
-            --cms-{$degree}-link-color: var(--cms-{$th['code']}-{$degree}-link-color);
-            --cms-{$degree}-active-link-bg: var(--cms-{$th['code']}-{$degree}-active-link-bg);
-            --cms-{$degree}-active-link-color: var(--cms-{$th['code']}-{$degree}-active-link-color);
-            --cms-{$degree}-color: var(--cms-{$th['code']}-{$degree}-color);
-        {/}
-        --cms-content-bg: var(--cms-{$th['code']}-content-bg);
-        --cms-content-bg-rgb: var(--cms-{$th['code']}-content-bg-rgb);
-        --cms-content-border-color: var(--cms-{$th['code']}-content-border-color);
-    }
-{/}
+{*{foreach $t as $th}*}
+{*    [data-bs-theme={$th['code']}] {*}
+{*        --cms-body-bg: var(--cms-{$th['code']}-body-bg);*}
+{*        --cms-heading-color: var(--cms-{$th['code']}-heading-color);*}
+{*        --cms-color: var(--cms-{$th['code']}-color);*}
+{*        --cms-color-rgb: var(--cms-{$th['code']}-color-rgb);*}
+{*        --cms-link-color: var(--cms-{$th['code']}-link-color);*}
+{*        --cms-link-color-rgb: var(--cms-{$th['code']}-link-color-rgb);*}
+{*        --cms-active-link-color: var(--cms-{$th['code']}-active-link-color);*}
+{*        --cms-active-link-color-rgb: var(--cms-{$th['code']}-active-link-color-rgb);*}
+{*        --cms-layout-bg: var(--cms-{$th['code']}-layout-bg);*}
+{*        --cms-layout-border-color: var(--cms-{$th['code']}-layout-border-color);*}
+{*        {foreach ['primary', 'secondary', 'side'] as $degree}*}
+{*            --cms-{$degree}-bg: var(--cms-{$th['code']}-{$degree}-bg);*}
+{*            --cms-{$degree}-border-color: var(--cms-{$th['code']}-{$degree}-border-color);*}
+{*            --cms-{$degree}-link-color: var(--cms-{$th['code']}-{$degree}-link-color);*}
+{*            --cms-{$degree}-active-link-bg: var(--cms-{$th['code']}-{$degree}-active-link-bg);*}
+{*            --cms-{$degree}-active-link-color: var(--cms-{$th['code']}-{$degree}-active-link-color);*}
+{*            --cms-{$degree}-color: var(--cms-{$th['code']}-{$degree}-color);*}
+{*        {/}*}
+{*        --cms-content-bg: var(--cms-{$th['code']}-content-bg);*}
+{*        --cms-content-bg-rgb: var(--cms-{$th['code']}-content-bg-rgb);*}
+{*        --cms-content-border-color: var(--cms-{$th['code']}-content-border-color);*}
+{*    }*}
+{*{/}*}
 
 {*bootstrap*}
 
