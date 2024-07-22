@@ -216,7 +216,7 @@ trait CorePresenter
 				->setSandboxMode()
 				->setPolicy(
 					SecurityPolicy::createSafePolicy()
-						->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox'])
+						->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox', 'snippet', 'snippetArea'])
 						->allowFilters(['noescape', 'mTime', 'translate'])
 						->allowProperties(stdClass::class, SecurityPolicy::All)
 						->allowProperties(CmsEntity::class, SecurityPolicy::All)

@@ -39,12 +39,7 @@
 		<div class="content-image-wrapper">
 			<div class="content-wrapper">
 				{control core-breadcrumbs}
-				<div class="alert-wrapper" n:if="$flashes">
-					<div n:foreach="$flashes as $flash" n:class="alert-main, alert, 'alert-' . $flash->type, alert-dismissible" role="alert">
-						{$flash->message}
-						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> × </button>
-					</div>
-				</div>
+				{control core-messages}
 				<div class="content override-padding">
 					{include 'main.file'}
 				</div>

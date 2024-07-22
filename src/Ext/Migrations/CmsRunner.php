@@ -18,7 +18,6 @@ use Nextras\Migrations\IExtensionHandler;
 use Nextras\Migrations\IPrinter;
 use Nextras\Migrations\LockException;
 use Nextras\Migrations\LogicException;
-use Tracy\Dumper;
 
 
 class CmsRunner extends Runner

@@ -37,7 +37,6 @@ class CmsEntityProcessor
 
 	public function processEntity(?CmsEntity $parent = null, ?string $parentName = null): void
 	{
-		bdump($this->data);
 		$metadata = $this->entity->getMetadata();
 		if ($parent && $parentName) {
 			if (!isset($this->entity->$parentName) || $this->entity->$parentName !== $parent) {
@@ -150,7 +149,6 @@ class CmsEntityProcessor
 				}
 			}
 		}
-		bdump($array);
 		$oldIds = $this->entity->$name?->toCollection()->fetchPairs(null, 'id');
 		$newIds = array_map(fn($v) => $v->id, $array);
 		sort($oldIds);

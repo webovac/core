@@ -15,6 +15,8 @@ use Webovac\Core\Control\Buttons\ButtonsControl;
 use Webovac\Core\Control\Buttons\IButtonsControl;
 use Webovac\Core\Control\Menu\IMenuControl;
 use Webovac\Core\Control\Menu\MenuControl;
+use Webovac\Core\Control\Messages\IMessagesControl;
+use Webovac\Core\Control\Messages\MessagesControl;
 use Webovac\Core\Control\Navigation\INavigationControl;
 use Webovac\Core\Control\Navigation\NavigationControl;
 use Webovac\Core\Control\SidePanel\ISidePanelControl;
@@ -39,6 +41,7 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private ?CmsEntity $entity,
 		private IMenuControl $menu,
 		private INavigationControl $navigation,
+		private IMessagesControl $message,
 		private IButtonsControl $buttons,
 		private ISignpostControl $signpost,
 		private ISidePanelControl $sidePanel,
@@ -97,5 +100,11 @@ class CoreControl extends BaseControl implements MainModuleControl
 	public function createComponentBreadcrumbs(): BreadcrumbsControl
 	{
 		return $this->breadcrumbs->create($this->webData, $this->pageData, $this->languageData);
+	}
+
+
+	public function createComponentMessages(): MessagesControl
+	{
+		return $this->message->create();
 	}
 }
