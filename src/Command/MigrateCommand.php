@@ -12,7 +12,6 @@ use Nextras\Migrations\Extensions\SqlHandler;
 use Nextras\Migrations\IDriver;
 use ReflectionClass;
 use ReflectionException;
-use Tracy\Dumper;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\MigrationGroup;
