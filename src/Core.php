@@ -38,6 +38,12 @@ class Core implements Module
 	}
 
 
+	public static function getCliSetup(): array
+	{
+		return ['icon' => '🌐', 'color' => 'white/black'];
+	}
+
+
 	public function getDefinitionGroup(): MigrationGroup
 	{
 		return new DefinitionGroup(Core::getModuleName(), Core::class);

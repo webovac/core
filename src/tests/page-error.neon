@@ -1,0 +1,4 @@
+name: Core - access Error
+path: //webvac.test
+asserts:
+	httpCode: 404

@@ -9,9 +9,10 @@ use App\Model\Person\Person;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IIdentity;
 use Nette\Security\User;
+use Stepapo\Utils\Clearable;
 
 
-class CmsUser
+class CmsUser implements Clearable
 {
 	public ?Person $person;
 

@@ -8,4 +8,5 @@ namespace Webovac\Core;
 interface Module
 {
 	public static function getModuleName(): string;
+	public static function getCliSetup(): array;
 }
