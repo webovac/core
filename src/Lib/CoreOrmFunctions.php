@@ -52,11 +52,11 @@ trait CoreOrmFunctions
 	public static function personFilter(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args): DbalExpressionResult
 	{
 		assert(count($args) === 1 && is_string($args[0]));
-		return new DbalExpressionResult([
-			($platform->getName() === 'pgsql'
+		return new DbalExpressionResult([(
+			$platform->getName() === 'pgsql'
 				? "LOWER(last_name || ' ' || first_name)"
-				: "LOWER(CONCAT(last_name, ' ', first_name)")
-				. "LIKE %_like_",
+				: "LOWER(CONCAT(last_name, ' ', first_name)"
+			) . "LIKE %_like_",
 			Strings::lower($args[0]),
 		]);
 	}

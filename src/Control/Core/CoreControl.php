@@ -27,9 +27,6 @@ use Webovac\Core\MainModuleControl;
 use Webovac\Core\Model\CmsEntity;
 
 
-/**
- * @property CoreTemplate $template
- */
 class CoreControl extends BaseControl implements MainModuleControl
 {
 	public function __construct(
@@ -48,12 +45,6 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private IBreadcrumbsControl $breadcrumbs,
 		private MigrateCommand $command,
 	) {}
-
-
-	public function render(): void
-	{
-		$this->template->render(__DIR__ . '/core.latte');
-	}
 
 
 	public function handleReset(): void
