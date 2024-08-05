@@ -4,6 +4,7 @@ namespace Webovac\Core\Definition;
 
 use Nextras\Dbal\Connection;
 use Nextras\Dbal\QueryException;
+use Tracy\Dumper;
 
 
 class MysqlDefinitionProcessor implements DefinitionProcessor
@@ -128,8 +129,8 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 		$k['constraint'] = "ADD CONSTRAINT `{$table->name}_{$foreignKey->name}_fk`";
 		$k['foreignKey'] = "FOREIGN KEY (`$foreignKey->name`)";
 		$k['references'] = "REFERENCES `$schema`.`$foreignKey->table` (`$foreignKey->column`)";
-		$k['onDelete'] = "ON DELETE " . strtoupper($foreignKey->onDelete);
 		$k['onUpdate'] = "ON UPDATE " . strtoupper($foreignKey->onUpdate);
+		$k['onDelete'] = "ON DELETE " . strtoupper($foreignKey->onDelete);
 		$this->alterTable[] = implode(' ', $k);
 	}
 

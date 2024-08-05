@@ -99,7 +99,7 @@ tables:
 		foreignKeys:
 			created_by_person_id: [table: person, column: id, onDelete: restrict]
 			updated_by_person_id: [table: person, column: id, onDelete: restrict]
-			home_page_id: [table: page, column: id, onDelete: restrict]
+			home_page_id: [table: page, column: id, onDelete: set null]
 	module2web:
 		columns:
 			module_id: [type: int, null: false]

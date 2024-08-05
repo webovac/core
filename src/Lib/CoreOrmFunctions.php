@@ -55,8 +55,8 @@ trait CoreOrmFunctions
 		return new DbalExpressionResult([(
 			$platform->getName() === 'pgsql'
 				? "LOWER(last_name || ' ' || first_name)"
-				: "LOWER(CONCAT(last_name, ' ', first_name)"
-			) . "LIKE %_like_",
+				: "LOWER(CONCAT(last_name, ' ', first_name))"
+			) . " LIKE %_like_",
 			Strings::lower($args[0]),
 		]);
 	}
