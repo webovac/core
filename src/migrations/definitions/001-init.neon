@@ -23,14 +23,16 @@ tables:
 			module_id: [type: int, null: true]
 			page_id: [type: int, null: true]
 			web_id: [type: int, null: true]
+			person_id: [type: int, null: true]
 		primaryKey: id
-		uniqueKeys: [language_id, module_id, page_id, web_id]
-		indexes: [language_id, module_id, page_id, web_id]
+		uniqueKeys: [language_id, module_id, page_id, web_id, person_id]
+		indexes: [language_id, module_id, page_id, web_id, person_id]
 		foreignKeys:
 			language_id: [table: language, column: id]
 			module_id: [table: module, column: id]
 			page_id: [table: page, column: id]
 			web_id: [table: web, column: id]
+			person_id: [table: person, column: id]
 	language:
 		columns:
 			id: [type: int, null: false, auto: true]
@@ -74,15 +76,17 @@ tables:
 			module_id: [type: int, null: true]
 			page_id: [type: int, null: true]
 			web_id: [type: int, null: true]
+			person_id: [type: int, null: true]
 			type: [type: string, null: false]
 		primaryKey: id
-		indexes: [created_by_person_id, language_id, module_id, page_id, web_id]
+		indexes: [created_by_person_id, language_id, module_id, page_id, web_id, person_id]
 		foreignKeys:
 			created_by_person_id: [table: person, column: id, onDelete: restrict]
 			language_id: [table: language, column: id]
 			module_id: [table: module, column: id]
 			page_id: [table: page, column: id]
 			web_id: [table: web, column: id]
+			person_id: [table: person, column: id]
 	module:
 		columns:
 			id: [type: int, null: false, auto: true]

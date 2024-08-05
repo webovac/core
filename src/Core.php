@@ -13,6 +13,7 @@ use App\Model\ModuleTranslation\ModuleTranslation;
 use App\Model\Orm;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslation;
+use App\Model\Person\Person;
 use App\Model\Person\PersonData;
 use App\Model\Role\RoleData;
 use App\Model\Text\TextData;
@@ -104,16 +105,26 @@ class Core implements Module
 					['A' => $webTranslation->web->code, 'B' => $webTranslation->title],
 				);
 			};
+			$this->orm->personRepository->onAfterPersist[] = function (Person $person) {
+				$this->orm->indexTranslationRepository->createIndexTranslation(
+					$person,
+					'person',
+					$this->orm->languageRepository->getById(1),
+					['A' => $person->name],
+				);
+			};
 		}
 		if ($this->orm->hasRepositoryByName('logRepository')) {
 			$this->orm->languageRepository->onAfterInsert[] = fn (Language $language) => $this->orm->logRepository->createLog($language, 'language', Log::TYPE_CREATE, $language->createdByPerson, $language->createdAt);
 			$this->orm->moduleRepository->onAfterInsert[] = fn (\App\Model\Module\Module $module) => $this->orm->logRepository->createLog($module, 'module', Log::TYPE_CREATE, $module->createdByPerson, $module->createdAt);
 			$this->orm->pageRepository->onAfterInsert[] = fn (Page $page) => $this->orm->logRepository->createLog($page, 'page', Log::TYPE_CREATE, $page->createdByPerson, $page->createdAt);
 			$this->orm->webRepository->onAfterInsert[] = fn (Web $web) => $this->orm->logRepository->createLog($web, 'web', Log::TYPE_CREATE, $web->createdByPerson, $web->createdAt);
+			$this->orm->personRepository->onAfterInsert[] = fn (Person $person) => $this->orm->logRepository->createLog($person, 'person', Log::TYPE_CREATE, $person, $person->createdAt);
 			$this->orm->languageRepository->onAfterUpdate[] = fn (Language $language) => $this->orm->logRepository->createLog($language, 'language', Log::TYPE_UPDATE, $language->updatedByPerson, $language->updatedAt);
 			$this->orm->moduleRepository->onAfterUpdate[] = fn (\App\Model\Module\Module $module) => $this->orm->logRepository->createLog($module, 'module', Log::TYPE_UPDATE, $module->updatedByPerson, $module->updatedAt);
 			$this->orm->pageRepository->onAfterUpdate[] = fn (Page $page) => $this->orm->logRepository->createLog($page, 'page', Log::TYPE_UPDATE, $page->updatedByPerson, $page->updatedAt);
 			$this->orm->webRepository->onAfterUpdate[] = fn (Web $web) => $this->orm->logRepository->createLog($web, 'web', Log::TYPE_UPDATE, $web->updatedByPerson, $web->updatedAt);
+			$this->orm->personRepository->onAfterUpdate[] = fn (Person $person) => $this->orm->logRepository->createLog($person, 'person', Log::TYPE_UPDATE, $person, $person->updatedAt);
 		}
 	}
 }

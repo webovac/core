@@ -23,6 +23,7 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
  * @property Module|null $module {m:1 Module, oneSided=true}
  * @property Page|null $page {m:1 Page, oneSided=true}
  * @property Web|null $web {m:1 Web, oneSided=true}
+ * @property Person|null $person {m:1 Person, oneSided=true}
  * @property Person|null $createdByPerson {m:1 Person, oneSided=true}
  *
  * @property DateTimeImmutable $date
