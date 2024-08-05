@@ -14,7 +14,9 @@ use Nette\Application\UI\InvalidLinkException;
 use Nette\Utils\Arrays;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\HasRequirements;
 
 /**
  * @property MenuItemTemplate $template
@@ -35,6 +37,7 @@ class MenuItemControl extends BaseControl
 		private string $moduleClass,
 		private string $templateName,
 		private DataModel $dataModel,
+		private CmsUser $cmsUser,
 	) {}
 
 
@@ -52,6 +55,9 @@ class MenuItemControl extends BaseControl
 
 	public function render(): void
 	{
+		if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->pageData->authorizingTag)) {
+			return;
+		}
 		$this->template->pageData = $this->pageData;
 		$this->template->pageTranslationData = $this->pageTranslationData;
 		$this->template->targetLanguageData = $this->targetLanguageData;

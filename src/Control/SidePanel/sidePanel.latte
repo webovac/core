@@ -4,7 +4,7 @@
 		{$presenter->getComponent('search-searchForm')->render()}
 	</div>
 	<hr n:if="$hasSearch" class="mt-0">
-	<div class="user menu-item">
+	<div n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink 'Home:', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="user menu-item">
 		<div class="user-icon" style="height: 48px;">
 			<i class="fad fa-fw fa-circle-user" style="font-size: 48px; line-height: 1"></i>
 		</div>
@@ -13,7 +13,7 @@
 		</div>
 	</div>
 	<hr>
-{*	<a class="menu-item" href="#"><i class="fass fa-fw fa-cog"></i><span class="ms-2">Nastavení</span></a>*}
+	<a n:if="$hasPersons" href="{plink 'Home:', 'Persons:PersonDetailSettings', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}" class="menu-item" href="#"><i class="fass fa-fw fa-cog"></i><span class="ms-2">Nastavení</span></a>
 	<a class="menu-item" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}"><i class="fass fa-fw fa-sign-out"></i><span class="ms-2">{_'Odhlásit'}</span></a>
 	<hr>
 	<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">

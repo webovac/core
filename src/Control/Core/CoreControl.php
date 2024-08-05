@@ -47,6 +47,12 @@ class CoreControl extends BaseControl implements MainModuleControl
 	) {}
 
 
+	public function render(): void
+	{
+		$this->template->render(__DIR__ . '/core.latte');
+	}
+
+
 	public function handleReset(): void
 	{
 		$_SERVER['argv'][] = 'a';

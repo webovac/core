@@ -26,5 +26,6 @@ class SidePanelTemplate extends BaseTemplate
 	public ?CmsEntity $entity;
 	public bool $isError;
 	public bool $hasSearch;
+	public bool $hasPersons;
 	/** @var string[] */ public array $availableTranslations;
 }
