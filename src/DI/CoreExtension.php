@@ -47,6 +47,7 @@ class CoreExtension extends BaseExtension
 				'username' => Expect::string()->required(),
 				'password' => Expect::string(),
 			]),
+			'testMode' => Expect::bool()->default(false),
 		]);
 	}
 
@@ -56,7 +57,7 @@ class CoreExtension extends BaseExtension
 		parent::loadConfiguration();
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('neonHandler'))
-			->setFactory(NeonHandler::class, [['host' => $this->config->host], $builder->parameters['debugMode']]);
+			->setFactory(NeonHandler::class, [['host' => $this->config->host], $builder->parameters['debugMode'], $this->config->testMode]);
 		$definitionProcessor = $builder->addDefinition($this->prefix('definitionProcessor'))
 			->setFactory($this->config->db->driver === 'pgsql' ? PgsqlDefinitionProcessor::class : MysqlDefinitionProcessor::class);
 		if ($this->config->db->driver === 'mysql') {

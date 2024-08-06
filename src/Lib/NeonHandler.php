@@ -6,10 +6,12 @@ namespace Webovac\Core\Lib;
 
 use App\Model\DataModel;
 use App\Model\Orm;
+use App\Model\Web\WebData;
 use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\IExtensionHandler;
 use Stepapo\Utils\ConfigProcessor;
+use Tracy\Dumper;
 use Webovac\Core\Definition\Definition;
 use Webovac\Core\Definition\DefinitionProcessor;
 use Webovac\Core\Definition\Manipulation;
@@ -24,7 +26,7 @@ class NeonHandler implements IExtensionHandler
 	public function __construct(
 		private array $params,
 		private bool $debugMode,
-		private DataModel $dataModel,
+		private bool $testMode,
 		private Orm $orm,
 		private DefinitionProcessor $structureProcessor,
 	) {}
@@ -33,9 +35,6 @@ class NeonHandler implements IExtensionHandler
 	public function execute(File $file): int
 	{
 		$count = 0;
-		if (str_contains($file->name, 'dev') && !$this->debugMode) {
-			return $count;
-		}
 		if ($file->group->migrationGroup instanceof ManipulationGroup) {
 			$skipDefaults = str_contains($file->name, 'update');
 			$config = (array) Neon::decode(@file_get_contents($file->path));
@@ -44,8 +43,17 @@ class NeonHandler implements IExtensionHandler
 			$repository = $this->orm->getRepositoryByName($repositoryName . 'Repository');
 			if (isset($config['class'], $config['items'])) {
 				$manipulationData = Manipulation::createFromArray($config, skipDefaults: $skipDefaults);
+				if ($manipulationData->dev && !$this->debugMode) {
+					return $count;
+				}
+				if ($manipulationData->test && !$this->testMode) {
+					return $count;
+				}
 				foreach ($manipulationData->items as $itemData) {
-					$repository->createFromData($itemData, skipDefaults: $skipDefaults, getOriginalByData: true);
+					$entity = $repository->createFromData($itemData, skipDefaults: $skipDefaults, getOriginalByData: true);
+					if (method_exists($repository, 'postProcessFromData')) {
+						$repository->postProcessFromData($itemData, $entity, skipDefaults: $skipDefaults);
+					}
 					$count++;
 				}
 			} else {

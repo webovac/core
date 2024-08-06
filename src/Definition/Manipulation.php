@@ -10,6 +10,8 @@ class Manipulation extends Schematic
 {
 	public string $class;
 	public string $type = 'insert';
+	public bool $dev = false;
+	public bool $test = false;
 	/** @var Item[]|array */ public array $items;
 
 
