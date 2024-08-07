@@ -176,8 +176,8 @@ tables:
 			updated_by_person_id: [table: person, column: id, onDelete: restrict]
 			module_id: [table: module, column: id]
 			parent_page_id: [table: page, column: id, onDelete: set null]
-			redirect_page_id: [table: page, column: id, onDelete: restrict]
-			target_page_id: [table: page, column: id, onDelete: restrict]
+			redirect_page_id: [table: page, column: id, onDelete: cascade]
+			target_page_id: [table: page, column: id, onDelete: cascade]
 			template_page_id: [table: page, column: id, onDelete: set null]
 			web_id: [table: web, column: id]
 			image_file_id: [table: file, column: id, onDelete: set null]
@@ -323,7 +323,7 @@ tables:
 			large_icon_file_id: [table: file, column: id, onDelete: set null]
 			logo_file_id: [table: file, column: id, onDelete: set null]
 			background_file_id: [table: file, column: id, onDelete: set null]
-			home_page_id: [table: page, column: id, onDelete: restrict]
+			home_page_id: [table: page, column: id, onDelete: set null]
 	web_translation:
 		columns:
 			id: [type: int, null: false, auto: true]
