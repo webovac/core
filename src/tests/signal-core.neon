@@ -1,0 +1,15 @@
+name: Core - signal Core
+identity:
+	id: 1
+	roles: admin
+requests:
+	language:
+		path: '//test?language=en&do=setLanguage'
+		asserts:
+			renders: '//test/en?do=logStep'
+			notRenders: '//test?do=logStep'
+	theme:
+		path: '//test?theme=3&do=setTheme'
+		asserts:
+			renders: theme-default-dark
+			notRenders: theme-default-light

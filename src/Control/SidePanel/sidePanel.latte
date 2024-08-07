@@ -25,7 +25,7 @@
 					<img src="/dist/images/languages/{$l->shortcut}.svg">
 				</a>
 			{else}
-				<a href="{plink '//default', $pageData->name, $entity?->getParameters(), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+				<a href="{plink '//default', $pageData->name, $entity?->getParameters($languageData), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
 					<img src="/dist/images/languages/{$l->shortcut}.svg">
 				</a>
 			{/}

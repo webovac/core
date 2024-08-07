@@ -7,6 +7,7 @@ use App\Model\File\FileData;
 use App\Model\File\FileRepository;
 use App\Model\Person\Person;
 use DateTimeInterface;
+use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Entity\Reflection\PropertyMetadata;
 use Nextras\Orm\Model\IModel;
 use Nextras\Orm\Relationships\ManyHasMany;
@@ -50,7 +51,7 @@ class CmsEntityProcessor
 			$property = $metadata->hasProperty($name) ? $metadata->getProperty($name) : null;
 			if (!$property || $property->isPrimary) {
 				continue;
-			} elseif (!$property->wrapper) {
+			} elseif (!$property->wrapper || $property->wrapper === DateTimeImmutable::class) {
 				$this->processScalar($property);
 			} elseif (in_array($property->wrapper, [OneHasOne::class, ManyHasOne::class])) {
 				$this->processHasOne($property);

@@ -1,0 +1,4 @@
+name: Core - access Style
+path: //test/style.css
+asserts:
+	renders: ':root {'

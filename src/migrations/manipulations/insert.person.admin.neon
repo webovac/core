@@ -1,4 +1,4 @@
-email: admin
+email: 'admin@test.test'
 firstName: admin
 lastName: admin
 roles:

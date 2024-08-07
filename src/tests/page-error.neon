@@ -1,4 +1,13 @@
 name: Core - access Error
-path: //webvac.test
+identity:
+	id: 1
+	roles: admin
 asserts:
 	httpCode: 404
+requests:
+	wrong host:
+		path: //webvac.test
+	wrong path:
+		path: //test/webz
+	wrong id:
+		path: //test/weby/999

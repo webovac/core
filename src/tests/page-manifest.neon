@@ -1,0 +1,4 @@
+name: Core - access Manifest
+path: //test/manifest.json
+asserts:
+	renders: '"name": "CMS"'

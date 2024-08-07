@@ -38,10 +38,4 @@ trait CoreLanguage
 	{
 		return $this->getTranslation($language)->title;
 	}
-
-
-	public function getParameter(?LanguageData $language = null): string
-	{
-		return $this->shortcut;
-	}
 }

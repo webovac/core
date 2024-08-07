@@ -24,18 +24,6 @@ abstract class CmsEntity extends Entity
 	abstract public function getDataClass(): string;
 
 
-	public function getParameter(?LanguageData $languageData = null): mixed
-	{
-		return $this->getPersistedId();
-	}
-
-
-	public function getParentParameter(?LanguageData $languageData = null): mixed
-	{
-		return null;
-	}
-
-
 	public function isChanged(?array $old): bool
 	{
 		if (!$old) {

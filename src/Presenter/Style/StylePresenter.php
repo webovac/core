@@ -48,12 +48,6 @@ class StylePresenter extends Presenter
 		$this->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
 		if ($this->cmsUser->isLoggedIn()) {
 			$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
-			if ($this->preference && $this->preference->language) {
-				if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getBy(['language' => $this->preference->language->id])) {
-					$languageData = $this->dataModel->languageRepository->getById($this->preference->language->id);
-					$this->lang = $languageData->shortcut;
-				}
-			}
 		}
 		if (
 			$this->cmsUser->isLoggedIn()

@@ -187,7 +187,7 @@ trait CorePage
 	}
 
 
-	public function getParameters(): array
+	public function getParameters(?LanguageData $languageData = null): array
 	{
 		return $this->web
 			? ['Admin:PageDetail' => $this->id]
