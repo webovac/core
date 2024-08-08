@@ -90,7 +90,7 @@ class CoreControl extends BaseControl implements MainModuleControl
 
 	public function createComponentBreadcrumbs(): BreadcrumbsControl
 	{
-		return $this->breadcrumbs->create($this->webData, $this->pageData, $this->languageData);
+		return $this->breadcrumbs->create($this->webData);
 	}
 
 

@@ -6,11 +6,12 @@ namespace Webovac\Core\Model\Language;
 
 use App\Model\Language\Language;
 use App\Model\Language\LanguageData;
+use App\Model\Web\WebData;
 
 
 trait CoreLanguageRepository
 {
-	public function getByParameters(array $parameters): ?Language
+	public function getByParameters(array $parameters, ?WebData $webData = null): ?Language
 	{
 		return $this->getBy(['shortcut' => $parameters['LanguageDetail']]);
 	}

@@ -10,8 +10,8 @@ class Manipulation extends Schematic
 {
 	public string $class;
 	public string $type = 'insert';
-	public bool $dev = false;
-	public bool $test = false;
+	public ?bool $dev = null;
+	public ?bool $test = null;
 	/** @var Item[]|array */ public array $items;
 
 
@@ -22,7 +22,7 @@ class Manipulation extends Schematic
 			$manipulation->items[$itemKey] = $manipulation->class::createFromArray(
 				$itemConfig,
 				$itemKey,
-				isset($config['type']) && $config['type'] === 'update'
+				$skipDefaults,
 			);
 		}
 		return $manipulation;

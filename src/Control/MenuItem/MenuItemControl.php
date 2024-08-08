@@ -47,17 +47,17 @@ class MenuItemControl extends BaseControl
 	public function loadState(array $params): void
 	{
 		parent::loadState($params);
-		$t = $this->pageData->getCollection('translations')->getBy(['language' => $this->languageData->id]);
-		$this->pageTranslationData = $t ?: $this->pageData->getCollection('translations')->getBy(['language' => $this->webData->defaultLanguage]);
-		$this->targetLanguageData = $t ? $this->languageData : $this->dataModel->languageRepository->getById($this->webData->defaultLanguage);
 	}
 
 
 	public function render(): void
 	{
-		if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->pageData->authorizingTag)) {
+		if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
 			return;
 		}
+		$t = $this->pageData->getCollection('translations')->getBy(['language' => $this->languageData->id]);
+		$this->pageTranslationData = $t ?: $this->pageData->getCollection('translations')->getBy(['language' => $this->webData->defaultLanguage]);
+		$this->targetLanguageData = $t ? $this->languageData : $this->dataModel->languageRepository->getById($this->webData->defaultLanguage);
 		$this->template->pageData = $this->pageData;
 		$this->template->pageTranslationData = $this->pageTranslationData;
 		$this->template->targetLanguageData = $this->targetLanguageData;
@@ -96,7 +96,7 @@ class MenuItemControl extends BaseControl
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $this->presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $this->presenter->link('//Home:', [
+			Page::TYPE_PAGE => $this->presenter->link('//default', [
 					'pageName' => $p->name,
 					'lang' => $this->targetLanguageData->shortcut,
 					'id' => $p->hasParameter ? $this->entity->getParameters($this->languageData) : [],

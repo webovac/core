@@ -4,7 +4,6 @@ namespace Webovac\Core\Definition;
 
 use Nextras\Dbal\Connection;
 use Nextras\Dbal\QueryException;
-use Tracy\Dumper;
 
 
 class MysqlDefinitionProcessor implements DefinitionProcessor

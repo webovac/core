@@ -11,6 +11,7 @@ use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationRepository;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Model\CmsEntity;
@@ -19,7 +20,7 @@ use Webovac\Core\Model\Web\WebModuleData;
 
 trait CorePageRepository
 {
-	public function getByParameters(array $parameters): ?Page
+	public function getByParameters(array $parameters, ?WebData $webData = null): ?Page
 	{
 		if (isset($parameters['ModuleDetail'])) {
 			return $this->getBy(['module->id' => $parameters['ModuleDetail'], 'id' => $parameters['TemplateDetail']]);

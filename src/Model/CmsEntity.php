@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
-use App\Model\Language\LanguageData;
 use DateTimeImmutable;
 use Nette\Utils\Type;
 use Nextras\Orm\Entity\Entity;

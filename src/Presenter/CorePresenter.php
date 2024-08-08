@@ -69,6 +69,8 @@ trait CorePresenter
 	private ?CmsEntity $entity = null;
 	private string $title;
 	public array $components = [];
+	public array $crumbs = [];
+	public array $activePages = [];
 
 
 	public function injectCoreStartup(): void
@@ -123,11 +125,11 @@ trait CorePresenter
 				}
 				$this->entity = $this->orm
 					->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
-					->getByParameters($this->getParameter('id'));
+					->getByParameters($this->getParameter('id'), $this->webData);
 				if (!$this->entity) {
 					$this->error();
 				}
-				if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->pageData->authorizingTag)) {
+				if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
 					throw new ForbiddenRequestException;
 				}
 			}
@@ -143,6 +145,7 @@ trait CorePresenter
 			$this->title = $this->entity ? $this->entity->getTitle($this->languageData) : $this->pageTranslation->title;
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
+			$this->neco();
 		};
 	}
 
@@ -286,5 +289,38 @@ trait CorePresenter
 			}
 		}
 		return $return;
+	}
+
+
+	public function neco()
+	{
+		$parameters = [];
+		foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->parentPages as $id) {
+			$pageData = $this->dataModel->getPageData($this->webData->id, $id);
+			$title = $pageData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
+			if ($pageData->hasParameter) {
+				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($pageData->parentDetailRootPages));
+				if (!isset($parameters[$lastDetailRootPage->name])) {
+					$parameters[$lastDetailRootPage->name] = $this->presenter->getParameter('id')[$lastDetailRootPage->name];
+				}
+				if ($pageData->isDetailRoot) {
+					$entity = $this->orm
+						->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
+						->getByParameters($parameters, $this->webData);
+					$title = $entity->getTitle($this->languageData);
+				}
+			}
+			$this->getComponent('core-breadcrumbs')->addCrumb(
+				$id,
+				($pageData->isHomePage ? '<i class="fasl fa-fw fa-home"></i> ' : '') . $title,
+				$this->presenter->link(
+					'//default',
+					[
+						'pageName' => $pageData->name,
+						'id' => $pageData->hasParameter ? $parameters : [],
+					],
+				),
+			);
+		}
 	}
 }

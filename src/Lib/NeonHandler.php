@@ -4,14 +4,11 @@ declare(strict_types = 1);
 
 namespace Webovac\Core\Lib;
 
-use App\Model\DataModel;
 use App\Model\Orm;
-use App\Model\Web\WebData;
 use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\IExtensionHandler;
 use Stepapo\Utils\ConfigProcessor;
-use Tracy\Dumper;
 use Webovac\Core\Definition\Definition;
 use Webovac\Core\Definition\DefinitionProcessor;
 use Webovac\Core\Definition\Manipulation;
@@ -43,10 +40,16 @@ class NeonHandler implements IExtensionHandler
 			$repository = $this->orm->getRepositoryByName($repositoryName . 'Repository');
 			if (isset($config['class'], $config['items'])) {
 				$manipulationData = Manipulation::createFromArray($config, skipDefaults: $skipDefaults);
-				if ($manipulationData->dev && !$this->debugMode) {
+				if (
+					($manipulationData->dev === true && !$this->debugMode)
+					|| ($manipulationData->dev === false && $this->debugMode)
+				) {
 					return $count;
 				}
-				if ($manipulationData->test && !$this->testMode) {
+				if (
+					($manipulationData->test === true && !$this->testMode)
+					|| ($manipulationData->test === false && $this->testMode)
+				) {
 					return $count;
 				}
 				foreach ($manipulationData->items as $itemData) {

@@ -6,7 +6,7 @@ asserts:
 	httpCode: 404
 requests:
 	wrong host:
-		path: //webvac.test
+		path: //tst
 	wrong path:
 		path: //test/webz
 	wrong id:

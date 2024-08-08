@@ -36,7 +36,13 @@ class TestConfigProvider
 			$config = (array) Neon::decode(FileSystem::read((string) $file));
 			$configs[$config['name']] = $config;
 		}
-		return $configs;
+		$keys = array_keys($configs);
+		shuffle($keys);
+		$random = [];
+		foreach ($keys as $key) {
+			$random[$key] = $configs[$key];
+		}
+		return $random;
 	}
 
 

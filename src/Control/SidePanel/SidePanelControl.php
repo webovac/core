@@ -7,7 +7,6 @@ namespace Webovac\Core\Control\SidePanel;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
-use App\Model\Theme\Theme;
 use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
 use ReflectionException;

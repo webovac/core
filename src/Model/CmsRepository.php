@@ -6,6 +6,7 @@ namespace Webovac\Core\Model;
 
 use App\Lib\OrmFunctions;
 use App\Model\Person\Person;
+use App\Model\Web\WebData;
 use DateTimeInterface;
 use Nette\DI\Attributes\Inject;
 use Nette\Utils\Arrays;
@@ -37,7 +38,7 @@ abstract class CmsRepository extends Repository
 	}
 
 
-	public function getByParameters(array $parameters): ?CmsEntity
+	public function getByParameters(array $parameters, ?WebData $webData = null): ?CmsEntity
 	{
 		return $this->getBy(['id' => Arrays::first($parameters)]);
 	}
