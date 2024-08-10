@@ -13,6 +13,7 @@ use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationData;
 use DateTimeInterface;
 use Nette\Http\FileUpload;
+use Nette\InvalidArgumentException;
 use Nette\Schema\Processor;
 use ReflectionException;
 use Stepapo\Utils\Attribute\ArrayOfType;
@@ -98,18 +99,11 @@ trait CoreWebData
 		WebData::processWebModules($data);
 		if (isset($data->tree)) {
 			foreach ($data->tree as $parentPage => $pages) {
-				if (!WebData::checkPage($parentPage, $data)) {
-					continue;
-				}
 				WebData::processTree((array) $pages, $parentPage, $rank++, $data);
 			}
 		}
 		if (isset($data->pages)) {
 			foreach ($data->pages as $pageKey => $pageConfig) {
-				if (!WebData::checkPage($pageKey, $data)) {
-					unset($data->pages[$pageKey]);
-					continue;
-				}
 				$data->pages[$pageKey] = PageData::createFromArray($pageConfig, $pageKey, $skipDefaults);
 			}
 		}
@@ -139,24 +133,6 @@ trait CoreWebData
 	}
 
 
-	private static function checkPage(string $page, WebData $data)
-	{
-		if (isset($data->pages[$page])) {
-			$p = $data->pages[$page];
-			$relatedPage = $p['targetPage'] ?? ($p['redirectPage'] ?? null);
-			if (!$relatedPage) {
-				return true;
-			}
-			return WebData::checkPage(str_contains($relatedPage, ':') ? strtok($relatedPage, ':') : $relatedPage, $data);
-		}
-		if (isset($data->webModules[$page])) {
-			//return $this->moduleChecker->isModuleInstalled(lcfirst($page));
-			return true;
-		}
-		return false;
-	}
-
-
 	private static function processTree(array $pages, string $parentPage, int $rank, WebData &$data): void
 	{
 		$r = 1;
@@ -166,13 +142,12 @@ trait CoreWebData
 			$data->webModules[$parentPage]['rank'] = $rank;
 		}
 		foreach ($pages as $page => $subPages) {
-			if (!WebData::checkPage($page, $data)) {
-				continue;
-			}
 			if (isset($data->pages[$page])) {
 				$data->pages[$page]['parentPage'] = $parentPage;
-			} else {
+			} elseif (isset($data->webModules[$page])) {
 				$data->webModules[$page]['parentPage'] = $parentPage;
+			} else {
+				throw new InvalidArgumentException("Page '$page' not found in config.");
 			}
 			WebData::processTree((array) $subPages, $page, $r++, $data);
 		}

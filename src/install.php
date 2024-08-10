@@ -30,6 +30,7 @@ use Webovac\Generator\CmsGenerator;
 		'Page' => [Linkable::class, HasParent::class, HasPages::class, HasTranslations::class],
 		'PageTranslation' => [Translation::class],
 		'Preference',
+		'QueryName',
 		'Role',
 		'Text' => [HasTranslations::class],
 		'TextTranslation' => [Translation::class],

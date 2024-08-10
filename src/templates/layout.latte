@@ -30,6 +30,7 @@
 	<link rel="stylesheet" href="{$baseUrl}/dist-pro/css/bundle.css?m={='dist/css/bundle.css'|mTime}">
 	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
 	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
+{*	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">*}
 </head>
 <body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? (str_contains($themeData->code, 'dark') ? 'dark' : 'light') : 'light'}"{ifset $logStepUrl} data-log-step-url="{$logStepUrl}"{/}>
 <div n:class="layout, $pageData->stretched ? stretched">
@@ -48,9 +49,9 @@
 						{$pageData->name}
 						{if !$pageData->module || $webData->code === 'cms'}
 							:
-							<a href="{plink '//default', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageData->module, 'TemplateDetail' => $pageData->id] : ['Admin:PageDetail' => $pageData->id], 'lang' => $adminLang}">{_'Obsah'}</a>
+							<a href="{plink '//default', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">{_'Obsah'}</a>
 							·
-							<a href="{plink '//default', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageData->module, 'TemplateDetail' => $pageData->id] : ['Admin:PageDetail' => $pageData->id], 'lang' => $adminLang}">{_'Nastavení'}</a>
+							<a href="{plink '//default', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">{_'Nastavení'}</a>
 						{/}
 						<br>
 						{foreach $webDatas as $w}

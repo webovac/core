@@ -10,6 +10,7 @@ use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslation;
 use App\Model\Person\Person;
+use App\Model\QueryName\QueryName;
 use App\Model\Role\Role;
 use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
@@ -60,6 +61,7 @@ use Webovac\Core\Control\PageItem\PageItemControl;
  * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
  *
  * @property OneHasMany|Page[] $childPages {1:m Page::$parentPage, orderBy=rank}
+ * @property OneHasMany|QueryName[] $queryNames {1:m QueryName::$page}
  * @property OneHasMany|PageTranslation[] $translations {1:m PageTranslation::$page, orderBy=language->rank}
  *
  * @property ManyHasMany|Person[] $authorizedPersons {m:m Person, isMain=true, oneSided=true}
@@ -190,8 +192,8 @@ trait CorePage
 	public function getParameters(?LanguageData $languageData = null): array
 	{
 		return $this->web
-			? ['Admin:PageDetail' => $this->id]
-			: ['ModuleDetail' => $this->module->id, 'TemplateDetail' => $this->id];
+			? ['Admin:PageDetail' => $this->name]
+			: ['ModuleDetail' => $this->module->name, 'TemplateDetail' => $this->name];
 	}
 
 

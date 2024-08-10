@@ -19,6 +19,7 @@ use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
+use Tracy\Dumper;
 
 
 trait CoreWebRepository

@@ -11,7 +11,7 @@ class ContentProcessor
 		'h1', 'h2', 'h3', 'p', 'b', 'i', 'a', 'br',
 		'ol', 'ul', 'li',
 		'table', 'thead', 'tbody', 'th', 'tr', 'td',
-		'div', 'figure', 'img', 'span'
+		'div', 'figure', 'img', 'span', 'code', 'pre'
 	];
 
 

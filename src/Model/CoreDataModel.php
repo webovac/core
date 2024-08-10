@@ -6,6 +6,7 @@ namespace Webovac\Core\Model;
 
 use App\Model\Language\LanguageData;
 use App\Model\Language\LanguageDataRepository;
+use App\Model\Module\ModuleData;
 use App\Model\Module\ModuleDataRepository;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
@@ -67,6 +68,12 @@ trait CoreDataModel
 	public function getLanguageData(int $id): ?LanguageData
 	{
 		return $this->languageRepository->getById($id);
+	}
+
+
+	public function getModuleData(int $id): ?ModuleData
+	{
+		return $this->moduleRepository->getById($id);
 	}
 
 

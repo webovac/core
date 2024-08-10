@@ -110,7 +110,7 @@ trait CorePresenter
 			} catch (MissingPermissionException $e) {
 				throw new ForbiddenRequestException;
 			} catch (LoginRequiredException $e) {
-				$loginPageName = $this->orm->webRepository->getById($this->webData->id)->modules->has($this->orm->moduleRepository->getBy(['name' => 'FsvAuth']))
+				$loginPageName = $this->orm->webRepository->getById($this->webData->id)->modules->has($this->orm->moduleRepository->getBy(['name' => 'fsvAuth']))
 					? 'FsvAuth:Home'
 					: 'Auth:Home';
 				$this->redirect('default', ['pageName' => $loginPageName, 'backlink' => $this->storeRequest()]);
@@ -161,6 +161,7 @@ trait CorePresenter
 			}
 			$this->template->webTranslationData = $this->webTranslationData;
 			$this->template->pageData = $this->pageData;
+			$this->template->pageModuleData = $this->pageData->module ? $this->dataModel->getModuleData($this->pageData->module) : null;
 			if ($this->pageData->imageFile) {
 				$this->template->imageUrl = $this->fileUploader->getUrl($this->pageData->imageFile->getBackgroundIdentifier(), '1200x630');
 			}

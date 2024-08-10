@@ -53,6 +53,7 @@ class MenuControl extends BaseControl
 		$this->template->dataModel = $this->dataModel;
 		$searchModuleData = $this->dataModel->moduleRepository->getBy(['name' => 'Search']);
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
+			&& $searchModuleData
 			&& in_array($searchModuleData->id, $this->webData->modules, true);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$this->template->layoutData = $this->dataModel->getLayoutData($this->webData->layout);

@@ -14,6 +14,7 @@ use App\Model\Web\Web;
 use App\Model\Web\WebData;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
+use Tracy\Dumper;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\Web\WebModuleData;
 
@@ -23,9 +24,9 @@ trait CorePageRepository
 	public function getByParameters(array $parameters, ?WebData $webData = null): ?Page
 	{
 		if (isset($parameters['ModuleDetail'])) {
-			return $this->getBy(['module->id' => $parameters['ModuleDetail'], 'id' => $parameters['TemplateDetail']]);
+			return $this->getBy(['module->name' => $parameters['ModuleDetail'], 'name' => $parameters['TemplateDetail']]);
 		}
-		return $this->getBy(['id' => $parameters['Admin:PageDetail']]);
+		return $this->getBy(['name' => $parameters['Admin:PageDetail']]);
 	}
 
 
@@ -208,10 +209,10 @@ trait CorePageRepository
 				is_int($data->parentPage)
 					? ['id' => $data->parentPage]
 					: [
-					ICollection::AND,
-					['name' => $data->parentPage],
-					[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
-				]
+						ICollection::AND,
+						['name' => $data->parentPage],
+						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+					]
 			);
 		}
 		$this->persist($page);

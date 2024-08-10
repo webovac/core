@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\Page;
 use App\Model\File\FileData;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslationData;
+use App\Model\QueryName\QueryNameData;
 use DateTimeInterface;
 use Nette\Http\FileUpload;
 use ReflectionException;
@@ -27,6 +28,7 @@ trait CorePageData
 	#[DefaultValue(Page::ACCESS_FOR_ALL)] public string $accessFor;
 	public ?string $authorizingTag;
 	public ?string $style;
+	/** @var QueryNameData[] */ #[ArrayOfType(QueryNameData::class)] public array|null $queryNames;
 	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
 	/** @var int[] */ public array|null $authorizedRoles;
 	/** @var int[] */ public array|null $authorizedPersons;

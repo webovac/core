@@ -35,6 +35,12 @@ final class RouterFactory
 			if ($pageData->type !== Page::TYPE_PAGE) {
 				continue;
 			}
+			$queryNames = [];
+			if (isset($pageData->queryNames)) {
+				foreach ($pageData->queryNames as $queryName) {
+					$queryNames[] = "$queryName->query=<$queryName->parameter>";
+				}
+			}
 			foreach ($pageData->translations as $translationData) {
 				$languageData = $this->dataModel->languageRepository->getById($translationData->language);
 				if ($pageData->redirectPage) {
@@ -43,7 +49,7 @@ final class RouterFactory
 					$p = $pageData;
 				}
 				$routeList->addRoute(
-					mask: $translationData->fullPath,
+					mask: $translationData->fullPath . ($queryNames ? (' ? ' . implode(' & ', $queryNames)) : ''),
 					metadata: [
 						'presenter' => 'Home',
 						'action' => 'default',
