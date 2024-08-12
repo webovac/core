@@ -25,7 +25,7 @@ trait CorePageRepository
 		if (isset($parameters['ModuleDetail'])) {
 			return $this->getBy(['module->name' => $parameters['ModuleDetail'], 'name' => $parameters['TemplateDetail']]);
 		}
-		return $this->getBy(['name' => $parameters['Admin:PageDetail']]);
+		return $this->getBy(['name' => $parameters['Admin:PageDetail'], 'web->id' => $webData->id]);
 	}
 
 
