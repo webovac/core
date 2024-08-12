@@ -34,6 +34,7 @@
 	},
 	"require-dev": {
 		"webovac/generator": "dev-main",
+		"stepapo/request-tester": "dev-main",
 		"nikic/php-parser": "~5.0.0"
 	},
 	"scripts": {
