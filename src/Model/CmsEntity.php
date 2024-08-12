@@ -20,6 +20,7 @@ use Stepapo\Utils\Model\Item;
 
 abstract class CmsEntity extends Entity
 {
+	public const OMITTED_PROPERTIES = ['id', 'createdByPerson', 'updatedByPerson', 'createdAt', 'updatedAt'];
 	abstract public function getDataClass(): string;
 
 
@@ -47,22 +48,25 @@ abstract class CmsEntity extends Entity
 	/**
 	 * @throws ReflectionException
 	 */
-	public function getData(): Item
+	public function getData(bool $neon = false): Item
 	{
 		$class = new ReflectionClass($this->getDataClass());
 		$data = $class->newInstance();
 		foreach ($class->getProperties() as $p) {
 			$name = $p->name;
+			if ($neon && in_array($name, self::OMITTED_PROPERTIES, true)) {
+				continue;
+			}
 			$property = $this->getMetadata()->hasProperty($name) ? $this->getMetadata()->getProperty($name) : null;
 			if (!$property) {
 				continue;
 			} elseif (!$property->wrapper) {
 				$data->$name = $this->$name;
 			} elseif (in_array($property->wrapper, [OneHasOne::class, ManyHasOne::class])) {
-				$data->$name = $this->shouldGetData($p) ? $this->$name?->getData() : $this->$name?->getPersistedId();
+				$data->$name = $this->shouldGetData($p) ? $this->$name?->getData($neon) : $this->$name?->getPersistedId();
 			} elseif ($property->wrapper === OneHasMany::class) {
 				foreach ($this->$name as $related) {
-					$data->$name[$related->getPersistedId()] = $related->getData();
+					$data->$name[$related->getPersistedId()] = $related->getData($neon);
 				}
 			} elseif ($property->wrapper === ManyHasMany::class) {
 				foreach ($this->$name as $related) {

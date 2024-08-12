@@ -9,7 +9,6 @@ use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\IExtensionHandler;
 use Stepapo\Utils\ConfigProcessor;
-use Tracy\Dumper;
 use Webovac\Core\Definition\Definition;
 use Webovac\Core\Definition\DefinitionProcessor;
 use Webovac\Core\Definition\Manipulation;
@@ -62,9 +61,6 @@ class NeonHandler implements IExtensionHandler
 				}
 			} else {
 				$data = $file->group->migrationGroup->class::createFromNeon($file->path, $this->params, $skipDefaults);
-//				if (str_contains($file->name, 'steps')) {
-//					Dumper::dump($data);
-//				}
 				$entity = $repository->createFromData($data, skipDefaults: $skipDefaults, getOriginalByData: true);
 				if (method_exists($repository, 'postProcessFromData')) {
 					$repository->postProcessFromData($data, $entity, skipDefaults: $skipDefaults);

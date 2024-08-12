@@ -14,7 +14,6 @@ use App\Model\Web\Web;
 use App\Model\Web\WebData;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
-use Tracy\Dumper;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\Web\WebModuleData;
 
