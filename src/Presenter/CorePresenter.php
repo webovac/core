@@ -110,10 +110,8 @@ trait CorePresenter
 			} catch (MissingPermissionException $e) {
 				throw new ForbiddenRequestException;
 			} catch (LoginRequiredException $e) {
-				$loginPageName = $this->orm->webRepository->getById($this->webData->id)->modules->has($this->orm->moduleRepository->getBy(['name' => 'FsvAuth']))
-					? 'FsvAuth:Home'
-					: 'Auth:Home';
-				$this->redirect('default', ['pageName' => $loginPageName, 'backlink' => $this->storeRequest()]);
+				$loginPage = $this->dataModel->getPageDataByName($this->webData->id, 'FsvAuth:Home') ?: $this->dataModel->getPageDataByName($this->webData->id, 'Auth:Home');
+				$this->redirect('default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
 			}
 			if ($this->pageData->hasParameter) {
 				if (!$this->pageData->parentDetailRootPages) {
