@@ -18,6 +18,7 @@ use Nextras\Orm\Collection\Helpers\DbalQueryBuilderHelper;
 trait CoreOrmFunctions
 {
 	public const string LIKE_FILTER = 'likeFilter';
+	public const string LIKE_FILTER_OR = 'likeFilterOr';
 	public const string PERSON_FILTER = 'personFilter';
 
 
@@ -46,6 +47,15 @@ trait CoreOrmFunctions
 		assert(count($args) === 2 && is_string($args[0]) && is_string($args[1]));
 		$column = $helper->processPropertyExpr($builder, $args[0])->args[1];
 		return new DbalExpressionResult(['LOWER(%column) LIKE %_like_', $column, Strings::lower($args[1])]);
+	}
+
+
+	public static function likeFilterOr(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args): DbalExpressionResult
+	{
+		assert(count($args) === 3 && is_string($args[0]) && is_string($args[1]) && is_string($args[2]));
+		$column1 = $helper->processPropertyExpr($builder, $args[0])->args[1];
+		$column2 = $helper->processPropertyExpr($builder, $args[1])->args[1];
+		return new DbalExpressionResult(['%column LIKE %_like_ OR %column LIKE %_like_', $column1, $args[2], $column2, $args[2]]);
 	}
 
 

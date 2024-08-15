@@ -145,7 +145,7 @@ trait CorePresenter
 			$this->title = $this->entity ? $this->entity->getTitle($this->languageData) : $this->pageTranslation->title;
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
-			$this->neco();
+			$this->buildCrumbs();
 		};
 	}
 
@@ -293,7 +293,7 @@ trait CorePresenter
 	}
 
 
-	public function neco()
+	private function buildCrumbs(): void
 	{
 		$parameters = [];
 		foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->parentPages as $id) {

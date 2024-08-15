@@ -7,6 +7,7 @@ namespace Webovac\Core\Control\Menu;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
+use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\Multiplier;
 use ReflectionException;
@@ -56,7 +57,15 @@ class MenuControl extends BaseControl
 			&& $searchModuleData
 			&& in_array($searchModuleData->id, $this->webData->modules, true);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
-			$this->template->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
+			$layoutData = $this->dataModel->getLayoutData($this->webData->layout);
+			$this->template->layoutData = $layoutData;
+			if ($layoutData->hideSidePanel) {
+				foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->getCollection('translations') as $translationData) {
+					$this->template->availableTranslations[$translationData->language] = $translationData->language;
+				}
+				$this->template->themeDatas = $this->dataModel->themeRepository->findBy(['id' => $layoutData->themes]);
+				$this->template->themeDatas->uasort(fn(ThemeData $a, ThemeData $b) => str_contains('dark', $a->code) !== str_contains('dark', $b->code) ? -1 : 1);
+			}
 		}
 		$this->template->entity = $this->entity;
 		$this->template->title = $this->webData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;

@@ -27,7 +27,7 @@
 	<link rel="shortcut icon" n:ifset="$smallIconUrl" href="{$baseUrl}/{$smallIconUrl}?m={=$smallIconUrl|mTime}">
 	<link rel="apple-touch-icon" n:ifset="$largeIconUrl" href="{$baseUrl}/{$largeIconUrl}?m={=$largeIconUrl|mTime}">
 	<link rel="manifest" href="{plink '//Manifest:', host: $webData->host, basePath: $webData->basePath, lang: $languageData->shortcut}?m={$webTranslationData->updatedAt ?: $webTranslationData->createdAt|date:'U'}">
-	<link rel="stylesheet" href="{$baseUrl}/dist-pro/css/bundle.css?m={='dist/css/bundle.css'|mTime}">
+	<link rel="stylesheet" href="{$baseUrl}/dist/css/bundle.css?m={='dist/css/bundle.css'|mTime}">
 	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
 	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
 </head>
@@ -66,7 +66,9 @@
 			<div class="background"></div>
 		</div>
 	</div>
-	{control core-sidePanel}
+	{if !$layoutData->hideSidePanel}
+		{control core-sidePanel}
+	{/}
 </div>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="{$baseUrl}/dist/js/bundle.js?m={='dist/js/bundle.js'|mTime}"></script>

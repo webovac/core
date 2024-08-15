@@ -111,7 +111,7 @@ class MenuItemControl extends BaseControl
 	{
 		return match($this->context) {
 			'buttons' => 'btn btn-outline-' . ($this->pageData->style ?: 'primary'),
-			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->pageData->style ? ($this->pageData->style . '-subtle') : 'light') .  ' p-3',
+			'signpost' => 'rounded g-col-6 g-col-lg-4 bg-' . ($this->pageData->style ? ($this->pageData->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->pageData->style ? ' btn btn-subtle-' . $this->pageData->style : ''),
 		} . (
 			($this->pageData->id === $this->presenter->pageData->id)

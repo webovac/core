@@ -9,6 +9,7 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
+use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
 use Stepapo\Utils\Model\Collection;
 use Webovac\Core\Model\CmsEntity;
@@ -29,4 +30,6 @@ class MenuTemplate extends BaseTemplate
 	public string $wwwDir;
 	public bool $isError;
 	public bool $hasSearch;
+	/** @var string[] */ public array $availableTranslations;
+	/** @var ThemeData[] */ public Collection $themeDatas;
 }

@@ -12,7 +12,8 @@
 					<img src="{$baseUrl}/dist/images/logo-fsv-text.svg">
 				</div>
 			{else}
-				<img src="{$baseUrl}/{$logoUrl}">
+				<img class="logo-img" src="{$baseUrl}/{$logoUrl}">
+				<div class="spinner-border text-primary"></div>
 			{/}
 		</a>
 		<div class="d-flex">
@@ -23,5 +24,36 @@
 		<div class="menu flex-grow-1" id="menu" n:inner-foreach="$pageDatas as $p">
 			{control 'menuItem-' . $p->id}
 		</div>
+		<div class="menu" n:if="$layoutData->hideSidePanel && $cmsUser->isLoggedIn()">
+			<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
+			{var $l = $dataModel->getLanguageData($translation->language)}
+			{var $t = $l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id]) ?: $l->getCollection('translations')->getBy(['translationLanguage' => $webData->defaultLanguage])}
+			{ifset $availableTranslations[$l->id]}
+					{if $cmsUser->isLoggedIn()}
+						<a n:if="$t" href="{plink '//setLanguage!', $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+							<img src="/dist/images/languages/{$l->shortcut}.svg">
+						</a>
+					{else}
+						<a href="{plink '//default', $pageData->name, $entity?->getParameters($languageData), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+							<img src="/dist/images/languages/{$l->shortcut}.svg">
+						</a>
+					{/}
+				{else}
+					<div n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id])->title} nedostupné" data-tooltip-position="right">
+						<img src="/dist/images/languages/{$l->shortcut}.svg">
+					</div>
+				{/}
+			</div>
+			<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && count($themeDatas) > 1 && !$isError" n:inner-foreach="$themeDatas as $themeData">
+				{var $translation = $themeData->getCollection('translations')->getBy(['language' => $languageData->id]) ?: $themeData->getCollection('translations')->getBy(['language' => $webData->defaultLanguage])}
+				<a n:if="$translation" href="{plink '//setTheme!', $themeData->id}" data-tooltip="{$translation->title}" data-tooltip-position="right">
+					<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $themeData->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
+				</a>
+			</div>
+			<a class="menu-item" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}">
+				<i class="fass fa-fw fa-power-off"></i><span>{_'Odhlásit'}</span>
+			</a>
+		</div>
+
 	</div>
 </div>
