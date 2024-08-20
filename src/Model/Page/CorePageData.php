@@ -49,6 +49,7 @@ trait CorePageData
 	public FileUpload|FileData|string|int|null $imageFile;
 	public ?string $targetParameter;
 	public ?string $targetUrl;
+	public ?string $targetPath;
 	public ?string $targetSignal;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;

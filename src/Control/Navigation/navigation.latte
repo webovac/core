@@ -7,9 +7,16 @@
 		</div>
 		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw fas fa-bars"></i></a>
 		<div class="menu" id="submenu">
-			{control activeMenuItem}
-			{foreach $pageDatas as $p}
-				{control 'menuItem-' . $p->id}
+			{ifset $entityMenuItems}
+				{foreach $entityMenuItems as $id => $entity}
+					{control 'entityMenuItem-' . $id}
+				{/}
+			{/}
+			{if $pageDatas->count() > 0}
+				{control activeMenuItem}
+				{foreach $pageDatas as $p}
+					{control 'menuItem-' . $p->id}
+				{/}
 			{/}
 		</div>
 	</div>

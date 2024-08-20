@@ -9,6 +9,7 @@ use App\Model\Person\Person;
 use App\Model\Web\WebData;
 use DateTimeInterface;
 use Nette\DI\Attributes\Inject;
+use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
 use Nextras\Orm\Repository\Repository;
 use Nextras\Orm\StorageReflection\StringHelper;
@@ -38,9 +39,20 @@ abstract class CmsRepository extends Repository
 	}
 
 
-	public function getByParameters(array $parameters, ?WebData $webData = null): ?CmsEntity
+	public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?CmsEntity
 	{
-		return $this->getBy(['id' => Arrays::first($parameters)]);
+		if ($parameters) {
+			return $this->getBy(['id' => Arrays::first($parameters)]);
+		} elseif ($path) {
+			return $this->getBy(['id' => Arrays::last(explode('/', $path))]);
+		}
+		throw new InvalidStateException;
+	}
+
+
+	public function getEntityListByPath(string $path, ?WebData $webData = null): array
+	{
+		return $this->findBy(['id' => explode('/', $path)])->fetchPairs('id');
 	}
 
 

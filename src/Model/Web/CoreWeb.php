@@ -90,4 +90,10 @@ trait CoreWeb
 		}
 		return new ArrayCollection($pages, $this->getRepository());
 	}
+
+
+	public function getMenuItems(): array
+	{
+		return $this->getRepository()->findBy(['id!=' => $this->id])->fetchPairs('id');
+	}
 }

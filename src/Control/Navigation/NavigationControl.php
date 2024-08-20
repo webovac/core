@@ -27,6 +27,7 @@ class NavigationControl extends BaseControl
 		private ?PageData $pageData,
 		private LanguageData $languageData,
 		private ?CmsEntity $entity,
+		private ?array $entityList,
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
 		private IMenuItemControl $menuItem,
@@ -40,6 +41,9 @@ class NavigationControl extends BaseControl
 	{
 		if (!$this->pageData) {
 			return;
+		}
+		if ($this->entityList && method_exists($this->entity, 'getMenuItems')) {
+			$this->template->entityMenuItems = $this->entity->getMenuItems();
 		}
 		$this->template->pageDatas = $this->dataModel->getChildPageDatas($this->webData, $this->pageData, $this->languageData);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
@@ -64,6 +68,16 @@ class NavigationControl extends BaseControl
 		return new Multiplier(function ($id): MenuItemControl {
 			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
 			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, 'secondary');
+		});
+	}
+
+
+	public function createComponentEntityMenuItem(): Multiplier
+	{
+		return new Multiplier(function ($id): MenuItemControl {
+			$linkedEntity = $this->template->entityMenuItems[$id];
+			$pageData = $this->dataModel->getPageDataByName($this->webData->id, $linkedEntity->getPathPageName());
+			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, 'secondary', linkedEntity: $linkedEntity);
 		});
 	}
 }

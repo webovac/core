@@ -16,6 +16,7 @@ class MenuItemTemplate extends BaseTemplate
 	public ?PageTranslationData $pageTranslationData;
 	public LanguageData $languageData;
 	public LanguageData $targetLanguageData;
+	public ?string $title;
 	public string $context;
 	public ?string $href;
 	public string $class;

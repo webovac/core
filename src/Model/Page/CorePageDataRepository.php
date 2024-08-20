@@ -83,7 +83,7 @@ trait CorePageDataRepository
 				$parentPath = !$pageData->dontInheritPath && $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])
 					? $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])->fullPath
 					: '//' . $pageData->host . ($pageData->basePath ? ('/' . $pageData->basePath) : '');
-				$path = $translation->path ? preg_replace('/<(.*)>/', "<id[" . $pageData->name . "]>", $translation->path) : null;
+				$path = $translation->path ? preg_replace('/<id(.*)>/', "<id[" . $pageData->name . "]>", $translation->path) : null;
 				$pageData->translations[$translation->id]->fullPath = $parentPath . ($path ? '/' . $path : '');
 			}
 			if ($page->type === Page::TYPE_MODULE) {

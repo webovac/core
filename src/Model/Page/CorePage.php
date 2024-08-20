@@ -42,6 +42,7 @@ use Webovac\Core\Control\PageItem\PageItemControl;
  * @property string|null $parameterName
  * @property string|null $repository
  * @property mixed|null $targetParameter
+ * @property string|null $targetPath;
  * @property string|null $targetSignal
  * @property string|null $targetUrl
  * @property int $rank

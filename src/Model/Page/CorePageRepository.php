@@ -20,7 +20,7 @@ use Webovac\Core\Model\Web\WebModuleData;
 
 trait CorePageRepository
 {
-	public function getByParameters(array $parameters, ?WebData $webData = null): ?Page
+	public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?Page
 	{
 		if (isset($parameters['ModuleDetail'])) {
 			return $this->getBy(['module->name' => $parameters['ModuleDetail'], 'name' => $parameters['TemplateDetail']]);

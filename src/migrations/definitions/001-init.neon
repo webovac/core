@@ -162,6 +162,7 @@ tables:
 			parameter_name: [type: string, null: true]
 			target_page_id: [type: int, null: true]
 			target_parameter: [type: string, null: true]
+			target_path: [type: string, null: true]
 			target_url: [type: string, null: true]
 			type: [type: string, null: false, default: page]
 			access_for: [type: string, null: false, default: all]

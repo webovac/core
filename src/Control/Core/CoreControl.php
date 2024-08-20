@@ -36,6 +36,7 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private ?PageData $navigationPageData,
 		private ?PageData $buttonsPageData,
 		private ?CmsEntity $entity,
+		private ?array $entityList,
 		private IMenuControl $menu,
 		private INavigationControl $navigation,
 		private IMessagesControl $message,
@@ -66,7 +67,7 @@ class CoreControl extends BaseControl implements MainModuleControl
 
 	public function createComponentNavigation(): NavigationControl
 	{
-		return $this->navigation->create($this->webData, $this->navigationPageData, $this->languageData, $this->entity);
+		return $this->navigation->create($this->webData, $this->navigationPageData, $this->languageData, $this->entity, $this->entityList);
 	}
 
 

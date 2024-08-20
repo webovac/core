@@ -67,6 +67,7 @@ trait CorePresenter
 	private ?PageData $buttonsPageData;
 	private ?Preference $preference;
 	private ?CmsEntity $entity = null;
+	/** @var CmsEntity[] */ private ?array $entityList = null;
 	private string $title;
 	public array $components = [];
 	public array $crumbs = [];
@@ -121,9 +122,11 @@ trait CorePresenter
 				if (!$lastDetailRootPage) {
 					$this->error();
 				}
-				$this->entity = $this->orm
-					->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
-					->getByParameters($this->getParameter('id'), $this->webData);
+				$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
+				$this->entity = $repository->getByParameters($this->getParameter('id'), $this->getParameter('path'), $this->webData);
+				if ($this->getParameter('path')) {
+					$this->entityList = $repository->getEntityListByPath($this->getParameter('path'));
+				}
 				if (!$this->entity) {
 					$this->error();
 				}
@@ -243,6 +246,7 @@ trait CorePresenter
 			$this->navigationPageData,
 			$this->buttonsPageData,
 			$this->entity,
+			$this->entityList,
 		);
 	}
 
@@ -298,15 +302,37 @@ trait CorePresenter
 			$pageData = $this->dataModel->getPageData($this->webData->id, $id);
 			$title = $pageData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
 			if ($pageData->hasParameter) {
-				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($pageData->parentDetailRootPages));
-				if (!isset($parameters[$lastDetailRootPage->name])) {
-					$parameters[$lastDetailRootPage->name] = $this->presenter->getParameter('id')[$lastDetailRootPage->name];
-				}
-				if ($pageData->isDetailRoot) {
-					$entity = $this->orm
-						->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
-						->getByParameters($parameters, $this->webData);
-					$title = $entity->getTitle($this->languageData);
+				if ($this->getParameter('id')) {
+					$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($pageData->parentDetailRootPages));
+					if (!isset($parameters[$lastDetailRootPage->name])) {
+						$parameters[$lastDetailRootPage->name] = $this->getParameter('id')[$lastDetailRootPage->name];
+					}
+					if ($pageData->isDetailRoot) {
+						$entity = $this->orm
+							->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
+							->getByParameters($parameters, null, $this->webData);
+						$title = $entity->getTitle($this->languageData);
+					}
+				} elseif ($this->getParameter('path')) {
+					$path = [];
+					$title = $this->entity->getTitle($this->languageData);
+					foreach ($this->entityList as $entity) {
+						if ($entity === $this->entity) {
+							continue;
+						}
+						$path[] = Arrays::first($entity->getParameters());
+						$this->getComponent('core-breadcrumbs')->addCrumb(
+							$id,
+							$entity->getTitle($this->languageData),
+							$this->presenter->link(
+								'//default',
+								[
+									'pageName' => $pageData->name,
+									'path' => implode('/', $path),
+								],
+							),
+						);
+					}
 				}
 			}
 			$this->getComponent('core-breadcrumbs')->addCrumb(
@@ -317,6 +343,7 @@ trait CorePresenter
 					[
 						'pageName' => $pageData->name,
 						'id' => $pageData->hasParameter ? $parameters : [],
+						'path' => $pageData->hasParameter ? $this->getParameter('path') : null,
 					],
 				),
 			);

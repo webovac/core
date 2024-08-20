@@ -11,7 +11,7 @@ use App\Model\Web\WebData;
 
 trait CoreLanguageRepository
 {
-	public function getByParameters(array $parameters, ?WebData $webData = null): ?Language
+	public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?Language
 	{
 		return $this->getBy(['shortcut' => $parameters['LanguageDetail']]);
 	}

@@ -14,6 +14,7 @@ use Webovac\Core\Control\BaseControl;
 class BreadcrumbsControl extends BaseControl
 {
 	public array $crumbs;
+	public array $activePages;
 
 
 	public function __construct(
@@ -31,13 +32,14 @@ class BreadcrumbsControl extends BaseControl
 
 	public function isActivePage(int $pageId): bool
 	{
-		return array_key_exists($pageId, $this->crumbs);
+		return array_key_exists($pageId, $this->activePages);
 	}
 
 
 	public function addCrumb(int $id, string $title, $link): void
 	{
-		$this->crumbs[$id] = [
+		$this->activePages[$id] = true;
+		$this->crumbs[] = [
 			'title' => $title,
 			'link' => $link,
 		];

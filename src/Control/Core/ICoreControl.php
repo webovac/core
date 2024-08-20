@@ -20,5 +20,6 @@ interface ICoreControl extends Factory
 		?PageData $navigationPageData,
 		?PageData $buttonsPageData,
 		?CmsEntity $entity = null,
+		?array $entityList = null,
 	): CoreControl;
 }

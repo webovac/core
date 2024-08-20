@@ -23,5 +23,6 @@ interface IMenuItemControl extends Factory
 		bool $checkActive = true,
 		string $moduleClass = Core::class,
 		string $templateName = 'default',
+		?CmsEntity $linkedEntity = null,
 	): MenuItemControl;
 }

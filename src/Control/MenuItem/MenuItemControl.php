@@ -36,6 +36,7 @@ class MenuItemControl extends BaseControl
 		private bool $checkActive,
 		private string $moduleClass,
 		private string $templateName,
+		private ?CmsEntity $linkedEntity,
 		private DataModel $dataModel,
 		private CmsUser $cmsUser,
 	) {}
@@ -60,6 +61,7 @@ class MenuItemControl extends BaseControl
 		$this->targetLanguageData = $t ? $this->languageData : $this->dataModel->languageRepository->getById($this->webData->defaultLanguage);
 		$this->template->pageData = $this->pageData;
 		$this->template->pageTranslationData = $this->pageTranslationData;
+		$this->template->title = $this->linkedEntity && $this->pageData->hasParameter ? $this->linkedEntity->getTitle($this->languageData) : $this->pageTranslationData?->title;
 		$this->template->targetLanguageData = $this->targetLanguageData;
 		$this->template->languageData = $this->languageData;
 		$this->template->context = $this->context;
@@ -74,6 +76,9 @@ class MenuItemControl extends BaseControl
 
 	public function isActive(int $pageId)
 	{
+		if ($this->linkedEntity && $this->linkedEntity !== $this->entity) {
+			return false;
+		}
 		return $this->presenter->getComponent('core-breadcrumbs')->isActivePage($pageId);
 	}
 
@@ -86,20 +91,21 @@ class MenuItemControl extends BaseControl
 		if ($this->pageData->type === Page::TYPE_INTERNAL_LINK && $this->pageData->targetPage) {
 			$p = $this->dataModel->getPageData($this->webData->id, $this->pageData->targetPage);
 			$targetParameter = $this->pageData->targetParameter;
+			$targetPath = $this->pageData->targetPath;
 		} else {
 			$p = $this->pageData;
 			$targetParameter = $p->hasParameter ? $this->entity?->getParameters($this->languageData) : null;
+			$targetPath = null;
 		}
-		if ($p->hasParameter) {
-			$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($p->parentDetailRootPages));
-		}
+		$e = $this->linkedEntity ?: $this->entity;
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $this->presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
 			Page::TYPE_PAGE => $this->presenter->link('//default', [
 					'pageName' => $p->name,
 					'lang' => $this->targetLanguageData->shortcut,
-					'id' => $p->hasParameter ? $this->entity->getParameters($this->languageData) : [],
+					'id' => $targetParameter ?: ($p->hasParameter && !$this->presenter->getParameter('path') ? $e->getParameters($this->languageData) : []),
+					'path' => $targetPath ?: ($this->presenter->getParameter('path') ? $this->presenter->getParameter('path') . '/' . Arrays::first($e->getParameters($this->languageData)) : ''),
 				],
 			),
 			default => null,
@@ -113,10 +119,8 @@ class MenuItemControl extends BaseControl
 			'buttons' => 'btn btn-outline-' . ($this->pageData->style ?: 'primary'),
 			'signpost' => 'rounded g-col-6 g-col-lg-4 bg-' . ($this->pageData->style ? ($this->pageData->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->pageData->style ? ' btn btn-subtle-' . $this->pageData->style : ''),
-		} . (
-			($this->pageData->id === $this->presenter->pageData->id)
-				|| ($this->checkActive && $this->isActive($this->pageData->id))
-				|| ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage)) ? ' active' : ''
-			);
+		} . (($this->pageData->id === $this->presenter->pageData->id && (!$this->linkedEntity || $this->linkedEntity === $this->entity))
+		   || ($this->checkActive && $this->isActive($this->pageData->id))
+		   || ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage)) ? ' active' : '');
 	}
 }
