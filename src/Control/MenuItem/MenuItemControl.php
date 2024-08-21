@@ -74,12 +74,12 @@ class MenuItemControl extends BaseControl
 	}
 
 
-	public function isActive(int $pageId)
+	public function isActive(int $pageId, ?string $path = null)
 	{
 		if ($this->linkedEntity && $this->linkedEntity !== $this->entity) {
 			return false;
 		}
-		return $this->presenter->getComponent('core-breadcrumbs')->isActivePage($pageId);
+		return (!$path || str_contains($this->presenter->getParameter('path') ?: '', $path)) && $this->presenter->getComponent('core-breadcrumbs')->isActivePage($pageId);
 	}
 
 
@@ -88,24 +88,24 @@ class MenuItemControl extends BaseControl
 	 */
 	private function getHref(): ?string
 	{
+		$e = $this->linkedEntity ?: $this->entity;
 		if ($this->pageData->type === Page::TYPE_INTERNAL_LINK && $this->pageData->targetPage) {
 			$p = $this->dataModel->getPageData($this->webData->id, $this->pageData->targetPage);
-			$targetParameter = $this->pageData->targetParameter;
-			$targetPath = $this->pageData->targetPath;
+			$path = $this->pageData->targetPath;
+			$parameter = $this->pageData->targetParameter ? [$e->getPageName() => $this->pageData->targetParameter] : null;
 		} else {
 			$p = $this->pageData;
-			$targetParameter = $p->hasParameter ? $this->entity?->getParameters($this->languageData) : null;
-			$targetPath = null;
+			$parameter = $p->hasParameter && !$this->presenter->getParameter('path') ? $e?->getParameters($this->languageData) : null;
+			$path = $p->hasParameter && $this->presenter->getParameter('path') ? ($this->presenter->getParameter('path') . '/' . Arrays::first($e->getParameters($this->languageData))) : '';
 		}
-		$e = $this->linkedEntity ?: $this->entity;
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $this->presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
 			Page::TYPE_PAGE => $this->presenter->link('//default', [
 					'pageName' => $p->name,
 					'lang' => $this->targetLanguageData->shortcut,
-					'id' => $targetParameter ?: ($p->hasParameter && !$this->presenter->getParameter('path') ? $e->getParameters($this->languageData) : []),
-					'path' => $targetPath ?: ($this->presenter->getParameter('path') ? $this->presenter->getParameter('path') . '/' . Arrays::first($e->getParameters($this->languageData)) : ''),
+					'id' => $parameter,
+					'path' => $path,
 				],
 			),
 			default => null,
@@ -121,6 +121,6 @@ class MenuItemControl extends BaseControl
 			default => 'menu-item' . ($this->pageData->style ? ' btn btn-subtle-' . $this->pageData->style : ''),
 		} . (($this->pageData->id === $this->presenter->pageData->id && (!$this->linkedEntity || $this->linkedEntity === $this->entity))
 		   || ($this->checkActive && $this->isActive($this->pageData->id))
-		   || ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage)) ? ' active' : '');
+		   || ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage, $this->pageData->targetPath)) ? ' active' : '');
 	}
 }
