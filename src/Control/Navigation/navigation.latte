@@ -8,14 +8,14 @@
 		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw fas fa-bars"></i></a>
 		<div class="menu" id="submenu">
 			{ifset $entityMenuItems}
-				{foreach $entityMenuItems as $id => $entity}
-					{control 'entityMenuItem-' . $id}
+				{foreach $entityMenuItems as $e}
+					{renderMenuItem($dataModel->getPageDataByName($webData->id, $entity->getPathPageName()), $e)}
 				{/}
 			{/}
 			{if $pageDatas->count() > 0}
-				{control activeMenuItem}
+				{renderMenuItem($activePageData)}
 				{foreach $pageDatas as $p}
-					{control 'menuItem-' . $p->id}
+					{renderMenuItem($p)}
 				{/}
 			{/}
 		</div>

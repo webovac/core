@@ -8,10 +8,7 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Nette\Application\UI\Multiplier;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\Control\MenuItem\IMenuItemControl;
-use Webovac\Core\Control\MenuItem\MenuItemControl;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -26,22 +23,16 @@ class SignpostControl extends BaseControl
 		private LanguageData $languageData,
 		private ?CmsEntity $entity,
 		private DataModel $dataModel,
-		private IMenuItemControl $menuItem,
 	) {}
 
 
 	public function render(): void
 	{
 		$this->template->pageDatas = $this->dataModel->getChildPageDatas($this->webData, $this->pageData, $this->languageData);
+		$this->template->webData = $this->webData;
+		$this->template->languageData = $this->languageData;
+		$this->template->dataModel = $this->dataModel;
+		$this->template->entity = $this->entity;
 		$this->template->render(__DIR__ . '/signpost.latte');
-	}
-
-
-	public function createComponentMenuItem(): Multiplier
-	{
-		return new Multiplier(function ($id): MenuItemControl {
-			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
-			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, 'signpost');
-		});
 	}
 }

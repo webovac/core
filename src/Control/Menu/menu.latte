@@ -22,7 +22,12 @@
 			<a href="#" class="menu-button" id="menu-button"><i class="fas fa-fw fa-bars"></i></a>
 		</div>
 		<div class="menu flex-grow-1" id="menu" n:inner-foreach="$pageDatas as $p">
-			{control 'menuItem-' . $p->id}
+{*			{control 'menuItem-' . $p->id}*}
+			{var $t = $p->getCollection('translations')->getBy(['language' => $languageData->id])}
+			{var $pageTranslationData = $t ?: $p->getCollection('translations')->getBy(['language' => $webData->defaultLanguage])}
+			{var $targetLanguageData = $t ? $languageData : $dataModel->languageRepository->getById($webData->defaultLanguage)}
+
+			{renderMenuItem($p)}
 		</div>
 		<div class="menu" n:if="$layoutData->hideSidePanel && $cmsUser->isLoggedIn()">
 			<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">

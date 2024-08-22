@@ -1,7 +1,7 @@
 {templateType Webovac\Core\Control\Buttons\ButtonsTemplate}
 <div class="mb-3">
-	{control activeMenuItem}
+	{renderMenuItem($pageData)}
 	{foreach $pageDatas as $p}
-		{control 'menuItem-' . $p->id}
+		{renderMenuItem($p)}
 	{/}
 </div>

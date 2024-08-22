@@ -8,11 +8,8 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Nette\Application\UI\Multiplier;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\Control\MenuItem\IMenuItemControl;
-use Webovac\Core\Control\MenuItem\MenuItemControl;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Model\CmsEntity;
 
@@ -30,7 +27,6 @@ class NavigationControl extends BaseControl
 		private ?array $entityList,
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
-		private IMenuItemControl $menuItem,
 	) {}
 
 
@@ -53,31 +49,10 @@ class NavigationControl extends BaseControl
 		$this->template->title = $this->entity && $this->pageData->hasParameter
 			? $this->entity->getTitle($this->languageData)
 			: $this->pageData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
+		$this->template->webData = $this->webData;
+		$this->template->languageData = $this->languageData;
+		$this->template->dataModel = $this->dataModel;
+		$this->template->entity = $this->entity;
 		$this->template->render(__DIR__ . '/navigation.latte');
-	}
-
-
-	public function createComponentActiveMenuItem(): MenuItemControl
-	{
-		return $this->menuItem->create($this->pageData, $this->webData, $this->languageData, $this->entity, 'secondary', false);
-	}
-
-
-	public function createComponentMenuItem(): Multiplier
-	{
-		return new Multiplier(function ($id): MenuItemControl {
-			$pageData = $this->template->pageDatas->getById($this->webData->id . '-' . $id);
-			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, 'secondary');
-		});
-	}
-
-
-	public function createComponentEntityMenuItem(): Multiplier
-	{
-		return new Multiplier(function ($id): MenuItemControl {
-			$linkedEntity = $this->template->entityMenuItems[$id];
-			$pageData = $this->dataModel->getPageDataByName($this->webData->id, $linkedEntity->getPathPageName());
-			return $this->menuItem->create($pageData, $this->webData, $this->languageData, $this->entity, 'secondary', linkedEntity: $linkedEntity);
-		});
 	}
 }

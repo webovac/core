@@ -5,22 +5,28 @@ declare(strict_types=1);
 namespace Webovac\Core\Control\MenuItem;
 
 use App\Control\BaseTemplate;
+use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
+use App\Model\Web\WebData;
+use Nette\Application\IPresenter;
+use Nette\Application\UI\Presenter;
+use Webovac\Core\Model\CmsEntity;
 
 
 class MenuItemTemplate extends BaseTemplate
 {
-	public PageData $pageData;
-	public ?PageTranslationData $pageTranslationData;
-	public LanguageData $languageData;
-	public LanguageData $targetLanguageData;
-	public ?string $title;
-	public string $context;
-	public ?string $href;
-	public string $class;
-	public string $tag;
-	public bool $iconHasWrapper;
-	public string $iconStyle;
+	public function __construct(
+		public WebData $webData,
+		public PageData $pageData,
+		public ?PageTranslationData $pageTranslationData,
+		public LanguageData $languageData,
+		public LanguageData $targetLanguageData,
+		public ?CmsEntity $entity,
+		public ?CmsEntity $linkedEntity,
+		public DataModel $dataModel,
+		public string $context,
+		public Presenter $presenter,
+	) {}
 }
