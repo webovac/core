@@ -10,6 +10,8 @@ use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Control\MenuItem\MenuItemTemplate;
+use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Model\CmsEntity;
 
@@ -27,6 +29,7 @@ class NavigationControl extends BaseControl
 		private ?array $entityList,
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
+		private MenuItemRenderer $menuItemRenderer,
 	) {}
 
 
@@ -53,6 +56,9 @@ class NavigationControl extends BaseControl
 		$this->template->languageData = $this->languageData;
 		$this->template->dataModel = $this->dataModel;
 		$this->template->entity = $this->entity;
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
+			$this->menuItemRenderer->render('secondary', $this, $this->webData, $pageData, $this->languageData, $this->entity, $linkedEntity);
+		});
 		$this->template->render(__DIR__ . '/navigation.latte');
 	}
 }

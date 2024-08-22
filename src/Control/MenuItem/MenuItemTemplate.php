@@ -10,7 +10,7 @@ use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
-use Nette\Application\IPresenter;
+use Latte\Engine;
 use Nette\Application\UI\Presenter;
 use Webovac\Core\Model\CmsEntity;
 
@@ -18,6 +18,7 @@ use Webovac\Core\Model\CmsEntity;
 class MenuItemTemplate extends BaseTemplate
 {
 	public function __construct(
+		public Engine $latte,
 		public WebData $webData,
 		public PageData $pageData,
 		public ?PageTranslationData $pageTranslationData,
@@ -28,5 +29,7 @@ class MenuItemTemplate extends BaseTemplate
 		public DataModel $dataModel,
 		public string $context,
 		public Presenter $presenter,
-	) {}
+	) {
+		parent::__construct($latte);
+	}
 }

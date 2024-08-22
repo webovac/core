@@ -9,6 +9,8 @@ use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Control\MenuItem\MenuItemTemplate;
+use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -23,6 +25,7 @@ class SignpostControl extends BaseControl
 		private LanguageData $languageData,
 		private ?CmsEntity $entity,
 		private DataModel $dataModel,
+		private MenuItemRenderer $menuItemRenderer,
 	) {}
 
 
@@ -31,8 +34,10 @@ class SignpostControl extends BaseControl
 		$this->template->pageDatas = $this->dataModel->getChildPageDatas($this->webData, $this->pageData, $this->languageData);
 		$this->template->webData = $this->webData;
 		$this->template->languageData = $this->languageData;
-		$this->template->dataModel = $this->dataModel;
 		$this->template->entity = $this->entity;
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
+			$this->menuItemRenderer->render('signpost', $this, $this->webData, $pageData, $this->languageData, $this->entity, $linkedEntity);
+		});
 		$this->template->render(__DIR__ . '/signpost.latte');
 	}
 }
