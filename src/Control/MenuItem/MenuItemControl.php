@@ -42,15 +42,6 @@ class MenuItemControl extends BaseControl
 	) {}
 
 
-	/**
-	 * @throws ReflectionException
-	 */
-	public function loadState(array $params): void
-	{
-		parent::loadState($params);
-	}
-
-
 	public function render(): void
 	{
 		if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
@@ -119,8 +110,10 @@ class MenuItemControl extends BaseControl
 			'buttons' => 'btn btn-outline-' . ($this->pageData->style ?: 'primary'),
 			'signpost' => 'rounded g-col-6 g-col-lg-4 bg-' . ($this->pageData->style ? ($this->pageData->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->pageData->style ? ' btn btn-subtle-' . $this->pageData->style : ''),
-		} . (($this->pageData->id === $this->presenter->pageData->id && (!$this->linkedEntity || $this->linkedEntity === $this->entity))
+		}
+		. (($this->pageData->id === $this->presenter->pageData->id && (!$this->linkedEntity || $this->linkedEntity === $this->entity))
 		   || ($this->checkActive && $this->isActive($this->pageData->id))
-		   || ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage, $this->pageData->targetPath)) ? ' active' : '');
+		   || ($this->checkActive && $this->pageData->targetPage && $this->isActive($this->pageData->targetPage, $this->pageData->targetPath)) ? ' active' : '')
+			;
 	}
 }
