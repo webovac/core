@@ -17,6 +17,8 @@ use Latte\Loaders\StringLoader;
 use Latte\Sandbox\SecurityPolicy;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\ForbiddenRequestException;
+use Nette\Application\UI\Template;
+use Nette\Application\UI\TemplateFactory;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\DI\Attributes\Inject;
@@ -57,6 +59,7 @@ trait CorePresenter
 	#[Inject] public ModuleChecker $moduleChecker;
 	#[Inject] public Cache $cache;
 	#[Inject] public CmsTranslator $translator;
+	#[Inject] public TemplateFactory $templateFactory;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -89,6 +92,9 @@ trait CorePresenter
 				$this->error();
 			}
 			$this->translator->setLanguageData($this->languageData);
+			$this->templateFactory->onCreate[] = function (Template $template) {
+				$template->getLatte()->setLocale($this->languageData->shortcut);
+			};
 			$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
 			if (!$this->webData) {
 				$this->error();
@@ -154,6 +160,7 @@ trait CorePresenter
 	public function injectCoreRender(): void
 	{
 		$this->onRender[] = function () {
+			$this->template->getLatte()->setLocale($this->languageData->shortcut);
 			$this->template->languageData = $this->languageData;
 			$this->template->webData = $this->webData;
 			if ($this->webData->iconFile) {
@@ -343,7 +350,7 @@ trait CorePresenter
 					[
 						'pageName' => $pageData->name,
 						'id' => $pageData->hasParameter ? $parameters : [],
-						'path' => $pageData->hasParameter ? $this->getParameter('path') : null,
+						'path' => $pageData->hasPath ? $this->getParameter('path') : null,
 					],
 				),
 			);

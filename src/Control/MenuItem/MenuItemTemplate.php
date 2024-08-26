@@ -17,6 +17,11 @@ use Webovac\Core\Model\CmsEntity;
 
 class MenuItemTemplate extends BaseTemplate
 {
+	public ?string $href;
+	public string $class;
+	public ?string $icon;
+
+
 	public function __construct(
 		public Engine $latte,
 		public WebData $webData,
@@ -24,12 +29,17 @@ class MenuItemTemplate extends BaseTemplate
 		public ?PageTranslationData $pageTranslationData,
 		public LanguageData $languageData,
 		public LanguageData $targetLanguageData,
+		public bool $checkActive,
 		public ?CmsEntity $entity,
 		public ?CmsEntity $linkedEntity,
 		public DataModel $dataModel,
 		public string $context,
 		public Presenter $presenter,
 	) {
+		$this->href = $pageData->getHref($targetLanguageData, $webData, $dataModel, $presenter, $entity, $linkedEntity);
+		$this->class = $pageData->getClass($context, $checkActive, $presenter, $entity, $linkedEntity);
+		$this->icon = ($linkedEntity && $pageData->isDetailRoot && method_exists($linkedEntity, 'getIcon')
+			? $linkedEntity->getIcon() : null) ?: $pageData->icon;
 		parent::__construct($latte);
 	}
 }

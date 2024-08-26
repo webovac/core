@@ -22,7 +22,7 @@ class MenuItemRenderer
 	) {}
 
 
-	public function render(string $context, Control $control, WebData $webData, PageData $pageData, LanguageData $languageData, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): void
+	public function render(string $context, Control $control, WebData $webData, PageData $pageData, LanguageData $languageData, bool $checkActive, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): void
 	{
 		$t = $pageData->getCollection('translations')->getBy(['language' => $languageData->id]);
 		$control->template->getLatte()->render(__DIR__ . '/../templates/menuItem.latte', new MenuItemTemplate(
@@ -32,6 +32,7 @@ class MenuItemRenderer
 			pageTranslationData: $t ?: $pageData->getCollection('translations')->getBy(['language' => $webData->defaultLanguage]),
 			languageData: $languageData,
 			targetLanguageData: $t ? $languageData : $this->dataModel->languageRepository->getById($webData->defaultLanguage),
+			checkActive: $checkActive,
 			entity: $entity,
 			linkedEntity: $linkedEntity,
 			dataModel: $this->dataModel,

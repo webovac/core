@@ -30,8 +30,8 @@ trait CorePageDataRepository
 				$this->buildCollection($collection);
 				$array = (array) $collection;
 				uasort($array, function(PageData $a, PageData $b) {
-					return [$a->host, $a->basePath, $a->hasParameter]
-						<=> [$b->host, $b->basePath, $b->hasParameter];
+					return [$a->host, $a->basePath, $a->hasPath, $a->hasParameter]
+						<=> [$b->host, $b->basePath, $b->hasPath, $b->hasParameter];
 				});
 				return new Collection($array);
 			});

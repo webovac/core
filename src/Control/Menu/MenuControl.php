@@ -73,7 +73,7 @@ class MenuControl extends BaseControl
 		$this->template->wwwDir = $this->dir->getWwwDir();
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
-			$this->menuItemRenderer->render('primary', $this, $this->webData, $pageData, $this->languageData, $this->entity, $linkedEntity);
+			$this->menuItemRenderer->render('primary', $this, $this->webData, $pageData, $this->languageData, $this->webData->homePage !== $pageData->id, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/menu.latte');
 	}

@@ -1,6 +1,6 @@
 {templateType Webovac\Core\Control\Buttons\ButtonsTemplate}
 <div class="mb-3">
-	{renderMenuItem($pageData)}
+	{renderMenuItem($pageData, checkActive: false)}
 	{foreach $pageDatas as $p}
 		{renderMenuItem($p)}
 	{/}

@@ -49,6 +49,8 @@ class NavigationControl extends BaseControl
 			$this->template->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
 		}
 		$this->template->activePageData = $this->pageData;
+		$this->template->icon = ($this->entity && $this->pageData->isDetailRoot && method_exists($this->entity, 'getIcon') 
+			? $this->entity->getIcon() : null) ?: $this->pageData->icon;
 		$this->template->title = $this->entity && $this->pageData->hasParameter
 			? $this->entity->getTitle($this->languageData)
 			: $this->pageData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
@@ -56,8 +58,8 @@ class NavigationControl extends BaseControl
 		$this->template->languageData = $this->languageData;
 		$this->template->dataModel = $this->dataModel;
 		$this->template->entity = $this->entity;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
-			$this->menuItemRenderer->render('secondary', $this, $this->webData, $pageData, $this->languageData, $this->entity, $linkedEntity);
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null, bool $checkActive = true) {
+			$this->menuItemRenderer->render('secondary', $this, $this->webData, $pageData, $this->languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/navigation.latte');
 	}

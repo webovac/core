@@ -47,6 +47,7 @@ trait CorePageData
 	#[DefaultValue(false)] public bool $dontInheritPath;
 	#[DefaultValue(false)] public bool $dontInheritAccessSetup;
 	#[DefaultValue(false)] public bool $hasParameter;
+	#[DefaultValue(false)] public bool $hasPath;
 	#[DefaultValue(false)] public bool $isDetailRoot;
 	public ?string $parameterName;
 	public ?string $icon;
@@ -124,17 +125,17 @@ trait CorePageData
 		} else {
 			$p = $this;
 			$parameter = $p->hasParameter && !$presenter->getParameter('path') ? $e?->getParameters($languageData) : null;
-			$path = $p->hasParameter && $presenter->getParameter('path') ? ($presenter->getParameter('path') . '/' . Arrays::first($e->getParameters($languageData))) : '';
+			$path = $p->hasPath && $presenter->getParameter('path') ? ($presenter->getParameter('path') . '/' . Arrays::first($e->getParameters($languageData))) : '';
 		}
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
 			Page::TYPE_PAGE => $presenter->link('//default', [
-				'pageName' => $p->name,
-				'lang' => $languageData->shortcut,
-				'id' => $parameter,
-				'path' => $path,
-			],
+					'pageName' => $p->name,
+					'lang' => $languageData->shortcut,
+					'id' => $parameter,
+					'path' => $path,
+				],
 			),
 			default => null,
 		};

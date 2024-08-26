@@ -38,6 +38,7 @@ use Webovac\Core\Control\PageItem\PageItemControl;
  * @property bool $dontInheritPath {default false}
  * @property bool $dontInheritAccessSetup {default false}
  * @property bool $hasParameter {default false}
+ * @property bool $hasPath {default false}
  * @property bool $isDetailRoot {default false}
  * @property string|null $parameterName
  * @property string|null $repository

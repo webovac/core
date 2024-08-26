@@ -2,7 +2,7 @@
 <div class="mobile-collapsed wrapper navigation-wrapper secondary-navigation-wrapper" n:if="$activePageData->providesNavigation" n:snippet>
 	<div class="navigation secondary-navigation">
 		<div class="title">
-			<i n:if="$activePageData->icon" class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$activePageData->icon}"></i>
+			<i n:if="$icon" class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$icon}"></i>
 			<span>{$title}</span>
 		</div>
 		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw fas fa-bars"></i></a>
@@ -13,7 +13,7 @@
 				{/}
 			{/}
 			{if $pageDatas->count() > 0}
-				{renderMenuItem($activePageData)}
+				{renderMenuItem($activePageData, checkActive: false)}
 				{foreach $pageDatas as $p}
 					{renderMenuItem($p)}
 				{/}

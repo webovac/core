@@ -1,10 +1,9 @@
 {templateType Webovac\Core\Control\SidePanel\SidePanelTemplate}
 <div class="side-panel" id="side" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn()">
-	<div n:if="$hasSearch" class="search menu-item" style="height: 56px; min-height: 56px;">
+	<div n:if="$hasSearch" class="search menu-item border-bottom" style="height: 57px; min-height: 57px;">
 		{$presenter->getComponent('search-searchForm')->render()}
 	</div>
-	<hr n:if="$hasSearch" class="mt-0">
-	<div n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink '//default', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="user menu-item">
+	<div n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink '//default', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="pt-3 user menu-item">
 		<div class="user-icon" style="height: 48px;">
 			<i class="fad fa-fw fa-circle-user" style="font-size: 48px; line-height: 1"></i>
 		</div>
