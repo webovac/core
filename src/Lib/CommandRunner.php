@@ -28,11 +28,25 @@ class CommandRunner
 	}
 
 
-	public function run(string $module, string $name): int
+	public function run(string $name): int
 	{
-		if (!isset($this->commands[$module][$name])) {
-			throw new InvalidArgumentException("Command '$name' does not exist in module '$module'.");
+		if (!str_contains($name, ':')) {
+			throw new InvalidArgumentException("Invalid command.");
 		}
-		return $this->commands[$module][$name]->run();
+		[$module, $command] = explode(':', $name);
+		if (!isset($this->commands[$module][$command])) {
+			throw new InvalidArgumentException("Command '$command' does not exist in module '$module'.");
+		}
+		return $this->commands[$module][$command]->run();
+	}
+
+
+	public function printCommands(): void
+	{
+		foreach ($this->commands as $module => $moduleCommands) {
+			foreach ($moduleCommands as $name => $command) {
+				print "$module:$name\n";
+			}
+		}
 	}
 }
