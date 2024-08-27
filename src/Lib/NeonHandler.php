@@ -40,16 +40,9 @@ class NeonHandler implements IExtensionHandler
 			$repository = $this->orm->getRepositoryByName($repositoryName . 'Repository');
 			if (isset($config['class'], $config['items'])) {
 				$manipulationData = Manipulation::createFromArray($config, skipDefaults: $skipDefaults);
-				if (
-					($manipulationData->dev === true && !$this->debugMode)
-					|| ($manipulationData->dev === false && $this->debugMode)
-				) {
-					return $count;
-				}
-				if (
-					($manipulationData->test === true && !$this->testMode)
-					|| ($manipulationData->test === false && $this->testMode)
-				) {
+				$skipDev = ($manipulationData->dev === true && !$this->debugMode) || ($manipulationData->dev === false && $this->debugMode);
+				$skipTest = ($manipulationData->test === true && !$this->testMode) || ($manipulationData->test === false && $this->testMode);
+				if ($skipDev && $skipTest) {
 					return $count;
 				}
 				foreach ($manipulationData->items as $itemData) {

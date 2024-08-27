@@ -13,5 +13,5 @@ use Webovac\Core\Model\CmsEntity;
 
 interface IButtonsControl extends Factory
 {
-	function create(WebData $webData, ?PageData $pageData, LanguageData $languageData, ?CmsEntity $entity): ButtonsControl;
+	function create(?CmsEntity $entity): ButtonsControl;
 }

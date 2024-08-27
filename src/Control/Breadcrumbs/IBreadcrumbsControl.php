@@ -10,5 +10,5 @@ use Webovac\Core\Factory;
 
 interface IBreadcrumbsControl extends Factory
 {
-	function create(WebData $webData): BreadcrumbsControl;
+	function create(): BreadcrumbsControl;
 }

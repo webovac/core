@@ -14,6 +14,7 @@ use Nette\Application\LinkGenerator;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\MenuItem\MenuItemTemplate;
+use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\MenuItemRenderer;
@@ -27,15 +28,13 @@ use Webovac\Core\Model\CmsEntity;
 class MenuControl extends BaseControl
 {
 	public function __construct(
-		private WebData $webData,
-		private PageData $pageData,
-		private LanguageData $languageData,
 		private ?CmsEntity $entity,
 		private Dir $dir,
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
 		private FileUploader $fileUploader,
 		private MenuItemRenderer $menuItemRenderer,
+		private DataProvider $dataProvider,
 	) {}
 
 
@@ -44,24 +43,27 @@ class MenuControl extends BaseControl
 	 */
 	public function render(): void
 	{
-		$this->template->webData = $this->webData;
-		if ($this->webData->logoFile) {
-			$this->template->logoUrl = $this->fileUploader->getUrl($this->webData->logoFile->getDefaultIdentifier());
+		$webData = $this->dataProvider->getWebData();
+		$pageData = $this->dataProvider->getPageData();
+		$languageData = $this->dataProvider->getLanguageData();
+		$this->template->webData = $webData;
+		if ($webData->logoFile) {
+			$this->template->logoUrl = $this->fileUploader->getUrl($webData->logoFile->getDefaultIdentifier());
 		}
-		$this->template->pageData = $this->pageData;
-		$this->template->pageDatas = $this->dataModel->getRootPageDatas($this->webData, $this->languageData);
-		$this->template->languageData = $this->languageData;
-		$this->template->homePageData = $this->dataModel->getHomePageData($this->webData->id);
+		$this->template->pageData = $pageData;
+		$this->template->pageDatas = $this->dataModel->getRootPageDatas($webData, $languageData);
+		$this->template->languageData = $languageData;
+		$this->template->homePageData = $this->dataModel->getHomePageData($webData->id);
 		$this->template->dataModel = $this->dataModel;
 		$searchModuleData = $this->dataModel->moduleRepository->getBy(['name' => 'Search']);
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& $searchModuleData
-			&& in_array($searchModuleData->id, $this->webData->modules, true);
+			&& in_array($searchModuleData->id, $webData->modules, true);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
-			$layoutData = $this->dataModel->getLayoutData($this->webData->layout);
+			$layoutData = $this->dataProvider->getLayoutData();
 			$this->template->layoutData = $layoutData;
 			if ($layoutData->hideSidePanel) {
-				foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->getCollection('translations') as $translationData) {
+				foreach ($this->dataModel->getPageData($webData->id, $pageData->id)->getCollection('translations') as $translationData) {
 					$this->template->availableTranslations[$translationData->language] = $translationData->language;
 				}
 				$this->template->themeDatas = $this->dataModel->themeRepository->findBy(['id' => $layoutData->themes]);
@@ -69,11 +71,11 @@ class MenuControl extends BaseControl
 			}
 		}
 		$this->template->entity = $this->entity;
-		$this->template->title = $this->webData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
+		$this->template->title = $webData->getCollection('translations')->getBy(['language' => $languageData->id])->title;
 		$this->template->wwwDir = $this->dir->getWwwDir();
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
-			$this->menuItemRenderer->render('primary', $this, $this->webData, $pageData, $this->languageData, $this->webData->homePage !== $pageData->id, $this->entity, $linkedEntity);
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData) {
+			$this->menuItemRenderer->render('primary', $this, $webData, $pageData, $languageData, $webData->homePage !== $pageData->id, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/menu.latte');
 	}

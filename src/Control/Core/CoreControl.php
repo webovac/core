@@ -30,11 +30,6 @@ use Webovac\Core\Model\CmsEntity;
 class CoreControl extends BaseControl implements MainModuleControl
 {
 	public function __construct(
-		private WebData $webData,
-		private LanguageData $languageData,
-		private ?PageData $pageData,
-		private ?PageData $navigationPageData,
-		private ?PageData $buttonsPageData,
 		private ?CmsEntity $entity,
 		private ?array $entityList,
 		private IMenuControl $menu,
@@ -61,37 +56,37 @@ class CoreControl extends BaseControl implements MainModuleControl
 
 	public function createComponentMenu(): MenuControl
 	{
-		return $this->menu->create($this->webData, $this->pageData, $this->languageData, $this->entity);
+		return $this->menu->create($this->entity);
 	}
 
 
 	public function createComponentNavigation(): NavigationControl
 	{
-		return $this->navigation->create($this->webData, $this->navigationPageData, $this->languageData, $this->entity, $this->entityList);
+		return $this->navigation->create($this->entity, $this->entityList);
 	}
 
 
 	public function createComponentButtons(): ButtonsControl
 	{
-		return $this->buttons->create($this->webData, $this->buttonsPageData, $this->languageData, $this->entity);
+		return $this->buttons->create($this->entity);
 	}
 
 
 	public function createComponentSignpost(): SignpostControl
 	{
-		return $this->signpost->create($this->webData, $this->pageData, $this->languageData, $this->entity);
+		return $this->signpost->create($this->entity);
 	}
 
 
 	public function createComponentSidePanel(): SidePanelControl
 	{
-		return $this->sidePanel->create($this->webData, $this->pageData, $this->languageData, $this->entity);
+		return $this->sidePanel->create($this->entity);
 	}
 
 
 	public function createComponentBreadcrumbs(): BreadcrumbsControl
 	{
-		return $this->breadcrumbs->create($this->webData);
+		return $this->breadcrumbs->create();
 	}
 
 

@@ -13,5 +13,5 @@ use Webovac\Core\Model\CmsEntity;
 
 interface ISidePanelControl extends Factory
 {
-	function create(WebData $webData, PageData $pageData, LanguageData $languageData, ?CmsEntity $entity): SidePanelControl;
+	function create(?CmsEntity $entity): SidePanelControl;
 }

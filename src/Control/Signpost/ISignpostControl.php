@@ -13,5 +13,5 @@ use Webovac\Core\Model\CmsEntity;
 
 interface ISignpostControl extends Factory
 {
-	function create(WebData $webData, PageData $pageData, LanguageData $languageData, ?CmsEntity $entity): SignpostControl;
+	function create(?CmsEntity $entity): SignpostControl;
 }

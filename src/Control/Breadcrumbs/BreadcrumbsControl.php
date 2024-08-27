@@ -6,6 +6,7 @@ namespace Webovac\Core\Control\Breadcrumbs;
 
 use App\Model\Web\WebData;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Lib\DataProvider;
 
 
 /**
@@ -17,15 +18,14 @@ class BreadcrumbsControl extends BaseControl
 	public array $activePages;
 
 
-	public function __construct(
-		private WebData $webData,
-	) {}
+	public function __construct(private DataProvider $dataProvider)
+	{}
 
 
 	public function render(): void
 	{
 		$this->template->crumbs = $this->crumbs;
-		$this->template->webData = $this->webData;
+		$this->template->webData = $this->dataProvider->getWebData();
 		$this->template->render(__DIR__ . '/breadcrumbs.latte');
 	}
 

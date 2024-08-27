@@ -13,5 +13,5 @@ use Webovac\Core\Model\CmsEntity;
 
 interface IMenuControl extends Factory
 {
-	function create(WebData $webData, PageData $pageData, LanguageData $languageData, ?CmsEntity $entity): MenuControl;
+	function create(?CmsEntity $entity): MenuControl;
 }

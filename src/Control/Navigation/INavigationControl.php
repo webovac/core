@@ -13,5 +13,5 @@ use Webovac\Core\Model\CmsEntity;
 
 interface INavigationControl extends Factory
 {
-	function create(WebData $webData, ?PageData $pageData, LanguageData $languageData, ?CmsEntity $entity, ?array $entityList): NavigationControl;
+	function create(?CmsEntity $entity, ?array $entityList): NavigationControl;
 }

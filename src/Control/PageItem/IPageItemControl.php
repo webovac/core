@@ -14,7 +14,6 @@ interface IPageItemControl extends Factory
 {
 	function create(
 		Page $page,
-		LanguageData $languageData,
 		string $moduleClass = Core::class,
 		string $templateName = 'default',
 	): PageItemControl;

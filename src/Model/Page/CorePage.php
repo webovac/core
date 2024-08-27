@@ -185,9 +185,9 @@ trait CorePage
 	}
 
 
-	public function getComponent(LanguageData $languageData, string $moduleClass, string $templateName): PageItemControl
+	public function getComponent(string $moduleClass, string $templateName): PageItemControl
 	{
-		return $this->component->create($this, $languageData, $moduleClass, $templateName);
+		return $this->component->create($this, $moduleClass, $templateName);
 	}
 
 

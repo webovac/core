@@ -14,11 +14,6 @@ use Webovac\Core\Model\CmsEntity;
 interface ICoreControl extends Factory
 {
 	function create(
-		WebData $webData,
-		LanguageData $languageData,
-		?PageData $pageData,
-		?PageData $navigationPageData,
-		?PageData $buttonsPageData,
 		?CmsEntity $entity = null,
 		?array $entityList = null,
 	): CoreControl;

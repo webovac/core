@@ -7,6 +7,7 @@ namespace Webovac\Core\Control\PageItem;
 use App\Model\Language\LanguageData;
 use App\Model\Page\Page;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Lib\DataProvider;
 
 
 /**
@@ -16,16 +17,16 @@ class PageItemControl extends BaseControl
 {
 	public function __construct(
 		private Page $page,
-		private LanguageData $languageData,
 		private string $moduleClass,
 		private string $templateName,
+		private DataProvider $dataProvider,
 	) {}
 
 
 	public function render(): void
 	{
 		$this->template->page = $this->page;
-		$this->template->languageData = $this->languageData;
+		$this->template->languageData = $this->dataProvider->getLanguageData();
 		$this->template->renderFile($this->moduleClass, self::class, $this->templateName);
 	}
 }

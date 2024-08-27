@@ -37,6 +37,7 @@ use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsTranslator;
 use Webovac\Core\Lib\CmsUser;
+use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
@@ -60,6 +61,7 @@ trait CorePresenter
 	#[Inject] public Cache $cache;
 	#[Inject] public CmsTranslator $translator;
 	#[Inject] public TemplateFactory $templateFactory;
+	#[Inject] public DataProvider $dataProvider;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -91,6 +93,7 @@ trait CorePresenter
 			if (!$this->languageData) {
 				$this->error();
 			}
+			$this->dataProvider->setLanguageData($this->languageData);
 			$this->translator->setLanguageData($this->languageData);
 			$this->templateFactory->onCreate[] = function (Template $template) {
 				$template->getLatte()->setLocale($this->languageData->shortcut);
@@ -99,6 +102,7 @@ trait CorePresenter
 			if (!$this->webData) {
 				$this->error();
 			}
+			$this->dataProvider->setWebData($this->webData);
 			$this->webTranslationData = $this->webData->getCollection('translations')->getBy(['language' => $this->languageData->id]) ?? null;
 			if (!$this->webTranslationData) {
 				$this->error();
@@ -107,6 +111,7 @@ trait CorePresenter
 			if (!$this->pageData) {
 				$this->error();
 			}
+			$this->dataProvider->setPageData($this->pageData);
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
 			if (!$this->pageTranslation) {
 				$this->error();
@@ -151,7 +156,9 @@ trait CorePresenter
 			}
 			$this->title = $this->entity ? $this->entity->getTitle($this->languageData) : $this->pageTranslation->title;
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
+			$this->dataProvider->setNavigationPageData($this->navigationPageData);
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
+			$this->dataProvider->setButtonsPageData($this->buttonsPageData);
 			$this->buildCrumbs();
 		};
 	}
@@ -247,11 +254,6 @@ trait CorePresenter
 	public function createComponentCore(): CoreControl
 	{
 		return $this->core->create(
-			$this->webData,
-			$this->languageData,
-			$this->pageData,
-			$this->navigationPageData,
-			$this->buttonsPageData,
 			$this->entity,
 			$this->entityList,
 		);
