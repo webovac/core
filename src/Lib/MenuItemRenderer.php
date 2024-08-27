@@ -8,10 +8,7 @@ use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Latte\Engine;
 use Nette\Application\UI\Control;
-use Nette\Application\UI\Presenter;
-use Nette\Application\UI\Template;
 use Webovac\Core\Control\MenuItem\MenuItemTemplate;
 use Webovac\Core\Model\CmsEntity;
 

@@ -16,12 +16,22 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 use Stepapo\Utils\Model\Item;
+use Webovac\Core\Lib\DataProvider;
 
 
 abstract class CmsEntity extends Entity
 {
 	public const OMITTED_PROPERTIES = ['id', 'createdByPerson', 'updatedByPerson', 'createdAt', 'updatedAt'];
+	protected DataProvider $dataProvider;
+
+
 	abstract public function getDataClass(): string;
+
+
+	public function injectDataProvider(DataProvider $dataProvider): void
+	{
+		$this->dataProvider = $dataProvider;
+	}
 
 
 	public function isChanged(?array $old): bool

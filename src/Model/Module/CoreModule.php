@@ -19,6 +19,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property int $id {primary}
  *
  * @property string $name
+ * @property string $title {virtual}
  * @property string $icon
  *
  * @property DateTimeImmutable $createdAt {default now}
@@ -55,9 +56,9 @@ trait CoreModule
 	}
 
 
-	public function getTitle(LanguageData $language): string
+	public function getterTitle(): string
 	{
-		return $this->getTranslation($language)->title;
+		return $this->getTranslation($this->dataProvider->getLanguageData())->title;
 	}
 
 

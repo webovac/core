@@ -5,15 +5,10 @@ declare(strict_types=1);
 namespace Webovac\Core\Control\Menu;
 
 use App\Model\DataModel;
-use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Theme\ThemeData;
-use App\Model\Web\WebData;
-use Latte\Engine;
-use Nette\Application\LinkGenerator;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\Control\MenuItem\MenuItemTemplate;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
@@ -52,7 +47,6 @@ class MenuControl extends BaseControl
 		}
 		$this->template->pageData = $pageData;
 		$this->template->pageDatas = $this->dataModel->getRootPageDatas($webData, $languageData);
-		$this->template->languageData = $languageData;
 		$this->template->homePageData = $this->dataModel->getHomePageData($webData->id);
 		$this->template->dataModel = $this->dataModel;
 		$searchModuleData = $this->dataModel->moduleRepository->getBy(['name' => 'Search']);

@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Webovac\Core\Control\Signpost;
 
 use App\Model\DataModel;
-use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
-use App\Model\Web\WebData;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\Control\MenuItem\MenuItemTemplate;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Model\CmsEntity;
@@ -35,7 +32,6 @@ class SignpostControl extends BaseControl
 		$languageData = $this->dataProvider->getLanguageData();
 		$this->template->pageDatas = $this->dataModel->getChildPageDatas($webData, $pageData, $languageData);
 		$this->template->webData = $webData;
-		$this->template->languageData = $languageData;
 		$this->template->entity = $this->entity;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData) {
 			$this->menuItemRenderer->render('signpost', $this, $webData, $pageData, $languageData, false, $this->entity, $linkedEntity);

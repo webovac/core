@@ -154,7 +154,7 @@ trait CorePresenter
 					}
 				}
 			}
-			$this->title = $this->entity ? $this->entity->getTitle($this->languageData) : $this->pageTranslation->title;
+			$this->title = $this->entity ? $this->entity->title : $this->pageTranslation->title;
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
 			$this->dataProvider->setNavigationPageData($this->navigationPageData);
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
@@ -188,7 +188,7 @@ trait CorePresenter
 			$this->template->title = $this->title;
 			$this->template->metaTitle = (!$this->entity || (!$this->pageData->providesNavigation && !$this->pageData->providesButtons) ? $this->pageTranslationData->title : '')
 				. ($this->entity && !$this->pageData->providesNavigation && !$this->pageData->providesButtons ? ' | ' : '' )
-				. ($this->entity ? $this->entity->getTitle($this->languageData) : '');
+				. ($this->entity ? $this->entity->title : '');
 			$this->template->metaType = $this->entity?->getRepository()->getMapper()->getTableName() ?: 'page';
 //			if ($this->pageData->hasParameter) {
 //				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
@@ -320,11 +320,11 @@ trait CorePresenter
 						$entity = $this->orm
 							->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
 							->getByParameters($parameters, null, $this->webData);
-						$title = $entity->getTitle($this->languageData);
+						$title = $entity->title;
 					}
 				} elseif ($this->getParameter('path')) {
 					$path = [];
-					$title = $this->entity->getTitle($this->languageData);
+					$title = $this->entity->title;
 					foreach ($this->entityList as $entity) {
 						if ($entity === $this->entity) {
 							continue;
@@ -332,7 +332,7 @@ trait CorePresenter
 						$path[] = Arrays::first($entity->getParameters());
 						$this->getComponent('core-breadcrumbs')->addCrumb(
 							$id,
-							$entity->getTitle($this->languageData),
+							$entity->title,
 							$this->presenter->link(
 								'//default',
 								[

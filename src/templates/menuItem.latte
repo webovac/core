@@ -6,7 +6,7 @@
 		<div n:tag-if="$context === 'signpost'" n:if="$icon" class="p-2 rounded-5 d-inline-block bg-white" style="width: 51px; height: 51px;">
 			<i n:class="$dataModel->layoutRepository->getById($webData->layout)->{$context . 'Icon'}, fa-fw, 'fa-' . $icon, $context === 'signpost' ? fs-2, $context === 'signpost' ? lh-sm"></i>
 		</div>
-		<h3 n:tag="$context === 'signpost' ? 'h3' : 'span'" n:class="$context === 'signpost' ? 'mt-2 mb-0'">{$linkedEntity && $pageData->hasParameter ? $linkedEntity->getTitle($languageData) : $pageTranslationData?->title}</h3>
+		<h3 n:tag="$context === 'signpost' ? 'h3' : 'span'" n:class="$context === 'signpost' ? 'mt-2 mb-0'">{$linkedEntity && $pageData->hasParameter ? $linkedEntity->title : $pageTranslationData?->title}</h3>
 		<span class="text-danger" n:if="$languageData->id !== $targetLanguageData->id" data-tooltip="{_'Nedostupný překlad'}"><i class="fas fa-circle-exclamation fa-fw" ></i></span>
 	</a>
 {/}

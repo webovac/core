@@ -16,6 +16,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  *
  * @property string $shortcut
  * @property string $name
+ * @property string $title {virtual}
  * @property int $rank
  *
  * @property DateTimeImmutable $createdAt {default now}
@@ -34,8 +35,8 @@ trait CoreLanguage
 	}
 
 
-	public function getTitle(LanguageData $language): string
+	public function getterTitle(): string
 	{
-		return $this->getTranslation($language)->title;
+		return $this->getTranslation($this->dataProvider->getLanguageData())->title;
 	}
 }

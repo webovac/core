@@ -8,13 +8,11 @@ use App\Model\DataModel;
 use App\Model\File\FileData;
 use App\Model\Language\LanguageData;
 use App\Model\Page\Page;
-use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\QueryName\QueryNameData;
 use App\Model\Web\WebData;
 use DateTimeInterface;
 use Nette\Application\IPresenter;
-use Nette\Application\LinkGenerator;
 use Nette\Http\FileUpload;
 use Nette\Utils\Arrays;
 use ReflectionException;
@@ -124,8 +122,8 @@ trait CorePageData
 			$parameter = $this->targetParameter ? [$e->getPageName() => $this->targetParameter] : null;
 		} else {
 			$p = $this;
-			$parameter = $p->hasParameter && !$presenter->getParameter('path') ? $e?->getParameters($languageData) : null;
-			$path = $p->hasPath && $presenter->getParameter('path') ? ($presenter->getParameter('path') . '/' . Arrays::first($e->getParameters($languageData))) : '';
+			$parameter = $p->hasParameter && !$presenter->getParameter('path') ? $e?->getParameters() : null;
+			$path = $p->hasPath && $presenter->getParameter('path') ? ($presenter->getParameter('path') . '/' . Arrays::first($e->getParameters())) : '';
 		}
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $presenter->link('//' . $p->targetSignal . '!'),

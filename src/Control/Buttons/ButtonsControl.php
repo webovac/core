@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Webovac\Core\Control\Buttons;
 
 use App\Model\DataModel;
-use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
-use App\Model\Web\WebData;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\Control\MenuItem\MenuItemTemplate;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Model\CmsEntity;
@@ -39,7 +36,6 @@ class ButtonsControl extends BaseControl
 		$this->template->pageData = $pageData;
 		$this->template->pageDatas = $this->dataModel->getChildPageDatas($webData, $pageData, $languageData);
 		$this->template->webData = $webData;
-		$this->template->languageData = $languageData;
 		$this->template->entity = $this->entity;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null, bool $checkActive = true) use ($webData, $languageData) {
 			$this->menuItemRenderer->render('buttons', $this, $webData, $pageData, $languageData, $checkActive, $this->entity, $linkedEntity);

@@ -27,6 +27,7 @@ use Webovac\Core\Control\PageItem\PageItemControl;
  *
  * @property string|null $icon
  * @property string $name
+ * @property string $title {virtual}
  * @property string $type {enum Page::TYPE_*} {default Page::TYPE_PAGE}
  * @property string $accessFor {enum Page::ACCESS_FOR_*} {default Page::ACCESS_FOR_ALL}
  * @property string|null $authorizingTag
@@ -125,12 +126,12 @@ trait CorePage
 	}
 
 
-	public function getTitle(LanguageData $language): ?string
+	public function getterTitle(): ?string
 	{
 		if ($this->type === self::TYPE_SEPARATOR) {
 			return 'Oddělovač';
 		}
-		return $this->getTranslation($language)?->title ?: 'Stránka';
+		return $this->getTranslation($this->dataProvider->getLanguageData())?->title ?: 'Stránka';
 	}
 
 
@@ -191,7 +192,7 @@ trait CorePage
 	}
 
 
-	public function getParameters(?LanguageData $languageData = null): array
+	public function getParameters(): array
 	{
 		return $this->web
 			? ['Admin:PageDetail' => $this->name]

@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Control\SidePanel;
 
 use App\Model\DataModel;
-use App\Model\Language\LanguageData;
-use App\Model\Page\PageData;
 use App\Model\Theme\ThemeData;
-use App\Model\Web\WebData;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\DataProvider;

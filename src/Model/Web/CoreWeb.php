@@ -28,6 +28,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string $iconBackgroundColor {default '#ffffff'}
  * @property string $host
  * @property string $basePath {default ''}
+ * @property string $title {virtual}
  *
  * @property DateTimeImmutable $createdAt {default now}
  * @property DateTimeImmutable|null $updatedAt
@@ -55,9 +56,9 @@ trait CoreWeb
 	public const string DEFAULT_ICON_BACKGROUND_COLOR = '#d3eafd';
 
 
-	public function getTitle(LanguageData $language): string
+	public function getterTitle(): string
 	{
-		return $this->getTranslation($language)->title;
+		return $this->getTranslation($this->dataProvider->getLanguageData())->title;
 	}
 
 

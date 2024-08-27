@@ -2,7 +2,6 @@
 
 namespace Webovac\Core\Model;
 
-use App\Model\Language\LanguageData;
 use Webovac\Core\Control\BaseControl;
 
 interface Renderable
@@ -10,5 +9,5 @@ interface Renderable
 	public function getComponent(string $moduleClass, string $templateName): BaseControl;
 	public function getPageName(): string;
 	public function getEntityIcon(): string;
-	public function getParameters(?LanguageData $languageData = null): array;
+	public function getParameters(): array;
 }

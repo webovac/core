@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Person;
 
-use App\Model\Language\LanguageData;
 use App\Model\Preference\Preference;
 use App\Model\Role\Role;
 use Nextras\Dbal\Utils\DateTimeImmutable;
@@ -20,6 +19,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string $lastName
  * @property string $name {virtual}
  * @property string $nameForList {virtual}
+ * @property string $title {virtual}
  *
  * @property OneHasMany|Preference[] $preferences {1:m Preference::$person}
  * @property ManyHasMany|Role[] $roles {m:m Role::$persons}
@@ -42,7 +42,7 @@ trait CorePerson
 	}
 
 
-	public function getTitle(LanguageData $language): string
+	public function getterTitle(): string
 	{
 		return $this->name;
 	}

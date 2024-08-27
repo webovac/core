@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Breadcrumbs;
 
-use App\Model\Web\WebData;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\DataProvider;
 
