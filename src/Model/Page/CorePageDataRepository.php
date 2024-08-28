@@ -78,7 +78,8 @@ trait CorePageDataRepository
 			$pageData->navigationPage = $page->providesNavigation ? $page->id : ($parentPageData->navigationPage ?? null);
 			$pageData->buttonsPage = $page->providesButtons ? $page->id : ($parentPageData->buttonsPage ?? null);
 			$pageData->parentPages = array_merge($parentPageData->parentPages ?? [], $page->type === Page::TYPE_MODULE ? [] : [$page->id]);
-			$pageData->parentDetailRootPages = array_merge($parentPageData->parentPages ?? [], $page->isDetailRoot ? [$page->id] : []);
+			$pageData->isDetailRoot = $pageData->hasParameter && $pageData->repository !== $parentPageData?->repository;
+			$pageData->parentDetailRootPages = array_merge($parentPageData->parentPages ?? [], $pageData->isDetailRoot ? [$page->id] : []);
 			$pageData->parentPage = $page->parentPage?->id ?: ($parentPageData->parentPage ?? null);
 			foreach ($page->translations as $translation) {
 				$parentPath = !$pageData->dontInheritPath && $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])

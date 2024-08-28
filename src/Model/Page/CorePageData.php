@@ -46,8 +46,6 @@ trait CorePageData
 	#[DefaultValue(false)] public bool $dontInheritAccessSetup;
 	#[DefaultValue(false)] public bool $hasParameter;
 	#[DefaultValue(false)] public bool $hasPath;
-	#[DefaultValue(false)] public bool $isDetailRoot;
-	public ?string $parameterName;
 	public ?string $icon;
 	public ?string $repository;
 	public int|string|null $parentPage;
@@ -71,6 +69,7 @@ trait CorePageData
 	public ?string $basePath;
 	/** @var AccessSetup[] */ public array|null $accessSetups;
 	#[DefaultValue(false)] public bool $isHomePage;
+	#[DefaultValue(false)] public bool $isDetailRoot;
 	public ?int $navigationPage;
 	public ?int $buttonsPage;
 	/** @var int[] */ public array|null $parentPages;
