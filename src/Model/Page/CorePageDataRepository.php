@@ -8,6 +8,7 @@ use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationDataRepository;
 use Nette\DI\Attributes\Inject;
+use Nette\Utils\Arrays;
 use ReflectionException;
 use Stepapo\Utils\Model\Collection;
 use Throwable;
@@ -77,8 +78,11 @@ trait CorePageDataRepository
 			$pageData->isHomePage = $page->isHomePage();
 			$pageData->navigationPage = $page->providesNavigation ? $page->id : ($parentPageData->navigationPage ?? null);
 			$pageData->buttonsPage = $page->providesButtons ? $page->id : ($parentPageData->buttonsPage ?? null);
+			$pageData->repository = $page->repository ?: $parentPageData?->repository;
 			$pageData->parentPages = array_merge($parentPageData->parentPages ?? [], $page->type === Page::TYPE_MODULE ? [] : [$page->id]);
-			$pageData->isDetailRoot = $pageData->hasParameter && $pageData->repository !== $parentPageData?->repository;
+			$p = $page->translations->toCollection()->fetch()?->path;
+			$pageData->isDetailRoot = $p && str_contains($p, '<');
+			$pageData->hasPath = ($p ? str_contains($p, '<path') : false) ?: ($parentPageData?->hasPath ?: false);
 			$pageData->parentDetailRootPages = array_merge($parentPageData->parentPages ?? [], $pageData->isDetailRoot ? [$page->id] : []);
 			$pageData->parentPage = $page->parentPage?->id ?: ($parentPageData->parentPage ?? null);
 			foreach ($page->translations as $translation) {

@@ -51,6 +51,7 @@ final class RouterFactory
 					} else {
 						$p = $pageData;
 					}
+					bdump($translationData->fullPath);
 					$routeList->addRoute(
 						mask: $translationData->fullPath . ($queryNames ? (' ? ' . implode(' & ', $queryNames)) : ''),
 						metadata: [

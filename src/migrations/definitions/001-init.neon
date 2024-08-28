@@ -158,7 +158,6 @@ tables:
 			dont_inherit_path: [type: bool, null: false, default: false]
 			dont_inherit_access_setup: [type: bool, null: false, default: false]
 			has_parameter: [type: bool, null: false, default: false]
-			has_path: [type: bool, null: false, default: false]
 			target_page_id: [type: int, null: true]
 			target_parameter: [type: string, null: true]
 			target_path: [type: string, null: true]
@@ -170,7 +169,7 @@ tables:
 			stretched: [type: bool, null: false, default: false]
 		primaryKey: id
 		uniqueKeys: [[web_id, name]]
-		indexes: [created_by_person_id, updated_by_person_id, has_parameter, has_path, module_id, parent_page_id, redirect_page_id, target_page_id, template_page_id, image_file_id, web_id]
+		indexes: [created_by_person_id, updated_by_person_id, has_parameter, module_id, parent_page_id, redirect_page_id, target_page_id, template_page_id, image_file_id, web_id]
 		foreignKeys:
 			created_by_person_id: [table: person, column: id, onDelete: restrict]
 			updated_by_person_id: [table: person, column: id, onDelete: restrict]
