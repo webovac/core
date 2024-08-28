@@ -26,9 +26,9 @@
 		</div>
 		<div class="menu" n:if="$layoutData->hideSidePanel && $cmsUser->isLoggedIn()">
 			<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
-			{var $l = $dataModel->getLanguageData($translation->language)}
-			{var $t = $l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id]) ?: $l->getCollection('translations')->getBy(['translationLanguage' => $webData->defaultLanguage])}
-			{ifset $availableTranslations[$l->id]}
+				{var $l = $dataModel->getLanguageData($translation->language)}
+				{var $t = $l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id]) ?: $l->getCollection('translations')->getBy(['translationLanguage' => $webData->defaultLanguage])}
+				{ifset $availableTranslations[$l->id]}
 					{if $cmsUser->isLoggedIn()}
 						<a n:if="$t" href="{plink '//setLanguage!', $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
 							<img src="/dist/images/languages/{$l->shortcut}.svg">

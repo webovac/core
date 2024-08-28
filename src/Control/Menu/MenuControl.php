@@ -46,6 +46,7 @@ class MenuControl extends BaseControl
 			$this->template->logoUrl = $this->fileUploader->getUrl($webData->logoFile->getDefaultIdentifier());
 		}
 		$this->template->pageData = $pageData;
+		$this->template->languageData = $languageData;
 		$this->template->pageDatas = $this->dataModel->getRootPageDatas($webData, $languageData);
 		$this->template->homePageData = $this->dataModel->getHomePageData($webData->id);
 		$this->template->dataModel = $this->dataModel;
