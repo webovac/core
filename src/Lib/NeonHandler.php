@@ -9,6 +9,7 @@ use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\IExtensionHandler;
 use Stepapo\Utils\ConfigProcessor;
+use Tracy\Dumper;
 use Webovac\Core\Definition\Definition;
 use Webovac\Core\Definition\DefinitionProcessor;
 use Webovac\Core\Definition\Manipulation;
@@ -40,9 +41,12 @@ class NeonHandler implements IExtensionHandler
 			$repository = $this->orm->getRepositoryByName($repositoryName . 'Repository');
 			if (isset($config['class'], $config['items'])) {
 				$manipulationData = Manipulation::createFromArray($config, skipDefaults: $skipDefaults);
-				$skipDev = ($manipulationData->dev === true && !$this->debugMode) || ($manipulationData->dev === false && $this->debugMode);
-				$skipTest = ($manipulationData->test === true && !$this->testMode) || ($manipulationData->test === false && $this->testMode);
-				if ($skipDev && $skipTest) {
+				$prodMode = !$this->debugMode && !$this->testMode;
+				if (
+					($prodMode && !in_array('prod', $manipulationData->modes, true))
+					|| ($this->debugMode && !in_array('dev', $manipulationData->modes, true))
+					|| ($this->testMode && !in_array('test', $manipulationData->modes, true))
+				) {
 					return $count;
 				}
 				foreach ($manipulationData->items as $itemData) {

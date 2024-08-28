@@ -65,8 +65,8 @@ trait CorePageData
 
 	### for CachedModel ###
 
-	public ?int $web;
-	public ?int $module;
+	public int|string|null $web;
+	public int|string|null $module;
 	public ?string $host;
 	public ?string $basePath;
 	/** @var AccessSetup[] */ public array|null $accessSetups;

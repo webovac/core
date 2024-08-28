@@ -10,8 +10,7 @@ class Manipulation extends Schematic
 {
 	public string $class;
 	public string $type = 'insert';
-	public ?bool $dev = null;
-	public ?bool $test = null;
+	public array $modes = ['prod', 'dev', 'test'];
 	/** @var Item[]|array */ public array $items;
 
 

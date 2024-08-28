@@ -221,16 +221,26 @@ trait CorePageRepository
 
 	public function getByData(PageData|string $data, ?HasPages $hasPages): ?Page
 	{
+		$code = $data instanceof PageData ? $data->name : $data;
 		if (!$hasPages) {
+			if (isset($data->web) || isset($data->module)) {
+				$filter = ['name' => $code];
+				if (isset($data->web)) {
+					$filter[is_numeric($data->web) ? 'web' : 'web->code'] = $data->web;
+				}
+				if (isset($data->module)) {
+					$filter[is_numeric($data->module) ? 'module' : 'module->name'] = $data->module;
+				}
+				return $this->getBy($filter);
+			}
 			return null;
 		}
-		$code = $data instanceof PageData ? $data->name : $data;
 		assert($hasPages instanceof CmsEntity);
 		if (!$hasPages->isPersisted()) {
 			return is_numeric($code) ? $this->getById($code) : null;
 		}
 		return $this->getBy([
-			'name' => $data instanceof PageData ? $data->name : $data,
+			'name' => $code,
 			$hasPages instanceof Web ? 'web' : 'module' => $hasPages,
 		]);
 	}

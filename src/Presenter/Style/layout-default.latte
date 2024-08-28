@@ -71,7 +71,7 @@
 	padding: 6px var(--cms-content-padding-right) 6px var(--cms-content-padding-left);
 	font-size: 14px;
 	color: var(--bs-secondary);
-	position: absolute;
+{*	position: absolute;*}
 }
 .breadcrumbs a {
 	color: var(--bs-secondary);
@@ -86,6 +86,7 @@
 	position: absolute;
 	left: 0;
 	right: 0;
+	top: 0;
 	padding: 6px var(--cms-content-padding-left) 6px var(--cms-content-padding-right);
 	margin-bottom: 0;
 	font-size: 14px;
@@ -172,13 +173,13 @@
 }
 @media (max-width: 991.8px) and (display-mode: standalone) {
 	body {
-		padding-bottom: 60px;
+		padding-bottom: calc(48px + 32px);
 	}
 	.primary-navigation .menu {
-		height: 60px;
-		padding: 0 12px 12px 12px;
+		height: calc(48px + 32px);
+		padding-bottom: 32px;
 	}
 	.layout .side-panel {
-		bottom: 60px;
+		bottom: calc(48px + 32px);
 	}
 }

@@ -60,6 +60,7 @@ class Core implements Module
 			new ManipulationGroup('language', LanguageData::class),
 			new ManipulationGroup('text', TextData::class, ['language']),
 			new ManipulationGroup('module', ModuleData::class, ['language']),
+			new ManipulationGroup('page', ModuleData::class, ['web', 'module', 'language']),
 		];
 	}
 
