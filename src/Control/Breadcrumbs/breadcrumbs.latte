@@ -1,5 +1,5 @@
 {templateType Webovac\Core\Control\Breadcrumbs\BreadcrumbsTemplate}
-<div n:if="(!isModuleInstalled('style') || $presenter->template->layoutData->code !== 'simple' || count($crumbs) > 1)" class="breadcrumbs" n:inner-foreach="$crumbs as $crumb">
+<div class="breadcrumbs" n:inner-foreach="$crumbs as $crumb">
 	<a href="{$crumb['link']}">{$crumb['title']|noescape}</a>
 	<span n:sep class="separator"> : </span>
 </div>

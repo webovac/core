@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Lib;
 
 use Nette\Utils\Strings;
@@ -16,7 +18,7 @@ class MonthNameProvider
 	{
 		$months = [];
 		for ($i = 1; $i <= 12; $i++) {
-			$date = (new \DateTime())->setDate(year: 0, month: $i, day: 1);
+			$date = \DateTime::createFromFormat('!m', (string) $i);
 			$formatter = new \IntlDateFormatter($this->dataProvider->getLanguageData()->shortcut, pattern: $pattern);
 			$months[$i] = Strings::firstUpper($formatter->format($date));
 		}
