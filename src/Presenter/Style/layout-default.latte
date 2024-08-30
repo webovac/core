@@ -171,7 +171,7 @@
 		overflow: initial;
 	}
 }
-@media (max-width: 991.8px) and (display-mode: standalone) {
+@media (max-width: 991.8px) and (display-mode: standalone) and (orientation: portrait) {
 	body {
 		padding-bottom: calc(48px + 32px);
 	}
@@ -181,5 +181,17 @@
 	}
 	.layout .side-panel {
 		bottom: calc(48px + 32px);
+	}
+}
+@media (max-width: 991.8px) and (display-mode: standalone) and (orientation: landscape) {
+	body {
+		padding-bottom: calc(48px + 12px);
+	}
+	.primary-navigation .menu {
+		height: calc(48px + 12px);
+		padding-bottom: 12px;
+	}
+	.layout .side-panel {
+		bottom: calc(48px + 12px);
 	}
 }
