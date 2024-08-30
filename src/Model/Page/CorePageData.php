@@ -125,9 +125,9 @@ trait CorePageData
 			$path = $p->hasPath && $presenter->getParameter('path') ? ($presenter->getParameter('path') . '/' . Arrays::first($e->getParameters())) : '';
 		}
 		return match($p->type) {
-			Page::TYPE_SIGNAL => $presenter->link('//' . $p->targetSignal . '!'),
+			Page::TYPE_SIGNAL => $presenter->getName() === 'Error4xx' ? null : $presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $presenter->link('//default', [
+			Page::TYPE_PAGE => $presenter->link('//Home:', [
 					'pageName' => $p->name,
 					'lang' => $languageData->shortcut,
 					'id' => $parameter,

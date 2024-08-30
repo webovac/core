@@ -123,7 +123,7 @@ trait CorePresenter
 				throw new ForbiddenRequestException;
 			} catch (LoginRequiredException $e) {
 				$loginPage = $this->dataModel->getPageDataByName($this->webData->id, 'FsvAuth:Home') ?: $this->dataModel->getPageDataByName($this->webData->id, 'Auth:Home');
-				$this->redirect('default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
+				$this->redirect('Home:default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
 			}
 			if ($this->pageData->hasParameter) {
 				if (!$this->pageData->parentDetailRootPages) {
@@ -197,7 +197,8 @@ trait CorePresenter
 //			} else {
 //				$params = [];
 //			}
-			$this->template->metaUrl = $this->link('//this');
+			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
+			$this->template->metaUrl = $this->request->getPresenterName() === 'Error4xx' ? $this->link('//Home:default', $homePage->name) : $this->link('//this');
 			$this->template->webDatas = $this->dataModel->getWebDatas();
 			$adminPageData = $this->dataModel->getPageDataByName($this->webData->id, 'Admin:Home');
 			$this->template->showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser) ?: false;
@@ -348,7 +349,7 @@ trait CorePresenter
 				$id,
 				($pageData->isHomePage ? '<i class="fasl fa-fw fa-home"></i> ' : '') . $title,
 				$this->presenter->link(
-					'//default',
+					'//Home:default',
 					[
 						'pageName' => $pageData->name,
 						'id' => $pageData->hasParameter ? $parameters : [],
