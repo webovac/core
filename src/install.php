@@ -27,7 +27,7 @@ use Webovac\Generator\CmsGenerator;
 		'LanguageTranslation' => [Translation::class],
 		'Module' => [HasPages::class, HasTranslations::class],
 		'ModuleTranslation' => [Translation::class],
-		'Page' => [Linkable::class, HasParent::class, HasPages::class, HasTranslations::class],
+		'Page' => [Linkable::class, HasPages::class, HasTranslations::class],
 		'PageTranslation' => [Translation::class],
 		'Preference',
 		'QueryName',

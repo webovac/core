@@ -6,6 +6,7 @@ namespace Webovac\Core\Model\Page;
 
 use App\Model\File\File;
 use App\Model\Language\LanguageData;
+use App\Model\Log\Log;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslation;
@@ -20,6 +21,9 @@ use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
 use Webovac\Core\Control\PageItem\IPageItemControl;
 use Webovac\Core\Control\PageItem\PageItemControl;
+use Webovac\Core\IndexDefinition;
+use Webovac\Core\IndexTranslationDefinition;
+use Webovac\Core\Model\LinkableTrait;
 
 
 /**
@@ -69,6 +73,9 @@ use Webovac\Core\Control\PageItem\PageItemControl;
  */
 trait CorePage
 {
+	use LinkableTrait;
+
+
 	public const string TYPE_PAGE = 'page';
 	public const string TYPE_SIGNAL = 'signal';
 	public const string TYPE_INTERNAL_LINK = 'internalLink';
@@ -192,8 +199,8 @@ trait CorePage
 	public function getParameters(): array
 	{
 		return $this->web
-			? ['Admin:PageDetail' => $this->name]
-			: ['ModuleDetail' => $this->module->name, 'TemplateDetail' => $this->name];
+			? [$this->getPageName() => $this->name]
+			: [$this->module->getPageName() => $this->module->name, $this->getPageName() => $this->name];
 	}
 
 
@@ -206,5 +213,37 @@ trait CorePage
 	public function getEntityIcon(): string
 	{
 		return 'file';
+	}
+
+
+	public function getIndexDefinition(): IndexDefinition
+	{
+		$definition = new IndexDefinition;
+		$definition->entity = $this;
+		$definition->entityName = 'page';
+		foreach ($this->translations as $translation) {
+			$translationDefinition = new IndexTranslationDefinition;
+			$translationDefinition->language = $translation->language;
+			$translationDefinition->documents = ['A' => $this->name, 'B' => $translation->title, 'C' => $translation->description];
+			$definition->translations[] = $translationDefinition;
+		}
+		return $definition;
+	}
+
+
+	public function createLog(string $type): ?Log
+	{
+		$log = new Log;
+		$log->page = $this;
+		$log->type = $type;
+		$log->createdByPerson = match($type) {
+			Log::TYPE_CREATE => $this->createdByPerson,
+			Log::TYPE_UPDATE => $this->updatedByPerson,
+		};
+		$log->date = match($type) {
+			Log::TYPE_CREATE => $this->createdAt,
+			Log::TYPE_UPDATE => $this->updatedAt,
+		};
+		return $log;
 	}
 }

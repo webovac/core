@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\Web;
 use App\Model\File\File;
 use App\Model\Language\Language;
 use App\Model\Language\LanguageData;
+use App\Model\Log\Log;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\Person\Person;
@@ -17,6 +18,8 @@ use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
+use Webovac\Core\IndexDefinition;
+use Webovac\Core\IndexTranslationDefinition;
 
 
 /**
@@ -96,5 +99,37 @@ trait CoreWeb
 	public function getMenuItems(): array
 	{
 		return $this->getRepository()->findBy(['id!=' => $this->id])->fetchPairs('id');
+	}
+
+
+	public function getIndexDefinition(): IndexDefinition
+	{
+		$definition = new IndexDefinition;
+		$definition->entity = $this;
+		$definition->entityName = 'web';
+		foreach ($this->translations as $translation) {
+			$translationDefinition = new IndexTranslationDefinition;
+			$translationDefinition->language = $translation->language;
+			$translationDefinition->documents = ['A' => $this->code, 'B' => $translation->title];
+			$definition->translations[] = $translationDefinition;
+		}
+		return $definition;
+	}
+
+
+	public function createLog(string $type): ?Log
+	{
+		$log = new Log;
+		$log->web = $this;
+		$log->type = $type;
+		$log->createdByPerson = match($type) {
+			Log::TYPE_CREATE => $this->createdByPerson,
+			Log::TYPE_UPDATE => $this->updatedByPerson,
+		};
+		$log->date = match($type) {
+			Log::TYPE_CREATE => $this->createdAt,
+			Log::TYPE_UPDATE => $this->updatedAt,
+		};
+		return $log;
 	}
 }

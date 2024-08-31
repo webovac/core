@@ -82,7 +82,15 @@ class CmsEntityProcessor
 			if ($metadata->hasProperty('updatedAt')) {
 				$this->entity->updatedAt = $this->date;
 			}
+			// kvůli indexu při změně translation:
+			if ($this->isModified && !$this->entity->isModified()) {
+				$this->entity->getRepository()->onAfterUpdate($this->entity);
+			}
 			$this->model->persist($this->entity);
+		}
+		// kvůli indexu při změně translation:
+		if ($this->isModified && !$this->entity->isModified()) {
+			$this->entity->getRepository()->onAfterPersist($this->entity);
 		}
 	}
 

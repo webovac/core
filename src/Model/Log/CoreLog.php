@@ -26,7 +26,7 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
  * @property Person|null $person {m:1 Person, oneSided=true}
  * @property Person|null $createdByPerson {m:1 Person, oneSided=true}
  *
- * @property DateTimeImmutable $date
+ * @property DateTimeImmutable|null $date
  */
 trait CoreLog
 {
