@@ -11,6 +11,7 @@ use Stepapo\Utils\Schematic;
 class ForeignKey extends Schematic
 {
 	#[KeyProperty] public string $name;
+	public ?string $schema = null;
 	public string $table;
 	public string $column;
 	public string $onDelete = 'cascade';

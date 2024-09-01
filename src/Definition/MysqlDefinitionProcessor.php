@@ -6,6 +6,7 @@ namespace Webovac\Core\Definition;
 
 use Nextras\Dbal\Connection;
 use Nextras\Dbal\QueryException;
+use Tracy\Dumper;
 
 
 class MysqlDefinitionProcessor implements DefinitionProcessor
@@ -125,11 +126,12 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 	private function addAlterTableWithForeignKey(Table $table, ForeignKey $foreignKey): void
 	{
 		$schema = $table->schema ?: $this->defaultSchema;
+		$foreignSchema = $foreignKey->schema ?: $this->defaultSchema;
 		$k = [];
 		$k['alter'] = "ALTER TABLE `$schema`.`$table->name`";
 		$k['constraint'] = "ADD CONSTRAINT `{$table->name}_{$foreignKey->name}_fk`";
 		$k['foreignKey'] = "FOREIGN KEY (`$foreignKey->name`)";
-		$k['references'] = "REFERENCES `$schema`.`$foreignKey->table` (`$foreignKey->column`)";
+		$k['references'] = "REFERENCES `$foreignSchema`.`$foreignKey->table` (`$foreignKey->column`)";
 		$k['onUpdate'] = "ON UPDATE " . strtoupper($foreignKey->onUpdate);
 		$k['onDelete'] = "ON DELETE " . strtoupper($foreignKey->onDelete);
 		$this->alterTable[] = implode(' ', $k);
@@ -199,6 +201,7 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 		return match($type) {
 			'bool' => 'tinyint',
 			'int' => 'int',
+			'bigint' => 'bigint',
 			'string' => 'varchar(255)',
 			'text' => 'text',
 			'datetime' => 'timestamp',
@@ -215,6 +218,7 @@ class MysqlDefinitionProcessor implements DefinitionProcessor
 			default => match($type) {
 				'bool' => $default ? 1 : 0,
 				'int' => $default,
+				'bigint' => $default,
 				'string' => "'$default'",
 				'text' => "'$default'",
 			}

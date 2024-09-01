@@ -25,6 +25,9 @@
 			{renderMenuItem($p)}
 		</div>
 		<div class="menu" n:if="$layoutData->hideSidePanel && $cmsUser->isLoggedIn()">
+			<div n:if="$hasSearch && !$isError" class="search menu-item">
+				{$presenter->getComponent('search-searchForm')->render()}
+			</div>
 			<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
 				{var $l = $dataModel->getLanguageData($translation->language)}
 				{var $t = $l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id]) ?: $l->getCollection('translations')->getBy(['translationLanguage' => $webData->defaultLanguage])}

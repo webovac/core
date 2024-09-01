@@ -147,11 +147,12 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	private function addAlterTableWithForeignKey(Table $table, ForeignKey $foreignKey): void
 	{
 		$schema = $table->schema ?: $this->defaultSchema;
+		$foreignSchema = $foreignKey->schema ?: $this->defaultSchema;
 		$k = [];
 		$k['alter'] = "ALTER TABLE \"$schema\".\"$table->name\"";
 		$k['constraint'] = "ADD CONSTRAINT \"{$table->name}_$foreignKey->name\"";
 		$k['foreignKey'] = "FOREIGN KEY (\"$foreignKey->name\")";
-		$k['references'] = "REFERENCES \"$schema\".\"$foreignKey->table\" (\"$foreignKey->column\")";
+		$k['references'] = "REFERENCES \"$foreignSchema\".\"$foreignKey->table\" (\"$foreignKey->column\")";
 		$k['onDelete'] = "ON DELETE " . strtoupper($foreignKey->onDelete);
 		$k['onUpdate'] = "ON UPDATE " . strtoupper($foreignKey->onUpdate);
 		$this->alterTable[] = implode(' ', $k);
@@ -205,6 +206,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 		return match($type) {
 			'bool' => 'bool',
 			'int' => 'int4',
+			'bigint' => 'int4',
 			'string' => 'varchar',
 			'text' => 'text',
 			'datetime' => 'timestamp',
@@ -221,6 +223,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 			default => match($type) {
 				'bool' => $default ? 'true' : 'false',
 				'int' => $default,
+				'bigint' => $default,
 				'string' => "'$default'",
 				'text' => "'$default'",
 				'datetime' => "$default",
