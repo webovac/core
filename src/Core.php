@@ -7,6 +7,7 @@ namespace Webovac\Core;
 use App\Model\Language\Language;
 use App\Model\Language\LanguageData;
 use App\Model\Log\Log;
+use App\Model\Module\Module as ModuleEntity;
 use App\Model\Module\ModuleData;
 use App\Model\Orm;
 use App\Model\Page\Page;
@@ -69,21 +70,14 @@ class Core implements Module
 			$this->orm->pageRepository->$property[] = fn() => $this->cache->remove('page');
 			$this->orm->webRepository->$property[] = fn() => $this->cache->remove('web');
 		}
-		if ($this->orm->hasRepositoryByName('indexRepository')) {
-			$this->orm->languageRepository->onAfterPersist[] = fn(Language $language) => $this->orm->indexRepository->createIndex($language);
-			$this->orm->moduleRepository->onAfterPersist[] = fn(\App\Model\Module\Module $module) => $this->orm->indexRepository->createIndex($module);
-			$this->orm->pageRepository->onAfterPersist[] = fn(Page $page) => $this->orm->indexRepository->createIndex($page);
-			$this->orm->webRepository->onAfterPersist[] = fn(Web $web) => $this->orm->indexRepository->createIndex($web);
-			$this->orm->personRepository->onAfterPersist[] = fn(Person $person) => $this->orm->indexRepository->createIndex($person);
-		}
 		if ($this->orm->hasRepositoryByName('logRepository')) {
 			$this->orm->languageRepository->onAfterInsert[] = fn (Language $language) => $this->orm->logRepository->createLog($language, Log::TYPE_CREATE);
-			$this->orm->moduleRepository->onAfterInsert[] = fn (\App\Model\Module\Module $module) => $this->orm->logRepository->createLog($module, Log::TYPE_CREATE);
+			$this->orm->moduleRepository->onAfterInsert[] = fn (ModuleEntity $module) => $this->orm->logRepository->createLog($module, Log::TYPE_CREATE);
 			$this->orm->pageRepository->onAfterInsert[] = fn (Page $page) => $this->orm->logRepository->createLog($page, Log::TYPE_CREATE);
 			$this->orm->webRepository->onAfterInsert[] = fn (Web $web) => $this->orm->logRepository->createLog($web, Log::TYPE_CREATE);
 			$this->orm->personRepository->onAfterInsert[] = fn (Person $person) => $this->orm->logRepository->createLog($person, Log::TYPE_CREATE);
 			$this->orm->languageRepository->onAfterUpdate[] = fn (Language $language) => $this->orm->logRepository->createLog($language, Log::TYPE_UPDATE);
-			$this->orm->moduleRepository->onAfterUpdate[] = fn (\App\Model\Module\Module $module) => $this->orm->logRepository->createLog($module, Log::TYPE_UPDATE);
+			$this->orm->moduleRepository->onAfterUpdate[] = fn (ModuleEntity $module) => $this->orm->logRepository->createLog($module, Log::TYPE_UPDATE);
 			$this->orm->pageRepository->onAfterUpdate[] = fn (Page $page) => $this->orm->logRepository->createLog($page, Log::TYPE_UPDATE);
 			$this->orm->webRepository->onAfterUpdate[] = fn (Web $web) => $this->orm->logRepository->createLog($web, Log::TYPE_UPDATE);
 			$this->orm->personRepository->onAfterUpdate[] = fn (Person $person) => $this->orm->logRepository->createLog($person, Log::TYPE_UPDATE);

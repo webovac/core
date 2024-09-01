@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Definition;
 
 use Nextras\Dbal\Connection;
@@ -212,7 +214,7 @@ class PgsqlDefinitionProcessor implements DefinitionProcessor
 	}
 
 
-	private function getDefault(string $default, string $type): string
+	private function getDefault(mixed $default, string $type): mixed
 	{
 		return match($default) {
 			'now' => "now()",

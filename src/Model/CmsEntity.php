@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model;
 
 use DateTimeImmutable;
+use Nette\NotSupportedException;
 use Nette\Utils\Type;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Entity\ToArrayConverter;
@@ -25,33 +26,9 @@ abstract class CmsEntity extends Entity
 	protected DataProvider $dataProvider;
 
 
-	abstract public function getDataClass(): string;
-
-
 	public function injectDataProvider(DataProvider $dataProvider): void
 	{
 		$this->dataProvider = $dataProvider;
-	}
-
-
-	public function isChanged(?array $old): bool
-	{
-		if (!$old) {
-			return true;
-		}
-		$new = $this->toArray(ToArrayConverter::RELATIONSHIP_AS_ID);
-		foreach ($old as $key => $value) {
-			if ($value instanceof DateTimeImmutable) {
-				if ($value != $new[$key]) {
-					return true;
-				}
-				continue;
-			}
-			if ($value !== $new[$key]) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 
@@ -60,6 +37,9 @@ abstract class CmsEntity extends Entity
 	 */
 	public function getData(bool $neon = false): Item
 	{
+		if (!method_exists($this, 'getDataClass')) {
+			throw new NotSupportedException;
+		}
 		$class = new ReflectionClass($this->getDataClass());
 		$data = $class->newInstance();
 		foreach ($class->getProperties() as $p) {

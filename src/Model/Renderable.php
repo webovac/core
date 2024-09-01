@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Model;
 
 use Webovac\Core\Control\BaseControl;
@@ -7,6 +9,6 @@ use Webovac\Core\Control\BaseControl;
 
 interface Renderable
 {
-	public function getComponent(string $moduleClass, string $templateName): BaseControl;
-	public function getEntityIcon(): ?string;
+	function getComponent(string $moduleClass, string $templateName): BaseControl;
+	function getEntityIcon(): ?string;
 }
