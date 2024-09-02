@@ -176,7 +176,6 @@ trait CorePresenter
 			}
 			$this->template->webTranslationData = $this->webTranslationData;
 			$this->template->pageData = $this->pageData;
-			$this->template->pageModuleData = $this->pageData->module ? $this->dataModel->getModuleData($this->pageData->module) : null;
 			if ($this->pageData->imageFile) {
 				$this->template->imageUrl = $this->fileUploader->getUrl($this->pageData->imageFile->getBackgroundIdentifier(), '1200x630');
 			}
@@ -199,11 +198,6 @@ trait CorePresenter
 //			}
 			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
 			$this->template->metaUrl = $this->request->getPresenterName() === 'Error4xx' ? $this->link('//Home:default', $homePage->name) : $this->link('//this');
-			$this->template->webDatas = $this->dataModel->getWebDatas();
-			$adminPageData = $this->dataModel->getPageDataByName($this->webData->id, 'Admin:Home');
-			$this->template->showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser) ?: false;
-			$this->template->adminLang = in_array($this->languageData->id, $adminPageData->getLanguageIds(), true) ? $this->lang : 'cs';
-			$this->template->languageShortcuts = $this->dataModel->languageRepository->findAllPairs();
 			$this->template->bodyClasses = [];
 			$this->template->bodyClasses[] = "web-{$this->webData->code}";
 			$this->template->bodyClasses[] = 'layout-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->layoutData->code : 'cvut');

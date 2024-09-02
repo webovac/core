@@ -8,6 +8,7 @@ use App\Control\BaseTemplate;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Layout\LayoutData;
+use App\Model\Module\ModuleData;
 use App\Model\Page\PageData;
 use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
@@ -28,4 +29,8 @@ class SidePanelTemplate extends BaseTemplate
 	public bool $hasSearch;
 	public bool $hasPersons;
 	/** @var string[] */ public array $availableTranslations;
+	public bool $showAdmin;
+	public string $adminLang;
+	public ?ModuleData $pageModuleData;
+	public array $languageShortcuts;
 }

@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
-use DateTimeImmutable;
 use Nette\NotSupportedException;
 use Nette\Utils\Type;
 use Nextras\Orm\Entity\Entity;
-use Nextras\Orm\Entity\ToArrayConverter;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;

@@ -10,9 +10,10 @@ use App\Model\Log\Log;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslation;
+use App\Model\Parameter\Parameter;
 use App\Model\Person\Person;
-use App\Model\QueryName\QueryName;
 use App\Model\Role\Role;
+use App\Model\Signal\Signal;
 use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ArrayCollection;
@@ -65,7 +66,8 @@ use Webovac\Core\Model\LinkableTrait;
  * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
  *
  * @property OneHasMany|Page[] $childPages {1:m Page::$parentPage, orderBy=rank}
- * @property OneHasMany|QueryName[] $queryNames {1:m QueryName::$page}
+ * @property OneHasMany|Parameter[] $parameters {1:m Parameter::$page}
+ * @property OneHasMany|Signal[] $signals {1:m Signal::$page}
  * @property OneHasMany|PageTranslation[] $translations {1:m PageTranslation::$page, orderBy=language->rank}
  *
  * @property ManyHasMany|Person[] $authorizedPersons {m:m Person, isMain=true, oneSided=true}

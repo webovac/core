@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Presenter;
 
 use App\Model\Language\LanguageData;
-use App\Model\Module\ModuleData;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationData;
@@ -21,7 +20,6 @@ trait CorePresenterTemplate
 	public WebData $webData;
 	public WebTranslationData $webTranslationData;
 	public PageData $pageData;
-	public ?ModuleData $pageModuleData;
 	public string $imageUrl;
 	public string $smallIconUrl;
 	public string $largeIconUrl;
@@ -35,8 +33,5 @@ trait CorePresenterTemplate
 	public string $metaTitle;
 	public string $metaType;
 	public string $metaUrl;
-	public bool $showAdmin;
 	public array $bodyClasses;
-	public string $adminLang;
-	public array $languageShortcuts;
 }

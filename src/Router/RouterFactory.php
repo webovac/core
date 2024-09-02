@@ -7,6 +7,7 @@ namespace Webovac\Core\Router;
 use App\Model\DataModel;
 use App\Model\Page\Page;
 use Nette\Caching\Cache;
+use Nette\Routing\Route;
 
 
 final class RouterFactory
@@ -38,10 +39,16 @@ final class RouterFactory
 				if ($pageData->type !== Page::TYPE_PAGE) {
 					continue;
 				}
-				$queryNames = [];
-				if (isset($pageData->queryNames)) {
-					foreach ($pageData->queryNames as $queryName) {
-						$queryNames[] = "$queryName->query=<$queryName->parameter>";
+				$parameters = [];
+				if (isset($pageData->parameters)) {
+					foreach ($pageData->parameters as $parameter) {
+						$parameters[] = "$parameter->query=<$parameter->parameter>";
+					}
+				}
+				$signals = [];
+				if (isset($pageData->signals)) {
+					foreach ($pageData->signals as $signal) {
+						$signals[$signal->name] = $signal->signal;
 					}
 				}
 				foreach ($pageData->translations as $translationData) {
@@ -51,17 +58,20 @@ final class RouterFactory
 					} else {
 						$p = $pageData;
 					}
-					bdump($translationData->fullPath);
+					$metadata = [
+						'presenter' => 'Home',
+						'action' => 'default',
+						'host' => $p->host,
+						'basePath' => $p->basePath,
+						'pageName' => $p->name,
+						'lang' => $languageData->shortcut,
+					];
+					if ($signals) {
+						$metadata['do'] = [Route::FilterTable => $signals];
+					}
 					$routeList->addRoute(
-						mask: $translationData->fullPath . ($queryNames ? (' ? ' . implode(' & ', $queryNames)) : ''),
-						metadata: [
-							'presenter' => 'Home',
-							'action' => 'default',
-							'host' => $p->host,
-							'basePath' => $p->basePath,
-							'pageName' => $p->name,
-							'lang' => $languageData->shortcut,
-						],
+						mask: $translationData->fullPath . ($parameters || $signals ? (' ? ' . implode(' & ', $parameters) . ($signals ? ' & do=<do>' : ''))  : ''),
+						metadata: $metadata,
 						oneWay: (bool) $pageData->redirectPage,
 					);
 				}

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Webovac\Core\Model\QueryName;
+namespace Webovac\Core\Model\Parameter;
 
 use DateTimeInterface;
 use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Attribute\ValueProperty;
 
 
-trait CoreQueryNameData
+trait CoreParameterData
 {
 	public ?int $id;
 	#[KeyProperty] public string $query;

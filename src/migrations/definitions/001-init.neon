@@ -245,7 +245,7 @@ tables:
 			person_id: [table: person, column: id]
 			web_id: [table: web, column: id]
 			language_id: [table: language, column: id]
-	query_name:
+	parameter:
 		columns:
 			id: [type: int, null: false, auto: true]
 			created_by_person_id: [type: int, null: true]
@@ -276,6 +276,22 @@ tables:
 		foreignKeys:
 			role_id: [table: role, column: id]
 			person_id: [table: person, column: id]
+	signal:
+		columns:
+			id: [type: int, null: false, auto: true]
+			created_by_person_id: [type: int, null: true]
+			updated_by_person_id: [type: int, null: true]
+			page_id: [type: int, null: false]
+			name: [type: string, null: false]
+			signal: [type: string, null: false]
+			created_at: [type: datetime, null: false, default: now]
+			updated_at: [type: datetime, null: true]
+		primaryKey: id
+		indexes: [created_by_person_id, updated_by_person_id, page_id]
+		foreignKeys:
+			created_by_person_id: [table: person, column: id, onDelete: restrict]
+			updated_by_person_id: [table: person, column: id, onDelete: restrict]
+			page_id: [table: page, column: id]
 	text:
 		columns:
 			id: [type: int, null: false, auto: true]

@@ -8,6 +8,7 @@ use App\Model\DataModel;
 use App\Model\Theme\ThemeData;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Model\CmsEntity;
@@ -23,6 +24,7 @@ class SidePanelControl extends BaseControl
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
 		private DataProvider $dataProvider,
+		private CmsUser $cmsUser,
 	) {}
 
 
@@ -57,6 +59,15 @@ class SidePanelControl extends BaseControl
 		}
 		$this->template->entity = $this->entity;
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
+		$adminPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Admin:Home');
+		$showAdmin =  $adminPageData?->isUserAuthorized($this->cmsUser) ?: false;
+		$this->template->showAdmin = $showAdmin;
+		if ($showAdmin) {
+			$this->template->languageShortcuts = $this->dataModel->languageRepository->findAllPairs();
+			$this->template->pageModuleData = $pageData->module ? $this->dataModel->getModuleData($pageData->module) : null;
+			$this->template->webDatas = $this->dataModel->getWebDatas();
+			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
+		}
 		$this->template->render(__DIR__ . '/sidePanel.latte');
 	}
 }

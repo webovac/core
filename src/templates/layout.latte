@@ -43,23 +43,7 @@
 				<div class="content override-padding">
 					{include 'main.file'}
 				</div>
-				<div class="footer small" n:if="$showAdmin">
-					<p n:if="$showAdmin">
-						{$pageData->name}
-						{if !$pageData->module || $webData->code === 'cms'}
-							:
-							<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">{_'Obsah'}</a>
-							·
-							<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">{_'Nastavení'}</a>
-						{/}
-						<br>
-						{foreach $webDatas as $w}
-							<a href="{plink '//Home:', 'Home', host: $w->host, basePath: $w->basePath, lang: $languageShortcuts[$w->defaultLanguage]}" class="link-secondary">
-								{$w->host}{if $w->basePath}/{$w->basePath}{/}
-							</a>
-							{sep} · {/}
-						{/}
-					</p>
+				<div class="footer small">
 					{include 'footer.file'}
 				</div>
 			</div>
