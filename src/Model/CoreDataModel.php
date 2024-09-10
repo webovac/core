@@ -150,7 +150,7 @@ trait CoreDataModel
 			}
 			if (
 				$pageData->type === Page::TYPE_INTERNAL_LINK
-				&& !$this->getPageData($webData->id, $parentPageData->targetPage)->isUserAuthorized($this->cmsUser)
+				&& !$this->getPageData($webData->id, $pageData->targetPage)->isUserAuthorized($this->cmsUser)
 			) {
 				return false;
 			}
