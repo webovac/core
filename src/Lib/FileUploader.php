@@ -9,6 +9,8 @@ use Nette\Http\FileUpload;
 
 interface FileUploader
 {
+	const ALGORITHM_CONTENT = 'sha1';
+
 	function upload(FileUpload $upload, string $namespace = 'cms'): string;
 	function delete(string $identifier): void;
 	function getResponse(FileUpload $upload, string $namespace = 'cms'): array;

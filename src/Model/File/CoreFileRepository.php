@@ -9,12 +9,15 @@ use App\Model\File\FileRepository;
 use App\Model\Person\Person;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
+use Nette\InvalidArgumentException;
 use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
+use Tracy\Dumper;
+use Webovac\Core\Lib\FileUploader;
 
 
 trait CoreFileRepository
@@ -61,12 +64,14 @@ trait CoreFileRepository
 	}
 
 
-	private function svg2png(FileUpload $upload, bool $forceSquare): FileUpload
+	public function svg2png(FileUpload $upload, bool $forceSquare): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
-		Svg::make(file_get_contents($tmpFile))->saveAsPng($tmpFile);
-
-		return $forceSquare ? $this->image2square($upload) : $this->createFileUpload($upload);
+		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
+		copy($tmpFile, $cloneFile);
+		Svg::make(file_get_contents($cloneFile))->saveAsPng($cloneFile);
+		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
+		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 
 
@@ -74,11 +79,14 @@ trait CoreFileRepository
 	 * @throws ImageException
 	 * @throws UnknownImageFileException
 	 */
-	private function image2webp(FileUpload $upload, bool $forceSquare): FileUpload
+	public function image2webp(FileUpload $upload, bool $forceSquare): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
-		Image::fromFile($tmpFile)->save($tmpFile, type: ImageType::WEBP);
-		return $forceSquare ? $this->image2square($upload) : $this->createFileUpload($upload);
+		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
+		copy($tmpFile, $cloneFile);
+		Image::fromFile($cloneFile)->save($cloneFile, type: ImageType::WEBP);
+		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
+		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 
 
@@ -86,11 +94,14 @@ trait CoreFileRepository
 	 * @throws ImageException
 	 * @throws UnknownImageFileException
 	 */
-	private function image2jpeg(FileUpload $upload, bool $forceSquare): FileUpload
+	public function image2jpeg(FileUpload $upload, bool $forceSquare): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
-		Image::fromFile($tmpFile)->save($tmpFile, type: ImageType::JPEG);
-		return $forceSquare ? $this->image2square($upload) : $this->createFileUpload($upload);
+		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
+		copy($tmpFile, $cloneFile);
+		Image::fromFile($cloneFile)->save($cloneFile, type: ImageType::JPEG);
+		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
+		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 
 
@@ -127,9 +138,11 @@ trait CoreFileRepository
 
 	public function createFileUploadFromString(string $upload): FileUpload
 	{
-		$name = Random::generate(8);
+		$content = base64_decode($upload);
+//		$name = Random::generate(8);
+		$name = substr(sha1($content), 0, 8);
 		$path = $this->dir->getTempDir() . '/' . $name;
-		$size = file_put_contents($path, base64_decode($upload));
+		$size = file_put_contents($path, $content);
 		return new FileUpload([
 			'name' => $name,
 			'full_path' => $path,
@@ -142,7 +155,8 @@ trait CoreFileRepository
 
 	public function createFileUploadFromContent(string $content, ?File $originalFile = null): FileUpload
 	{
-		$name = $originalFile?->name ?: Random::generate(8);
+//		$name = $originalFile?->name ?: Random::generate(8);
+		$name = $originalFile?->name ?: substr(sha1($content), 0, 8);
 		$path = $this->dir->getTempDir() . '/' . $name;
 		$size = file_put_contents($path, $content);
 		return new FileUpload([

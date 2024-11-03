@@ -11,5 +11,5 @@ class WebModuleData extends ArrayHash
 {
 	public string $name;
 	public int|string|null $parentPage;
-	public int $rank;
+	public int|null $rank = null;
 }

@@ -15,20 +15,7 @@ use Webovac\Core\IndexTranslationDefinition;
 
 
 /**
- * @property int $id {primary}
- *
- * @property string $shortcut
- * @property string $name
  * @property string $title {virtual}
- * @property int $rank
- *
- * @property DateTimeImmutable $createdAt {default now}
- * @property DateTimeImmutable|null $updatedAt
- *
- * @property Person|null $createdByPerson {m:1 Person, oneSided=true}
- * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
- *
- * @property OneHasMany|LanguageTranslation[] $translations {1:m LanguageTranslation::$language, orderBy=translationLanguage->rank}
  */
 trait CoreLanguage
 {

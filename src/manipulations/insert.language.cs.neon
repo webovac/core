@@ -1,0 +1,7 @@
+class: App\Model\Language\LanguageData
+skipDefaults: true
+items:
+	cs:
+		shortcut: cs
+		name: czech
+		rank: 1

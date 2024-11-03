@@ -28,8 +28,12 @@ use Nextras\Orm\Relationships\IRelationshipCollection;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
+use Stepapo\Definition\Lib\Analyzer;
+use Stepapo\Definition\Lib\Collector;
+use Stepapo\Definition\Lib\PgsqlAnalyzer;
 use Stepapo\Utils\Model\Item;
 use Webovac\Core\Attribute\RequiresEntity;
+use Webovac\Core\Command\DefinitionCommand;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Core;
@@ -43,6 +47,7 @@ use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
+use Webovac\Core\Module;
 
 
 trait CorePresenter
@@ -62,6 +67,7 @@ trait CorePresenter
 	#[Inject] public CmsTranslator $translator;
 	#[Inject] public TemplateFactory $templateFactory;
 	#[Inject] public DataProvider $dataProvider;
+	#[Inject] public DefinitionCommand $definitionCommand;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -160,6 +166,7 @@ trait CorePresenter
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
 			$this->dataProvider->setButtonsPageData($this->buttonsPageData);
 			$this->buildCrumbs();
+//			$this->definitionCommand->run();
 		};
 	}
 

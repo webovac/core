@@ -17,7 +17,7 @@ trait CoreModuleData
 	public string $name;
 	public int|string $homePage;
 	/** @var ModuleTranslationData[] */ #[ArrayOfType(ModuleTranslationData::class)] public array|null $translations;
-	/** @var PageData[]|array */ public array|null $pages;
+	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
 	public ?string $icon;
 	public array $tree;
 	public int|string|null $createdByPerson;
@@ -26,36 +26,36 @@ trait CoreModuleData
 	public ?DateTimeInterface $updatedAt;
 
 
-	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
 	{
 		$data = parent::createFromArray($config, $key, $skipDefaults);
 		$rank = 1;
 		foreach ($data->tree as $parentPage => $pages) {
 			ModuleData::processTree((array) $pages, $parentPage, $rank++, $data);
 		}
-		foreach ($data->pages as $pageKey => $pageConfig) {
-			if (!ModuleData::checkPage($pageKey, $data)) {
-				unset($data->pages[$pageKey]);
-				continue;
-			}
-			$data->pages[$pageKey] = PageData::createFromArray($pageConfig, $pageKey, $skipDefaults);
-		}
+//		foreach ($data->pages as $pageKey => $pageConfig) {
+//			if (!ModuleData::checkPage($pageKey, $data)) {
+//				unset($data->pages[$pageKey]);
+//				continue;
+//			}
+//			$data->pages[$pageKey] = PageData::createFromArray($pageConfig, $pageKey, $skipDefaults, $parentKey);
+//		}
 		return $data;
 	}
 
 
-	private static function checkPage(string $page, ModuleData $data)
-	{
-		if (isset($data->pages[$page])) {
-			$p = $data->pages[$page];
-			$relatedPage = $p['targetPage'] ?? ($p['redirectPage'] ?? null);
-			if (!$relatedPage) {
-				return true;
-			}
-			return ModuleData::checkPage(str_contains($relatedPage, ':') ? strtok($relatedPage, ':') : $relatedPage, $data);
-		}
-		return false;
-	}
+//	private static function checkPage(string $page, ModuleData $data)
+//	{
+//		if (isset($data->pages[$page])) {
+//			$p = $data->pages[$page];
+//			$relatedPage = $p['targetPage'] ?? ($p['redirectPage'] ?? null);
+//			if (!$relatedPage) {
+//				return true;
+//			}
+//			return ModuleData::checkPage(str_contains($relatedPage, ':') ? strtok($relatedPage, ':') : $relatedPage, $data);
+//		}
+//		return false;
+//	}
 
 
 	private static function processTree(array $pages, string $parentPage, int $rank, ModuleData &$data): void
@@ -63,9 +63,9 @@ trait CoreModuleData
 		$r = 1;
 		$data->pages[$parentPage]['rank'] = $rank;
 		foreach ($pages as $page => $subPages) {
-			if (!ModuleData::checkPage($page, $data)) {
-				continue;
-			}
+//			if (!ModuleData::checkPage($page, $data)) {
+//				continue;
+//			}
 			$data->pages[$page]['parentPage'] = $parentPage;
 			ModuleData::processTree((array) $subPages, $page, $r++, $data);
 		}

@@ -8,9 +8,9 @@ use App\Model\Orm;
 use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\IExtensionHandler;
+use Stepapo\Definition\Config\Definition;
+use Stepapo\Definition\Lib\DbProcessor;
 use Stepapo\Utils\ConfigProcessor;
-use Webovac\Core\Definition\Definition;
-use Webovac\Core\Definition\DefinitionProcessor;
 use Webovac\Core\Definition\Manipulation;
 use Webovac\Core\ManipulationGroup;
 
@@ -25,7 +25,7 @@ class NeonHandler implements IExtensionHandler
 		private bool $debugMode,
 		private bool $testMode,
 		private Orm $orm,
-		private DefinitionProcessor $structureProcessor,
+		private DbProcessor $processor,
 	) {}
 
 
@@ -64,7 +64,7 @@ class NeonHandler implements IExtensionHandler
 				$count++;
 			}
 		} else {
-			$count = $this->structureProcessor->process(Definition::createFromNeon($file->path, $this->params));
+//			$count = $this->processor->process(Definition::createFromNeon($file->path, $this->params));
 		}
 		return $count;
 	}

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Page;
 
 use App\Model\Module\Module;
+use App\Model\Module\ModuleRepository;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslation;
@@ -41,7 +42,8 @@ trait CorePageRepository
 		$count ??= $web->getPages()->countStored();
 		$page = new Page;
 		$page->web = $web;
-		$page->module = $module;
+		$page->targetModule = $module;
+//		$page->module = $module;
 		$page->name = $module->name . 'Module';
 		$page->type = Page::TYPE_MODULE;
 		$page->rank = $count + 1;
@@ -61,7 +63,7 @@ trait CorePageRepository
 
 	public function removeModulePage(Web $web, Module $module): void
 	{
-		$modulePage = $this->getBy(['web' => $web, 'module' => $module]);
+		$modulePage = $this->getBy(['web' => $web, 'targetModule' => $module]);
 		$this->removePage($modulePage);
 	}
 
@@ -168,7 +170,7 @@ trait CorePageRepository
 					: [
 						ICollection::AND,
 						['name' => $data->redirectPage],
-						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+						$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
 					]
 			);
 		}
@@ -180,7 +182,7 @@ trait CorePageRepository
 						: [
 							ICollection::AND,
 							['name' => $data->targetPage],
-							[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+							$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
 						]
 				);
 			}
@@ -192,7 +194,7 @@ trait CorePageRepository
 					: [
 						ICollection::AND,
 						['name' => $data->parentPage],
-						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+						$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
 					]
 			);
 		}
@@ -210,7 +212,7 @@ trait CorePageRepository
 					: [
 						ICollection::AND,
 						['name' => $data->parentPage],
-						[ICollection::OR, 'web' => $page->web, 'module' => $page->web ? $page->web->modules->toCollection()->fetchPairs(null, 'id') : $page->module],
+						$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
 					]
 			);
 		}

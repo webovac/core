@@ -92,7 +92,7 @@ trait CorePageDataRepository
 				$pageData->translations[$translation->id]->fullPath = $parentPath . ($path ? '/' . $path : '');
 			}
 			if ($page->type === Page::TYPE_MODULE) {
-				$this->buildCollection($collection, $page->module, $pageData, $rank);
+				$this->buildCollection($collection, $page->targetModule, $pageData, $rank);
 			} else {
 				$pageData->rank = $rank++;
 				$collection[$pageData->web . '-' . $page->id] = $pageData;

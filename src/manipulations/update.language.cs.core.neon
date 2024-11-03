@@ -1,0 +1,10 @@
+class: App\Model\Language\LanguageData
+iteration: 2
+forceUpdate: true
+skipDefaults: true
+items:
+	cs:
+		shortcut: cs
+		translations:
+			cs: [title: Čeština]
+			en: [title: Czech]

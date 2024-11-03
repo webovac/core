@@ -11,19 +11,6 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Relationships\OneHasMany;
 
 
-/**
- * @property int $id {primary}
- *
- * @property string $name
- *
- * @property DateTimeImmutable $createdAt {default now}
- * @property DateTimeImmutable|null $updatedAt
- *
- * @property Person|null $createdByPerson {m:1 Person, oneSided=true}
- * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
- *
- * @property OneHasMany|TextTranslation[] $translations {1:m TextTranslation::$text, orderBy=language->rank}
- */
 trait CoreText
 {
 	public function getTranslation(LanguageData $language): ?TextTranslation

@@ -6,6 +6,7 @@ namespace Webovac\Core\Ext\Migrations;
 
 use DateTime;
 use Nette\Utils\FileInfo;
+use Nextras\Migrations\Engine\OrderResolver;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\Entities\Group;
@@ -22,7 +23,7 @@ use Nextras\Migrations\LogicException;
 
 class CmsRunner extends Runner
 {
-	private CmsOrderResolver $orderResolver;
+	private OrderResolver $orderResolver;
 	/** @var list<Group> */ private array $groups = [];
 	/** @var array<string, IExtensionHandler> (extension => IExtensionHandler) */ private array $extensionsHandlers = [];
 
@@ -32,7 +33,7 @@ class CmsRunner extends Runner
 		private IPrinter $printer,
 	) {
 		parent::__construct($driver, $printer);
-		$this->orderResolver = new CmsOrderResolver;
+		$this->orderResolver = new OrderResolver;
 	}
 
 
@@ -84,9 +85,9 @@ class CmsRunner extends Runner
 			$this->driver->lock();
 
 			$this->printer->printIntro($mode);
-			if ($mode === self::MODE_RESET) {
-				$this->driver->emptyDatabase();
-			}
+//			if ($mode === self::MODE_RESET) {
+//				$this->driver->emptyDatabase();
+//			}
 
 			$this->driver->createTable();
 			$migrations = $this->driver->getAllMigrations();

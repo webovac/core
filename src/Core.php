@@ -11,6 +11,7 @@ use App\Model\Module\Module as ModuleEntity;
 use App\Model\Module\ModuleData;
 use App\Model\Orm;
 use App\Model\Page\Page;
+use App\Model\Page\PageData;
 use App\Model\Person\Person;
 use App\Model\Person\PersonData;
 use App\Model\Role\RoleData;
@@ -51,13 +52,13 @@ class Core implements Module
 	public function getManipulationGroups(): array
 	{
 		return [
-			new ManipulationGroup('web', WebData::class, ['layout']),
-			new ManipulationGroup('role', RoleData::class),
-			new ManipulationGroup('person', PersonData::class, ['role']),
-			new ManipulationGroup('language', LanguageData::class),
-			new ManipulationGroup('text', TextData::class, ['language']),
-			new ManipulationGroup('module', ModuleData::class, ['language']),
-			new ManipulationGroup('page', ModuleData::class, ['web', 'module', 'language']),
+			WebData::class => new ManipulationGroup('web', WebData::class, ['layout']),
+			RoleData::class => new ManipulationGroup('role', RoleData::class),
+			PersonData::class => new ManipulationGroup('person', PersonData::class, ['role']),
+			LanguageData::class => new ManipulationGroup('language', LanguageData::class),
+			TextData::class => new ManipulationGroup('text', TextData::class, ['language']),
+			ModuleData::class => new ManipulationGroup('module', ModuleData::class, ['language']),
+			PageData::class => new ManipulationGroup('page', PageData::class, ['web', 'module', 'language']),
 		];
 	}
 

@@ -11,23 +11,6 @@ use App\Model\Web\Web;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 
 
-/**
- * @property int $id {primary}
- *
- * @property string|null $path
- * @property string|null $title
- * @property string|null $description
- * @property string|null $onclick
- * @property string|null $content
- *
- * @property DateTimeImmutable $createdAt {default now}
- * @property DateTimeImmutable|null $updatedAt
- *
- * @property Page $page {m:1 Page::$translations}
- * @property Language $language {m:1 Language, oneSided=true}
- * @property Person|null $createdByPerson {m:1 Person, oneSided=true}
- * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
- */
 trait CorePageTranslation
 {
 	public function getRouteMask(?Web $web = null, array $parts = []): string

@@ -1,0 +1,4 @@
+class: App\Model\Role\RoleData
+items:
+	admin:
+		code: admin

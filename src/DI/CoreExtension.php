@@ -16,19 +16,24 @@ use Nette\Schema\Schema;
 use Nextras\Dbal\Bridges\NetteDI\DbalExtension;
 use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
-use Webovac\Core\Command\Command;
-use Webovac\Core\Definition\MysqlDefinitionProcessor;
-use Webovac\Core\Definition\PgsqlDefinitionProcessor;
+use Stepapo\Definition\DI\DefinitionExtension;
+use Stepapo\Manipulation\DI\ManipulationExtension;
+use Stepapo\Utils\Command\Command;
+use Stepapo\Utils\DI\StepapoExtension;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Factory;
 use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsRepository;
 use Webovac\Core\Module;
+use Webovac\Generator\DI\GeneratorExtension;
 
 
-class CoreExtension extends BaseExtension
+class CoreExtension extends StepapoExtension
 {
+	private DefinitionExtension $definitionExtension;
+	private GeneratorExtension $generatorExtension;
+	private ManipulationExtension $manipulationExtension;
 	private OrmExtension $ormExtension;
 	private MultiplierExtension $multiplierExtension;
 	private DbalExtension $dbalExtension;
@@ -58,11 +63,9 @@ class CoreExtension extends BaseExtension
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('neonHandler'))
 			->setFactory(NeonHandler::class, [['host' => $this->config->host], $builder->parameters['debugMode'], $this->config->testMode]);
-		$definitionProcessor = $builder->addDefinition($this->prefix('definitionProcessor'))
-			->setFactory($this->config->db->driver === 'pgsql' ? PgsqlDefinitionProcessor::class : MysqlDefinitionProcessor::class);
-		if ($this->config->db->driver === 'mysql') {
-			$definitionProcessor->addSetup('setDefaultSchema', [$this->config->db->database]);
-		}
+		$this->createDefinitionExtension();
+		$this->createGeneratorExtension();
+		$this->createManipulationExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
 		$this->createDecoratorExtension();
@@ -80,6 +83,40 @@ class CoreExtension extends BaseExtension
 		$config = $this->processSchema($this->projectSearchExtension->getConfigSchema(), $this->getProjectSearchConfig());
 		$this->projectSearchExtension->setConfig($config);
 		$this->projectSearchExtension->loadConfiguration();
+	}
+
+
+	protected function createDefinitionExtension(): void
+	{
+		$this->definitionExtension = new DefinitionExtension;
+		$this->definitionExtension->setCompiler($this->compiler, 'stepapo.definition');
+		$config = $this->processSchema($this->definitionExtension->getConfigSchema(), [
+			'driver' => $this->config->db->driver,
+			'database' => $this->config->db->database,
+		]);
+		$this->definitionExtension->setConfig($config);
+		$this->definitionExtension->loadConfiguration();
+	}
+
+
+	protected function createGeneratorExtension(): void
+	{
+		$this->generatorExtension = new GeneratorExtension;
+		$this->generatorExtension->setCompiler($this->compiler, 'webovac.generator');
+		$this->generatorExtension->loadConfiguration();
+	}
+
+
+	protected function createManipulationExtension(): void
+	{
+		$this->manipulationExtension = new ManipulationExtension;
+		$this->manipulationExtension->setCompiler($this->compiler, 'stepapo.manipulation');
+		$config = $this->processSchema($this->manipulationExtension->getConfigSchema(), [
+			'parameters' => ['host' => $this->config->host],
+			'testMode' => $this->config->testMode,
+		]);
+		$this->manipulationExtension->setConfig($config);
+		$this->manipulationExtension->loadConfiguration();
 	}
 
 
@@ -156,6 +193,9 @@ class CoreExtension extends BaseExtension
 	public function beforeCompile(): void
 	{
 		parent::beforeCompile();
+		$this->definitionExtension->beforeCompile();
+		$this->generatorExtension->beforeCompile();
+		$this->manipulationExtension->beforeCompile();
 		$this->projectSearchExtension->beforeCompile();
 		$this->decoratorExtension->beforeCompile();
 		$this->ormExtension->beforeCompile();
@@ -168,6 +208,9 @@ class CoreExtension extends BaseExtension
 	public function afterCompile(ClassType $class): void
 	{
 		parent::afterCompile($class);
+		$this->definitionExtension->afterCompile($class);
+		$this->generatorExtension->afterCompile($class);
+		$this->manipulationExtension->afterCompile($class);
 		$this->projectSearchExtension->afterCompile($class);
 		$this->decoratorExtension->afterCompile($class);
 		$this->ormExtension->afterCompile($class);
@@ -184,7 +227,7 @@ class CoreExtension extends BaseExtension
 		return [
 			'module' => ['in' => $appDir, 'implements' => Module::class],
 			'command' => ['in' => $appDir, 'implements' => Command::class],
-			'control' => ['in' => $appDir, 'extends' => Factory::class],
+			'control' => ['in' => $appDir, 'implements' => Factory::class],
 			'lib' => ['in' => $appDir, 'classes' => 'App\**\Lib\**'],
 			'dataRepository' => ['in' => $appDir, 'extends' => CmsDataRepository::class],
 		];

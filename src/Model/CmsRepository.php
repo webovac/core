@@ -65,6 +65,30 @@ abstract class CmsRepository extends Repository
 	/**
 	 * @throws ReflectionException
 	 */
+	public function createFromDataReturnBool(
+		Item $data,
+		?CmsEntity $original = null,
+		?CmsEntity $parent = null,
+		?string $parentName = null,
+		?Person $person = null,
+		?DateTimeInterface $date = null,
+		bool $skipDefaults = false,
+		bool $getOriginalByData = false,
+	): bool
+	{
+		if ($getOriginalByData) {
+			$original ??= method_exists($this, 'getByData') ? $this->getByData($data, $parent) : null;
+		}
+		$class = new ReflectionClass($this->getEntityClassName([]));
+		$entity = $original ?: $class->newInstance();
+		$processor = new CmsEntityProcessor($entity, $data, $person, $date, $skipDefaults, $this->getModel());
+		return $processor->processEntity($parent, $parentName);
+	}
+
+
+	/**
+	 * @throws ReflectionException
+	 */
 	public function createFromData(
 		Item $data,
 		?CmsEntity $original = null,

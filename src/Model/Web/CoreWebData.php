@@ -7,7 +7,10 @@ namespace Webovac\Core\Model\Web;
 use App\Model\File\File;
 use App\Model\File\FileData;
 use App\Model\Module\ModuleData;
+use App\Model\Module\ModuleRepository;
+use App\Model\Page\Page;
 use App\Model\Page\PageData;
+use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\Web;
 use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationData;
@@ -18,6 +21,7 @@ use Nette\Schema\Processor;
 use ReflectionException;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
+use Stepapo\Utils\Attribute\Type;
 use Stepapo\Utils\Expect;
 
 
@@ -36,9 +40,8 @@ trait CoreWebData
 	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $logoFile;
 	public FileUpload|FileData|string|int|null $backgroundFile;
 	/** @var WebTranslationData[] */ #[ArrayOfType(WebTranslationData::class)] public array|null $translations;
-	/** @var PageData[]|array */ public array|null $pages;
-	/** @var WebModuleData[]|string[] */ public array|null $webModules;
-	/** @var ModuleData[]|string[] */ public array|null $modules;
+	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
+	/** @var string[] */ public array|null $modules;
 	#[DefaultValue('')] public string $basePath;
 	public array $tree;
 	public int|string|null $createdByPerson;
@@ -86,70 +89,5 @@ trait CoreWebData
 			'basePath' => $this->basePath,
 			'lang' => $language,
 		];
-	}
-
-
-	/**
-	 * @throws ReflectionException
-	 */
-	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
-	{
-		$data = parent::createFromArray($config, $key, $skipDefaults);
-		$rank = 1;
-		WebData::processWebModules($data);
-		if (isset($data->tree)) {
-			foreach ($data->tree as $parentPage => $pages) {
-				WebData::processTree((array) $pages, $parentPage, $rank++, $data);
-			}
-		}
-		if (isset($data->pages)) {
-			foreach ($data->pages as $pageKey => $pageConfig) {
-				$data->pages[$pageKey] = PageData::createFromArray($pageConfig, $pageKey, $skipDefaults);
-			}
-		}
-		if (isset($data->webModules)) {
-			foreach ($data->webModules as $webModuleKey => $webModuleConfig) {
-				$webModuleConfig['name'] ??= $webModuleKey;
-				unset($data->webModules[$webModuleKey]);
-				$data->webModules[$webModuleKey] = (new Processor)->process(Expect::fromSchematic(WebModuleData::class, $skipDefaults), $webModuleConfig);
-			}
-		}
-		return $data;
-	}
-
-
-	private static function processWebModules(WebData &$config): void
-	{
-		if (!isset($config->webModules)) {
-			return;
-		}
-		foreach ($config->webModules as $key => $moduleName) {
-			unset($config->webModules[$key]);
-//			if (!$this->moduleChecker->isModuleInstalled(lcfirst($moduleName))) {
-//				continue;
-//			}
-			$config->webModules[$moduleName] = [];
-		}
-	}
-
-
-	private static function processTree(array $pages, string $parentPage, int $rank, WebData &$data): void
-	{
-		$r = 1;
-		if (isset($data->pages[$parentPage])) {
-			$data->pages[$parentPage]['rank'] = $rank;
-		} else {
-			$data->webModules[$parentPage]['rank'] = $rank;
-		}
-		foreach ($pages as $page => $subPages) {
-			if (isset($data->pages[$page])) {
-				$data->pages[$page]['parentPage'] = $parentPage;
-			} elseif (isset($data->webModules[$page])) {
-				$data->webModules[$page]['parentPage'] = $parentPage;
-			} else {
-				throw new InvalidArgumentException("Page '$page' not found in config.");
-			}
-			WebData::processTree((array) $subPages, $page, $r++, $data);
-		}
 	}
 }

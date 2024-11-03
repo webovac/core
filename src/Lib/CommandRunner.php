@@ -6,7 +6,7 @@ namespace Webovac\Core\Lib;
 
 use Nette\InvalidArgumentException;
 use Nette\Utils\Arrays;
-use Webovac\Core\Command\Command;
+use Stepapo\Utils\Command\Command;
 
 
 class CommandRunner

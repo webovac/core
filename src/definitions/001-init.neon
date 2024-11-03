@@ -1,0 +1,382 @@
+schemas:
+	public:
+		tables:
+			file:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					identifier: [type: string, null: false]
+					modern_identifier: [type: string, null: true]
+					compatible_identifier: [type: string, null: true]
+					name: [type: string, null: false]
+					extension: [type: string, null: false]
+					content_type: [type: string, null: false]
+					type: [type: string, null: false]
+					created_at: [type: datetime, null: false, default: now]
+				primaryKey: id
+				uniqueKeys: [identifier]
+				indexes: [created_by_person_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+			index:
+				columns:
+					id: [type: int, null: false, auto: true]
+					language_id: [type: int, null: true]
+					module_id: [type: int, null: true]
+					page_id: [type: int, null: true]
+					web_id: [type: int, null: true]
+					person_id: [type: int, null: true]
+				primaryKey: id
+				uniqueKeys: [language_id, module_id, page_id, web_id, person_id]
+				indexes: [language_id, module_id, page_id, web_id, person_id]
+				foreignKeys:
+					language_id: [table: language, column: id]
+					module_id: [table: module, column: id]
+					page_id: [table: page, column: id]
+					web_id: [table: web, column: id]
+					person_id: [table: person, column: id]
+			language:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					shortcut: [type: string, null: false]
+					name: [type: string, null: false]
+					rank: [type: int, null: false]
+				primaryKey: id
+				uniqueKeys: [shortcut, name, rank]
+				indexes: [created_by_person_id, updated_by_person_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+			language_translation:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					language_id: [type: int, null: false]
+					translation_language_id: [type: int, null: false]
+					title: [type: string, null: false]
+				primaryKey: id
+				uniqueKeys: [[language_id, translation_language_id]]
+				indexes: [created_by_person_id, updated_by_person_id, language_id, translation_language_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					language_id: [table: language, column: id, reverseName: translations, reverseOrder: translationLanguage->rank]
+					translation_language_id: [table: language, column: id]
+			log:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					date: [type: datetime, null: true]
+					language_id: [type: int, null: true]
+					module_id: [type: int, null: true]
+					page_id: [type: int, null: true]
+					web_id: [type: int, null: true]
+					person_id: [type: int, null: true]
+					type: [type: string, null: false]
+				primaryKey: id
+				indexes: [created_by_person_id, language_id, module_id, page_id, web_id, person_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					language_id: [table: language, column: id]
+					module_id: [table: module, column: id]
+					page_id: [table: page, column: id]
+					web_id: [table: web, column: id]
+					person_id: [table: person, column: id]
+			module:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					name: [type: string, null: false]
+					icon: [type: string, null: true]
+					home_page_id: [type: int, null: true]
+				primaryKey: id
+				uniqueKeys: [name]
+				indexes: [created_by_person_id, updated_by_person_id, home_page_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					home_page_id: [table: page, column: id, onDelete: set null]
+			module2web:
+				columns:
+					module_id: [type: int, null: false]
+					web_id: [type: int, null: false]
+				primaryKey: [module_id, web_id]
+				indexes: [module_id, web_id]
+				foreignKeys:
+					module_id: [table: module, column: id, reverseName: webs]
+					web_id: [table: web, column: id, reverseName: modules]
+			module_translation:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					module_id: [type: int, null: false]
+					language_id: [type: int, null: false]
+					title: [type: string, null: false]
+					description: [type: text, null: true]
+					base_path: [type: string, null: true]
+				primaryKey: id
+				uniqueKeys: [[module_id, language_id]]
+				indexes: [created_by_person_id, updated_by_person_id, module_id, language_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					module_id: [table: module, column: id, reverseName: translations, reverseOrder: language->rank]
+					language_id: [table: language, column: id]
+			page:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					web_id: [type: int, null: true]
+					parent_page_id: [type: int, null: true]
+					icon: [type: string, null: true]
+					redirect_page_id: [type: int, null: true]
+					module_id: [type: int, null: true]
+					target_module_id: [type: int, null: true]
+					template_page_id: [type: int, null: true]
+					image_file_id: [type: int, null: true]
+					published_at: [type: datetime, null: true]
+					name: [type: string, null: false]
+					style: [type: string, null: true]
+					repository: [type: string, null: true]
+					provides_navigation: [type: bool, null: false, default: false]
+					rank: [type: int, null: false, default: 1]
+					hide_in_navigation: [type: bool, null: false, default: false]
+					provides_buttons: [type: bool, null: false, default: false]
+					dont_inherit_path: [type: bool, null: false, default: false]
+					dont_inherit_access_setup: [type: bool, null: false, default: false]
+					has_parameter: [type: bool, null: false, default: false]
+					target_page_id: [type: int, null: true]
+					target_parameter: [type: string, null: true]
+					target_path: [type: string, null: true]
+					target_url: [type: string, null: true]
+					type: [type: string, null: false, default: page]
+					access_for: [type: string, null: false, default: all]
+					authorizing_tag: [type: string, null: true]
+					target_signal: [type: string, null: true]
+					stretched: [type: bool, null: false, default: false]
+				primaryKey: id
+				uniqueKeys: [[web_id, name]]
+				indexes: [created_by_person_id, updated_by_person_id, has_parameter, module_id, target_module_id, parent_page_id, redirect_page_id, target_page_id, template_page_id, image_file_id, web_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank]
+					target_module_id: [table: module, column: id]
+					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank]
+					redirect_page_id: [table: page, column: id, onDelete: cascade]
+					target_page_id: [table: page, column: id, onDelete: cascade]
+					template_page_id: [table: page, column: id, onDelete: set null]
+					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank]
+					image_file_id: [table: file, column: id, onDelete: set null]
+			page2authorized_person:
+				columns:
+					page_id: [type: int, null: false]
+					person_id: [type: int, null: false]
+				primaryKey: [page_id, person_id]
+				indexes: [page_id, person_id]
+				foreignKeys:
+					page_id: [table: page, column: id, reverseName: authorizedPersons]
+					person_id: [table: person, column: id]
+			page2authorized_role:
+				columns:
+					page_id: [type: int, null: false]
+					role_id: [type: int, null: false]
+				primaryKey: [page_id, role_id]
+				indexes: [page_id, role_id]
+				foreignKeys:
+					page_id: [table: page, column: id, reverseName: authorizedRoles]
+					role_id: [table: role, column: id]
+			page_translation:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					page_id: [type: int, null: false]
+					language_id: [type: int, null: false]
+					path: [type: string, null: true]
+					title: [type: string, null: true]
+					description: [type: text, null: true]
+					onclick: [type: text, null: true]
+					content: [type: text, null: true]
+				primaryKey: id
+				uniqueKeys: [[page_id, language_id]]
+				indexes: [created_by_person_id, updated_by_person_id, page_id, language_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					page_id: [table: page, column: id, reverseName: translations, reverseOrder: language->rank]
+					language_id: [table: language, column: id]
+			parameter:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					page_id: [type: int, null: false]
+					query: [type: string, null: false]
+					parameter: [type: string, null: false]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+				primaryKey: id
+				indexes: [created_by_person_id, updated_by_person_id, page_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					page_id: [table: page, column: id, reverseName: parameters]
+			person:
+				columns:
+					id: [type: int, null: false, auto: true]
+					email: [type: string, null: true]
+					first_name: [type: string, null: false]
+					last_name: [type: string, null: false]
+					last_login_at: [type: datetime, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+				primaryKey: id
+				uniqueKeys: [email]
+			preference:
+				columns:
+					id: [type: int, null: false, auto: true]
+					person_id: [type: int, null: false]
+					web_id: [type: int, null: false]
+					language_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+				primaryKey: id
+				indexes: [person_id, web_id, language_id]
+				foreignKeys:
+					person_id: [table: person, column: id, reverseName: preferences]
+					web_id: [table: web, column: id]
+					language_id: [table: language, column: id]
+			role:
+				columns:
+					id: [type: int, null: false, auto: true]
+					code: [type: string, null: false]
+				primaryKey: id
+				uniqueKeys: [code]
+			role2person:
+				columns:
+					role_id: [type: int, null: false]
+					person_id: [type: int, null: false]
+				primaryKey: [role_id, person_id]
+				indexes: [role_id, person_id]
+				foreignKeys:
+					role_id: [table: role, column: id, reverseName: persons]
+					person_id: [table: person, column: id, reverseName: roles]
+			signal:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					page_id: [type: int, null: false]
+					name: [type: string, null: false]
+					signal: [type: string, null: false]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+				primaryKey: id
+				indexes: [created_by_person_id, updated_by_person_id, page_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					page_id: [table: page, column: id, reverseName: signals]
+			text:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					name: [type: string, null: false]
+				primaryKey: id
+				indexes: [created_by_person_id, updated_by_person_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+			text_translation:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					text_id: [type: int, null: false]
+					language_id: [type: int, null: false]
+					string: [type: string, null: false]
+				primaryKey: id
+				uniqueKeys: [[text_id, language_id]]
+				indexes: [created_by_person_id, updated_by_person_id, text_id, language_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					text_id: [table: text, column: id, reverseName: translations, reverseOrder: language->rank]
+					language_id: [table: language, column: id]
+			web:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					color: [type: string, null: true]
+					complementary_color: [type: string, null: false, default: '#888888']
+					host: [type: string, null: false]
+					published_at: [type: datetime, null: true]
+					base_path: [type: string, null: false, default: '']
+					icon_background_color: [type: string, null: false, default: '#ffffff']
+					home_page_id: [type: int, null: true]
+					default_language_id: [type: int, null: true]
+					icon_file_id: [type: int, null: true]
+					large_icon_file_id: [type: int, null: true]
+					logo_file_id: [type: int, null: true]
+					background_file_id: [type: int, null: true]
+					code: [type: string, null: false]
+				primaryKey: id
+				uniqueKeys: [[host, base_path], code]
+				indexes: [created_by_person_id, updated_by_person_id, base_path, default_language_id, icon_file_id, large_icon_file_id, logo_file_id, background_file_id, home_page_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					default_language_id: [table: language, column: id, onDelete: restrict]
+					icon_file_id: [table: file, column: id, onDelete: set null]
+					large_icon_file_id: [table: file, column: id, onDelete: set null]
+					logo_file_id: [table: file, column: id, onDelete: set null]
+					background_file_id: [table: file, column: id, onDelete: set null]
+					home_page_id: [table: page, column: id, onDelete: set null]
+			web_translation:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					web_id: [type: int, null: false]
+					language_id: [type: int, null: false]
+					title: [type: string, null: false]
+					footer: [type: string, null: true]
+				primaryKey: id
+				uniqueKeys: [[web_id, language_id]]
+				indexes: [created_by_person_id, updated_by_person_id, web_id, language_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					web_id: [table: web, column: id, reverseName: translations, reverseOrder: language->rank]
+					language_id: [table: language, column: id]
+
+

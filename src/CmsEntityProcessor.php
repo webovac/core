@@ -19,6 +19,7 @@ use Nextras\Orm\Relationships\OneHasOne;
 use ReflectionClass;
 use ReflectionException;
 use Stepapo\Utils\Model\Item;
+use Tracy\Dumper;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -38,7 +39,7 @@ class CmsEntityProcessor
 	) {}
 
 
-	public function processEntity(?CmsEntity $parent = null, ?string $parentName = null): void
+	public function processEntity(?CmsEntity $parent = null, ?string $parentName = null): bool
 	{
 		$metadata = $this->entity->getMetadata();
 		if ($parent && $parentName) {
@@ -63,6 +64,9 @@ class CmsEntityProcessor
 		}
 		$this->isModified = $this->isModified || $this->entity->isModified();
 		$this->isPersisted = $this->entity->isPersisted();
+		if ($this->isModified) {
+//			Dumper::dump($this->entity->modified);
+		}
 		if (!$this->isPersisted) {
 			if ($metadata->hasProperty('createdByPerson')) {
 				$this->entity->createdByPerson = $this->person;
@@ -94,6 +98,7 @@ class CmsEntityProcessor
 		if ($this->isModified && !$this->entity->isModified()) {
 			$this->entity->getRepository()->onAfterPersist($this->entity);
 		}
+		return $this->isModified;
 	}
 
 
@@ -166,6 +171,9 @@ class CmsEntityProcessor
 		sort($newIds);
 		if (!isset($this->entity->$name) || $oldIds !== $newIds) {
 			$this->isModified = true;
+//			Dumper::dump($name);
+//			Dumper::dump($oldIds);
+//			Dumper::dump($newIds);
 			$this->entity->$name->set($array);
 		}
 	}
@@ -187,6 +195,9 @@ class CmsEntityProcessor
 			$processor->processEntity(parent: $this->entity, parentName: $property->relationship->property);
 			if (!$this->isModified) {
 				$this->isModified = $processor->isModified;
+				if ($processor->isModified) {
+//					Dumper::dump($processor->entity->modified);
+				}
 			}
 			$ids[] = $relatedEntity->getPersistedId();
 		}
@@ -194,6 +205,8 @@ class CmsEntityProcessor
 			foreach ($this->entity->$name as $related) {
 				if (!in_array($related->getPersistedId(), $ids, true)) {
 					$this->isModified = true;
+//					Dumper::dump($name);
+//					Dumper::dump($related->getData());
 					$relatedRepository->delete($related);
 				}
 			}

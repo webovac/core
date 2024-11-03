@@ -1,0 +1,6 @@
+class: App\Model\Person\PersonData
+items:
+	user:
+		email: 'user@test.test'
+		firstName: user
+		lastName: user

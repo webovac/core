@@ -8,6 +8,7 @@ use App\Model\DataModel;
 use App\Model\File\FileData;
 use App\Model\Language\LanguageData;
 use App\Model\Page\Page;
+use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Parameter\ParameterData;
 use App\Model\Parameter\QueryNameData;
@@ -22,6 +23,7 @@ use ReflectionException;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Stepapo\Utils\Attribute\KeyProperty;
+use Stepapo\Utils\Attribute\Type;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsUser;
@@ -32,7 +34,7 @@ trait CorePageData
 {
 	public ?int $id;
 	#[KeyProperty] public string $name;
-	public int $rank;
+	public int|null $rank;
 	#[DefaultValue(Page::TYPE_PAGE)] public string $type;
 	#[DefaultValue(Page::ACCESS_FOR_ALL)] public string $accessFor;
 	public ?string $authorizingTag;
@@ -68,6 +70,7 @@ trait CorePageData
 
 	public int|string|null $web;
 	public int|string|null $module;
+	public int|string|null $targetModule;
 	public ?string $host;
 	public ?string $basePath;
 	/** @var AccessSetup[] */ public array|null $accessSetups;

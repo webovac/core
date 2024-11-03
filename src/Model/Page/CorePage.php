@@ -28,50 +28,7 @@ use Webovac\Core\Model\LinkableTrait;
 
 
 /**
- * @property int $id {primary}
- *
- * @property string|null $icon
- * @property string $name
  * @property string $title {virtual}
- * @property string $type {enum Page::TYPE_*} {default Page::TYPE_PAGE}
- * @property string $accessFor {enum Page::ACCESS_FOR_*} {default Page::ACCESS_FOR_ALL}
- * @property string|null $authorizingTag
- * @property string|null $style {enum Page::STYLE_*}
- * @property bool $providesNavigation {default false}
- * @property bool $providesButtons {default false}
- * @property bool $hideInNavigation {default false}
- * @property bool $stretched {default false}
- * @property bool $dontInheritPath {default false}
- * @property bool $dontInheritAccessSetup {default false}
- * @property bool $hasParameter {default false}
- * @property string|null $repository
- * @property mixed|null $targetParameter
- * @property string|null $targetPath;
- * @property string|null $targetSignal
- * @property string|null $targetUrl
- * @property int $rank
- *
- * @property DateTimeImmutable $createdAt {default now}
- * @property DateTimeImmutable|null $updatedAt
- * @property DateTimeImmutable $publishedAt {default now}
- *
- * @property Web|null $web {m:1 Web::$pages}
- * @property Module|null $module {m:1 Module::$pages}
- * @property Page|null $parentPage {m:1 Page::$childPages}
- * @property Page|null $redirectPage {m:1 Page, oneSided=true}
- * @property Page|null $templatePage {m:1 Page, oneSided=true}
- * @property Page|null $targetPage {m:1 Page, oneSided=true}
- * @property File|null $imageFile {m:1 File, oneSided=true}
- * @property Person|null $createdByPerson {m:1 Person, oneSided=true}
- * @property Person|null $updatedByPerson {m:1 Person, oneSided=true}
- *
- * @property OneHasMany|Page[] $childPages {1:m Page::$parentPage, orderBy=rank}
- * @property OneHasMany|Parameter[] $parameters {1:m Parameter::$page}
- * @property OneHasMany|Signal[] $signals {1:m Signal::$page}
- * @property OneHasMany|PageTranslation[] $translations {1:m PageTranslation::$page, orderBy=language->rank}
- *
- * @property ManyHasMany|Person[] $authorizedPersons {m:m Person, isMain=true, oneSided=true}
- * @property ManyHasMany|Role[] $authorizedRoles {m:m Role, isMain=true, oneSided=true}
  */
 trait CorePage
 {
@@ -144,7 +101,7 @@ trait CorePage
 	public function getIcon(): ?string
 	{
 		return $this->type === Page::TYPE_MODULE
-			? $this->module->icon
+			? $this->targetModule->icon
 			: $this->icon;
 	}
 
@@ -169,7 +126,7 @@ trait CorePage
 		/** @var Page $page */
 		foreach ($this->childPages->toCollection() as $page) {
 			if ($page->type === Page::TYPE_MODULE) {
-				foreach ($page->module->getPages() as $modulePage) {
+				foreach ($page->targetModule->getPages() as $modulePage) {
 					$pages[] = $modulePage;
 				}
 			} else {

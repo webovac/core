@@ -15,21 +15,9 @@ use Webovac\Core\IndexTranslationDefinition;
 
 
 /**
- * @property int $id {primary}
- *
- * @property string|null $email
- * @property string $firstName
- * @property string $lastName
  * @property string $name {virtual}
  * @property string $nameForList {virtual}
  * @property string $title {virtual}
- *
- * @property OneHasMany|Preference[] $preferences {1:m Preference::$person}
- * @property ManyHasMany|Role[] $roles {m:m Role::$persons}
- *
- * @property DateTimeImmutable|null $lastLoginAt
- * @property DateTimeImmutable $createdAt {default now}
- * @property DateTimeImmutable|null $updatedAt
  */
 trait CorePerson
 {
