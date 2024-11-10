@@ -7,14 +7,16 @@ namespace Webovac\Core\Model;
 use App\Model\Orm;
 use Nette\Caching\Cache;
 use Nextras\Orm\Repository\IRepository;
-use Stepapo\Utils\Model\Collection;
-use Stepapo\Utils\Model\Item;
-use Stepapo\Utils\Model\Repository;
+use Stepapo\Utils\Injectable;
+use Stepapo\Model\Data\Collection;
+use Stepapo\Model\Data\Item;
+use Stepapo\Model\Data\Repository;
+use Stepapo\Utils\Service;
 use Throwable;
 use Webovac\Core\Lib\ModuleChecker;
 
 
-class CmsDataRepository extends Repository
+class CmsDataRepository extends Repository implements Service, Injectable
 {
 	public function __construct(
 		protected Orm $orm,

@@ -7,9 +7,10 @@ namespace Webovac\Core\Lib\Crosstab;
 use App\Model\Orm;
 use Stepapo\Crosstab\Control\Crosstab\CrosstabControl;
 use Stepapo\Crosstab\Crosstab;
+use Stepapo\Utils\Service;
 
 
-class CmsCrosstabFactory
+class CmsCrosstabFactory implements Service
 {
 	public function __construct(
 		private Orm $orm,

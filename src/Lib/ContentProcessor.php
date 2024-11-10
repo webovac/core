@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
+use Stepapo\Utils\Service;
 
-class ContentProcessor
+
+class ContentProcessor implements Service
 {
 	private const array ALLOWED_TAGS = [
 		'h1', 'h2', 'h3', 'p', 'b', 'i', 'a', 'br',

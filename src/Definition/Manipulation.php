@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Definition;
 
-use Stepapo\Utils\Model\Item;
+use Stepapo\Model\Data\Item;
 use Stepapo\Utils\Schematic;
 
 

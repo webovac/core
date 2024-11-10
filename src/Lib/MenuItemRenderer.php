@@ -9,10 +9,12 @@ use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\Control;
+use Stepapo\Utils\Service;
 use Webovac\Core\Control\MenuItem\MenuItemTemplate;
 use Webovac\Core\Model\CmsEntity;
 
-class MenuItemRenderer
+
+class MenuItemRenderer implements Service
 {
 	public function __construct(
 		private DataModel $dataModel,

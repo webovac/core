@@ -7,9 +7,10 @@ namespace Webovac\Core\Lib;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use Nette\Localization\Translator;
+use Stepapo\Utils\Service;
 
 
-class CmsTranslator implements Translator
+class CmsTranslator implements Translator, Service
 {
 	private LanguageData $languageData;
 

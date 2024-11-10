@@ -1,0 +1,47 @@
+modules:
+	Core:
+		isPackage: true
+		entities:
+			Log:
+			Person:
+			File:
+			Language:
+				entityImplements:
+					- Webovac\Core\Model\Linkable
+					- Webovac\Core\Model\HasTranslations
+			LanguageTranslation:
+				entityImplements:
+					- Webovac\Core\Model\Translation
+			Module:
+				entityImplements:
+					- Webovac\Core\Model\Page\HasPages
+					- Webovac\Core\Model\HasTranslations
+			ModuleTranslation:
+				entityImplements:
+					- Webovac\Core\Model\Translation
+			Page:
+				entityImplements:
+					- Webovac\Core\Model\Linkable
+					- Webovac\Core\Model\Page\HasPages
+					- Webovac\Core\Model\HasTranslations
+			PageTranslation:
+				entityImplements:
+					- Webovac\Core\Model\Translation
+			Preference:
+			Parameter:
+			Role:
+			Signal:
+			Text:
+				entityImplements:
+					- Webovac\Core\Model\HasTranslations
+			TextTranslation:
+				entityImplements:
+					- Webovac\Core\Model\Translation
+			Web:
+				entityImplements:
+					- Webovac\Core\Model\Linkable
+					- Webovac\Core\Model\Page\HasPages
+					- Webovac\Core\Model\HasTranslations
+			WebTranslation:
+				entityImplements:
+					- Webovac\Core\Model\Translation

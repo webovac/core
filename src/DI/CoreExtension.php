@@ -16,12 +16,15 @@ use Nette\Schema\Schema;
 use Nextras\Dbal\Bridges\NetteDI\DbalExtension;
 use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
-use Stepapo\Definition\DI\DefinitionExtension;
-use Stepapo\Manipulation\DI\ManipulationExtension;
+use Stepapo\Model\Definition\DI\DefinitionExtension;
+use Stepapo\Model\Manipulation\DI\ManipulationExtension;
+use Stepapo\Model\DI\ModelExtension;
 use Stepapo\Utils\Command\Command;
 use Stepapo\Utils\DI\StepapoExtension;
+use Stepapo\Utils\Injectable;
+use Stepapo\Utils\Service;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
-use Webovac\Core\Factory;
+use Stepapo\Utils\Factory;
 use Webovac\Core\Lib\NeonHandler;
 use Webovac\Core\Model\CmsDataRepository;
 use Webovac\Core\Model\CmsRepository;
@@ -31,9 +34,8 @@ use Webovac\Generator\DI\GeneratorExtension;
 
 class CoreExtension extends StepapoExtension
 {
-	private DefinitionExtension $definitionExtension;
+	private ModelExtension $modelExtension;
 	private GeneratorExtension $generatorExtension;
-	private ManipulationExtension $manipulationExtension;
 	private OrmExtension $ormExtension;
 	private MultiplierExtension $multiplierExtension;
 	private DbalExtension $dbalExtension;
@@ -63,9 +65,8 @@ class CoreExtension extends StepapoExtension
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('neonHandler'))
 			->setFactory(NeonHandler::class, [['host' => $this->config->host], $builder->parameters['debugMode'], $this->config->testMode]);
-		$this->createDefinitionExtension();
+		$this->createModelExtension();
 		$this->createGeneratorExtension();
-		$this->createManipulationExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
 		$this->createDecoratorExtension();
@@ -86,16 +87,18 @@ class CoreExtension extends StepapoExtension
 	}
 
 
-	protected function createDefinitionExtension(): void
+	protected function createModelExtension(): void
 	{
-		$this->definitionExtension = new DefinitionExtension;
-		$this->definitionExtension->setCompiler($this->compiler, 'stepapo.definition');
-		$config = $this->processSchema($this->definitionExtension->getConfigSchema(), [
+		$this->modelExtension = new ModelExtension;
+		$this->modelExtension->setCompiler($this->compiler, 'stepapo.model');
+		$config = $this->processSchema($this->modelExtension->getConfigSchema(), [
+			'parameters' => ['host' => $this->config->host],
+			'testMode' => $this->config->testMode,
 			'driver' => $this->config->db->driver,
 			'database' => $this->config->db->database,
 		]);
-		$this->definitionExtension->setConfig($config);
-		$this->definitionExtension->loadConfiguration();
+		$this->modelExtension->setConfig($config);
+		$this->modelExtension->loadConfiguration();
 	}
 
 
@@ -104,19 +107,6 @@ class CoreExtension extends StepapoExtension
 		$this->generatorExtension = new GeneratorExtension;
 		$this->generatorExtension->setCompiler($this->compiler, 'webovac.generator');
 		$this->generatorExtension->loadConfiguration();
-	}
-
-
-	protected function createManipulationExtension(): void
-	{
-		$this->manipulationExtension = new ManipulationExtension;
-		$this->manipulationExtension->setCompiler($this->compiler, 'stepapo.manipulation');
-		$config = $this->processSchema($this->manipulationExtension->getConfigSchema(), [
-			'parameters' => ['host' => $this->config->host],
-			'testMode' => $this->config->testMode,
-		]);
-		$this->manipulationExtension->setConfig($config);
-		$this->manipulationExtension->loadConfiguration();
 	}
 
 
@@ -193,9 +183,8 @@ class CoreExtension extends StepapoExtension
 	public function beforeCompile(): void
 	{
 		parent::beforeCompile();
-		$this->definitionExtension->beforeCompile();
+		$this->modelExtension->beforeCompile();
 		$this->generatorExtension->beforeCompile();
-		$this->manipulationExtension->beforeCompile();
 		$this->projectSearchExtension->beforeCompile();
 		$this->decoratorExtension->beforeCompile();
 		$this->ormExtension->beforeCompile();
@@ -208,9 +197,8 @@ class CoreExtension extends StepapoExtension
 	public function afterCompile(ClassType $class): void
 	{
 		parent::afterCompile($class);
-		$this->definitionExtension->afterCompile($class);
+		$this->modelExtension->afterCompile($class);
 		$this->generatorExtension->afterCompile($class);
-		$this->manipulationExtension->afterCompile($class);
 		$this->projectSearchExtension->afterCompile($class);
 		$this->decoratorExtension->afterCompile($class);
 		$this->ormExtension->afterCompile($class);
@@ -225,11 +213,7 @@ class CoreExtension extends StepapoExtension
 		$rootDir = $this->getContainerBuilder()->parameters['rootDir'];
 		$appDir = "$rootDir/app";
 		return [
-			'module' => ['in' => $appDir, 'implements' => Module::class],
-			'command' => ['in' => $appDir, 'implements' => Command::class],
-			'control' => ['in' => $appDir, 'implements' => Factory::class],
-			'lib' => ['in' => $appDir, 'classes' => 'App\**\Lib\**'],
-			'dataRepository' => ['in' => $appDir, 'extends' => CmsDataRepository::class],
+			['in' => $appDir, 'implements' => Service::class],
 		];
 	}
 
@@ -237,10 +221,7 @@ class CoreExtension extends StepapoExtension
 	private function getDecoratorConfig(): array
 	{
 		return [
-			TemplateFactory::class => ['inject' => true],
-			DataModel::class => ['inject' => true],
-			CmsDataRepository::class => ['inject' => true],
-			CmsRepository::class => ['inject' => true],
+			Injectable::class => ['inject' => true],
 		];
 	}
 }

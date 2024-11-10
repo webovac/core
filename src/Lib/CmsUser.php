@@ -10,9 +10,10 @@ use Nette\Security\AuthenticationException;
 use Nette\Security\IIdentity;
 use Nette\Security\User;
 use Stepapo\Utils\Clearable;
+use Stepapo\Utils\Service;
 
 
-class CmsUser implements Clearable
+class CmsUser implements Clearable, Service
 {
 	public ?Person $person;
 

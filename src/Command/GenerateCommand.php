@@ -24,11 +24,11 @@ class GenerateCommand implements Command
 	) {
 		foreach ($this->modules as $module) {
 			$reflection = new ReflectionClass($module);
-			if (file_exists($dir = dirname($reflection->getFileName()) . '/files')) {
+			if (file_exists($dir = dirname($reflection->getFileName()) . '/config/files')) {
 				$this->folders[] = $dir;
 			}
 		}
-		if (file_exists($dir = $this->dir->getAppDir() . '/files')) {
+		if (file_exists($dir = $this->dir->getAppDir() . '/../config/files')) {
 			$this->folders[] = $dir;
 		}
 	}

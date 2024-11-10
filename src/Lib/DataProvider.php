@@ -9,9 +9,10 @@ use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
 use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
+use Stepapo\Utils\Service;
 
 
-class DataProvider
+class DataProvider implements Service
 {
 	private WebData $webData;
 	private LanguageData $languageData;

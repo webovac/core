@@ -28,10 +28,10 @@ use Nextras\Orm\Relationships\IRelationshipCollection;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
-use Stepapo\Definition\Lib\Analyzer;
-use Stepapo\Definition\Lib\Collector;
-use Stepapo\Definition\Lib\PgsqlAnalyzer;
-use Stepapo\Utils\Model\Item;
+use Stepapo\Model\Definition\Analyzer;
+use Stepapo\Model\Definition\Collector;
+use Stepapo\Model\Definition\PgsqlAnalyzer;
+use Stepapo\Model\Data\Item;
 use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\Command\DefinitionCommand;
 use Webovac\Core\Control\Core\CoreControl;
@@ -55,7 +55,6 @@ trait CorePresenter
 	#[Persistent] public string $host;
 	#[Persistent] public string $basePath;
 	#[Persistent] public string $lang;
-	#[Persistent] public string $backlink;
 	#[Inject] public ICoreControl $core;
 	#[Inject] public Orm $orm;
 	#[Inject] public Dir $dir;
@@ -67,7 +66,6 @@ trait CorePresenter
 	#[Inject] public CmsTranslator $translator;
 	#[Inject] public TemplateFactory $templateFactory;
 	#[Inject] public DataProvider $dataProvider;
-	#[Inject] public DefinitionCommand $definitionCommand;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -81,8 +79,6 @@ trait CorePresenter
 	/** @var CmsEntity[] */ private ?array $entityList = null;
 	private string $title;
 	public array $components = [];
-	public array $crumbs = [];
-	public array $activePages = [];
 
 
 	public function injectCoreStartup(): void
@@ -166,7 +162,6 @@ trait CorePresenter
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
 			$this->dataProvider->setButtonsPageData($this->buttonsPageData);
 			$this->buildCrumbs();
-//			$this->definitionCommand->run();
 		};
 	}
 

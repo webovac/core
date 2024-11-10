@@ -6,7 +6,7 @@ namespace Webovac\Core\Control\PageItem;
 
 use App\Model\Page\Page;
 use Webovac\Core\Core;
-use Webovac\Core\Factory;
+use Stepapo\Utils\Factory;
 
 
 interface IPageItemControl extends Factory

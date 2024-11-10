@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Navigation;
 
-use Webovac\Core\Factory;
+use Stepapo\Utils\Factory;
 use Webovac\Core\Model\CmsEntity;
 
 

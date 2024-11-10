@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Command;
 
-use Stepapo\Definition\Lib\Analyzer;
-use Stepapo\Definition\Lib\Collector;
-use Stepapo\Definition\Lib\Comparator;
-use Stepapo\Definition\Lib\DbProcessor;
+use Stepapo\Model\Definition\PropertyProcessor;
 use Stepapo\Utils\Command\Command;
 use Webovac\Core\Module;
 
 
-class DefinitionCommand implements Command
+class PropertyCommand implements Command
 {
 	/** @param Module[] $modules */
 	public function __construct(
 		private array $modules,
-		private DbProcessor $processor,
+		private PropertyProcessor $processor,
 	) {}
 
 
@@ -26,7 +23,7 @@ class DefinitionCommand implements Command
 		$folders = [];
 		foreach ($this->modules as $module) {
 			$reflection = new \ReflectionClass($module);
-			if (file_exists($dir = dirname($reflection->getFileName()) . "/definitions")) {
+			if (file_exists($dir = dirname($reflection->getFileName()) . "/config/definitions")) {
 				$folders[] = $dir;
 			}
 		}

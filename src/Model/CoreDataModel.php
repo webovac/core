@@ -19,7 +19,7 @@ use App\Model\Web\WebData;
 use App\Model\Web\WebDataRepository;
 use Nette\DI\Attributes\Inject;
 use ReflectionException;
-use Stepapo\Utils\Model\Collection;
+use Stepapo\Model\Data\Collection;
 use Webovac\Core\Lib\CmsUser;
 
 

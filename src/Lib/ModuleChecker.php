@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
+use Stepapo\Utils\Service;
 use Webovac\Core\Module;
 
 
-class ModuleChecker
+class ModuleChecker implements Service
 {
 	private array $installedModules = [];
 

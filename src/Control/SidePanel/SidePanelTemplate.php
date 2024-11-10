@@ -12,7 +12,7 @@ use App\Model\Module\ModuleData;
 use App\Model\Page\PageData;
 use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
-use Stepapo\Utils\Model\Collection;
+use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;
 
 

@@ -24,9 +24,10 @@ use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
-use Stepapo\Utils\Model\Item;
+use Stepapo\Model\Data\Item;
+use Stepapo\Model\Orm\StepapoEntity;
 use Tracy\Dumper;
-use Webovac\Core\CmsEntityProcessor;
+use Stepapo\Model\Orm\EntityProcessor;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Model\CmsEntity;
 
@@ -38,8 +39,8 @@ trait CoreWebRepository
 	 */
 	public function createFromDataReturnBool(
 		Item $data,
-		?CmsEntity $original = null,
-		?CmsEntity $parent = null,
+		?StepapoEntity $original = null,
+		?StepapoEntity $parent = null,
 		?string $parentName = null,
 		?Person $person = null,
 		?\DateTimeInterface $date = null,
@@ -74,14 +75,14 @@ trait CoreWebRepository
 	 */
 	public function createFromData(
 		Item $data,
-		?CmsEntity $original = null,
-		?CmsEntity $parent = null,
+		?StepapoEntity $original = null,
+		?StepapoEntity $parent = null,
 		?string $parentName = null,
 		?Person $person = null,
 		?\DateTimeInterface $date = null,
 		bool $skipDefaults = false,
 		bool $getOriginalByData = false,
-	): CmsEntity
+	): StepapoEntity
 	{
 		if ((isset($data->iconFile) && (($data->iconFile instanceof FileUpload && $data->iconFile->hasFile()) || is_string($data->iconFile))) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
 			$data->iconFile = $this->styleFile($data->iconFile, $data->complementaryColor, $data->color);

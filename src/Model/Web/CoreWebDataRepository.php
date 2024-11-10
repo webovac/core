@@ -8,8 +8,8 @@ use App\Model\Page\PageDataRepository;
 use App\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
-use Stepapo\Utils\Model\Collection;
-use Stepapo\Utils\Model\Item;
+use Stepapo\Model\Data\Collection;
+use Stepapo\Model\Data\Item;
 use Throwable;
 
 

@@ -7,9 +7,10 @@ namespace Webovac\Core\Lib;
 use Nette\InvalidArgumentException;
 use Nette\Utils\Arrays;
 use Stepapo\Utils\Command\Command;
+use Stepapo\Utils\Service;
 
 
-class CommandRunner
+class CommandRunner implements Service
 {
 	/** @var Command[][] */ private array $commands;
 

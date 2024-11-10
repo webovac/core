@@ -10,7 +10,7 @@ use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationData;
-use Stepapo\Utils\Model\Collection;
+use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;
 
 

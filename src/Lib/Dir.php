@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
+use Stepapo\Utils\Service;
 
-class Dir
+
+class Dir implements Service
 {
 	public function __construct(private string $rootDir)
 	{}

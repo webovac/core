@@ -8,23 +8,28 @@ use Nette\Neon\Neon;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
 use ReflectionClass;
+use Stepapo\Utils\Service;
 use Webovac\Core\Module;
 
 
-class TestConfigProvider
+class TestConfigProvider implements Service
 {
 	private array $paths = [];
 
 
 	/** @param Module[] $modules */
 	public function __construct(
-		private array $modules
+		private array $modules,
+		private Dir $dir,
 	) {
 		foreach ($modules as $module) {
 			$reflection = new ReflectionClass($module);
-			if (file_exists($path = dirname($reflection->getFileName()) . '/tests')) {
+			if (file_exists($path = dirname($reflection->getFileName()) . '/config/tests')) {
 				$this->paths[] = $path;
 			}
+		}
+		if (file_exists($dir = $this->dir->getAppDir() . '/../config/tests')) {
+			$this->paths[] = $dir;
 		}
 	}
 
@@ -51,7 +56,7 @@ class TestConfigProvider
 		$setups = [];
 		foreach ($this->modules as $module) {
 			$reflection = new ReflectionClass($module);
-			if (file_exists(dirname($reflection->getFileName()) . '/tests')) {
+			if (file_exists(dirname($reflection->getFileName()) . '/config/tests')) {
 				$setups[$reflection->getShortName()] = $module::getCliSetup();
 			}
 		}

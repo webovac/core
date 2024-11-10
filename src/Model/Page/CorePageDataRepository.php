@@ -9,7 +9,7 @@ use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationDataRepository;
 use Nette\DI\Attributes\Inject;
 use ReflectionException;
-use Stepapo\Utils\Model\Collection;
+use Stepapo\Model\Data\Collection;
 use Throwable;
 
 

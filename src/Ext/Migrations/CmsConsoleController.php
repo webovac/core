@@ -8,6 +8,7 @@ use Nextras\Migrations\Controllers\ConsoleController;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\IDriver;
 use Stepapo\Utils\Printer;
+use Tracy\Dumper;
 use Webovac\Core\MigrationGroup;
 
 
@@ -36,6 +37,7 @@ class CmsConsoleController extends ConsoleController
 	/** PRIVATE PARENT */
 	private function printHeader(): void
 	{
+		$this->printer->printBigSeparator();
 		$this->printer->printLine("Migrations", "aqua");
 		$this->printer->printSeparator();
 	}

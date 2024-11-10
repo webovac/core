@@ -7,7 +7,7 @@ namespace Webovac\Core\Control\Buttons;
 use App\Control\BaseTemplate;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
-use Stepapo\Utils\Model\Collection;
+use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;
 
 
