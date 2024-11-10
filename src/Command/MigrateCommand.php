@@ -16,7 +16,7 @@ use Stepapo\Utils\Command\Command;
 use Tracy\Dumper;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\Lib\Dir;
-use Webovac\Core\MigrationGroup;
+use Stepapo\Model\MigrationGroup;
 use Webovac\Core\Module;
 
 

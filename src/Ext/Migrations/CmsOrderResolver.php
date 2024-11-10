@@ -8,7 +8,7 @@ use Nextras\Migrations\Engine\OrderResolver;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\LogicException;
 use Tracy\Dumper;
-use Webovac\Core\DefinitionGroup;
+use Stepapo\Model\Definition\DefinitionGroup;
 
 
 class CmsOrderResolver extends OrderResolver

@@ -13,7 +13,7 @@ use Stepapo\Model\Definition\DbProcessor;
 use Stepapo\Utils\ConfigProcessor;
 use Stepapo\Utils\Service;
 use Webovac\Core\Definition\Manipulation;
-use Webovac\Core\ManipulationGroup;
+use Stepapo\Model\Manipulation\ManipulationGroup;
 
 
 /**

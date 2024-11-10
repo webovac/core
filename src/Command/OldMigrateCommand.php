@@ -14,7 +14,7 @@ use ReflectionException;
 use Stepapo\Utils\Command\Command;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\Lib\NeonHandler;
-use Webovac\Core\MigrationGroup;
+use Stepapo\Model\MigrationGroup;
 use Webovac\Core\Module;
 
 

@@ -9,7 +9,7 @@ use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\IDriver;
 use Stepapo\Utils\Printer;
 use Tracy\Dumper;
-use Webovac\Core\MigrationGroup;
+use Stepapo\Model\MigrationGroup;
 
 
 class CmsConsoleController extends ConsoleController

@@ -7,7 +7,7 @@ namespace Webovac\Core\Ext\Migrations;
 use Nette\Utils\FileInfo;
 use Nextras\Migrations\Entities\Group;
 use Nextras\Migrations\IDiffGenerator;
-use Webovac\Core\MigrationGroup;
+use Stepapo\Model\MigrationGroup;
 
 
 class CmsGroup extends Group
