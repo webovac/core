@@ -1,5 +1,6 @@
 modules:
 	Core:
+		namespace: Webovac
 		isPackage: true
 		entities:
 			Log:
