@@ -30,6 +30,7 @@
 		"choowx/rasterize-svg": "^0.1",
 		"stepapo/crosstab": "dev-main",
 		"stepapo/dataset": "dev-main",
+		"stepapo/model": "dev-main",
 		"stepapo/utils": "dev-main",
 		"stepapo/visualization": "dev-main"
 	},
@@ -37,11 +38,6 @@
 		"webovac/generator": "dev-main",
 		"stepapo/request-tester": "dev-main",
 		"nikic/php-parser": "~5.0.0"
-	},
-	"scripts": {
-		"post-package-install": "php install.php",
-		"post-package-update": "php install.php",
-		"post-package-uninstall": "php uninstall.php"
 	},
 	"autoload": {
 		"psr-4": {
