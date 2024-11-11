@@ -19,6 +19,9 @@ use App\Model\Text\TextData;
 use App\Model\Web\Web;
 use App\Model\Web\WebData;
 use Nette\Caching\Cache;
+use Stepapo\Model\Definition\DefinitionGroup;
+use Stepapo\Model\Manipulation\ManipulationGroup;
+use Stepapo\Model\MigrationGroup;
 
 
 class Core implements Module
