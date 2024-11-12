@@ -24,7 +24,6 @@ trait CorePage
 {
 	use LinkableTrait;
 
-
 	public const string TYPE_PAGE = 'page';
 	public const string TYPE_SIGNAL = 'signal';
 	public const string TYPE_INTERNAL_LINK = 'internalLink';

@@ -28,7 +28,6 @@ use Webovac\Generator\DI\GeneratorExtension;
 class CoreExtension extends StepapoExtension
 {
 	private ModelExtension $modelExtension;
-	private GeneratorExtension $generatorExtension;
 	private OrmExtension $ormExtension;
 	private MultiplierExtension $multiplierExtension;
 	private DbalExtension $dbalExtension;
@@ -59,7 +58,6 @@ class CoreExtension extends StepapoExtension
 		$builder->addDefinition($this->prefix('neonHandler'))
 			->setFactory(NeonHandler::class, [['host' => $this->config->host], $builder->parameters['debugMode'], $this->config->testMode]);
 		$this->createModelExtension();
-		$this->createGeneratorExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
 		$this->createDecoratorExtension();
@@ -92,14 +90,6 @@ class CoreExtension extends StepapoExtension
 		]);
 		$this->modelExtension->setConfig($config);
 		$this->modelExtension->loadConfiguration();
-	}
-
-
-	protected function createGeneratorExtension(): void
-	{
-		$this->generatorExtension = new GeneratorExtension;
-		$this->generatorExtension->setCompiler($this->compiler, 'webovac.generator');
-		$this->generatorExtension->loadConfiguration();
 	}
 
 
@@ -177,7 +167,6 @@ class CoreExtension extends StepapoExtension
 	{
 		parent::beforeCompile();
 		$this->modelExtension->beforeCompile();
-		$this->generatorExtension->beforeCompile();
 		$this->projectSearchExtension->beforeCompile();
 		$this->decoratorExtension->beforeCompile();
 		$this->ormExtension->beforeCompile();
@@ -191,7 +180,6 @@ class CoreExtension extends StepapoExtension
 	{
 		parent::afterCompile($class);
 		$this->modelExtension->afterCompile($class);
-		$this->generatorExtension->afterCompile($class);
 		$this->projectSearchExtension->afterCompile($class);
 		$this->decoratorExtension->afterCompile($class);
 		$this->ormExtension->afterCompile($class);
