@@ -8,12 +8,11 @@ use App\Model\Orm;
 use Nette\Neon\Neon;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\IExtensionHandler;
-use Stepapo\Model\Definition\Config\Definition;
 use Stepapo\Model\Definition\DbProcessor;
+use Stepapo\Model\Manipulation\ManipulationGroup;
 use Stepapo\Utils\ConfigProcessor;
 use Stepapo\Utils\Service;
 use Webovac\Core\Definition\Manipulation;
-use Stepapo\Model\Manipulation\ManipulationGroup;
 
 
 /**

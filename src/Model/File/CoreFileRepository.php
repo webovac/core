@@ -9,15 +9,12 @@ use App\Model\File\FileRepository;
 use App\Model\Person\Person;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
-use Nette\InvalidArgumentException;
 use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
-use Tracy\Dumper;
-use Webovac\Core\Lib\FileUploader;
 
 
 trait CoreFileRepository

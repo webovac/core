@@ -10,13 +10,13 @@ use Nextras\Migrations\Drivers\PgSqlDriver;
 use Nextras\Migrations\Extensions\SqlHandler;
 use Nextras\Migrations\IDriver;
 use Stepapo\Model\Definition\DbProcessor;
+use Stepapo\Model\Definition\HasDefinitionGroup;
+use Stepapo\Model\Manipulation\HasManipulationGroups;
 use Stepapo\Model\Manipulation\Processor;
-use Stepapo\Utils\Printer;
 use Stepapo\Utils\Command\Command;
-use Tracy\Dumper;
+use Stepapo\Utils\Printer;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\Lib\Dir;
-use Stepapo\Model\MigrationGroup;
 use Webovac\Core\Module;
 
 
@@ -25,9 +25,15 @@ class MigrateCommand implements Command
 	private Printer $printer;
 
 
-	/** @param Module[] $modules */
+	/**
+	 * @param Module[] $modules
+	 * @param HasDefinitionGroup[] $withDefinitionGroup
+	 * @param HasManipulationGroups[] $withManipulationGroups
+	 */
 	public function __construct(
 		private array $modules,
+		private array $withDefinitionGroup,
+		private array $withManipulationGroups,
 		private Processor $manipulationProcessor,
 		private DbProcessor $definitionProcessor,
 		private IDriver $driver,
@@ -62,10 +68,9 @@ class MigrateCommand implements Command
 			if (file_exists($dir = dirname($reflection->getFileName()) . "/config/manipulations")) {
 				$folders[] = $dir;
 			}
-			if (!method_exists($module, 'getManipulationGroups')) {
-				continue;
-			}
-			$groups = array_merge($groups, $module->getManipulationGroups());
+		}
+		foreach ($this->withManipulationGroups as $hasManipulationGroups) {
+			$groups = array_merge($groups, $hasManipulationGroups->getManipulationGroups());
 		}
 		if (file_exists($dir = $this->dir->getAppDir() . '/../config/manipulations')) {
 			$folders[] = $dir;
@@ -74,11 +79,8 @@ class MigrateCommand implements Command
 
 		# SQL
 		$controller = new CmsConsoleController($this->driver);
-		foreach ($this->modules as $module) {
-			if (!method_exists($module, 'getDefinitionGroup')) {
-				continue;
-			}
-			$controller = $this->prepareModule($module, $controller);
+		foreach ($this->withDefinitionGroup as $hasDefinitionGroup) {
+			$controller = $this->prepareModule($hasDefinitionGroup, $controller);
 		}
 		$controller->addExtension('sql', $this->sqlHandler);
 		$controller->run();
@@ -87,23 +89,18 @@ class MigrateCommand implements Command
 	}
 
 
-	/**
-	 * @throws \ReflectionException
-	 */
-	public function prepareModule(Module $module, CmsConsoleController $controller): CmsConsoleController
+	public function prepareModule(HasDefinitionGroup $hasDefinitionGroup, CmsConsoleController $controller): CmsConsoleController
 	{
-		$reflection = new \ReflectionClass($module);
+		$reflection = new \ReflectionClass($hasDefinitionGroup);
 		$files = [];
 		$db = $this->driver instanceof PgSqlDriver ? 'pgsql' : 'mysql';
 		if (file_exists($dir = dirname($reflection->getFileName()) . "/config/migrations/$db")) {
 			$sqlFiles = Finder::findFiles("*.sql")->from($dir);
 			$files = array_merge($files, $sqlFiles->collect());
 		}
-		if (method_exists($module, 'getDefinitionGroup')) {
-			$migrationGroup = $module->getDefinitionGroup();
-			$controller->addCmsGroup($migrationGroup->name, $migrationGroup, $files, $migrationGroup->dependencies);
-			$_SERVER['argv'][] = $migrationGroup->name;
-		}
+		$migrationGroup = $hasDefinitionGroup->getDefinitionGroup();
+		$controller->addCmsGroup($migrationGroup->name, $migrationGroup, $files, $migrationGroup->dependencies);
+		$_SERVER['argv'][] = $migrationGroup->name;
 		return $controller;
 	}
 }

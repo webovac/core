@@ -4,20 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Web;
 
-use App\Model\File\File;
-use App\Model\Language\Language;
 use App\Model\Language\LanguageData;
 use App\Model\Log\Log;
-use App\Model\Module\Module;
 use App\Model\Page\Page;
-use App\Model\Person\Person;
-use App\Model\Preference\Preference;
 use App\Model\WebTranslation\WebTranslation;
-use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Relationships\ManyHasMany;
-use Nextras\Orm\Relationships\OneHasMany;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Web;
 
 use App\Model\File\File;
-use App\Model\File\FileData;
 use App\Model\File\FileRepository;
 use App\Model\Module\ModuleRepository;
 use App\Model\Page\Page;
@@ -15,21 +14,15 @@ use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
 use App\Model\Web\WebData;
-use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
 use Nette\InvalidArgumentException;
 use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
-use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
 use Stepapo\Model\Data\Item;
 use Stepapo\Model\Orm\StepapoEntity;
-use Tracy\Dumper;
-use Stepapo\Model\Orm\EntityProcessor;
-use Webovac\Core\Lib\FileUploader;
-use Webovac\Core\Model\CmsEntity;
 
 
 trait CoreWebRepository

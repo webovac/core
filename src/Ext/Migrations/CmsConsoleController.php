@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Webovac\Core\Ext\Migrations;
 
 use Nextras\Migrations\Controllers\ConsoleController;
-use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\IDriver;
-use Stepapo\Utils\Printer;
-use Tracy\Dumper;
 use Stepapo\Model\MigrationGroup;
+use Stepapo\Utils\Printer;
 
 
 class CmsConsoleController extends ConsoleController

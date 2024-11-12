@@ -6,23 +6,13 @@ namespace Webovac\Core\Model\Web;
 
 use App\Model\File\File;
 use App\Model\File\FileData;
-use App\Model\Module\ModuleData;
-use App\Model\Module\ModuleRepository;
-use App\Model\Page\Page;
 use App\Model\Page\PageData;
-use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\Web;
-use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationData;
 use DateTimeInterface;
 use Nette\Http\FileUpload;
-use Nette\InvalidArgumentException;
-use Nette\Schema\Processor;
-use ReflectionException;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
-use Stepapo\Utils\Attribute\Type;
-use Stepapo\Utils\Expect;
 
 
 trait CoreWebData

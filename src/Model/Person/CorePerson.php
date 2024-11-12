@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Person;
 
 use App\Model\Log\Log;
-use App\Model\Preference\Preference;
-use App\Model\Role\Role;
-use Nextras\Dbal\Utils\DateTimeImmutable;
-use Nextras\Orm\Relationships\ManyHasMany;
-use Nextras\Orm\Relationships\OneHasMany;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 

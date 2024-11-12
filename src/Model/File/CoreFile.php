@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\File;
 
 use App\Model\File\File;
-use App\Model\Person\Person;
-use Nextras\Dbal\Utils\DateTimeImmutable;
 
 
 trait CoreFile

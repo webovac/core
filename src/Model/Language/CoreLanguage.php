@@ -7,9 +7,6 @@ namespace Webovac\Core\Model\Language;
 use App\Model\Language\LanguageData;
 use App\Model\LanguageTranslation\LanguageTranslation;
 use App\Model\Log\Log;
-use App\Model\Person\Person;
-use Nextras\Dbal\Utils\DateTimeImmutable;
-use Nextras\Orm\Relationships\OneHasMany;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 

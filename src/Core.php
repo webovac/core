@@ -20,11 +20,12 @@ use App\Model\Web\Web;
 use App\Model\Web\WebData;
 use Nette\Caching\Cache;
 use Stepapo\Model\Definition\DefinitionGroup;
+use Stepapo\Model\Definition\HasDefinitionGroup;
+use Stepapo\Model\Manipulation\HasManipulationGroups;
 use Stepapo\Model\Manipulation\ManipulationGroup;
-use Stepapo\Model\MigrationGroup;
 
 
-class Core implements Module
+class Core implements Module, HasDefinitionGroup, HasManipulationGroups
 {
 	public function __construct(
 		private Orm $orm,
@@ -46,7 +47,7 @@ class Core implements Module
 	}
 
 
-	public function getDefinitionGroup(): MigrationGroup
+	public function getDefinitionGroup(): DefinitionGroup
 	{
 		return new DefinitionGroup(Core::getModuleName(), Core::class);
 	}

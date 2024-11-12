@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Page;
 
 use App\Model\Module\Module;
-use App\Model\Module\ModuleRepository;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslation;

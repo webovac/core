@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\DI;
 
-use App\Lib\TemplateFactory;
-use App\Model\DataModel;
 use App\Model\Orm;
 use Contributte\FormMultiplier\DI\MultiplierExtension;
 use Nette\DI\Extensions\DecoratorExtension;
@@ -17,18 +15,13 @@ use Nextras\Dbal\Bridges\NetteDI\DbalExtension;
 use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
 use Stepapo\Model\Definition\DI\DefinitionExtension;
-use Stepapo\Model\Manipulation\DI\ManipulationExtension;
 use Stepapo\Model\DI\ModelExtension;
-use Stepapo\Utils\Command\Command;
+use Stepapo\Model\Manipulation\DI\ManipulationExtension;
 use Stepapo\Utils\DI\StepapoExtension;
 use Stepapo\Utils\Injectable;
 use Stepapo\Utils\Service;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
-use Stepapo\Utils\Factory;
 use Webovac\Core\Lib\NeonHandler;
-use Webovac\Core\Model\CmsDataRepository;
-use Webovac\Core\Model\CmsRepository;
-use Webovac\Core\Module;
 use Webovac\Generator\DI\GeneratorExtension;
 
 

@@ -28,9 +28,6 @@ use Nextras\Orm\Relationships\IRelationshipCollection;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
-use Stepapo\Model\Definition\Analyzer;
-use Stepapo\Model\Definition\Collector;
-use Stepapo\Model\Definition\PgsqlAnalyzer;
 use Stepapo\Model\Data\Item;
 use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\Command\DefinitionCommand;
@@ -47,7 +44,6 @@ use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
-use Webovac\Core\Module;
 
 
 trait CorePresenter
