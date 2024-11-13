@@ -55,7 +55,7 @@ class Book extends CmsEntity implements Linkable
 }
 ```
 
-```html
+```latte
 {varType App\Model\Book\Book $book}
 <a href="{$book->getLink($presenter)}">{$book->title}</a>
 ```
@@ -86,6 +86,9 @@ class Book extends CmsEntity implements Renderable
 Let's have pages that utilize BookRepository and custom tag.
 
 ```php
+/**
+ * @property Web $web {m:1 Web::$books} 
+ */
 class Book extends CmsEntity implements HasRequirements
 {
     public function checkRequirements(CmsUser $user, WebData $webData, ?string $tag = null): bool
