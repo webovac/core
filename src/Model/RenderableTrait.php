@@ -19,4 +19,10 @@ trait RenderableTrait
 	{
 		$this->getComponent($moduleClass, $template)->render();
 	}
+
+
+	public function getEntityIcon(): ?string
+	{
+		return null;
+	}
 }
