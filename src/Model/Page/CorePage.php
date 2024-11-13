@@ -8,13 +8,14 @@ use App\Model\Language\LanguageData;
 use App\Model\Log\Log;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslation;
+use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Control\PageItem\IPageItemControl;
-use Webovac\Core\Control\PageItem\PageItemControl;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 use Webovac\Core\Model\LinkableTrait;
+use Webovac\Core\Model\RenderableTrait;
 
 
 /**
@@ -23,6 +24,7 @@ use Webovac\Core\Model\LinkableTrait;
 trait CorePage
 {
 	use LinkableTrait;
+	use RenderableTrait;
 
 	public const string TYPE_PAGE = 'page';
 	public const string TYPE_SIGNAL = 'signal';
@@ -69,7 +71,7 @@ trait CorePage
 		Page::STYLE_DARK => 'Dark',
 	];
 
-	private IPageItemControl $component;
+	#[Inject] public IPageItemControl $component;
 
 
 	public function getTranslation(LanguageData $language): ?PageTranslation
@@ -129,18 +131,6 @@ trait CorePage
 	public function getParentParameter(?LanguageData $language = null): int
 	{
 		return $this->web?->id ?: $this->module->id;
-	}
-
-
-	public function injectComponent(IPageItemControl $component): void
-	{
-		$this->component = $component;
-	}
-
-
-	public function getComponent(string $moduleClass, string $templateName): PageItemControl
-	{
-		return $this->component->create($this, $moduleClass, $templateName);
 	}
 
 

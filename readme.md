@@ -55,7 +55,7 @@ class Book extends CmsEntity implements Linkable
     use LinkableTrait;
     
     /**
-     * Specify a custom identifying column, unless you want to use primary key,
+     * Specify a custom identifying columns, unless you want to use just primary key,
      * which is used in LinkableTrait::getParameters by default
      */ 
     public function getParameters(): array
@@ -94,23 +94,20 @@ class BookRepository extends CmsRepository
 
 #### Renderable
 
-Let's have books rendered by BookItemControl component in Books module.
+Let's have books rendered by BookItemControl component created by IBookItemControl factory in Books module.
 
 ```php
 class Book extends CmsEntity implements Renderable
 {    
-    private IBookItemControl $component;
-
-    public function injectComponent(IBookItemControl $component): void
-    {
-        $this->component = $component;
-    }
-    
-    public function getComponent(string $moduleClass, string $templateName): BookItemControl
-    {
-        return $this->component->create($this, $moduleClass, $templateName);
-    }
+    use RenderableTrait;
+	
+    #[Inject] public IBookItemControl $component;
 }
+```
+
+```html
+{varType App\Model\Book\Book $book}
+{$book->render(App\Module\Books\Books::class, 'default')}
 ```
 
 #### HasRequirements
