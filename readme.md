@@ -31,21 +31,36 @@ webovac.core:
 
 Let's have a database table with books represented by Book entity
 
-### Linkable
+```php
+/**
+ * @property int $id {primary}
+ * @property string $title 
+ * @property Web $web {m:1 Web::$books} 
+ * @property OneHasMany|BookTranslation[] $translations {1:m BookTranslation::$book, orderBy=language->rank}
+ */
+class Book extends CmsEntity
+{
+}
+```
+
+### Interfaces
+
+#### Linkable
 
 Let's have a page with book detail defined in Books module.
 
 ```php
-/**
- * @property string $title 
- */
 class Book extends CmsEntity implements Linkable
 {
     use LinkableTrait;
     
+    /**
+     * Specify a custom identifying column, unless you want to use primary key,
+     * which is used in LinkableTrait::getParameters by default
+     */ 
     public function getParameters(): array
     {
-        return [$this->getPageName() => $this->id];
+        return [$this->getPageName() => $this->slug];
     }
 
     public function getPageName(): string
@@ -55,12 +70,29 @@ class Book extends CmsEntity implements Linkable
 }
 ```
 
+```php
+class BookRepository extends CmsRepository
+{
+    /**
+     * Specify a custom filter to get book, unless you want to use just primary key,
+     * which is used in CmsRepository::getByParameters by default
+     */ 
+    public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?Book
+    {
+        return $this->getBy([
+            'web->id' => $webData->id,
+            'slug' => $parameters['Books:BookDetail'],
+        ]);
+    }
+}
+```
+
 ```html
 {varType App\Model\Book\Book $book}
 <a href="{$book->getLink($presenter)}">{$book->title}</a>
 ```
 
-### Renderable
+#### Renderable
 
 Let's have books rendered by BookItemControl component in Books module.
 
@@ -81,14 +113,11 @@ class Book extends CmsEntity implements Renderable
 }
 ```
 
-### HasRequirements
+#### HasRequirements
 
-Let's have pages that utilize BookRepository and custom tag.
+Let's have pages that utilize BookRepository and custom tag. If requirements are defined, they are checked automatically when accessing the page.
 
 ```php
-/**
- * @property Web $web {m:1 Web::$books} 
- */
 class Book extends CmsEntity implements HasRequirements
 {
     public function checkRequirements(CmsUser $user, WebData $webData, ?string $tag = null): bool
@@ -106,14 +135,11 @@ class Book extends CmsEntity implements HasRequirements
 }
 ```
 
-### HasTranslations
+#### HasTranslations
 
 Let's have book translations represented by BookTranslation entity.
 
 ```php
-/**
- * @property OneHasMany|BookTranslation[] $translations {1:m BookTranslation::$book, orderBy=language->rank}
- */
 class Book implements HasTranslations
 {
     public function getTranslation(LanguageData $languageData): ?BookTranslation

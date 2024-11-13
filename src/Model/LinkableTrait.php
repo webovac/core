@@ -17,4 +17,10 @@ trait LinkableTrait
 		}
 		return $component->link('//Home:default', [$this->getPageName(), $this->getParameters()]);
 	}
+
+
+	public function getParameters(): array
+	{
+		return [$this->getPageName() => $this->id];
+	}
 }
