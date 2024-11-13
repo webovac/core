@@ -36,12 +36,14 @@ use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Core;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
+use Webovac\Core\HasOrmEvents;
 use Webovac\Core\Lib\CmsTranslator;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
+use Webovac\Core\Lib\RegisterOrmEvents;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
 
@@ -62,6 +64,7 @@ trait CorePresenter
 	#[Inject] public CmsTranslator $translator;
 	#[Inject] public TemplateFactory $templateFactory;
 	#[Inject] public DataProvider $dataProvider;
+	#[Inject] public RegisterOrmEvents $registerOrmEvents;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -80,6 +83,7 @@ trait CorePresenter
 	public function injectCoreStartup(): void
 	{
 		$this->onStartup[] = function () {
+			$this->registerOrmEvents->registerOrmEvents();
 			if ($this->cmsUser->isLoggedIn()) {
 				if (!$this->cmsUser->getPerson()) {
 					$this->cmsUser->logout();

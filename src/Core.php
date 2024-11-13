@@ -25,14 +25,12 @@ use Stepapo\Model\Manipulation\HasManipulationGroups;
 use Stepapo\Model\Manipulation\ManipulationGroup;
 
 
-class Core implements Module, HasDefinitionGroup, HasManipulationGroups
+class Core implements Module, HasDefinitionGroup, HasManipulationGroups, HasOrmEvents
 {
 	public function __construct(
 		private Orm $orm,
 		private Cache $cache,
-	) {
-		$this->registerOrmEvents();
-	}
+	) {}
 
 
 	public static function getModuleName(): string
