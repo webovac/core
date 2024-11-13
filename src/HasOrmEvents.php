@@ -7,5 +7,5 @@ namespace Webovac\Core;
 
 interface HasOrmEvents
 {
-	public function registerOrmEvents(): void;
+	function registerOrmEvents(): void;
 }

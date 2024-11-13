@@ -36,7 +36,6 @@ use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Core;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
-use Webovac\Core\HasOrmEvents;
 use Webovac\Core\Lib\CmsTranslator;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
