@@ -55,7 +55,7 @@ class Book extends CmsEntity implements Linkable
 }
 ```
 
-```latte
+```html
 {varType App\Model\Book\Book $book}
 <a href="{$book->getLink($presenter)}">{$book->title}</a>
 ```
