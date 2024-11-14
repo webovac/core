@@ -53,6 +53,7 @@ trait CorePresenter
 	#[Persistent] public string $basePath;
 	#[Persistent] public string $lang;
 	#[Inject] public ICoreControl $core;
+	#[Inject] public CmsUser $cmsUser;
 	#[Inject] public Orm $orm;
 	#[Inject] public Dir $dir;
 	#[Inject] public DataModel $dataModel;
