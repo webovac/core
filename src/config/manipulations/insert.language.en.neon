@@ -1,4 +1,5 @@
 class: App\Model\Language\LanguageData
+skipDefaults: true
 items:
 	en:
 		shortcut: en
