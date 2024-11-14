@@ -191,6 +191,8 @@ trait CoreWebRepository
 				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->image2jpeg($iconFile, true)->getTemporaryFile());
 			} elseif (!$iconFile->isImage()) {
 				throw new InvalidArgumentException;
+			} else {
+				$image = $iconFile->toImage();
 			}
 		} elseif ($iconFile instanceof File) {
 			$image = Image::fromString(file_get_contents($this->fileUploader->getPath($iconFile->identifier)));
