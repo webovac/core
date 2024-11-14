@@ -7,7 +7,7 @@ namespace Webovac\Core\Model;
 use Nette\Application\UI\Component;
 
 
-interface Linkable extends Renderable
+interface Linkable
 {
 	function getPageName(): string;
 	function getParameters(): array;
