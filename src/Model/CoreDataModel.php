@@ -139,10 +139,7 @@ trait CoreDataModel
 			if ($pageData->parentPage !== $parentPageData->id) {
 				return false;
 			}
-			if ($pageData->type === Page::TYPE_PAGE && (
-//					!$pageData->getCollection('translations')->getBy(['language' => $languageData->id]) ||
-					$pageData->hasParameter !== $parentPageData->hasParameter
-				)) {
+			if ($pageData->type === Page::TYPE_PAGE && ($pageData->hasParameter !== $parentPageData->hasParameter)) {
 				return false;
 			}
 			if (!$pageData->isUserAuthorized($this->cmsUser)) {

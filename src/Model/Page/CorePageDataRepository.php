@@ -77,6 +77,7 @@ trait CorePageDataRepository
 			$pageData->isHomePage = $page->isHomePage();
 			$pageData->navigationPage = $page->providesNavigation ? $page->id : ($parentPageData->navigationPage ?? null);
 			$pageData->buttonsPage = $page->providesButtons ? $page->id : ($parentPageData->buttonsPage ?? null);
+			$pageData->hasParameter = ($page->hasParameter ?: $parentPageData?->hasParameter) ?: false;
 			$pageData->repository = $page->repository ?: $parentPageData?->repository;
 			$pageData->parentPages = array_merge($parentPageData->parentPages ?? [], $page->type === Page::TYPE_MODULE ? [] : [$page->id]);
 			$p = $page->translations->toCollection()->fetch()?->path;
