@@ -45,7 +45,7 @@ trait CoreWebData
 		return '//'
 			. $this->host
 			. ($this->basePath ? ('/' . $this->basePath) : '')
-			. '/style.css';
+			. '/style';
 	}
 
 
