@@ -47,7 +47,15 @@ class MigrateCommand implements Command
 
 	public function run(): int
 	{
-		# DEFINITIONS;
+		$this->runDefinitions();
+		$this->runManipulations();
+		$this->runMigrations();
+		return 0;
+	}
+
+
+	public function runDefinitions(): int
+	{
 		$folders = [];
 		foreach ($this->modules as $module) {
 			$reflection = new \ReflectionClass($module);
@@ -59,8 +67,12 @@ class MigrateCommand implements Command
 			$folders[] = $dir;
 		}
 		$this->definitionProcessor->process($folders);
+		return 0;
+	}
 
-		# MANIPULATIONS
+
+	public function runManipulations(): int
+	{
 		$folders = [];
 		$groups = [];
 		foreach ($this->modules as $module) {
@@ -76,8 +88,12 @@ class MigrateCommand implements Command
 			$folders[] = $dir;
 		}
 		$this->manipulationProcessor->process($folders, $groups);
+		return 0;
+	}
 
-		# SQL
+
+	public function runMigrations(): int
+	{
 		$controller = new CmsConsoleController($this->driver);
 		foreach ($this->withDefinitionGroup as $hasDefinitionGroup) {
 			$controller = $this->prepareModule($hasDefinitionGroup, $controller);

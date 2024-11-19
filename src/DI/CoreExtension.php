@@ -14,15 +14,12 @@ use Nette\Schema\Schema;
 use Nextras\Dbal\Bridges\NetteDI\DbalExtension;
 use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
-use Stepapo\Model\Definition\DI\DefinitionExtension;
 use Stepapo\Model\DI\ModelExtension;
-use Stepapo\Model\Manipulation\DI\ManipulationExtension;
 use Stepapo\Utils\DI\StepapoExtension;
 use Stepapo\Utils\Injectable;
 use Stepapo\Utils\Service;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Lib\NeonHandler;
-use Webovac\Generator\DI\GeneratorExtension;
 
 
 class CoreExtension extends StepapoExtension
@@ -45,6 +42,7 @@ class CoreExtension extends StepapoExtension
 				'database' => Expect::string()->required(),
 				'username' => Expect::string()->required(),
 				'password' => Expect::string(),
+				'schemas' => Expect::arrayOf('string'),
 			]),
 			'testMode' => Expect::bool()->default(false),
 		]);
@@ -87,6 +85,7 @@ class CoreExtension extends StepapoExtension
 			'testMode' => $this->config->testMode,
 			'driver' => $this->config->db->driver,
 			'database' => $this->config->db->database,
+			'schemas' => $this->config->db->schemas ?: ($this->config->db->driver === 'pgsql' ? ['public'] : [$this->config->db->database]),
 		]);
 		$this->modelExtension->setConfig($config);
 		$this->modelExtension->loadConfiguration();
