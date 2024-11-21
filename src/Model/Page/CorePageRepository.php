@@ -220,7 +220,7 @@ trait CorePageRepository
 	}
 
 
-	public function getByData(PageData|string $data, ?HasPages $hasPages): ?Page
+	public function getByData(PageData|string $data, ?HasPages $hasPages = null): ?Page
 	{
 		$code = $data instanceof PageData ? $data->name : $data;
 		if (!$hasPages) {
