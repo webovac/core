@@ -20,6 +20,7 @@ trait CoreOrmFunctions
 	public const string LIKE_FILTER = 'likeFilter';
 	public const string LIKE_FILTER_OR = 'likeFilterOr';
 	public const string PERSON_FILTER = 'personFilter';
+	public const string PERSON_ORDER = 'personOrder';
 
 
 	public function __construct(
@@ -69,5 +70,13 @@ trait CoreOrmFunctions
 			) . " LIKE %_like_",
 			Strings::lower($args[0]),
 		]);
+	}
+
+
+	public static function personOrder(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args): DbalExpressionResult
+	{
+		$lastNameColumn = $helper->processPropertyExpr($builder, $args[1])->args[1];
+		$firstNameColumn = $helper->processPropertyExpr($builder, $args[0])->args[1];
+		return new DbalExpressionResult(['%column || %column', $lastNameColumn, $firstNameColumn]);
 	}
 }

@@ -15,6 +15,7 @@ use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
+use Nextras\Orm\Entity\Entity;
 
 
 trait CoreFileRepository

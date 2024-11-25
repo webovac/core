@@ -35,20 +35,22 @@
 <div n:class="layout, $pageData->stretched ? stretched">
 	{control core-menu}
 	<div class="horizontal-wrapper">
-		{control core-navigation}
-		<div class="content-image-wrapper">
-			<div class="content-wrapper">
-				{control core-breadcrumbs}
+			{control core-navigation}
+			<div class="content-image-wrapper">
+				<div class="content-wrapper">
+					{if !$layoutData->hideBreadcrumbs}
+						{control core-breadcrumbs}
+					{/}
 				{control core-messages}
-				<div class="content override-padding">
-					{include 'main.file'}
+					<div class="content override-padding">
+						{include 'main.file'}
+					</div>
+					<div class="footer small" n:ifcontent>
+						{include 'footer.file'}
+					</div>
 				</div>
-				<div class="footer small">
-					{include 'footer.file'}
-				</div>
+				<div class="background"></div>
 			</div>
-			<div class="background"></div>
-		</div>
 	</div>
 	{if !$layoutData->hideSidePanel}
 		{control core-sidePanel}

@@ -54,7 +54,7 @@
 				</a>
 			</div>
 			<a class="menu-item" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}">
-				<i class="fas fa-fw fa-power-off"></i><span>{_'Odhlásit'}</span>
+				<i n:class="$dataModel->layoutRepository->getById($webData->layout)->primaryIcon, fa-fw, fa-power-off"></i><span>{_'Odhlásit'}</span>
 			</a>
 		</div>
 

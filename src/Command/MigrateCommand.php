@@ -14,6 +14,7 @@ use Stepapo\Model\Definition\HasDefinitionGroup;
 use Stepapo\Model\Manipulation\HasManipulationGroups;
 use Stepapo\Model\Manipulation\Processor;
 use Stepapo\Utils\Command\Command;
+use Stepapo\Utils\Command\Downloader;
 use Stepapo\Utils\Printer;
 use Webovac\Core\Ext\Migrations\CmsConsoleController;
 use Webovac\Core\Lib\Dir;
@@ -29,11 +30,13 @@ class MigrateCommand implements Command
 	 * @param Module[] $modules
 	 * @param HasDefinitionGroup[] $withDefinitionGroup
 	 * @param HasManipulationGroups[] $withManipulationGroups
+	 * @param Downloader[] $downloaders
 	 */
 	public function __construct(
 		private array $modules,
 		private array $withDefinitionGroup,
 		private array $withManipulationGroups,
+		private array $downloaders,
 		private Processor $manipulationProcessor,
 		private DbProcessor $definitionProcessor,
 		private IDriver $driver,
@@ -48,6 +51,7 @@ class MigrateCommand implements Command
 	public function run(): int
 	{
 		$this->runDefinitions();
+		$this->runDownloads();
 		$this->runManipulations();
 		$this->runMigrations();
 		return 0;
@@ -67,6 +71,21 @@ class MigrateCommand implements Command
 			$folders[] = $dir;
 		}
 		$this->definitionProcessor->process($folders);
+		return 0;
+	}
+
+
+	public function runDownloads(): int
+	{
+		if (!$this->downloaders) {
+			return 0;
+		}
+		$this->printer->printBigSeparator();
+		$this->printer->printLine('Downloads', 'aqua');
+		$this->printer->printSeparator();
+		foreach ($this->downloaders as $downloader) {
+			$downloader->run();
+		}
 		return 0;
 	}
 
