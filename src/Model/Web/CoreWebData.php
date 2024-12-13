@@ -10,9 +10,9 @@ use App\Model\Page\PageData;
 use App\Model\Web\Web;
 use App\Model\WebTranslation\WebTranslationData;
 use DateTimeInterface;
-use Nette\Http\FileUpload;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
+use Stepapo\Utils\Attribute\Type;
 
 
 trait CoreWebData
@@ -25,14 +25,15 @@ trait CoreWebData
 	#[DefaultValue(Web::DEFAULT_COMPLEMENTARY_COLOR)] public string $complementaryColor;
 	#[DefaultValue(Web::DEFAULT_ICON_BACKGROUND_COLOR)] public string $iconBackgroundColor;
 	#[DefaultValue('cs')] public int|string $defaultLanguage;
-	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $iconFile;
-	public FileUpload|FileData|string|int|null $largeIconFile;
-	#[DefaultValue(File::DEFAULT_ICON)] public FileUpload|FileData|string|int|null $logoFile;
-	public FileUpload|FileData|string|int|null $backgroundFile;
+	#[Type(FileData::class), DefaultValue(File::DEFAULT_ICON)] public ?FileData $iconFile;
+	#[Type(FileData::class)] public ?FileData $largeIconFile;
+	#[Type(FileData::class), DefaultValue(File::DEFAULT_ICON)] public ?FileData $logoFile;
+	#[Type(FileData::class)] public ?FileData $backgroundFile;
 	/** @var WebTranslationData[] */ #[ArrayOfType(WebTranslationData::class)] public array|null $translations;
 	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
 	/** @var string[] */ public array|null $modules;
 	#[DefaultValue('')] public string $basePath;
+	#[DefaultValue(false)] public bool $isAdmin;
 	public array $tree;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
@@ -80,4 +81,17 @@ trait CoreWebData
 			'lang' => $language,
 		];
 	}
+
+
+//	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
+//	{
+//		foreach (['iconFile', 'logoFile', 'backgroundFile'] as $name) {
+//			if (isset($config[$name]) and is_string($config[$name])) {
+//				$upload = $config[$name];
+//				$config[$name] = new FileData;
+//				$config[$name]->upload = $upload;
+//			}
+//		}
+//		return parent::createFromArray($config, $key, $skipDefaults, $parentKey);
+//	}
 }

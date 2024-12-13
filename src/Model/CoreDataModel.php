@@ -99,10 +99,10 @@ trait CoreDataModel
 
 
 	/** @return Collection<PageData> */ 
-	public function getRootPageDatas(WebData $webData, LanguageData $languageData): Collection
+	public function getRootPageDatas(WebData $webData, LanguageData $languageData, ?CmsEntity $entity = null): Collection
 	{
 		$array = (array) $this->pageRepository->findAll();
-		$pageDatas = array_filter($array, function($pageData) use ($webData, $languageData) {
+		$pageDatas = array_filter($array, function($pageData) use ($webData, $languageData, $entity) {
 			if ($pageData->web !== $webData->id) {
 				return false;
 			}
@@ -121,6 +121,9 @@ trait CoreDataModel
 			) {
 				return false;
 			}
+			if ($pageData->authorizingTag && $entity) {
+				return $entity->checkRequirements($this->cmsUser, $webData, $pageData->authorizingTag);
+			}
 			return true;
 		});
 		uasort($pageDatas, fn(PageData $a, PageData $b) => $a->rank <=> $b->rank);
@@ -129,10 +132,10 @@ trait CoreDataModel
 
 
 	/** @return Collection<PageData> */ 
-	public function getChildPageDatas(WebData $webData, PageData $parentPageData, LanguageData $languageData): Collection
+	public function getChildPageDatas(WebData $webData, PageData $parentPageData, LanguageData $languageData, ?CmsEntity $entity = null): Collection
 	{
 		$array = (array) $this->pageRepository->findAll();
-		$pageDatas = array_filter($array, function($pageData) use ($webData, $parentPageData, $languageData) {
+		$pageDatas = array_filter($array, function($pageData) use ($webData, $parentPageData, $languageData, $entity) {
 			if ($pageData->web !== $webData->id) {
 				return false;
 			}
@@ -150,6 +153,9 @@ trait CoreDataModel
 				&& !$this->getPageData($webData->id, $pageData->targetPage)->isUserAuthorized($this->cmsUser)
 			) {
 				return false;
+			}
+			if ($pageData->authorizingTag && $entity) {
+				return $entity->checkRequirements($this->cmsUser, $webData, $pageData->authorizingTag);
 			}
 			return true;
 		});

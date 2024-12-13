@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\File;
 
 use App\Model\File\File;
+use App\Model\File\FileData;
 use App\Model\File\FileRepository;
-use App\Model\Person\Person;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
@@ -15,50 +15,75 @@ use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
-use Nextras\Orm\Entity\Entity;
 
 
 trait CoreFileRepository
 {
-	public function createFile(FileUpload|string|null $upload, ?Person $person = null, bool $forceSquare = false): ?File
+	public function getByData(FileData|string $data): ?File
 	{
-		if (!$upload) {
+		if ($data instanceof FileData) {
+			if (!isset($data->identifier)) {
+				return null;
+			}
+			return $this->getBy(['identifier' => $data->identifier]);
+		}
+		return $this->getBy(['identifier' => $data]);
+	}
+
+
+	public function createFileData(FileData $data, ?string $key = null): ?FileData
+	{
+		if (!isset($data->upload)) {
+			return $data;
+		}
+		if (is_string($data->upload)) {
+			$data->upload = $this->createFileUploadFromString($data->upload);
+		}
+		if (!$data->upload->hasFile()) {
 			return null;
 		}
-		if (is_string($upload)) {
-			$upload = $this->createFileUploadFromString($upload);
+		if ($key) {
+			$keyProperty = $data::getKeyProperty();
+			if ($keyProperty) {
+				$data->$keyProperty = $key;
+			}
 		}
-		if (!$upload->hasFile()) {
-			return null;
-		}
-		$identifier = $this->fileUploader->upload($upload);
-		$exists = $this->getModel()->getRepository(FileRepository::class)->getBy(['identifier' => $identifier]);
-		$file = $exists ?: new File;
-		$file->name = $upload->getSanitizedName();
-		$file->extension = $upload->getSuggestedExtension();
-		if (!$exists) {
-			$file->identifier = $identifier;
-			$file->contentType = $upload->getContentType();
-			$file->type = $upload->getContentType() === 'image/svg+xml' ? File::TYPE_SVG : ($upload->isImage() ? File::TYPE_IMAGE : File::TYPE_FILE);
-			if ($upload->getContentType() === 'image/svg+xml') {
-				$compatibleUpload = $this->svg2png($upload, $forceSquare);
-				$file->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
-				$modernUpload = $this->image2webp($compatibleUpload, $forceSquare);
-				$file->modernIdentifier = $this->fileUploader->upload($modernUpload);
-			} elseif ($upload->getContentType() === 'image/webp' || $upload->getContentType() === 'image/avif') {
-				$compatibleUpload = $this->image2jpeg($upload, $forceSquare);
-				$file->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
-				$file->modernIdentifier = $identifier;
-			} elseif ($upload->isImage()) {
-				$modernUpload = $this->image2webp($upload, $forceSquare);
-				$file->compatibleIdentifier = $identifier;
-				$file->modernIdentifier = $this->fileUploader->upload($modernUpload);
+		$identifier = $this->fileUploader->upload($data->upload);
+		$file = $this->getModel()->getRepository(FileRepository::class)->getBy(['identifier' => $identifier]);
+		$data->name = $data->upload->getSanitizedName();
+		$data->extension = $data->upload->getSuggestedExtension();
+		if (!$file) {
+			$data->identifier = $identifier;
+			$data->contentType = $data->upload->getContentType();
+			$data->type = $data->upload->getContentType() === 'image/svg+xml' ? File::TYPE_SVG : ($data->upload->isImage() ? File::TYPE_IMAGE : File::TYPE_FILE);
+			if ($data->upload->getContentType() === 'image/svg+xml') {
+				$compatibleUpload = $this->svg2png($data->upload, $data->forceSquare);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
+				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
+			} elseif ($data->upload->getContentType() === 'image/webp' || $data->upload->getContentType() === 'image/avif') {
+				$compatibleUpload = $this->image2jpeg($data->upload, $data->forceSquare);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
+				$data->modernIdentifier = $identifier;
+			} elseif ($data->upload->isImage()) {
+				$modernUpload = $this->image2webp($data->upload, $data->forceSquare);
+				$data->compatibleIdentifier = $identifier;
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
+			} elseif ($data->upload->getContentType() === 'application/pdf') {
+				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
+				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
 			}
 		} else {
-			$file->createdByPerson = $person;
+			$originalFileData = $file->getData();
+			$data->identifier = $originalFileData->identifier;
+			$data->contentType = $originalFileData->contentType;
+			$data->type = $originalFileData->type;
+			$data->compatibleIdentifier = $originalFileData->compatibleIdentifier;
+			$data->modernIdentifier = $originalFileData->modernIdentifier;
 		}
-		$this->persist($file);
-		return $file;
+		return $data;
 	}
 
 
@@ -98,6 +123,30 @@ trait CoreFileRepository
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
 		copy($tmpFile, $cloneFile);
 		Image::fromFile($cloneFile)->save($cloneFile, type: ImageType::JPEG);
+		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
+		return $forceSquare ? $this->image2square($upload) : $upload;
+	}
+
+
+	/**
+	 * @throws ImageException
+	 * @throws UnknownImageFileException
+	 */
+	public function pdf2jpeg(FileUpload $upload, bool $forceSquare): FileUpload
+	{
+		$tmpFile = $upload->getTemporaryFile();
+		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
+		copy($tmpFile, $cloneFile);
+		$img = new \Imagick;
+		$img->readImage($cloneFile . '[0]');
+		$img->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
+		$img->setImageAlphaChannel(\Imagick::ALPHACHANNEL_REMOVE);
+		$img->setImageFormat('jpg');
+		$img->setImageCompression(\Imagick::COMPRESSION_JPEG);
+		$img->setImageCompressionQuality(90);
+		$img->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
+		$jpeg = Image::fromString($img->getImageBlob());
+		$jpeg->save($cloneFile, type: ImageType::JPEG);
 		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}

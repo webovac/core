@@ -90,7 +90,7 @@ trait CorePageDataRepository
 					? $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])->fullPath
 					: '//' . $pageData->host . ($pageData->basePath ? ('/' . $pageData->basePath) : '');
 				$path = $translation->path ? preg_replace('/<id(.*)>/', "<id[" . $pageData->name . "]>", $translation->path) : null;
-				$pageData->translations[$translation->id]->fullPath = $parentPath . ($path ? '/' . $path : '');
+				$pageData->translations[$translation->language->id]->fullPath = $parentPath . ($path ? '/' . $path : '');
 			}
 			if ($page->type === Page::TYPE_MODULE) {
 				$this->buildCollection($collection, $page->targetModule, $pageData, $rank);

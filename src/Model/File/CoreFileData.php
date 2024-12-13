@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\File;
 
 use App\Model\File\File;
-use DateTimeInterface;
+use Nette\Http\FileUpload;
+use Stepapo\Utils\Attribute\ValueProperty;
 
 
 trait CoreFileData
 {
-	public ?int $id;
-	public string $identifier;
-	public ?string $compatibleIdentifier;
-	public ?string $modernIdentifier;
-	public string $name;
+	public int|null $id;
+	public string|null $identifier;
+	public string|null $compatibleIdentifier;
+	public string|null $modernIdentifier;
+	public string|null $previewIdentifier;
+	public string|null $name;
 	public string|null $extension;
-	public string $contentType;
-	public string $type;
-	public int|string|null $createdByPerson;
-	public int|string|null $updatedByPerson;
-	public ?DateTimeInterface $createdAt;
-	public ?DateTimeInterface $updatedAt;
+	public string|null $contentType;
+	public string|null $type;
+	#[ValueProperty] public string|FileUpload|null $upload;
+	public bool $forceSquare = false;
 
 
 	public function getDefaultIdentifier(): ?string

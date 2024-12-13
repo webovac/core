@@ -43,7 +43,7 @@ class NavigationControl extends BaseControl
 		if ($this->entityList && method_exists($this->entity, 'getMenuItems')) {
 			$this->template->entityMenuItems = $this->entity->getMenuItems();
 		}
-		$this->template->pageDatas = $this->dataModel->getChildPageDatas($webData, $pageData, $languageData);
+		$this->template->pageDatas = $this->dataModel->getChildPageDatas($webData, $pageData, $languageData, $this->entity);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$this->template->layoutData = $this->dataProvider->getLayoutData();
 		}

@@ -62,13 +62,19 @@ trait CoreOrmFunctions
 
 	public static function personFilter(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args): DbalExpressionResult
 	{
-		assert(count($args) === 1 && is_string($args[0]));
+		assert(count($args) === 3 && is_string($args[0]) && is_string($args[1]) && is_string($args[2]));
+		$lastNameColumn = $helper->processPropertyExpr($builder, $args[1])->args[1];
+		$firstNameColumn = $helper->processPropertyExpr($builder, $args[0])->args[1];
 		return new DbalExpressionResult([(
 			$platform->getName() === 'pgsql'
 				? "LOWER(last_name || ' ' || first_name)"
 				: "LOWER(CONCAT(last_name, ' ', first_name))"
+			) . " LIKE %_like_ OR " . (
+			$platform->getName() === 'pgsql'
+				? "LOWER(first_name || ' ' || last_name)"
+				: "LOWER(CONCAT(first_name, ' ', last_name))"
 			) . " LIKE %_like_",
-			Strings::lower($args[0]),
+			Strings::lower($args[2]), Strings::lower($args[2])
 		]);
 	}
 

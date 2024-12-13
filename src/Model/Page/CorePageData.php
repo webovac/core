@@ -16,12 +16,12 @@ use App\Model\Signal\SignalNameData;
 use App\Model\Web\WebData;
 use DateTimeInterface;
 use Nette\Application\IPresenter;
-use Nette\Http\FileUpload;
 use Nette\Utils\Arrays;
 use ReflectionException;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Stepapo\Utils\Attribute\KeyProperty;
+use Stepapo\Utils\Attribute\Type;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsUser;
@@ -54,7 +54,7 @@ trait CorePageData
 	public int|string|null $parentPage;
 	public int|string|null $redirectPage;
 	public int|string|null $targetPage;
-	public FileUpload|FileData|string|int|null $imageFile;
+	#[Type(FileData::class)] public ?FileData $imageFile;
 	public ?string $targetParameter;
 	public ?string $targetUrl;
 	public ?string $targetPath;
@@ -148,7 +148,7 @@ trait CorePageData
 	{
 		return match($context) {
 			'buttons' => 'btn btn-outline-' . ($this->style ?: 'primary'),
-			'signpost' => 'rounded g-col-6 g-col-lg-4 bg-' . ($this->style ? ($this->style . '-subtle') : 'light') .  ' p-3',
+			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->style ? ($this->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->style ? ' btn btn-subtle-' . $this->style : ''),
 		}
 			. (($this->id === $presenter->pageData->id && (!$linkedEntity || $linkedEntity === $entity))

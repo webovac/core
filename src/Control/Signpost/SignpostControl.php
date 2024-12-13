@@ -30,7 +30,7 @@ class SignpostControl extends BaseControl
 		$webData = $this->dataProvider->getWebData();
 		$pageData = $this->dataProvider->getPageData();
 		$languageData = $this->dataProvider->getLanguageData();
-		$this->template->pageDatas = $this->dataModel->getChildPageDatas($webData, $pageData, $languageData);
+		$this->template->pageDatas = $this->dataModel->getChildPageDatas($webData, $pageData, $languageData, $this->entity);
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData) {

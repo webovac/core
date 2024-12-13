@@ -22,7 +22,12 @@ use Webovac\Core\Model\CmsEntity;
  */
 class MenuControl extends BaseControl
 {
+	public const TEMPLATE_DEFAULT = 'default';
+	
+	
 	public function __construct(
+		private string $moduleClass,
+		private string $templateName,
 		private ?CmsEntity $entity,
 		private Dir $dir,
 		private DataModel $dataModel,
@@ -45,9 +50,10 @@ class MenuControl extends BaseControl
 		if ($webData->logoFile) {
 			$this->template->logoUrl = $this->fileUploader->getUrl($webData->logoFile->getDefaultIdentifier());
 		}
+		$this->template->fileUploader = $this->fileUploader;
 		$this->template->pageData = $pageData;
 		$this->template->languageData = $languageData;
-		$this->template->pageDatas = $this->dataModel->getRootPageDatas($webData, $languageData);
+		$this->template->pageDatas = $this->dataModel->getRootPageDatas($webData, $languageData, $this->entity);
 		$this->template->homePageData = $this->dataModel->getHomePageData($webData->id);
 		$this->template->dataModel = $this->dataModel;
 		$searchModuleData = $this->dataModel->moduleRepository->getBy(['name' => 'Search']);
@@ -72,6 +78,6 @@ class MenuControl extends BaseControl
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData) {
 			$this->menuItemRenderer->render('primary', $this, $webData, $pageData, $languageData, $webData->homePage !== $pageData->id, $this->entity, $linkedEntity);
 		});
-		$this->template->render(__DIR__ . '/menu.latte');
+		$this->template->renderFile($this->moduleClass, MenuControl::class, $this->templateName);
 	}
 }

@@ -15,7 +15,6 @@ use App\Model\Web\WebData;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Web\WebModuleData;
 
 
 trait CorePageRepository
@@ -202,22 +201,22 @@ trait CorePageRepository
 	}
 
 
-	public function postProcessModulePageFromData(WebModuleData $data, Page $page): Page
-	{
-		if (isset($data->parentPage)) {
-			$page->parentPage = $this->getBy(
-				is_int($data->parentPage)
-					? ['id' => $data->parentPage]
-					: [
-						ICollection::AND,
-						['name' => $data->parentPage],
-						$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
-					]
-			);
-		}
-		$this->persist($page);
-		return $page;
-	}
+//	public function postProcessModulePageFromData(WebModuleData $data, Page $page): Page
+//	{
+//		if (isset($data->parentPage)) {
+//			$page->parentPage = $this->getBy(
+//				is_int($data->parentPage)
+//					? ['id' => $data->parentPage]
+//					: [
+//						ICollection::AND,
+//						['name' => $data->parentPage],
+//						$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
+//					]
+//			);
+//		}
+//		$this->persist($page);
+//		return $page;
+//	}
 
 
 	public function getByData(PageData|string $data, ?HasPages $hasPages = null): ?Page

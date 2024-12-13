@@ -57,6 +57,12 @@ class CmsUser implements Clearable, Service
 	}
 
 
+	public function isInRole(string $role): bool
+	{
+		return $this->user->isInRole($role);
+	}
+
+
 	/**
 	 * @throws AuthenticationException
 	 */

@@ -14,7 +14,6 @@ schemas:
 					type: [type: string, null: false]
 					created_at: [type: datetime, null: false, default: now]
 				primaryKey: id
-				uniqueKeys: [identifier]
 				indexes: [created_by_person_id]
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
@@ -347,6 +346,7 @@ schemas:
 					logo_file_id: [type: int, null: true]
 					background_file_id: [type: int, null: true]
 					code: [type: string, null: false]
+					is_admin: [type: bool, null: false, default: false]
 				primaryKey: id
 				uniqueKeys: [[host, base_path], code]
 				indexes: [created_by_person_id, updated_by_person_id, base_path, default_language_id, icon_file_id, large_icon_file_id, logo_file_id, background_file_id, home_page_id]

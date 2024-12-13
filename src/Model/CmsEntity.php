@@ -17,6 +17,6 @@ abstract class CmsEntity extends StepapoEntity implements Injectable
 
 	protected function getOmittedProperties(): array
 	{
-		return ['id', 'createdByPerson', 'updatedByPerson', 'createdAt', 'updatedAt'];
+		return [/*'id', */'createdByPerson', 'updatedByPerson', 'createdAt', 'updatedAt'];
 	}
 }

@@ -2,10 +2,10 @@
 <div class="mobile-collapsed wrapper navigation-wrapper secondary-navigation-wrapper" n:if="$activePageData->providesNavigation" n:snippet>
 	<div class="navigation secondary-navigation">
 		<div class="title">
-			<i n:if="$icon" class="{$layoutData->signpostIcon ?? fas} fa-fw fa-{$icon}"></i>
+			<i n:if="$icon" class="{$layoutData->secondaryIcon ?? fas} fa-fw fa-{$icon}"></i>
 			<span>{$title}</span>
 		</div>
-		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw fas fa-bars"></i></a>
+		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw {$layoutData->secondaryIcon ?? fas} fa-bars"></i></a>
 		<div class="menu" id="submenu">
 			{ifset $entityMenuItems}
 				{foreach $entityMenuItems as $e}
