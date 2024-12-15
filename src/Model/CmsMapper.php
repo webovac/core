@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
-use Nextras\Dbal\QueryException;
 use Nextras\Orm\Mapper\Dbal\Conventions\Conventions;
 use Nextras\Orm\Mapper\Dbal\Conventions\IConventions;
-use Nextras\Orm\Mapper\Mapper;
+use Nextras\Orm\Mapper\Dbal\DbalMapper;
 
 
-abstract class CmsMapper extends Mapper
+abstract class CmsMapper extends DbalMapper
 {
 	protected function createConventions(): IConventions
 	{
@@ -21,9 +20,6 @@ abstract class CmsMapper extends Mapper
 	}
 
 
-	/**
-	 * @throws QueryException
-	 */
 	public function delete(CmsEntity $entity): void
 	{
 		$this->connection->query('DELETE FROM %table WHERE id = %i', $this->getTableName(), $entity->getPersistedId());
