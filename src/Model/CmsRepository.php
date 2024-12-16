@@ -9,7 +9,9 @@ use App\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
+use Nextras\Dbal\Drivers\Exception\QueryException;
 use Nextras\Orm\Collection\Functions\CollectionFunction;
+use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\StorageReflection\StringHelper;
 use Stepapo\Model\Orm\StepapoRepository;
 use Stepapo\Utils\Injectable;
@@ -35,12 +37,22 @@ abstract class CmsRepository extends StepapoRepository implements Injectable
 	}
 
 
+	public function getById($id): ?IEntity
+	{
+		try {
+			return parent::getById($id);
+		} catch (QueryException $e) {
+			return null;
+		}
+	}
+
+
 	public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?CmsEntity
 	{
 		if ($parameters) {
-			return $this->getBy(['id' => Arrays::first($parameters)]);
+			return $this->getById(Arrays::first($parameters));
 		} elseif ($path) {
-			return $this->getBy(['id' => Arrays::last(explode('/', $path))]);
+			return $this->getById(Arrays::last(explode('/', $path)));
 		}
 		throw new InvalidStateException;
 	}

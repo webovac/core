@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter\Error4xx;
 
-use Nette\Application\UI\Presenter;
-use Webovac\Core\Presenter\CorePresenter;
-use Webovac\Core\Presenter\ErrorPresenter;
-use Webovac\Style\Presenter\StylePresenter;
+use App\Presenter\BaseErrorPresenter;
 
 
 /**
  * @property Error4xxTemplate $template
  */
-class Error4xxPresenter extends Presenter
+class Error4xxPresenter extends BaseErrorPresenter
 {
-	use ErrorPresenter;
-	use CorePresenter;
-	use StylePresenter;
 }
