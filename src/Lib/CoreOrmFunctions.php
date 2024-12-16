@@ -65,26 +65,34 @@ trait CoreOrmFunctions
 	public static function likeFilter(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args, ?Aggregator $aggregator): DbalExpressionResult
 	{
 		assert(count($args) === 2 && is_string($args[0]) && is_string($args[1]));
-		$column = $helper->processExpression($builder, $args[0], $aggregator)->args[0];
-		return new DbalExpressionResult('LOWER(%column) LIKE %_like_', [$column, Strings::lower($args[1])]);
+		$column = $helper->processExpression($builder, $args[0], $aggregator);
+		return static::createDbalExpression(
+			'LOWER(%column) LIKE %_like_',
+			[$column->args[0], Strings::lower($args[1])],
+			[$column],
+		);
 	}
 
 
 	public static function likeFilterOr(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args, ?Aggregator $aggregator): DbalExpressionResult
 	{
 		assert(count($args) === 3 && is_string($args[0]) && is_string($args[1]) && is_string($args[2]));
-		$column1 = $helper->processExpression($builder, $args[0], $aggregator)->args[0];
-		$column2 = $helper->processExpression($builder, $args[1], $aggregator)->args[0];
-		return new DbalExpressionResult('%column LIKE %_like_ OR %column LIKE %_like_', [$column1, $args[2], $column2, $args[2]]);
+		$column1 = $helper->processExpression($builder, $args[0], $aggregator);
+		$column2 = $helper->processExpression($builder, $args[1], $aggregator);
+		return static::createDbalExpression(
+			'%column LIKE %_like_ OR %column LIKE %_like_',
+			[$column1->args[0], $args[2], $column2->args[0], $args[2]],
+			[$column1, $column2],
+		);
 	}
 
 
 	public static function personFilter(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args, ?Aggregator $aggregator): DbalExpressionResult
 	{
 		assert(count($args) === 3 && is_string($args[0]) && is_string($args[1]) && is_string($args[2]));
-		$lastNameColumn = $helper->processExpression($builder, $args[1], $aggregator)->args[0];
-		$firstNameColumn = $helper->processExpression($builder, $args[0], $aggregator)->args[0];
-		return new DbalExpressionResult((
+		$lastNameColumn = $helper->processExpression($builder, $args[1], $aggregator);
+		$firstNameColumn = $helper->processExpression($builder, $args[0], $aggregator);
+		return static::createDbalExpression((
 			$platform->getName() === 'pgsql'
 				? "LOWER(%column || ' ' || %column)"
 				: "LOWER(CONCAT(%column, ' ', %column))"
@@ -93,15 +101,31 @@ trait CoreOrmFunctions
 				? "LOWER(%column || ' ' || %column)"
 				: "LOWER(CONCAT(%column, ' ', %column))"
 			) . " LIKE %_like_",
-			[$lastNameColumn, $firstNameColumn, Strings::lower($args[2]), $firstNameColumn, $lastNameColumn, Strings::lower($args[2])
-		]);
+			[$lastNameColumn->args[0], $firstNameColumn->args[0], Strings::lower($args[2]), $firstNameColumn->args[0], $lastNameColumn->args[0], Strings::lower($args[2])],
+			[$lastNameColumn, $firstNameColumn],
+		);
 	}
 
 
 	public static function personOrder(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args, ?Aggregator $aggregator): DbalExpressionResult
 	{
-		$lastNameColumn = $helper->processExpression($builder, $args[1], $aggregator)->args[0];
-		$firstNameColumn = $helper->processExpression($builder, $args[0], $aggregator)->args[0];
-		return new DbalExpressionResult('%column || %column', [$lastNameColumn, $firstNameColumn]);
+		$lastNameColumn = $helper->processExpression($builder, $args[1], $aggregator);
+		$firstNameColumn = $helper->processExpression($builder, $args[0], $aggregator);
+		return static::createDbalExpression(
+			'%column || %column',
+			[$lastNameColumn->args[0], $firstNameColumn->args[0]],
+			[$lastNameColumn, $firstNameColumn],
+		);
+	}
+
+
+	private static function createDbalExpression(string $expression, array $args, array $columns = [])
+	{
+		return new DbalExpressionResult(
+			expression: $expression,
+			args: $args,
+			joins: array_merge(...array_map(fn(DbalExpressionResult $result) => $result->joins, $columns)),
+			groupBy: array_merge(...array_map(fn(DbalExpressionResult $result) => $result->groupBy, $columns)),
+		);
 	}
 }
