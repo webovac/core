@@ -29,7 +29,7 @@
 		"nextras/orm": "^5.0",
 		"choowx/rasterize-svg": "^0.1",
 		"stepapo/crosstab": "^1.0",
-		"stepapo/dataset": "^1.0",
+		"stepapo/dataset": "^2.0",
 		"stepapo/model": "dev-main",
 		"stepapo/utils": "^1.0",
 		"stepapo/visualization": "^1.0"
