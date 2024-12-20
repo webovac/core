@@ -5,17 +5,17 @@
 	<title>{$metaTitle . ' | ' . $webTranslationData->title|truncate:60}</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-	<meta name="description" n:ifset="$pageTranslation->description" content="{$pageTranslationData->description|truncate:300}">
+	<meta name="description" n:if="$description" content="{$description|truncate:300}">
 	<meta name="theme-color" content="{$themeData->contentBg}">
 	<meta property="og:type" content="{$entity ? $entityName : 'page'}">
 	<meta property="og:title" content="{$metaTitle|truncate:60}">
-	<meta property="og:description" n:if="$pageTranslation->description" content="{$pageTranslationData->description|truncate:300}">
-	<meta property="og:image" n:ifset="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
+	<meta property="og:description" n:if="$description" content="{$description|truncate:300}">
+	<meta property="og:image" n:if="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
 	<meta property="og:url" content="{$metaUrl}">
 	<meta property="og:site_name" content="{$webTranslationData->title|truncate:60}">
 	<meta name="twitter:title" content="{$metaTitle|truncate:60}">
 	<meta name="twitter:description" n:if="$pageTranslation->description" content="{$pageTranslationData->description|truncate:300}">
-	<meta name="twitter:image" n:ifset="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
+	<meta name="twitter:image" n:if="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
 	{*
 	<meta name="twitter:site" content="@USERNAME">
 	<meta name="twitter:creator" content="@USERNAME">
@@ -41,7 +41,7 @@
 				{if !$layoutData->hideBreadcrumbs}
 					{control core-breadcrumbs}
 				{/}
-			{control core-messages}
+				{control core-messages}
 				<div class="content override-padding">
 					{include 'main.file'}
 				</div>

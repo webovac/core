@@ -52,6 +52,7 @@ trait CorePresenter
 	#[Persistent] public string $host;
 	#[Persistent] public string $basePath;
 	#[Persistent] public string $lang;
+	#[Persistent] public string $backlink;
 	#[Inject] public ICoreControl $core;
 	#[Inject] public CmsUser $cmsUser;
 	#[Inject] public Orm $orm;
@@ -178,26 +179,18 @@ trait CorePresenter
 			}
 			$this->template->webTranslationData = $this->webTranslationData;
 			$this->template->pageData = $this->pageData;
-			if ($this->pageData->imageFile) {
-				$this->template->imageUrl = $this->fileUploader->getUrl($this->pageData->imageFile->getBackgroundIdentifier(), '1200x630');
-			}
+			$this->template->imageUrl = $this->getImageUrl();
 			$this->template->pageTranslation = $this->pageTranslation;
 			$this->template->pageTranslationData = $this->pageTranslationData;
 			$this->template->hasSideMenu = (bool) $this->navigationPageData;
 			$this->template->entity = $this->entity;
 			$this->template->entityName = $this->entity?->getRepository()->getMapper()->getTableName();
+			$this->template->description = $this->getDescription();
 			$this->template->title = $this->title;
-			$this->template->metaTitle = (!$this->entity || (!$this->pageData->providesNavigation && !$this->pageData->providesButtons) ? $this->pageTranslationData->title : '')
-				. ($this->entity && !$this->pageData->providesNavigation && !$this->pageData->providesButtons ? ' | ' : '' )
+			$this->template->metaTitle = (!$this->entity || !$this->pageData->isDetailRoot ? $this->pageTranslationData->title : '')
+				. ($this->entity && !$this->pageData->isDetailRoot ? ' | ' : '' )
 				. ($this->entity ? $this->entity->title : '');
 			$this->template->metaType = $this->entity?->getRepository()->getMapper()->getTableName() ?: 'page';
-//			if ($this->pageData->hasParameter) {
-//				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
-//				$parameterValue = $this->getParameter('id')[$lastDetailRootPage->name];
-//				$params = [$lastDetailRootPage->name => $parameterValue];
-//			} else {
-//				$params = [];
-//			}
 			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
 			$this->template->metaUrl = $this->request->getPresenterName() === 'Error4xx' ? $this->link('//Home:default', $homePage->name) : $this->link('//this');
 			$this->template->bodyClasses = [];
@@ -354,5 +347,24 @@ trait CorePresenter
 				),
 			);
 		}
+	}
+
+
+	private function getDescription(): ?string
+	{
+		return $this->entity && method_exists($this->entity, 'getDescription')
+			? $this->entity->getDescription($this->languageData)
+			: $this->pageTranslationData->description;
+	}
+
+
+	private function getImageUrl(): ?string
+	{
+		$imageFile = $this->entity && method_exists($this->entity, 'getImageFile')
+			? $this->entity->getImageFile()
+			: $this->pageData->imageFile;
+		return $imageFile
+			? $this->fileUploader->getUrl($imageFile->getBackgroundIdentifier(), '1200x630')
+			: null;
 	}
 }

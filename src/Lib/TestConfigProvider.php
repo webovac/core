@@ -25,6 +25,9 @@ class TestConfigProvider implements Service
 		foreach ($modules as $module) {
 			$reflection = new ReflectionClass($module);
 			if (file_exists($path = dirname($reflection->getFileName()) . '/config/tests')) {
+				if (str_contains($path, 'vendor')) {
+					continue;
+				}
 				$this->paths[] = $path;
 			}
 		}
@@ -56,7 +59,10 @@ class TestConfigProvider implements Service
 		$setups = [];
 		foreach ($this->modules as $module) {
 			$reflection = new ReflectionClass($module);
-			if (file_exists(dirname($reflection->getFileName()) . '/config/tests')) {
+			if (file_exists($path = dirname($reflection->getFileName()) . '/config/tests')) {
+				if (str_contains($path, 'vendor')) {
+					continue;
+				}
 				$setups[$reflection->getShortName()] = $module::getCliSetup();
 			}
 		}

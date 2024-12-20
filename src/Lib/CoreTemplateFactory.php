@@ -7,6 +7,7 @@ namespace Webovac\Core\Lib;
 use Nette\Application\UI\Template;
 use Nette\DI\Attributes\Inject;
 use Stepapo\Utils\Latte\Filters;
+use Tracy\Dumper;
 
 
 trait CoreTemplateFactory

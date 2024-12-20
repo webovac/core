@@ -20,7 +20,7 @@ trait CorePresenterTemplate
 	public WebData $webData;
 	public WebTranslationData $webTranslationData;
 	public PageData $pageData;
-	public string $imageUrl;
+	public ?string $imageUrl;
 	public string $smallIconUrl;
 	public string $largeIconUrl;
 	public PageTranslation $pageTranslation;
@@ -31,6 +31,7 @@ trait CorePresenterTemplate
 	public ?string $entityName;
 	public string $title;
 	public string $metaTitle;
+	public ?string $description;
 	public string $metaType;
 	public string $metaUrl;
 	public array $bodyClasses;
