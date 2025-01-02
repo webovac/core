@@ -184,13 +184,14 @@ trait CorePresenter
 			$this->template->pageTranslationData = $this->pageTranslationData;
 			$this->template->hasSideMenu = (bool) $this->navigationPageData;
 			$this->template->entity = $this->entity;
-			$this->template->entityName = $this->entity?->getRepository()->getMapper()->getTableName();
+			$entityName = $this->entity?->getRepository()->getMapper()->getTableName() instanceof Fqn ? $this->entity?->getRepository()->getMapper()->getTableName()->name : $this->entity?->getRepository()->getMapper()->getTableName();
+			$this->template->entityName = $entityName;
 			$this->template->description = $this->getDescription();
 			$this->template->title = $this->title;
 			$this->template->metaTitle = (!$this->entity || !$this->pageData->isDetailRoot ? $this->pageTranslationData->title : '')
 				. ($this->entity && !$this->pageData->isDetailRoot ? ' | ' : '' )
 				. ($this->entity ? $this->entity->title : '');
-			$this->template->metaType = $this->entity?->getRepository()->getMapper()->getTableName() ?: 'page';
+			$this->template->metaType = $entityName ?: 'page';
 			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
 			$this->template->metaUrl = $this->request->getPresenterName() === 'Error4xx' ? $this->link('//Home:default', $homePage->name) : $this->link('//this');
 			$this->template->bodyClasses = [];
