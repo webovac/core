@@ -24,6 +24,7 @@ use Nette\Caching\Storage;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
+use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use ReflectionClass;
 use ReflectionException;
