@@ -54,9 +54,9 @@ class MenuControl extends BaseControl
 		$this->template->pageData = $pageData;
 		$this->template->languageData = $languageData;
 		$this->template->pageDatas = $this->dataModel->getRootPageDatas($webData, $languageData, $this->entity);
-		$this->template->homePageData = $this->dataModel->getHomePageData($webData->id);
+		$this->template->homePageData = $this->dataModel->getPageData($webData->id, $webData->homePage);
 		$this->template->dataModel = $this->dataModel;
-		$searchModuleData = $this->dataModel->moduleRepository->getBy(['name' => 'Search']);
+		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& $searchModuleData
 			&& in_array($searchModuleData->id, $webData->modules, true);
@@ -67,12 +67,12 @@ class MenuControl extends BaseControl
 				foreach ($this->dataModel->getPageData($webData->id, $pageData->id)->getCollection('translations') as $translationData) {
 					$this->template->availableTranslations[$translationData->language] = $translationData->language;
 				}
-				$this->template->themeDatas = $this->dataModel->themeRepository->findBy(['id' => $layoutData->themes]);
+				$this->template->themeDatas = $this->dataModel->themeRepository->findByIds($layoutData->themes);
 				$this->template->themeDatas->uasort(fn(ThemeData $a, ThemeData $b) => str_contains('dark', $a->code) !== str_contains('dark', $b->code) ? -1 : 1);
 			}
 		}
 		$this->template->entity = $this->entity;
-		$this->template->title = $webData->getCollection('translations')->getBy(['language' => $languageData->id])->title;
+		$this->template->title = $webData->getCollection('translations')->getById($languageData->id)->title;
 		$this->template->wwwDir = $this->dir->getWwwDir();
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData) {

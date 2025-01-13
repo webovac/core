@@ -59,6 +59,7 @@ trait CorePageData
 	public ?string $targetUrl;
 	public ?string $targetPath;
 	public ?string $targetSignal;
+	public ?int $layoutWidth;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;
 	public ?DateTimeInterface $createdAt;

@@ -33,6 +33,7 @@ trait CoreDataModel
 	#[Inject] public PersonDataRepository $personRepository;
 	#[Inject] public RoleDataRepository $roleRepository;
 	#[Inject] public CmsUser $cmsUser;
+	private int $count = 0;
 
 
 	public function getPageData(int $webId, int $pageId): ?PageData
@@ -43,13 +44,8 @@ trait CoreDataModel
 
 	public function getPageDataByName(int $webId, string $pageName): ?PageData
 	{
-		return $this->pageRepository->getBy(['web' => $webId, 'name' => $pageName]);
-	}
-
-
-	public function getHomePageData(int $webId): ?PageData
-	{
-		return $this->pageRepository->getBy(['web' => $webId, 'isHomePage' => true]);
+		$pageId = $this->pageRepository->getId($webId, $pageName);
+		return $pageId ? $this->getPageData($webId, $pageId) : null;
 	}
 
 
@@ -59,9 +55,16 @@ trait CoreDataModel
 	}
 
 
+	public function getWebData(int $id): ?WebData
+	{
+		return $this->webRepository->getById($id);
+	}
+
+
 	public function getWebDataByHost(string $host, ?string $basePath): ?WebData
 	{
-		return $this->webRepository->getBy(['host' => $host, 'basePath' => $basePath]);
+		$webId = $this->webRepository->getId($host, $basePath);
+		return $webId ? $this->webRepository->getById($webId) : null;
 	}
 
 
@@ -71,15 +74,23 @@ trait CoreDataModel
 	}
 
 
+	public function getLanguageDataByShortcut(string $shortcut): ?LanguageData
+	{
+		$languageId = $this->languageRepository->getId($shortcut);
+		return $languageId ? $this->getLanguageData($languageId) : null;
+	}
+
+
 	public function getModuleData(int $id): ?ModuleData
 	{
 		return $this->moduleRepository->getById($id);
 	}
 
 
-	public function getLanguageDataByShortcut(string $shortcut): ?LanguageData
+	public function getModuleDataByName(string $name): ?ModuleData
 	{
-		return $this->languageRepository->getBy(['shortcut' => $shortcut]);
+		$moduleId = $this->moduleRepository->getId($name);
+		return $moduleId ? $this->getModuleData($moduleId) : null;
 	}
 
 
@@ -92,9 +103,9 @@ trait CoreDataModel
 			return null;
 		}
 		return $this->textRepository
-			->getBy(['name' => $name])
+			->getById($name)
 			?->getCollection('translations')
-			->getBy(['language' => $languageData->id]);
+			->getById($languageData->id);
 	}
 
 
@@ -109,7 +120,7 @@ trait CoreDataModel
 			if (count($pageData->parentPages) > 1) {
 				return false;
 			}
-//			if ($pageData->type === Page::TYPE_PAGE && !$pageData->getCollection('translations')->getBy(['language' => $languageData->id])) {
+//			if ($pageData->type === Page::TYPE_PAGE && !$pageData->getCollection('translations')->getById($languageData->id)) {
 //				return false;
 //			}
 			if (!$pageData->isUserAuthorized($this->cmsUser)) {

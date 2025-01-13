@@ -15,6 +15,7 @@ use Throwable;
 
 trait CorePageDataRepository
 {
+	private array $aliases;
 	#[Inject] public PageTranslationDataRepository $pageTranslationDataRepository;
 
 
@@ -26,6 +27,7 @@ trait CorePageDataRepository
 		if (!isset($this->collection)) {
 			$this->collection = $this->cache->load(lcfirst($this->getName()), function () {
 				$this->cache->remove('routeList');
+				$this->cache->remove('page_aliases');
 				$collection = new Collection;
 				$this->buildCollection($collection);
 				$array = (array) $collection;
@@ -37,6 +39,25 @@ trait CorePageDataRepository
 			});
 		}
 		return $this->collection;
+	}
+
+
+	/**
+	 * @throws Throwable
+	 */
+	protected function getAliases(): array
+	{
+		if (!isset($this->aliases)) {
+			$this->aliases = $this->cache->load(lcfirst($this->getName()) . '_aliases', function () {
+				$aliases = [];
+				/** @var PageData $page */
+				foreach ($this->getCollection() as $page) {
+					$aliases["$page->web-$page->name"] = $page->id;
+				}
+				return $aliases;
+			});
+		}
+		return $this->aliases;
 	}
 
 
@@ -86,8 +107,8 @@ trait CorePageDataRepository
 			$pageData->parentDetailRootPages = array_merge($parentPageData->parentPages ?? [], $pageData->isDetailRoot ? [$page->id] : []);
 			$pageData->parentPage = $page->parentPage?->id ?: ($parentPageData->parentPage ?? null);
 			foreach ($page->translations as $translation) {
-				$parentPath = !$pageData->dontInheritPath && $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])
-					? $parentPageData?->getCollection('translations')->getBy(['language' => $translation->language->id])->fullPath
+				$parentPath = !$pageData->dontInheritPath && $parentPageData?->getCollection('translations')->getById($translation->language->id)
+					? $parentPageData?->getCollection('translations')->getById($translation->language->id)->fullPath
 					: '//' . $pageData->host . ($pageData->basePath ? ('/' . $pageData->basePath) : '');
 				$path = $translation->path ? preg_replace('/<id(.*)>/', "<id[" . $pageData->name . "]>", $translation->path) : null;
 				$pageData->translations[$translation->language->id]->fullPath = $parentPath . ($path ? '/' . $path : '');
@@ -100,5 +121,11 @@ trait CorePageDataRepository
 				$this->buildCollection($collection, $page, $pageData);
 			}
 		}
+	}
+
+
+	public function getId(int $webId, string $pageName): ?int
+	{
+		return $this->getAliases()["$webId-$pageName"] ?? null;
 	}
 }

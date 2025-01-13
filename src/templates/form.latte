@@ -9,17 +9,21 @@
 		{if $input->getOption('type') === 'checkbox'}
 			<label class="form-check-label" n:name="$input->getName()">{_$input->caption}</label>
 			<input class="form-check-input" n:name="$input->getName()">
-		{elseif in_array($input->getOption('type'), ['checkboxList', 'radioList'], true)}
-			{label $input class => "form-label" /}<br>
+		{elseif in_array($input->getOption('type'), ['checkboxList', 'radio'], true)}
+			{label $input class => "form-label" /}
 			<div n:foreach="$input->items as $key => $caption" class="form-check">
 				<input class="form-check-input" n:name="$input->getName():$key">
 				<label class="form-check-label" n:name="$input->getName():$key">{_$caption}</label>
 			</div>
 		{else}
 			{label $input class: "form-label"/}
-			<div n:tag-if="$input->getOption('type') === 'select'">{input $input class: "form-control form-control-sm"}</div>
+			<div n:class="$input->getOption('type') !== 'select' ? 'input-group input-group-sm'" n:tag-if="$input->getOption('type') === 'select' || $input->getOption('prefix') || $input->getOption('suffix')">
+				<span class="input-group-text" n:if="$input->getOption('prefix')">{$input->getOption('prefix')}</span>
+				{input $input class: "form-control form-control-sm"}
+				<span class="input-group-text" n:if="$input->getOption('suffix')">{$input->getOption('suffix')}</span>
+			</div>
 		{/}
-        <small n:if="$input->getOption('description')" class="form-text text-muted">{_$input->getOption('description')}</small>
+        <div n:if="$input->getOption('description')" class="small form-text text-secondary">{_$input->getOption('description')}</div>
     </div>
     {input send class: "btn btn-primary"}
 </form>

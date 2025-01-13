@@ -107,7 +107,7 @@ trait CorePresenter
 				$this->error();
 			}
 			$this->dataProvider->setWebData($this->webData);
-			$this->webTranslationData = $this->webData->getCollection('translations')->getBy(['language' => $this->languageData->id]) ?? null;
+			$this->webTranslationData = $this->webData->getCollection('translations')->getById($this->languageData->id) ?? null;
 			if (!$this->webTranslationData) {
 				$this->error();
 			}
@@ -120,7 +120,7 @@ trait CorePresenter
 			if (!$this->pageTranslation) {
 				$this->error();
 			}
-			$this->pageTranslationData = $this->pageData->getCollection('translations')->getBy(['language' => $this->languageData->id]) ?? null;
+			$this->pageTranslationData = $this->pageData->getCollection('translations')->getById($this->languageData->id) ?? null;
 			try {
 				$this->pageData->checkRequirements($this->cmsUser);
 			} catch (MissingPermissionException $e) {
@@ -152,13 +152,13 @@ trait CorePresenter
 			if ($this->cmsUser->isLoggedIn()) {
 				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
 				if ($this->preference && $this->preference->language) {
-					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getBy(['language' => $this->preference->language->id])) {
+					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getById($this->preference->language->id)) {
 						$languageData = $this->dataModel->languageRepository->getById($this->preference->language->id);
 						$this->lang = $languageData->shortcut;
 					}
 				}
 			}
-			$this->title = $this->entity ? $this->entity->title : $this->pageTranslation->title;
+			$this->title = $this->entity ? $this->entity->getTitle() : $this->pageTranslation->title;
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
 			$this->dataProvider->setNavigationPageData($this->navigationPageData);
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
@@ -171,7 +171,7 @@ trait CorePresenter
 	public function injectCoreRender(): void
 	{
 		$this->onRender[] = function () {
-			$this->template->getLatte()->setLocale($this->languageData->shortcut);
+//			$this->template->getLatte()->setLocale($this->languageData->shortcut);
 			$this->template->languageData = $this->languageData;
 			$this->template->webData = $this->webData;
 			if ($this->webData->iconFile) {
@@ -191,7 +191,7 @@ trait CorePresenter
 			$this->template->title = $this->title;
 			$this->template->metaTitle = (!$this->entity || !$this->pageData->isDetailRoot ? $this->pageTranslationData->title : '')
 				. ($this->entity && !$this->pageData->isDetailRoot ? ' | ' : '' )
-				. ($this->entity ? $this->entity->title : '');
+				. ($this->entity ? $this->entity->getTitle() : '');
 			$this->template->metaType = $entityName ?: 'page';
 			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
 			$this->template->metaUrl = $this->request->getPresenterName() === 'Error4xx' ? $this->link('//Home:default', $homePage->name) : $this->link('//this');
@@ -301,7 +301,7 @@ trait CorePresenter
 		$parameters = [];
 		foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->parentPages as $id) {
 			$pageData = $this->dataModel->getPageData($this->webData->id, $id);
-			$title = $pageData->getCollection('translations')->getBy(['language' => $this->languageData->id])->title;
+			$title = $pageData->getCollection('translations')->getById($this->languageData->id)->title;
 			if ($pageData->hasParameter) {
 				if ($this->getParameter('id')) {
 					$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($pageData->parentDetailRootPages));
@@ -312,11 +312,11 @@ trait CorePresenter
 						$entity = $this->orm
 							->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
 							->getByParameters($parameters, null, $this->webData);
-						$title = $entity->title;
+						$title = $entity->getTitle();
 					}
 				} elseif ($this->getParameter('path')) {
 					$path = [];
-					$title = $this->entity->title;
+					$title = $this->entity->getTitle();
 					foreach ($this->entityList as $entity) {
 						if ($entity === $this->entity) {
 							continue;
@@ -324,7 +324,7 @@ trait CorePresenter
 						$path[] = Arrays::first($entity->getParameters());
 						$this->getComponent('core-breadcrumbs')->addCrumb(
 							$id,
-							$entity->title,
+							$entity->getTitle(),
 							$this->presenter->link(
 								'//default',
 								[

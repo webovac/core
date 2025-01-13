@@ -6,6 +6,7 @@ namespace Webovac\Core\Model;
 
 use App\Model\Orm;
 use Nette\Caching\Cache;
+use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Model\Data\Collection;
 use Stepapo\Model\Data\Item;
@@ -33,14 +34,21 @@ class CmsDataRepository extends Repository implements Service, Injectable
 	{
 		if (!isset($this->collection)) {
 			$this->collection = $this->cache->load(lcfirst($this->getName()), function () {
+				$this->cache->remove(lcfirst($this->getName()) . '_aliases');
 				$collection = new Collection;
 				foreach ($this->getOrmRepository()->findAll() as $entity) {
-					$collection[$entity->getPersistedId()] = $entity->getData();
+					$collection[$this->getIdentifier($entity)] = $entity->getData();
 				}
 				return $collection;
 			});
 		}
 		return $this->collection;
+	}
+
+
+	protected function getIdentifier(IEntity $entity): mixed
+	{
+		return $entity->getPersistedId();
 	}
 
 

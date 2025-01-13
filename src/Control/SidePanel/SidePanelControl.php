@@ -40,18 +40,18 @@ class SidePanelControl extends BaseControl
 		$this->template->pageData = $pageData;
 		$this->template->languageData = $languageData;
 		$this->template->dataModel = $this->dataModel;
-		$searchModuleData = $this->dataModel->moduleRepository->getBy(['name' => 'Search']);
+		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& $searchModuleData
 			&& in_array($searchModuleData->id, $webData->modules, true);
-		$personsModuleData = $this->dataModel->moduleRepository->getBy(['name' => 'Persons']);
+		$personsModuleData = $this->dataModel->getModuleDataByName('Persons');
 		$this->template->hasPersons = $this->moduleChecker->isModuleInstalled('persons')
 			&& $personsModuleData
 			&& in_array($personsModuleData->id, $webData->modules, true);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$layoutData = $this->dataModel->getLayoutData($webData->layout);
 			$this->template->layoutData = $layoutData;
-			$this->template->themeDatas = $this->dataModel->themeRepository->findBy(['id' => $layoutData->themes]);
+			$this->template->themeDatas = $this->dataModel->themeRepository->findByIds($layoutData->themes);
 			$this->template->themeDatas->uasort(fn(ThemeData $a, ThemeData $b) => str_contains('dark', $a->code) !== str_contains('dark', $b->code) ? -1 : 1);
 		}
 		foreach ($this->dataModel->getPageData($webData->id, $pageData->id)->getCollection('translations') as $translationData) {

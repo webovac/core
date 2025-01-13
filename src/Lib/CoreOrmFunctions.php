@@ -25,6 +25,9 @@ trait CoreOrmFunctions
 	public const string LIKE_FILTER_OR = 'likeFilterOr';
 	public const string PERSON_FILTER = 'personFilter';
 	public const string PERSON_ORDER = 'personOrder';
+	public const string YEAR_FILTER = 'yearFilter';
+	public const string MONTH_FILTER = 'monthFilter';
+	public const string DATE_FILTER = 'dateFilter';
 
 
 	public function __construct(
@@ -115,6 +118,42 @@ trait CoreOrmFunctions
 			'%column || %column',
 			[$lastNameColumn->args[0], $firstNameColumn->args[0]],
 			[$lastNameColumn, $firstNameColumn],
+		);
+	}
+
+
+	public static function yearFilter(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args, ?Aggregator $aggregator): DbalExpressionResult
+	{
+		assert(count($args) === 2 && is_string($args[0]) && is_string($args[1]));
+		$column = $helper->processExpression($builder, $args[0], $aggregator);
+		return static::createDbalExpression(
+			'YEAR(%column) = %i',
+			[$column->args[0], $args[1]],
+			[$column],
+		);
+	}
+
+
+	public static function monthFilter(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args, ?Aggregator $aggregator): DbalExpressionResult
+	{
+		assert(count($args) === 2 && is_string($args[0]) && is_string($args[1]));
+		$column = $helper->processExpression($builder, $args[0], $aggregator);
+		return static::createDbalExpression(
+			'MONTH(%column) = %i',
+			[$column->args[0], $args[1]],
+			[$column],
+		);
+	}
+
+
+	public static function dateFilter(IPlatform $platform, DbalQueryBuilderHelper $helper, QueryBuilder $builder, array $args, ?Aggregator $aggregator): DbalExpressionResult
+	{
+		assert(count($args) === 2 && is_string($args[0]) && is_string($args[1]));
+		$column = $helper->processExpression($builder, $args[0], $aggregator);
+		return static::createDbalExpression(
+			'DATE(%column) = DATE(%dt)',
+			[$column->args[0], $args[1]],
+			[$column],
 		);
 	}
 

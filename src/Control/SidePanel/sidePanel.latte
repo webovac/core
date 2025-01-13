@@ -32,7 +32,7 @@
 	<hr>
 	<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
 		{var $l = $dataModel->getLanguageData($translation->language)}
-			{var $t = $l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id]) ?: $l->getCollection('translations')->getBy(['translationLanguage' => $webData->defaultLanguage])}
+			{var $t = $l->getCollection('translations')->getById($languageData->id) ?: $l->getCollection('translations')->getById($webData->defaultLanguage)}
 			{ifset $availableTranslations[$l->id]}
 			{if $cmsUser->isLoggedIn()}
 				<a n:if="$t" href="{plink '//this', language: $l->shortcut, do: 'setLanguage'}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
@@ -44,13 +44,13 @@
 				</a>
 			{/}
 		{else}
-			<div n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getBy(['translationLanguage' => $languageData->id])->title} nedostupné" data-tooltip-position="right">
+			<div n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getById($languageData->id)->title} nedostupné" data-tooltip-position="right">
 				<img src="/dist/images/languages/{$l->shortcut}.svg">
 			</div>
 		{/}
 	</div>
 	<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && count($themeDatas) > 1 && !$isError" n:inner-foreach="$themeDatas as $themeData">
-		{var $translation = $themeData->getCollection('translations')->getBy(['language' => $languageData->id]) ?: $themeData->getCollection('translations')->getBy(['language' => $webData->defaultLanguage])}
+		{var $translation = $themeData->getCollection('translations')->getById($languageData->id) ?: $themeData->getCollection('translations')->getById($webData->defaultLanguage)}
 		<a n:if="$translation" href="{plink '//this', 'theme' => $themeData->id, 'do' => 'setTheme'}" data-tooltip="{$translation->title}" data-tooltip-position="right">
 			<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $themeData->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
 		</a>

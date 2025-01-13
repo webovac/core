@@ -149,6 +149,7 @@ schemas:
 					target_module_id: [type: int, null: true]
 					template_page_id: [type: int, null: true]
 					image_file_id: [type: int, null: true]
+					layout_width: [type: int, null: true]
 					published_at: [type: datetime, null: true]
 					name: [type: string, null: false]
 					style: [type: string, null: true]

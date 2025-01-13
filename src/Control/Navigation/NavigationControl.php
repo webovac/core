@@ -51,8 +51,8 @@ class NavigationControl extends BaseControl
 		$this->template->icon = ($this->entity && $pageData->isDetailRoot && method_exists($this->entity, 'getIcon')
 			? $this->entity->getIcon() : null) ?: $pageData->icon;
 		$this->template->title = $this->entity && $pageData->hasParameter
-			? $this->entity->title
-			: $pageData->getCollection('translations')->getBy(['language' => $languageData->id])->title;
+			? $this->entity->getTitle()
+			: $pageData->getCollection('translations')->getById($languageData->id)->title;
 		$this->template->webData = $webData;
 		$this->template->dataModel = $this->dataModel;
 		$this->template->entity = $this->entity;

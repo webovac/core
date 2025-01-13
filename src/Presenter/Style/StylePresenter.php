@@ -38,10 +38,7 @@ class StylePresenter extends Presenter
 
 	public function actionDefault(): void
 	{
-		$this->webData = $this->dataModel->webRepository->getBy([
-			'host' => $this->host,
-			'basePath' => $this->basePath
-		]);
+		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
 		if (!$this->webData) {
 			$this->error();
 		}

@@ -80,7 +80,7 @@ trait CorePage
 	}
 
 
-	public function getterTitle(): ?string
+	public function getterTitle(): string
 	{
 		if ($this->type === self::TYPE_SEPARATOR) {
 			return 'Oddělovač';

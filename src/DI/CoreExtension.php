@@ -58,8 +58,8 @@ class CoreExtension extends StepapoExtension
 		$this->createModelExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
-		$this->createDecoratorExtension();
 		$this->createProjectSearchExtension();
+		$this->createDecoratorExtension();
 		$this->createDbalExtension();
 		$this->createMigrationsExtension();
 	}

@@ -107,7 +107,7 @@ trait CoreFileRepository
 		$tmpFile = $upload->getTemporaryFile();
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
 		copy($tmpFile, $cloneFile);
-		Image::fromFile($cloneFile)->save($cloneFile, type: ImageType::WEBP);
+		Image::fromFile($cloneFile)->resize(1920, null)->save($cloneFile, type: ImageType::WEBP);
 		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}

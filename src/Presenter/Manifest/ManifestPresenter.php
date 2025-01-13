@@ -39,7 +39,7 @@ class ManifestPresenter extends Presenter
 		if (!$this->webData) {
 			$this->error();
 		}
-		$this->webTranslationData = $this->webData->getCollection('translations')->getBy(['language' => $languageData->id]) ?? null;
+		$this->webTranslationData = $this->webData->getCollection('translations')->getById($languageData->id) ?? null;
 		if (!$this->webTranslationData) {
 			$this->error();
 		}

@@ -23,12 +23,12 @@ class MenuItemRenderer implements Service
 
 	public function render(string $context, Control $control, WebData $webData, PageData $pageData, LanguageData $languageData, bool $checkActive, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): void
 	{
-		$t = $pageData->getCollection('translations')->getBy(['language' => $languageData->id]);
+		$t = $pageData->getCollection('translations')->getById($languageData->id);
 		$control->template->getLatte()->render(__DIR__ . '/../templates/menuItem.latte', new MenuItemTemplate(
 			latte: $control->template->getLatte(),
 			webData: $webData,
 			pageData: $pageData,
-			pageTranslationData: $t ?: $pageData->getCollection('translations')->getBy(['language' => $webData->defaultLanguage]),
+			pageTranslationData: $t ?: $pageData->getCollection('translations')->getById($webData->defaultLanguage),
 			languageData: $languageData,
 			targetLanguageData: $t ? $languageData : $this->dataModel->languageRepository->getById($webData->defaultLanguage),
 			checkActive: $checkActive,
