@@ -93,7 +93,7 @@ trait CoreFileRepository
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
 		copy($tmpFile, $cloneFile);
 		Svg::make(file_get_contents($cloneFile))->saveAsPng($cloneFile);
-		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
+		$upload = $this->createFileUploadFromFile($cloneFile);
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 
@@ -108,7 +108,7 @@ trait CoreFileRepository
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
 		copy($tmpFile, $cloneFile);
 		Image::fromFile($cloneFile)->resize(1920, null)->save($cloneFile, type: ImageType::WEBP);
-		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
+		$upload = $this->createFileUploadFromFile($cloneFile);
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 
@@ -123,7 +123,7 @@ trait CoreFileRepository
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
 		copy($tmpFile, $cloneFile);
 		Image::fromFile($cloneFile)->save($cloneFile, type: ImageType::JPEG);
-		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
+		$upload = $this->createFileUploadFromFile($cloneFile);
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 
@@ -147,7 +147,7 @@ trait CoreFileRepository
 		$img->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
 		$jpeg = Image::fromString($img->getImageBlob());
 		$jpeg->save($cloneFile, type: ImageType::JPEG);
-		$upload = $this->createFileUploadFromString(base64_encode(file_get_contents($cloneFile)));
+		$upload = $this->createFileUploadFromFile($cloneFile);
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 
@@ -186,7 +186,6 @@ trait CoreFileRepository
 	public function createFileUploadFromString(string $upload): FileUpload
 	{
 		$content = base64_decode($upload);
-//		$name = Random::generate(8);
 		$name = substr(sha1($content), 0, 8);
 		$path = $this->dir->getTempDir() . '/' . $name;
 		$size = file_put_contents($path, $content);
@@ -200,9 +199,21 @@ trait CoreFileRepository
 	}
 
 
+	public function createFileUploadFromFile(string $file): FileUpload
+	{
+		$size = filesize($file);
+		return new FileUpload([
+			'name' => basename($file),
+			'full_path' => $file,
+			'size' => $size ?: 0,
+			'tmp_name' => $file,
+			'error' => $size ? UPLOAD_ERR_OK : UPLOAD_ERR_NO_FILE,
+		]);
+	}
+
+
 	public function createFileUploadFromContent(string $content, ?File $originalFile = null): FileUpload
 	{
-//		$name = $originalFile?->name ?: Random::generate(8);
 		$name = $originalFile?->name ?: substr(sha1($content), 0, 8);
 		$path = $this->dir->getTempDir() . '/' . $name;
 		$size = file_put_contents($path, $content);

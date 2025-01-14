@@ -15,6 +15,7 @@
 	},
 	"require": {
 		"php": ">=8.3",
+		"ext-imagick": "*",
 		"contributte/forms-multiplier": "^4.0",
 		"nette/application": "^3.2",
 		"nette/bootstrap": "^3.2",
