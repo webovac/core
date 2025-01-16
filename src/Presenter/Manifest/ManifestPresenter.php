@@ -32,17 +32,8 @@ class ManifestPresenter extends Presenter
 	public function actionDefault(): void
 	{
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
-		if (!$languageData) {
-			$this->error();
-		}
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
-		if (!$this->webData) {
-			$this->error();
-		}
 		$this->webTranslationData = $this->webData->getCollection('translations')->getById($languageData->id) ?? null;
-		if (!$this->webTranslationData) {
-			$this->error();
-		}
 	}
 
 
@@ -50,6 +41,7 @@ class ManifestPresenter extends Presenter
 	{
 		$this->template->webData = $this->webData;
 		$this->template->webTranslationData = $this->webTranslationData;
+		$this->template->lang = $this->dataModel->getLanguageData($this->webData->defaultLanguage)->shortcut;
 		$this->template->setFile(__DIR__ . '/manifest.latte');
 		$this->getHttpResponse()->setExpiration('1 month');
 	}

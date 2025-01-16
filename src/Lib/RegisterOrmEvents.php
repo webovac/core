@@ -14,7 +14,7 @@ class RegisterOrmEvents implements Service
 	) {}
 
 
-	public function registerOrmEvents(): void
+	public function register(): void
 	{
 		foreach ($this->withOrmEvents as $hasOrmEvents) {
 			$hasOrmEvents->registerOrmEvents();

@@ -31,7 +31,7 @@ trait CoreWebDataRepository
 	{
 		if (!isset($this->collection)) {
 			$this->collection = $this->cache->load(lcfirst($this->getName()), function () {
-				$this->cache->remove('routeList');
+				$this->cache->remove('routeSetup');
 				$this->cache->remove('web_aliases');
 				$collection = new Collection;
 				foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $entity) {

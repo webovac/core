@@ -44,9 +44,9 @@ trait CoreModule
 	}
 
 
-	public function getDescription(LanguageData $language): ?string
+	public function getDescription(): ?string
 	{
-		return $this->getTranslation($language)?->description;
+		return $this->getTranslation($this->dataProvider->getLanguageData())?->description;
 	}
 
 

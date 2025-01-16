@@ -39,9 +39,6 @@ class StylePresenter extends Presenter
 	public function actionDefault(): void
 	{
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
-		if (!$this->webData) {
-			$this->error();
-		}
 		$this->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
 		if ($this->cmsUser->isLoggedIn()) {
 			$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());

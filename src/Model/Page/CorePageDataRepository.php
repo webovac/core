@@ -26,7 +26,7 @@ trait CorePageDataRepository
 	{
 		if (!isset($this->collection)) {
 			$this->collection = $this->cache->load(lcfirst($this->getName()), function () {
-				$this->cache->remove('routeList');
+				$this->cache->remove('routeSetup');
 				$this->cache->remove('page_aliases');
 				$collection = new Collection;
 				$this->buildCollection($collection);

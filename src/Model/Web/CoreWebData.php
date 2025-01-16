@@ -83,6 +83,15 @@ trait CoreWebData
 	}
 
 
+	public function getPageRouteMask(): string
+	{
+		return '//'
+			. $this->host
+			. ($this->basePath ? ('/' . $this->basePath) : '')
+			. '[/<p .+>]';
+	}
+
+
 //	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
 //	{
 //		foreach (['iconFile', 'logoFile', 'backgroundFile'] as $name) {

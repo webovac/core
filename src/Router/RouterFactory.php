@@ -6,77 +6,301 @@ namespace Webovac\Core\Router;
 
 use App\Model\DataModel;
 use App\Model\Page\Page;
+use Nette\Application\BadRequestException;
 use Nette\Caching\Cache;
 use Nette\Routing\Route;
+use Nette\Routing\RouteList;
 
 
 final class RouterFactory
 {
+	private array $setup;
+
+
 	public function __construct(
 		private DataModel $dataModel,
 		private Cache $cache,
 	) {}
 
 
-	public function create(): CmsRouteList
+	public function create(): RouteList
 	{
-		return $this->cache->load('routeList', function() {
-			$routeList = new CmsRouteList;
-			foreach ($this->dataModel->webRepository->findAll() as $webData) {
+		$routeList = new RouteList;
+		$webDatas = $this->dataModel->webRepository->findAll();
+		foreach ($webDatas as $webData) {
+			$routeList->addRoute(
+				mask: $webData->getStyleRouteMask(),
+				metadata: $webData->getStyleRouteMetadata(),
+			);
+			foreach ($webData->translations as $webTranslationData) {
+				$languageData = $this->dataModel->getLanguageData($webTranslationData->language);
 				$routeList->addRoute(
-					mask: $webData->getStyleRouteMask(),
-					metadata: $webData->getStyleRouteMetadata(),
+					mask: $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
+					metadata: $webData->getManifestRouteMetadata($languageData->shortcut),
 				);
-				foreach ($webData->translations as $webTranslationData) {
-					$languageData = $this->dataModel->getLanguageData($webTranslationData->language);
-					$routeList->addRoute(
-						mask: $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-						metadata: $webData->getManifestRouteMetadata($languageData->shortcut),
-					);
-				}
 			}
-			foreach ($this->dataModel->pageRepository->findAll() as $pageData) {
-				if ($pageData->type !== Page::TYPE_PAGE) {
+		}
+		foreach (array_reverse((array) $webDatas) as $webData) {
+			$routeList->addRoute(
+				mask: $webData->getPageRouteMask(),
+				metadata: [
+					'presenter' => 'Home',
+					'action' => 'default',
+					'host' => $webData->host,
+					'basePath' => $webData->basePath,
+					null => [
+						Route::FilterIn => $this->filterIn(...),
+						Route::FilterOut => $this->filterOut(...),
+					],
+				],
+			);
+		}
+		return $routeList;
+	}
+
+
+	private function filterIn(array $params): array
+	{
+		$setup = $this->getSetup();
+		$r = [];
+		$p = explode('/', $params['p'] ?? '');
+		$ids = [];
+		foreach ($p as $key => $part) {
+			if (isset($setup['parts'][$part])) {
+				continue;
+			}
+			$p[$key] = '<id>';
+			$ids[] = $part;
+		}
+		$p = implode('/', $p);
+		$do = $params['do'] ?? null;
+		$base = '//' . $params['host'] . ($params['basePath'] ? '/' . $params['basePath'] : '');
+		$pageIn = $setup['mapIn'][$base][$p] ?? null;
+		if (!$pageIn) {
+			foreach ($setup['mapIn'][$base] as $pagePath => $pageSetup) {
+				if (!str_contains($pagePath, '<id>')) {
 					continue;
 				}
-				$parameters = [];
-				if (isset($pageData->parameters)) {
-					foreach ($pageData->parameters as $parameter) {
-						$parameters[] = "$parameter->query=<$parameter->parameter>";
+				$pParts = explode('/', $p);
+				$pagePathParts = explode('/', $pagePath);
+				if (count($pParts) !== count($pagePathParts)) {
+					continue;
+				}
+				$ids = [];
+				foreach ($pagePathParts as $key => $part) {
+					if ($part === '<id>') {
+						$ids[] = $pParts[$key];
+						$pParts[$key] = '<id>';
 					}
 				}
-				$signals = [];
-				if (isset($pageData->signals)) {
-					foreach ($pageData->signals as $signal) {
-						$signals[$signal->name] = $signal->signal;
-					}
-				}
-				foreach ($pageData->translations as $translationData) {
-					$languageData = $this->dataModel->languageRepository->getById($translationData->language);
-					if ($pageData->redirectPage) {
-						$p = $this->dataModel->pageRepository->getById($pageData->web . '-' . $pageData->redirectPage);
-					} else {
-						$p = $pageData;
-					}
-					$metadata = [
-						'presenter' => 'Home',
-						'action' => 'default',
-						'host' => $p->host,
-						'basePath' => $p->basePath,
-						'pageName' => $p->name,
-						'lang' => $languageData->shortcut,
-					];
-					if ($signals) {
-						$metadata['do'] = [Route::FilterTable => $signals];
-					}
-					$routeList->addRoute(
-						mask: $translationData->fullPath . ($parameters || $signals ? (' ? ' . implode(' & ', $parameters) . ($signals ? ' & do=<do>' : ''))  : ''),
-						metadata: $metadata,
-						oneWay: (bool) $pageData->redirectPage,
-					);
+				$newP = implode('/', $pParts);
+				if ($newP === $pagePath) {
+					$pageIn = $pageSetup;
+					break;
 				}
 			}
-			return $routeList;
-		});
+		}
+		if (!$pageIn) {
+			throw new BadRequestException;
+		}
+		$return = [
+			'presenter' => 'Home',
+			'action' => 'default',
+			'host' => $pageIn['host'],
+			'basePath' => $pageIn['basePath'],
+			'pageName' => $pageIn['pageName'],
+			'lang' => $pageIn['lang'],
+		];
+		if ($pageIn['id']) {
+			$newIds = [];
+			foreach ($pageIn['id'] as $key => $name) {
+				$newIds[$name] = $ids[$key];
+			}
+			$return['id'] = $newIds;
+		}
+		if ($do) {
+			$return['do'] = $pageIn['signals'][$do] ?? $do;
+		}
+		foreach ($params as $key => $value) {
+			if (isset($return[$pageIn['parameters'][$key] ?? $key])) {
+				continue;
+			}
+			$return[$pageIn['parameters'][$key] ?? $key] = $value;
+		}
+		return $return;
 	}
+
+
+	private function filterOut(array $params): array
+	{
+		$setup = $this->getSetup();
+		$pageName = $params['pageName'];
+		$lang = $params['lang'];
+		$do = $params['do'] ?? null;
+		$id = array_values($params['id'] ?? []);
+		//$path = $params['path'];
+		$base = '//' . $params['host'] . ($params['basePath'] ? '/' . $params['basePath'] : '');
+		$pageOut = $setup['mapOut'][$base][$lang][$pageName];
+		if ($p = $pageOut['p']) {
+			$p = explode('/', $pageOut['p']);
+			foreach ($p as $key => $word) {
+				if ($word === '<id>') {
+					$p[$key] = array_shift($id);
+				}
+			}
+			$p = implode('/', $p);
+		}
+		$return = [
+			'presenter' => 'Home',
+			'action' => 'default',
+			'host' => $pageOut['host'],
+			'basePath' => $pageOut['basePath'],
+			'p' => $p ?: null,
+		];
+		if ($do) {
+			$return['do'] = $pageOut['signals'][$do] ?? $do;
+		}
+		foreach ($params as $key => $value) {
+			if (isset($return[$pageOut['parameters'][$key] ?? $key]) || in_array($key, ['pageName', 'lang', 'id', 'path'], true)) {
+				continue;
+			}
+			$return[$pageOut['parameters'][$key] ?? $key] = $value;
+		}
+		return $return;
+	}
+
+
+	private function getSetup(): array
+	{
+		if (!isset($this->setup)) {
+			$this->setup = $this->cache->load('routeSetup', function() {
+				$setup = [
+					'mapIn' => [],
+					'mapOut' => [],
+					'parts' => [],
+				];
+				foreach ($this->dataModel->pageRepository->findAll() as $pageData) {
+					if ($pageData->type !== Page::TYPE_PAGE) {
+						continue;
+					}
+					foreach ($pageData->translations as $translationData) {
+						$languageData = $this->dataModel->languageRepository->getById($translationData->language);
+						if ($pageData->redirectPage) {
+							$p = $this->dataModel->pageRepository->getById($pageData->web . '-' . $pageData->redirectPage);
+						} else {
+							$p = $pageData;
+						}
+						$base = '//' . $p->host . ($p->basePath ? '/' . $p->basePath : '');
+						$fullPath = str_replace($base, '', $translationData->fullPath);
+						preg_match_all('/<id\[(.+?)\]>/', $fullPath, $m);
+						$fullPath = preg_replace('/<id\[(.+?)\]>/', '<id>', $fullPath);
+						$fullPath = trim($fullPath, '/');
+						foreach (explode('/', $fullPath) as $part) {
+							if ($part === '<id>' || isset($setup['parts'][$part])) {
+								continue;
+							}
+							$setup['parts'][$part] = $part;
+						}
+						$parameters = [];
+						if (isset($pageData->parameters)) {
+							foreach ($pageData->parameters as $parameter) {
+								$parameters[$parameter->query] = $parameter->parameter;
+							}
+						}
+						$signals = [];
+						if (isset($pageData->signals)) {
+							foreach ($pageData->signals as $signal) {
+								$signals[$signal->name] = $signal->signal;
+							}
+						}
+						$setup['mapIn'][$base][$fullPath] = [
+							'presenter' => 'Home',
+							'action' => 'default',
+							'host' => $p->host,
+							'basePath' => $p->basePath,
+							'pageName' => $p->name,
+							'lang' => $languageData->shortcut,
+							'id' => $m[1],
+							'signals' => $signals,
+							'parameters' => $parameters,
+						];
+						$setup['mapOut'][$base][$languageData->shortcut][$p->name] = [
+							'presenter' => 'Home',
+							'action' => 'default',
+							'host' => $p->host,
+							'basePath' => $p->basePath,
+							'p' => trim($fullPath, '/'),
+							'signals' => array_flip($signals),
+							'parameters' => array_flip($parameters),
+						];
+					}
+				}
+				return $setup;
+			});
+		}
+		return $this->setup;
+	}
+
+
+//	public function createOld(): CmsRouteList
+//	{
+//		return $this->cache->load('routeSetup', function() {
+//			$routeList = new CmsRouteList;
+//			foreach ($this->dataModel->webRepository->findAll() as $webData) {
+//				$routeList->addRoute(
+//					mask: $webData->getStyleRouteMask(),
+//					metadata: $webData->getStyleRouteMetadata(),
+//				);
+//				foreach ($webData->translations as $webTranslationData) {
+//					$languageData = $this->dataModel->getLanguageData($webTranslationData->language);
+//					$routeList->addRoute(
+//						mask: $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
+//						metadata: $webData->getManifestRouteMetadata($languageData->shortcut),
+//					);
+//				}
+//			}
+//			foreach ($this->dataModel->pageRepository->findAll() as $pageData) {
+//				if ($pageData->type !== Page::TYPE_PAGE) {
+//					continue;
+//				}
+//				$parameters = [];
+//				if (isset($pageData->parameters)) {
+//					foreach ($pageData->parameters as $parameter) {
+//						$parameters[] = "$parameter->query=<$parameter->parameter>";
+//					}
+//				}
+//				$signals = [];
+//				if (isset($pageData->signals)) {
+//					foreach ($pageData->signals as $signal) {
+//						$signals[$signal->name] = $signal->signal;
+//					}
+//				}
+//				foreach ($pageData->translations as $translationData) {
+//					$languageData = $this->dataModel->languageRepository->getById($translationData->language);
+//					if ($pageData->redirectPage) {
+//						$p = $this->dataModel->pageRepository->getById($pageData->web . '-' . $pageData->redirectPage);
+//					} else {
+//						$p = $pageData;
+//					}
+//					$metadata = [
+//						'presenter' => 'Home',
+//						'action' => 'default',
+//						'host' => $p->host,
+//						'basePath' => $p->basePath,
+//						'pageName' => $p->name,
+//						'lang' => $languageData->shortcut,
+//					];
+//					if ($signals) {
+//						$metadata['do'] = [Route::FilterTable => $signals];
+//					}
+//					$routeList->addRoute(
+//						mask: $translationData->fullPath . ($parameters || $signals ? (' ? ' . implode(' & ', $parameters) . ($signals ? ' & do=<do>' : ''))  : ''),
+//						metadata: $metadata,
+//						oneWay: (bool) $pageData->redirectPage,
+//					);
+//				}
+//			}
+//			return $routeList;
+//		});
+//	}
 }

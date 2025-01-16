@@ -78,49 +78,25 @@ trait CorePresenter
 	private ?Preference $preference;
 	private ?CmsEntity $entity = null;
 	/** @var CmsEntity[] */ private ?array $entityList = null;
-	private string $title;
 	public array $components = [];
 
 
 	public function injectCoreStartup(): void
 	{
 		$this->onStartup[] = function () {
-			$this->registerOrmEvents->registerOrmEvents();
+			$this->registerOrmEvents->register();
 			if ($this->cmsUser->isLoggedIn()) {
 				if (!$this->cmsUser->getPerson()) {
 					$this->cmsUser->logout();
 					$this->redirect('this');
 				}
 			}
-			$this->addComponents(Core::getModuleName(), CoreControl::class);
 			$this->languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
-			if (!$this->languageData) {
-				$this->error();
-			}
-			$this->dataProvider->setLanguageData($this->languageData);
-			$this->translator->setLanguageData($this->languageData);
-			$this->templateFactory->onCreate[] = function (Template $template) {
-				$template->getLatte()->setLocale($this->languageData->shortcut);
-			};
 			$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
-			if (!$this->webData) {
-				$this->error();
-			}
-			$this->dataProvider->setWebData($this->webData);
 			$this->webTranslationData = $this->webData->getCollection('translations')->getById($this->languageData->id) ?? null;
-			if (!$this->webTranslationData) {
-				$this->error();
-			}
 			$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->getParameter('pageName') ?: 'Home');
-			if (!$this->pageData) {
-				$this->error();
-			}
-			$this->dataProvider->setPageData($this->pageData);
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
-			if (!$this->pageTranslation) {
-				$this->error();
-			}
-			$this->pageTranslationData = $this->pageData->getCollection('translations')->getById($this->languageData->id) ?? null;
+//			$this->pageTranslationData = $this->pageData->getCollection('translations')->getById($this->languageData->id) ?? null;
 			try {
 				$this->pageData->checkRequirements($this->cmsUser);
 			} catch (MissingPermissionException $e) {
@@ -134,9 +110,6 @@ trait CorePresenter
 					throw new InvalidStateException;
 				}
 				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
-				if (!$lastDetailRootPage) {
-					$this->error();
-				}
 				$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
 				$this->entity = $repository->getByParameters($this->getParameter('id'), $this->getParameter('path'), $this->webData);
 				if ($this->getParameter('path')) {
@@ -158,11 +131,21 @@ trait CorePresenter
 					}
 				}
 			}
-			$this->title = $this->entity ? $this->entity->getTitle() : $this->pageTranslation->title;
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
-			$this->dataProvider->setNavigationPageData($this->navigationPageData);
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
-			$this->dataProvider->setButtonsPageData($this->buttonsPageData);
+
+
+			$this->translator->setLanguageData($this->languageData);
+			$this->templateFactory->onCreate[] = function (Template $template) {
+				$template->getLatte()->setLocale($this->languageData->shortcut);
+			};
+			$this->dataProvider
+				->setLanguageData($this->languageData)
+				->setWebData($this->webData)
+				->setPageData($this->pageData)
+				->setNavigationPageData($this->navigationPageData)
+				->setButtonsPageData($this->buttonsPageData);
+
 			$this->buildCrumbs();
 		};
 	}
@@ -171,7 +154,6 @@ trait CorePresenter
 	public function injectCoreRender(): void
 	{
 		$this->onRender[] = function () {
-//			$this->template->getLatte()->setLocale($this->languageData->shortcut);
 			$this->template->languageData = $this->languageData;
 			$this->template->webData = $this->webData;
 			if ($this->webData->iconFile) {
@@ -182,14 +164,15 @@ trait CorePresenter
 			$this->template->pageData = $this->pageData;
 			$this->template->imageUrl = $this->getImageUrl();
 			$this->template->pageTranslation = $this->pageTranslation;
-			$this->template->pageTranslationData = $this->pageTranslationData;
 			$this->template->hasSideMenu = (bool) $this->navigationPageData;
 			$this->template->entity = $this->entity;
-			$entityName = $this->entity?->getRepository()->getMapper()->getTableName() instanceof Fqn ? $this->entity?->getRepository()->getMapper()->getTableName()->name : $this->entity?->getRepository()->getMapper()->getTableName();
+			$entityName = $this->entity?->getRepository()->getMapper()->getTableName() instanceof Fqn
+				? $this->entity?->getRepository()->getMapper()->getTableName()->name
+				: $this->entity?->getRepository()->getMapper()->getTableName();
 			$this->template->entityName = $entityName;
 			$this->template->description = $this->getDescription();
-			$this->template->title = $this->title;
-			$this->template->metaTitle = (!$this->entity || !$this->pageData->isDetailRoot ? $this->pageTranslationData->title : '')
+			$this->template->title = $this->getTitle();
+			$this->template->metaTitle = (!$this->entity || !$this->pageData->isDetailRoot ? $this->pageTranslation->title : '')
 				. ($this->entity && !$this->pageData->isDetailRoot ? ' | ' : '' )
 				. ($this->entity ? $this->entity->getTitle() : '');
 			$this->template->metaType = $entityName ?: 'page';
@@ -263,43 +246,10 @@ trait CorePresenter
 	}
 
 
-	private function addComponents(string $module, string $className): void
-	{
-		foreach ($this->getComponentList($className) as $key => $value) {
-			$this->components[] = [
-				'name' => $module . '-' . (is_numeric($key) ? $value : $key),
-				'requires' => is_numeric($key) ? null : Arrays::last(explode('\\', $value)),
-			];
-		}
-	}
-
-
-	/**
-	 * @throws ReflectionException
-	 */
-	private function getComponentList(string $className): array
-	{
-		$return = [];
-		$rf = new ReflectionClass($className);
-		foreach ($rf->getMethods() as $method) {
-			preg_match('/createComponent(.+)/', $method->getName(), $m);
-			if (!isset($m[1])) {
-				continue;
-			}
-			if ($ar = $method->getAttributes(RequiresEntity::class)) {
-				$return[lcfirst($m[1])] = $ar[0]->getArguments()[0];
-			} else {
-				$return[] = lcfirst($m[1]);
-			}
-		}
-		return $return;
-	}
-
-
 	private function buildCrumbs(): void
 	{
 		$parameters = [];
-		foreach ($this->dataModel->getPageData($this->webData->id, $this->pageData->id)->parentPages as $id) {
+		foreach ($this->pageData->parentPages as $id) {
 			$pageData = $this->dataModel->getPageData($this->webData->id, $id);
 			$title = $pageData->getCollection('translations')->getById($this->languageData->id)->title;
 			if ($pageData->hasParameter) {
@@ -352,11 +302,19 @@ trait CorePresenter
 	}
 
 
+	private function getTitle(): ?string
+	{
+		return $this->entity && method_exists($this->entity, 'getTitle')
+			? $this->entity->getTitle()
+			: $this->pageTranslation->title;
+	}
+
+
 	private function getDescription(): ?string
 	{
 		return $this->entity && method_exists($this->entity, 'getDescription')
-			? $this->entity->getDescription($this->languageData)
-			: $this->pageTranslationData->description;
+			? $this->entity->getDescription()
+			: $this->pageTranslation->description;
 	}
 
 
