@@ -62,7 +62,6 @@ final class RouterFactory
 	private function filterIn(array $params): array
 	{
 		$setup = $this->getSetup();
-		$r = [];
 		$p = explode('/', $params['p'] ?? '');
 		$ids = [];
 		foreach ($p as $key => $part) {
@@ -122,10 +121,11 @@ final class RouterFactory
 			$return['do'] = $pageIn['signals'][$do] ?? $do;
 		}
 		foreach ($params as $key => $value) {
-			if (isset($return[$pageIn['parameters'][$key] ?? $key])) {
+			$name = $pageOut['parameters'][$key] ?? $key;
+			if (isset($return[$name])) {
 				continue;
 			}
-			$return[$pageIn['parameters'][$key] ?? $key] = $value;
+			$return[$name] = $value;
 		}
 		return $return;
 	}
@@ -161,10 +161,11 @@ final class RouterFactory
 			$return['do'] = $pageOut['signals'][$do] ?? $do;
 		}
 		foreach ($params as $key => $value) {
-			if (isset($return[$pageOut['parameters'][$key] ?? $key]) || in_array($key, ['pageName', 'lang', 'id', 'path'], true)) {
+			$name = $pageOut['parameters'][$key] ?? $key;
+			if (isset($return[$name]) || in_array($key, ['pageName', 'lang', 'id', 'path'], true)) {
 				continue;
 			}
-			$return[$pageOut['parameters'][$key] ?? $key] = $value;
+			$return[$name] = $value;
 		}
 		return $return;
 	}
