@@ -30,8 +30,8 @@ trait CoreTemplate
 		$moduleRf = new ReflectionClass($moduleClass);
 		$dir = dirname($moduleRf->getFileName());
 		$componentRf = new ReflectionClass($componentClass);
-		$componentName = lcfirst(str_replace('Control', '', $componentRf->getShortName()));
-		if (!file_exists($path = "$dir/templates/$componentName.$templateName.latte")) {
+		$componentName = str_replace('Control', '', $componentRf->getShortName());
+		if (!file_exists($path = "$dir/Control/$componentName/$templateName.latte")) {
 			throw new InvalidArgumentException("Template '$path' does not exist.");
 		}
 		$this->render($path, $params);

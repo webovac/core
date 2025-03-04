@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Web;
 
 use App\Model\Language\LanguageData;
+use App\Model\Page\PageData;
 use App\Model\Page\PageDataRepository;
 use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationDataRepository;
+use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
@@ -27,30 +29,36 @@ trait CoreWebDataRepository
 	 * @return Collection<Item>
 	 * @throws Throwable
 	 */
-	protected function getCollection(): Collection
+	protected function buildCache(): void
 	{
-		if (!isset($this->collection)) {
-			$this->collection = $this->cache->load(lcfirst($this->getName()), function () {
-				$this->cache->remove('routeSetup');
-				$this->cache->remove('web_aliases');
-				$collection = new Collection;
-				foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $entity) {
-					$collection[$this->getIdentifier($entity)] = $entity->getData();
-				}
-				return $collection;
-			});
+		if (isset($this->collection)) {
+			return;
 		}
-		return $this->collection;
+		$this->cache->remove('routeSetup');
+		$this->cache->remove('webAliases');
+		$this->cache->clean([Cache::Tags => lcfirst($this->getName())]);
+		$items = [];
+		foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $entity) {
+			$key = $this->getIdentifier($entity);
+			$item = $entity->getData(forCache: true);
+			$rootPageIds = [];
+			foreach ($entity->getPagesForMenu() as $page) {
+				$rootPageIds[] = $page->id;
+			}
+			$item->rootPages = $rootPageIds;
+			$this->cacheItem($key, $item);
+			$this->addItemToCollection($key, $item);
+		}
 	}
 
 
-	protected function getAliases(): array
+	public function getAliases(): array
 	{
 		if (!isset($this->aliases)) {
-			$this->aliases = $this->cache->load(lcfirst($this->getName()) . '_aliases', function () {
+			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
 				$aliases = [];
 				/** @var WebData $web */
-				foreach ($this->getCollection() as $web) {
+				foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $web) {
 					$aliases["$web->host-$web->basePath"] = $web->id;
 				}
 				return $aliases;
@@ -60,7 +68,7 @@ trait CoreWebDataRepository
 	}
 
 
-	public function getId(string $host, ?string $basePath): ?int
+	public function getKey(string $host, ?string $basePath): ?int
 	{
 		return $this->getAliases()["$host-$basePath"] ?? null;
 	}

@@ -14,6 +14,7 @@ use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Control\PageItem\IPageItemControl;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
+use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Model\LinkableTrait;
 use Webovac\Core\Model\RenderableTrait;
 
@@ -71,6 +72,7 @@ trait CorePage
 		Page::STYLE_DARK => 'Dark',
 	];
 
+	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public IPageItemControl $component;
 
 

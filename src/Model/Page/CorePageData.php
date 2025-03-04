@@ -8,6 +8,7 @@ use App\Model\DataModel;
 use App\Model\File\FileData;
 use App\Model\Language\LanguageData;
 use App\Model\Page\Page;
+use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Parameter\ParameterData;
 use App\Model\Parameter\QueryNameData;
@@ -18,8 +19,10 @@ use DateTimeInterface;
 use Nette\Application\IPresenter;
 use Nette\Utils\Arrays;
 use ReflectionException;
+use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
+use Stepapo\Utils\Attribute\DontCache;
 use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Attribute\Type;
 use Webovac\Core\Exception\LoginRequiredException;
@@ -60,10 +63,10 @@ trait CorePageData
 	public ?string $targetPath;
 	public ?string $targetSignal;
 	public ?int $layoutWidth;
-	public int|string|null $createdByPerson;
-	public int|string|null $updatedByPerson;
-	public ?DateTimeInterface $createdAt;
-	public ?DateTimeInterface $updatedAt;
+	#[DontCache] public int|string|null $createdByPerson;
+	#[DontCache] public int|string|null $updatedByPerson;
+	#[DontCache] public ?DateTimeInterface $createdAt;
+	#[DontCache] public ?DateTimeInterface $updatedAt;
 
 	### for CachedModel ###
 
@@ -80,6 +83,7 @@ trait CorePageData
 	public ?int $buttonsPage;
 	/** @var int[] */ public array|null $parentPages;
 	/** @var int[] */ public array|null $parentDetailRootPages;
+	/** @var int[] */ public array|null $childPageIds;
 
 
 	/**
@@ -152,10 +156,42 @@ trait CorePageData
 			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->style ? ($this->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->style ? ' btn btn-subtle-' . $this->style : ''),
 		}
-			. (($this->id === $presenter->pageData->id && (!$linkedEntity || $linkedEntity === $entity))
+			. ((($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
 			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $this->targetPath))
 			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $this->targetPath)) ? ' active' : '')
 			;
+	}
+
+
+	/** @return Collection<PageData> */
+	public function getChildPageDatas(DataModel $dataModel, WebData $webData, CmsUser $cmsUser, ?CmsEntity $entity = null): Collection
+	{
+		$pageDatas = [];
+		foreach ($this->childPageIds as $childPageId) {
+			$pageData = $dataModel->getPageData($webData->id, $childPageId);
+			$pageDataToCheck = $pageData->type === Page::TYPE_INTERNAL_LINK
+				? $dataModel->getPageData($webData->id, $pageData->targetPage)
+				: $pageData;
+			if ($pageDataToCheck->checkPageRequirements($webData, $cmsUser, $entity)) {
+				$pageDatas[] = $pageData;
+			}
+		}
+		uasort($pageDatas, fn(PageData $a, PageData $b) => $a->rank <=> $b->rank);
+		return new Collection($pageDatas);
+	}
+
+
+	public function checkPageRequirements(WebData $webData, CmsUser $cmsUser, ?CmsEntity $entity = null): bool
+	{
+		if (!$this->isUserAuthorized($cmsUser)) {
+			return false;
+		}
+		if ($this->authorizingTag && $entity) {
+			if (!$entity->checkRequirements($cmsUser, $webData, $this->authorizingTag)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 

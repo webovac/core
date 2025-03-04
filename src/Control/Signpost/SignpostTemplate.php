@@ -14,6 +14,7 @@ use Webovac\Core\Model\CmsEntity;
 class SignpostTemplate extends BaseTemplate
 {
 	public WebData $webData;
+	public PageData $pageData;
 	public ?CmsEntity $entity;
 	/** @var Collection<PageData> */ public Collection $pageDatas;
 }

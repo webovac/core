@@ -93,10 +93,10 @@ trait CorePresenter
 			}
 			$this->languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 			$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
-			$this->webTranslationData = $this->webData->getCollection('translations')->getById($this->languageData->id) ?? null;
+			$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
 			$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->getParameter('pageName') ?: 'Home');
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
-//			$this->pageTranslationData = $this->pageData->getCollection('translations')->getById($this->languageData->id) ?? null;
+//			$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
 			try {
 				$this->pageData->checkRequirements($this->cmsUser);
 			} catch (MissingPermissionException $e) {
@@ -125,8 +125,8 @@ trait CorePresenter
 			if ($this->cmsUser->isLoggedIn()) {
 				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
 				if ($this->preference && $this->preference->language) {
-					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getById($this->preference->language->id)) {
-						$languageData = $this->dataModel->languageRepository->getById($this->preference->language->id);
+					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)) {
+						$languageData = $this->dataModel->getLanguageData($this->preference->language->id);
 						$this->lang = $languageData->shortcut;
 					}
 				}
@@ -251,7 +251,7 @@ trait CorePresenter
 		$parameters = [];
 		foreach ($this->pageData->parentPages as $id) {
 			$pageData = $this->dataModel->getPageData($this->webData->id, $id);
-			$title = $pageData->getCollection('translations')->getById($this->languageData->id)->title;
+			$title = $pageData->getCollection('translations')->getByKey($this->languageData->id)->title;
 			if ($pageData->hasParameter) {
 				if ($this->getParameter('id')) {
 					$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($pageData->parentDetailRootPages));

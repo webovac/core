@@ -8,6 +8,7 @@ use App\Model\DataModel;
 use App\Model\Page\PageData;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\ModuleChecker;
@@ -26,6 +27,7 @@ class NavigationControl extends BaseControl
 		private ModuleChecker $moduleChecker,
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
+		private CmsUser $cmsUser,
 	) {}
 
 
@@ -34,8 +36,8 @@ class NavigationControl extends BaseControl
 	 */
 	public function render(): void
 	{
-		$pageData = $this->dataProvider->getNavigationPageData();
-		if (!$pageData) {
+		$navigationPageData = $this->dataProvider->getNavigationPageData();
+		if (!$navigationPageData) {
 			return;
 		}
 		$webData = $this->dataProvider->getWebData();
@@ -43,20 +45,29 @@ class NavigationControl extends BaseControl
 		if ($this->entityList && method_exists($this->entity, 'getMenuItems')) {
 			$this->template->entityMenuItems = $this->entity->getMenuItems();
 		}
-		$this->template->pageDatas = $this->dataModel->getChildPageDatas($webData, $pageData, $languageData, $this->entity);
+		$this->template->pageDatas = $navigationPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$this->template->layoutData = $this->dataProvider->getLayoutData();
 		}
-		$this->template->activePageData = $pageData;
-		$this->template->icon = ($this->entity && $pageData->isDetailRoot && method_exists($this->entity, 'getIcon')
-			? $this->entity->getIcon() : null) ?: $pageData->icon;
-		$this->template->title = $this->entity && $pageData->hasParameter
+		$this->template->activePageData = $navigationPageData;
+		$this->template->icon = ($this->entity && $navigationPageData->isDetailRoot && method_exists($this->entity, 'getIcon')
+			? $this->entity->getIcon() : null) ?: $navigationPageData->icon;
+		$this->template->title = $this->entity && $navigationPageData->hasParameter
 			? $this->entity->getTitle()
-			: $pageData->getCollection('translations')->getById($languageData->id)->title;
+			: $navigationPageData->getCollection('translations')->getByKey($languageData->id)->title;
+		$this->template->imageIdentifier = $this->entity && method_exists($this->entity, 'getImageIdentifier')
+			? $this->entity->getImageIdentifier()
+			: null;
+		$this->template->imageUrl = $this->entity && method_exists($this->entity, 'getImageUrl')
+			? $this->entity->getImageUrl()
+			: null;
 		$this->template->webData = $webData;
 		$this->template->dataModel = $this->dataModel;
 		$this->template->entity = $this->entity;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null, bool $checkActive = true) use ($webData, $languageData) {
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData, $navigationPageData) {
+			$checkActive = $pageData->targetPage
+				? $pageData->targetPage !== $navigationPageData->id
+				: $pageData->id !== $navigationPageData->id;
 			$this->menuItemRenderer->render('secondary', $this, $webData, $pageData, $languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/navigation.latte');

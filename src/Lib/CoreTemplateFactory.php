@@ -30,7 +30,7 @@ trait CoreTemplateFactory
 			$template->addFilter('tint', [$this, 'tint']);
 			$template->addFilter('shade', [$this, 'shade']);
 			$template->addFunction('isModuleInstalled', fn(string $name) => $this->moduleChecker->isModuleInstalled($name));
-			$template->addFunction('core', fn(string $name) => __DIR__ . '/../templates/' . $name . '.latte');
+			$template->addFunction('core', fn(string $name) => __DIR__ . "/../templates/$name.latte");
 		};
 	}
 

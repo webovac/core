@@ -7,8 +7,10 @@ namespace Webovac\Core\Model\Language;
 use App\Model\Language\LanguageData;
 use App\Model\LanguageTranslation\LanguageTranslation;
 use App\Model\Log\Log;
+use Nette\DI\Attributes\Inject;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
+use Webovac\Core\Lib\DataProvider;
 
 
 /**
@@ -16,6 +18,9 @@ use Webovac\Core\IndexTranslationDefinition;
  */
 trait CoreLanguage
 {
+	#[Inject] public DataProvider $dataProvider;
+
+
 	public function getTranslation(LanguageData $language): ?LanguageTranslation
 	{
 		return $this->translations->toCollection()->getBy(['translationLanguage' => $language->id]);

@@ -7,6 +7,7 @@ namespace Webovac\Core\Control\Buttons;
 use App\Model\DataModel;
 use App\Model\Page\PageData;
 use Webovac\Core\Control\BaseControl;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Model\CmsEntity;
@@ -22,22 +23,26 @@ class ButtonsControl extends BaseControl
 		private DataModel $dataModel,
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
+		private CmsUser $cmsUser,
 	) {}
 
 
 	public function render(): void
 	{
-		$pageData = $this->dataProvider->getButtonsPageData();
-		if (!$pageData) {
+		$buttonsPageData = $this->dataProvider->getButtonsPageData();
+		if (!$buttonsPageData) {
 			return;
 		}
 		$webData = $this->dataProvider->getWebData();
 		$languageData = $this->dataProvider->getLanguageData();
-		$this->template->pageData = $pageData;
-		$this->template->pageDatas = $this->dataModel->getChildPageDatas($webData, $pageData, $languageData, $this->entity);
+		$this->template->pageData = $buttonsPageData;
+		$this->template->pageDatas = $buttonsPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null, bool $checkActive = true) use ($webData, $languageData) {
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData, $buttonsPageData) {
+			$checkActive = $pageData->targetPage
+				? $pageData->targetPage !== $buttonsPageData->id
+				: $pageData->id !== $buttonsPageData->id;
 			$this->menuItemRenderer->render('buttons', $this, $webData, $pageData, $languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/buttons.latte');

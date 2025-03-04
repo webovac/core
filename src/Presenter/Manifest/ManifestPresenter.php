@@ -33,7 +33,7 @@ class ManifestPresenter extends Presenter
 	{
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
-		$this->webTranslationData = $this->webData->getCollection('translations')->getById($languageData->id) ?? null;
+		$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($languageData->id) ?? null;
 	}
 
 

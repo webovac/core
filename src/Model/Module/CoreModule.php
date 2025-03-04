@@ -8,9 +8,11 @@ use App\Model\Language\LanguageData;
 use App\Model\Log\Log;
 use App\Model\ModuleTranslation\ModuleTranslation;
 use App\Model\Page\Page;
+use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
+use Webovac\Core\Lib\DataProvider;
 
 
 /**
@@ -18,6 +20,9 @@ use Webovac\Core\IndexTranslationDefinition;
  */
 trait CoreModule
 {
+	#[Inject] public DataProvider $dataProvider;
+
+
 	public function getTranslation(LanguageData $language): ?ModuleTranslation
 	{
 		return $this->translations->toCollection()->getBy(['language' => $language->id]);

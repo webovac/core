@@ -2,7 +2,13 @@
 <div class="mobile-collapsed wrapper navigation-wrapper secondary-navigation-wrapper" n:if="$activePageData->providesNavigation" n:snippet>
 	<div class="navigation secondary-navigation">
 		<div class="title">
-			<i n:if="$icon" class="fadl fa-fw fa-{$icon}"></i>
+			{if $imageIdentifier}
+				<img n:img="$imageIdentifier, '80x80'" width="40" height="40" class="rounded-5">
+			{elseif $imageUrl}
+				<img src="{$baseUrl}/{$imageUrl}" height="40">
+			{elseif $icon}
+				<i class="fadl fa-fw fa-{$icon}"></i>
+			{/}
 			<span>{$title}</span>
 		</div>
 		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw {$layoutData->secondaryIcon ?? fas} fa-bars"></i></a>
@@ -13,7 +19,7 @@
 				{/}
 			{/}
 			{if $pageDatas->count() > 0}
-				{renderMenuItem($activePageData, checkActive: false)}
+				{renderMenuItem($activePageData)}
 				{foreach $pageDatas as $p}
 					{renderMenuItem($p)}
 				{/}

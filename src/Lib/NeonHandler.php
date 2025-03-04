@@ -15,9 +15,6 @@ use Stepapo\Utils\Service;
 use Webovac\Core\Definition\Manipulation;
 
 
-/**
- * @author Jan Tvrdík
- */
 class NeonHandler implements IExtensionHandler, Service
 {
 	public function __construct(

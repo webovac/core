@@ -8,10 +8,12 @@ use App\Model\Language\LanguageData;
 use App\Model\Log\Log;
 use App\Model\Page\Page;
 use App\Model\WebTranslation\WebTranslation;
+use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
+use Webovac\Core\Lib\DataProvider;
 
 
 /**
@@ -22,6 +24,8 @@ trait CoreWeb
 	public const string DEFAULT_COLOR = '#2196f3';
 	public const string DEFAULT_COMPLEMENTARY_COLOR = '#cccccc';
 	public const string DEFAULT_ICON_BACKGROUND_COLOR = '#d3eafd';
+
+	#[Inject] public DataProvider $dataProvider;
 
 
 	public function getterTitle(): string

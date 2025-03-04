@@ -51,7 +51,7 @@ class SidePanelControl extends BaseControl
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$layoutData = $this->dataModel->getLayoutData($webData->layout);
 			$this->template->layoutData = $layoutData;
-			$this->template->themeDatas = $this->dataModel->themeRepository->findByIds($layoutData->themes);
+			$this->template->themeDatas = $this->dataModel->findThemeDatas($layoutData->themes);
 			$this->template->themeDatas->uasort(fn(ThemeData $a, ThemeData $b) => str_contains('dark', $a->code) !== str_contains('dark', $b->code) ? -1 : 1);
 		}
 		foreach ($this->dataModel->getPageData($webData->id, $pageData->id)->getCollection('translations') as $translationData) {
@@ -63,9 +63,9 @@ class SidePanelControl extends BaseControl
 		$showAdmin =  $adminPageData?->isUserAuthorized($this->cmsUser) ?: false;
 		$this->template->showAdmin = $showAdmin;
 		if ($showAdmin) {
-			$this->template->languageShortcuts = $this->dataModel->languageRepository->findAllPairs();
+			$this->template->languageShortcuts = $this->dataModel->languageRepository->findAllPairs($webData);
 			$this->template->pageModuleData = $pageData->module ? $this->dataModel->getModuleData($pageData->module) : null;
-			$this->template->webDatas = $this->dataModel->getWebDatas();
+			$this->template->webDatas = $this->dataModel->findWebDatas();
 			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
 		}
 		$this->template->render(__DIR__ . '/sidePanel.latte');

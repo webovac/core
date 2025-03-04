@@ -11,8 +11,6 @@ use Nextras\Orm\Entity\IEntity;
 
 interface HasPages extends IEntity
 {
-	/** @return ICollection<Page> */
-	function getPages(): ICollection;
-	/** @return ICollection<Page> */
-	function getPagesForMenu(): ICollection;
+	/** @return ICollection<Page> */ function getPages(): ICollection;
+	/** @return ICollection<Page> */ function getPagesForMenu(): ICollection;
 }

@@ -15,10 +15,10 @@ trait CoreLanguageDataRepository
 	protected function getAliases(): array
 	{
 		if (!isset($this->aliases)) {
-			$this->aliases = $this->cache->load(lcfirst($this->getName()) . '_aliases', function () {
+			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
 				$aliases = [];
 				/** @var LanguageData $page */
-				foreach ($this->getCollection() as $language) {
+				foreach ($this->getOrmRepository()->findAll() as $language) {
 					$aliases[$language->shortcut] = $language->id;
 				}
 				return $aliases;
@@ -30,15 +30,11 @@ trait CoreLanguageDataRepository
 
 	public function findAllPairs(): array
 	{
-		$return = [];
-		foreach ($this->findAll() as $languageData) {
-			$return[$languageData->id] = $languageData->shortcut;
-		}
-		return $return;
+		return array_flip($this->getAliases());
 	}
 
 
-	public function getId(string $shortcut): ?int
+	public function getKey(string $shortcut): ?int
 	{
 		return $this->getAliases()[$shortcut] ?? null;
 	}

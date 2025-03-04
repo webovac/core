@@ -26,7 +26,7 @@ final class RouterFactory
 	public function create(): RouteList
 	{
 		$routeList = new RouteList;
-		$webDatas = $this->dataModel->webRepository->findAll();
+		$webDatas = $this->dataModel->findWebDatas();
 		foreach ($webDatas as $webData) {
 			$routeList->addRoute(
 				mask: $webData->getStyleRouteMask(),
@@ -121,7 +121,7 @@ final class RouterFactory
 			$return['do'] = $pageIn['signals'][$do] ?? $do;
 		}
 		foreach ($params as $key => $value) {
-			$name = $pageOut['parameters'][$key] ?? $key;
+			$name = $pageIn['parameters'][$key] ?? $key;
 			if (isset($return[$name])) {
 				continue;
 			}
@@ -180,14 +180,14 @@ final class RouterFactory
 					'mapOut' => [],
 					'parts' => [],
 				];
-				foreach ($this->dataModel->pageRepository->findAll() as $pageData) {
+				foreach ($this->dataModel->findPageDatas() as $pageData) {
 					if ($pageData->type !== Page::TYPE_PAGE) {
 						continue;
 					}
 					foreach ($pageData->translations as $translationData) {
-						$languageData = $this->dataModel->languageRepository->getById($translationData->language);
+						$languageData = $this->dataModel->getLanguageData($translationData->language);
 						if ($pageData->redirectPage) {
-							$p = $this->dataModel->pageRepository->getById($pageData->web . '-' . $pageData->redirectPage);
+							$p = $this->dataModel->getPageData($pageData->web, $pageData->redirectPage);
 						} else {
 							$p = $pageData;
 						}
@@ -241,67 +241,4 @@ final class RouterFactory
 		}
 		return $this->setup;
 	}
-
-
-//	public function createOld(): CmsRouteList
-//	{
-//		return $this->cache->load('routeSetup', function() {
-//			$routeList = new CmsRouteList;
-//			foreach ($this->dataModel->webRepository->findAll() as $webData) {
-//				$routeList->addRoute(
-//					mask: $webData->getStyleRouteMask(),
-//					metadata: $webData->getStyleRouteMetadata(),
-//				);
-//				foreach ($webData->translations as $webTranslationData) {
-//					$languageData = $this->dataModel->getLanguageData($webTranslationData->language);
-//					$routeList->addRoute(
-//						mask: $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-//						metadata: $webData->getManifestRouteMetadata($languageData->shortcut),
-//					);
-//				}
-//			}
-//			foreach ($this->dataModel->pageRepository->findAll() as $pageData) {
-//				if ($pageData->type !== Page::TYPE_PAGE) {
-//					continue;
-//				}
-//				$parameters = [];
-//				if (isset($pageData->parameters)) {
-//					foreach ($pageData->parameters as $parameter) {
-//						$parameters[] = "$parameter->query=<$parameter->parameter>";
-//					}
-//				}
-//				$signals = [];
-//				if (isset($pageData->signals)) {
-//					foreach ($pageData->signals as $signal) {
-//						$signals[$signal->name] = $signal->signal;
-//					}
-//				}
-//				foreach ($pageData->translations as $translationData) {
-//					$languageData = $this->dataModel->languageRepository->getById($translationData->language);
-//					if ($pageData->redirectPage) {
-//						$p = $this->dataModel->pageRepository->getById($pageData->web . '-' . $pageData->redirectPage);
-//					} else {
-//						$p = $pageData;
-//					}
-//					$metadata = [
-//						'presenter' => 'Home',
-//						'action' => 'default',
-//						'host' => $p->host,
-//						'basePath' => $p->basePath,
-//						'pageName' => $p->name,
-//						'lang' => $languageData->shortcut,
-//					];
-//					if ($signals) {
-//						$metadata['do'] = [Route::FilterTable => $signals];
-//					}
-//					$routeList->addRoute(
-//						mask: $translationData->fullPath . ($parameters || $signals ? (' ? ' . implode(' & ', $parameters) . ($signals ? ' & do=<do>' : ''))  : ''),
-//						metadata: $metadata,
-//						oneWay: (bool) $pageData->redirectPage,
-//					);
-//				}
-//			}
-//			return $routeList;
-//		});
-//	}
 }

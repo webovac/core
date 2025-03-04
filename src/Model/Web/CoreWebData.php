@@ -4,15 +4,22 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Web;
 
+use App\Model\DataModel;
 use App\Model\File\File;
 use App\Model\File\FileData;
+use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationData;
 use DateTimeInterface;
+use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Stepapo\Utils\Attribute\Type;
+use Stepapo\Utils\Attribute\DontCache;
+use Webovac\Core\Lib\CmsUser;
+use Webovac\Core\Model\CmsEntity;
 
 
 trait CoreWebData
@@ -34,11 +41,15 @@ trait CoreWebData
 	/** @var string[] */ public array|null $modules;
 	#[DefaultValue('')] public string $basePath;
 	#[DefaultValue(false)] public bool $isAdmin;
-	public array $tree;
-	public int|string|null $createdByPerson;
-	public int|string|null $updatedByPerson;
+	#[DontCache] public array $tree;
+	#[DontCache] public int|string|null $createdByPerson;
+	#[DontCache] public int|string|null $updatedByPerson;
 	public ?DateTimeInterface $createdAt;
 	public ?DateTimeInterface $updatedAt;
+
+	### for CachedModel ###
+
+	/** @var int[] */ public array|null $rootPages;
 
 
 	public function getStyleRouteMask(): string
@@ -89,6 +100,23 @@ trait CoreWebData
 			. $this->host
 			. ($this->basePath ? ('/' . $this->basePath) : '')
 			. '[/<p .+>]';
+	}
+
+
+	/** @return Collection<PageData> */
+	public function getRootPageDatas(DataModel $dataModel, CmsUser $cmsUser, ?CmsEntity $entity = null): Collection
+	{
+		foreach ($this->rootPages as $rootPageId) {
+			$pageData = $dataModel->getPageData($this->id, $rootPageId);
+			$pageDataToCheck = $pageData->type === Page::TYPE_INTERNAL_LINK
+				? $dataModel->getPageData($this->id, $pageData->targetPage)
+				: $pageData;
+			if ($pageDataToCheck->checkPageRequirements($this, $cmsUser, $entity)) {
+				$pageDatas[] = $pageData;
+			}
+		}
+		uasort($pageDatas, fn(PageData $a, PageData $b) => $a->rank <=> $b->rank);
+		return new Collection($pageDatas);
 	}
 
 

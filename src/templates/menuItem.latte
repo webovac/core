@@ -2,7 +2,7 @@
 {if $pageData->type === App\Model\Page\Page::TYPE_SEPARATOR}
 	<hr n:if="$context !== 'content'">
 {else}
-	{var $layout = $dataModel->layoutRepository->getById($webData->layout)}
+	{var $layout = $dataModel->getLayoutData($webData->layout)}
 	<a n:tag="$pageData->type === App\Model\Page\Page::TYPE_TEXT ? 'div' : 'a'" n:attr='href: $href, onclick: $pageTranslationData->onclick ? "return confirm(\"$pageTranslationData->onclick\")"' n:if="!$pageData->hideInNavigation" n:class="$class, $layout->code === 'default' && $pageData->style && $context === 'secondary' ? 'my-1 me-1'">
 		<div n:tag-if="$context === 'signpost'" n:if="$icon" class="p-2 rounded-5 d-inline-block bg-white" style="width: 51px; height: 51px;">
 			<i n:class="$layout->{$context . 'Icon'}, fa-fw, 'fa-' . $icon, $context === 'signpost' ? fs-2, $context === 'signpost' ? lh-sm"></i>

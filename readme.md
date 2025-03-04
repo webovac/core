@@ -21,7 +21,7 @@ extensions:
 webovac.core:
     host: # example.com
     db:
-        driver: # mysql|pqsql
+        driver: # mysql|pgsql
         database: # webovac
         username: # webovac_user
         password: # webovac_password

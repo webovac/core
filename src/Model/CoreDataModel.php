@@ -32,145 +32,86 @@ trait CoreDataModel
 	#[Inject] public WebDataRepository $webRepository;
 	#[Inject] public PersonDataRepository $personRepository;
 	#[Inject] public RoleDataRepository $roleRepository;
-	#[Inject] public CmsUser $cmsUser;
-	private int $count = 0;
+
+
+	/** @return Collection<PageData> */
+	public function findPageDatas(): Collection
+	{
+		return $this->pageRepository->getCollection();
+	}
 
 
 	public function getPageData(int $webId, int $pageId): ?PageData
 	{
-		return $this->pageRepository->getById($webId . '-' . $pageId);
+		return $this->pageRepository->getByKey("$webId-$pageId");
 	}
 
 
 	public function getPageDataByName(int $webId, string $pageName): ?PageData
 	{
-		$pageId = $this->pageRepository->getId($webId, $pageName);
+		$pageId = $this->pageRepository->getKey($webId, $pageName);
 		return $pageId ? $this->getPageData($webId, $pageId) : null;
 	}
 
 
-	public function getWebDatas(): Collection
+	/** @return Collection<WebData> */
+	public function findWebDatas(): Collection
 	{
-		return $this->webRepository->findAll();
+		$webDatas = [];
+		foreach ($this->webRepository->getAliases() as $webId) {
+			$webDatas[] = $this->getWebData($webId);
+		}
+		return new Collection($webDatas);
 	}
 
 
-	public function getWebData(int $id): ?WebData
+	public function getWebData(int $key): ?WebData
 	{
-		return $this->webRepository->getById($id);
+		return $this->webRepository->getByKey($key);
 	}
 
 
 	public function getWebDataByHost(string $host, ?string $basePath): ?WebData
 	{
-		$webId = $this->webRepository->getId($host, $basePath);
-		return $webId ? $this->webRepository->getById($webId) : null;
+		$webId = $this->webRepository->getKey($host, $basePath);
+		return $webId ? $this->webRepository->getByKey($webId) : null;
 	}
 
 
-	public function getLanguageData(int $id): ?LanguageData
+	public function getLanguageData(int $key): ?LanguageData
 	{
-		return $this->languageRepository->getById($id);
+		return $this->languageRepository->getByKey($key);
 	}
 
 
 	public function getLanguageDataByShortcut(string $shortcut): ?LanguageData
 	{
-		$languageId = $this->languageRepository->getId($shortcut);
+		$languageId = $this->languageRepository->getKey($shortcut);
 		return $languageId ? $this->getLanguageData($languageId) : null;
 	}
 
 
-	public function getModuleData(int $id): ?ModuleData
+	public function getModuleData(int $key): ?ModuleData
 	{
-		return $this->moduleRepository->getById($id);
+		return $this->moduleRepository->getByKey($key);
 	}
 
 
 	public function getModuleDataByName(string $name): ?ModuleData
 	{
-		$moduleId = $this->moduleRepository->getId($name);
+		$moduleId = $this->moduleRepository->getKey($name);
 		return $moduleId ? $this->getModuleData($moduleId) : null;
 	}
 
 
-	/**
-	 * @throws ReflectionException
-	 */
 	public function getTextTranslation(mixed $name, LanguageData $languageData): ?TextTranslationData
 	{
 		if (!$name) {
 			return null;
 		}
 		return $this->textRepository
-			->getById($name)
+			->getByKey($name)
 			?->getCollection('translations')
-			->getById($languageData->id);
-	}
-
-
-	/** @return Collection<PageData> */ 
-	public function getRootPageDatas(WebData $webData, LanguageData $languageData, ?CmsEntity $entity = null): Collection
-	{
-		$array = (array) $this->pageRepository->findAll();
-		$pageDatas = array_filter($array, function($pageData) use ($webData, $languageData, $entity) {
-			if ($pageData->web !== $webData->id) {
-				return false;
-			}
-			if (count($pageData->parentPages) > 1) {
-				return false;
-			}
-//			if ($pageData->type === Page::TYPE_PAGE && !$pageData->getCollection('translations')->getById($languageData->id)) {
-//				return false;
-//			}
-			if (!$pageData->isUserAuthorized($this->cmsUser)) {
-				return false;
-			}
-			if (
-				$pageData->type === Page::TYPE_INTERNAL_LINK
-				&& !$this->getPageData($webData->id, $pageData->targetPage)->isUserAuthorized($this->cmsUser)
-			) {
-				return false;
-			}
-			if ($pageData->authorizingTag && $entity) {
-				return $entity->checkRequirements($this->cmsUser, $webData, $pageData->authorizingTag);
-			}
-			return true;
-		});
-		uasort($pageDatas, fn(PageData $a, PageData $b) => $a->rank <=> $b->rank);
-		return new Collection($pageDatas);
-	}
-
-
-	/** @return Collection<PageData> */ 
-	public function getChildPageDatas(WebData $webData, PageData $parentPageData, LanguageData $languageData, ?CmsEntity $entity = null): Collection
-	{
-		$array = (array) $this->pageRepository->findAll();
-		$pageDatas = array_filter($array, function($pageData) use ($webData, $parentPageData, $languageData, $entity) {
-			if ($pageData->web !== $webData->id) {
-				return false;
-			}
-			if ($pageData->parentPage !== $parentPageData->id) {
-				return false;
-			}
-			if ($pageData->type === Page::TYPE_PAGE && ($pageData->hasParameter !== $parentPageData->hasParameter)) {
-				return false;
-			}
-			if (!$pageData->isUserAuthorized($this->cmsUser)) {
-				return false;
-			}
-			if (
-				$pageData->type === Page::TYPE_INTERNAL_LINK
-				&& !$this->getPageData($webData->id, $pageData->targetPage)->isUserAuthorized($this->cmsUser)
-			) {
-				return false;
-			}
-			if ($pageData->authorizingTag && $entity) {
-				return $entity->checkRequirements($this->cmsUser, $webData, $pageData->authorizingTag);
-			}
-			return true;
-		});
-		uasort($pageDatas, fn($a, $b) => $a->rank <=> $b->rank);
-		return new Collection($pageDatas);
+			->getByKey($languageData->id);
 	}
 }
