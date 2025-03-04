@@ -73,6 +73,7 @@ trait CoreOrmFunctions
 			'LOWER(%column) LIKE %_like_',
 			[$column->args[0], Strings::lower($args[1])],
 			[$column],
+			$aggregator,
 		);
 	}
 
@@ -86,6 +87,7 @@ trait CoreOrmFunctions
 			'%column LIKE %_like_ OR %column LIKE %_like_',
 			[$column1->args[0], $args[2], $column2->args[0], $args[2]],
 			[$column1, $column2],
+			$aggregator,
 		);
 	}
 
@@ -106,6 +108,7 @@ trait CoreOrmFunctions
 			) . " LIKE %_like_",
 			[$lastNameColumn->args[0], $firstNameColumn->args[0], Strings::lower($args[2]), $firstNameColumn->args[0], $lastNameColumn->args[0], Strings::lower($args[2])],
 			[$lastNameColumn, $firstNameColumn],
+			$aggregator,
 		);
 	}
 
@@ -118,6 +121,7 @@ trait CoreOrmFunctions
 			'%column || %column',
 			[$lastNameColumn->args[0], $firstNameColumn->args[0]],
 			[$lastNameColumn, $firstNameColumn],
+			$aggregator,
 		);
 	}
 
@@ -130,6 +134,7 @@ trait CoreOrmFunctions
 			'YEAR(%column) = %i',
 			[$column->args[0], $args[1]],
 			[$column],
+			$aggregator,
 		);
 	}
 
@@ -142,6 +147,7 @@ trait CoreOrmFunctions
 			'MONTH(%column) = %i',
 			[$column->args[0], $args[1]],
 			[$column],
+			$aggregator,
 		);
 	}
 
@@ -154,17 +160,19 @@ trait CoreOrmFunctions
 			'DATE(%column) = DATE(%dt)',
 			[$column->args[0], $args[1]],
 			[$column],
+			$aggregator,
 		);
 	}
 
 
-	private static function createDbalExpression(string $expression, array $args, array $columns = [])
+	private static function createDbalExpression(string $expression, array $args, array $columns = [], ?Aggregator $aggregator = null)
 	{
 		return new DbalExpressionResult(
 			expression: $expression,
 			args: $args,
 			joins: array_merge(...array_map(fn(DbalExpressionResult $result) => $result->joins, $columns)),
 			groupBy: array_merge(...array_map(fn(DbalExpressionResult $result) => $result->groupBy, $columns)),
+			aggregator: $aggregator,
 		);
 	}
 }
