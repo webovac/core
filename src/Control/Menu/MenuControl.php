@@ -46,6 +46,7 @@ class MenuControl extends BaseControl
 	public function render(): void
 	{
 		$webData = $this->dataProvider->getWebData();
+		$layoutData = $this->dataProvider->getLayoutData();
 		$pageData = $this->dataProvider->getPageData();
 		$languageData = $this->dataProvider->getLanguageData();
 		$this->template->webData = $webData;
@@ -63,7 +64,6 @@ class MenuControl extends BaseControl
 			&& $searchModuleData
 			&& in_array($searchModuleData->id, $webData->modules, true);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
-			$layoutData = $this->dataProvider->getLayoutData();
 			$this->template->layoutData = $layoutData;
 			if ($layoutData->hideSidePanel) {
 				foreach ($this->dataModel->getPageData($webData->id, $pageData->id)->getCollection('translations') as $translationData) {
@@ -77,11 +77,11 @@ class MenuControl extends BaseControl
 		$this->template->title = $webData->getCollection('translations')->getByKey($languageData->id)->title;
 		$this->template->wwwDir = $this->dir->getWwwDir();
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData) {
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData) {
 			$checkActive = $pageData->targetPage
 				? $pageData->targetPage !== $webData->homePage
 				: $pageData->id !== $webData->homePage;
-			$this->menuItemRenderer->render('primary', $this, $webData, $pageData, $languageData, $checkActive, $this->entity, $linkedEntity);
+			$this->menuItemRenderer->render('primary', $this, $webData, $pageData, $layoutData, $languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->renderFile($this->moduleClass, MenuControl::class, $this->templateName);
 	}

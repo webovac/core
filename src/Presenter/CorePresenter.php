@@ -96,7 +96,7 @@ trait CorePresenter
 			$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
 			$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->getParameter('pageName') ?: 'Home');
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
-//			$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
+			$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
 			try {
 				$this->pageData->checkRequirements($this->cmsUser);
 			} catch (MissingPermissionException $e) {
@@ -196,7 +196,7 @@ trait CorePresenter
 				$this->template->bodyClasses[] = "secondary-m-collapsed";
 			}
 			if ($this->request->getPresenterName() === 'Error4xx') {
-				$file = __DIR__ . "/../Presenter/Error4xx/{$this->getParameter('exception')->getCode()}.latte";
+				$file = __DIR__ . "/Error4xx/{$this->getParameter('exception')->getCode()}.latte";
 				$main = file_get_contents(is_file($file) ? $file : __DIR__ . '/4xx.latte');
 			} else {
 				$main = $this->pageTranslation->content ?: '';

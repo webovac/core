@@ -34,16 +34,17 @@ class ButtonsControl extends BaseControl
 			return;
 		}
 		$webData = $this->dataProvider->getWebData();
+		$layoutData = $this->dataProvider->getLayoutData();
 		$languageData = $this->dataProvider->getLanguageData();
 		$this->template->pageData = $buttonsPageData;
 		$this->template->pageDatas = $buttonsPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData, $buttonsPageData) {
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData, $buttonsPageData) {
 			$checkActive = $pageData->targetPage
 				? $pageData->targetPage !== $buttonsPageData->id
 				: $pageData->id !== $buttonsPageData->id;
-			$this->menuItemRenderer->render('buttons', $this, $webData, $pageData, $languageData, $checkActive, $this->entity, $linkedEntity);
+			$this->menuItemRenderer->render('buttons', $this, $webData, $pageData, $layoutData, $languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/buttons.latte');
 	}

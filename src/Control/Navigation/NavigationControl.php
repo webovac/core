@@ -42,12 +42,13 @@ class NavigationControl extends BaseControl
 		}
 		$webData = $this->dataProvider->getWebData();
 		$languageData = $this->dataProvider->getLanguageData();
+		$layoutData = $this->dataProvider->getLayoutData();
 		if ($this->entityList && method_exists($this->entity, 'getMenuItems')) {
 			$this->template->entityMenuItems = $this->entity->getMenuItems();
 		}
 		$this->template->pageDatas = $navigationPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
-			$this->template->layoutData = $this->dataProvider->getLayoutData();
+			$this->template->layoutData = $layoutData;
 		}
 		$this->template->activePageData = $navigationPageData;
 		$this->template->icon = ($this->entity && $navigationPageData->isDetailRoot && method_exists($this->entity, 'getIcon')
@@ -64,11 +65,11 @@ class NavigationControl extends BaseControl
 		$this->template->webData = $webData;
 		$this->template->dataModel = $this->dataModel;
 		$this->template->entity = $this->entity;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData, $navigationPageData) {
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData, $layoutData, $navigationPageData) {
 			$checkActive = $pageData->targetPage
 				? $pageData->targetPage !== $navigationPageData->id
 				: $pageData->id !== $navigationPageData->id;
-			$this->menuItemRenderer->render('secondary', $this, $webData, $pageData, $languageData, $checkActive, $this->entity, $linkedEntity);
+			$this->menuItemRenderer->render('secondary', $this, $webData, $pageData, $layoutData, $languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/navigation.latte');
 	}

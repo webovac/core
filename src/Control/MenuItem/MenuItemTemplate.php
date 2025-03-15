@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\MenuItem;
 
-use App\Control\BaseTemplate;
+use App\Lib\TemplateFactory;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
+use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Web\WebData;
-use Latte\Engine;
 use Nette\Application\UI\Presenter;
 use Webovac\Core\Model\CmsEntity;
 
 
-class MenuItemTemplate extends BaseTemplate
+class MenuItemTemplate
 {
 	public ?string $href;
 	public string $class;
@@ -23,9 +23,9 @@ class MenuItemTemplate extends BaseTemplate
 
 
 	public function __construct(
-		public Engine $latte,
 		public WebData $webData,
 		public PageData $pageData,
+		public LayoutData $layoutData,
 		public ?PageTranslationData $pageTranslationData,
 		public LanguageData $languageData,
 		public LanguageData $targetLanguageData,
@@ -40,6 +40,5 @@ class MenuItemTemplate extends BaseTemplate
 		$this->class = $pageData->getClass($context, $checkActive, $presenter, $entity, $linkedEntity);
 		$this->icon = ($linkedEntity && $pageData->isDetailRoot && method_exists($linkedEntity, 'getIcon')
 			? $linkedEntity->getIcon() : null) ?: $pageData->icon;
-		parent::__construct($latte);
 	}
 }

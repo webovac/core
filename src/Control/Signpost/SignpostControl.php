@@ -30,14 +30,15 @@ class SignpostControl extends BaseControl
 	public function render(): void
 	{
 		$webData = $this->dataProvider->getWebData();
+		$layoutData = $this->dataProvider->getLayoutData();
 		$pageData = $this->dataProvider->getPageData();
 		$languageData = $this->dataProvider->getLanguageData();
 		$this->template->pageDatas = $pageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;
 		$this->template->pageData = $pageData;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData) {
-			$this->menuItemRenderer->render('signpost', $this, $webData, $pageData, $languageData, false, $this->entity, $linkedEntity);
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData) {
+			$this->menuItemRenderer->render('signpost', $this, $webData, $pageData, $layoutData, $languageData, false, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/signpost.latte');
 	}

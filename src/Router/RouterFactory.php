@@ -8,6 +8,7 @@ use App\Model\DataModel;
 use App\Model\Page\Page;
 use Nette\Application\BadRequestException;
 use Nette\Caching\Cache;
+use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Nette\Routing\RouteList;
 
@@ -20,6 +21,7 @@ final class RouterFactory
 	public function __construct(
 		private DataModel $dataModel,
 		private Cache $cache,
+		private IRequest $request,
 	) {}
 
 
@@ -135,11 +137,13 @@ final class RouterFactory
 	{
 		$setup = $this->getSetup();
 		$pageName = $params['pageName'];
-		$lang = $params['lang'];
+		$lang = $params['lang'] ?? 'cs';
 		$do = $params['do'] ?? null;
 		$id = array_values($params['id'] ?? []);
+		$host = $params['host'] ?? $this->request->getUrl()->getHost();
+		$basePath = $params['basePath'] ?? null;
 		//$path = $params['path'];
-		$base = '//' . $params['host'] . ($params['basePath'] ? '/' . $params['basePath'] : '');
+		$base = '//' . $host . ($basePath ? '/' . $basePath : '');
 		$pageOut = $setup['mapOut'][$base][$lang][$pageName];
 		if ($p = $pageOut['p']) {
 			$p = explode('/', $pageOut['p']);

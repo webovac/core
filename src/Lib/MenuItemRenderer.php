@@ -6,6 +6,7 @@ namespace Webovac\Core\Lib;
 
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
+use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
 use App\Model\Web\WebData;
 use Nette\Application\UI\Control;
@@ -26,6 +27,7 @@ class MenuItemRenderer implements Service
 		Control $control,
 		WebData $webData,
 		PageData $pageData,
+		LayoutData $layoutData,
 		LanguageData $languageData,
 		bool $checkActive,
 		?CmsEntity $entity,
@@ -34,9 +36,9 @@ class MenuItemRenderer implements Service
 	{
 		$t = $pageData->getCollection('translations')->getByKey($languageData->id);
 		$control->template->getLatte()->render(__DIR__ . '/../templates/menuItem.latte', new MenuItemTemplate(
-			latte: $control->template->getLatte(),
 			webData: $webData,
 			pageData: $pageData,
+			layoutData: $layoutData,
 			pageTranslationData: $t ?: $pageData->getCollection('translations')->getByKey($webData->defaultLanguage),
 			languageData: $languageData,
 			targetLanguageData: $t ? $languageData : $this->dataModel->getLanguageData($webData->defaultLanguage),
