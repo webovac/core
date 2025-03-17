@@ -68,10 +68,10 @@ class Core implements Module, HasDefinitionGroup, HasManipulationGroups, HasOrmE
 	public function registerOrmEvents(): void
 	{
 		foreach (['onAfterPersist', 'onAfterRemove'] as $property) {
-			$this->orm->languageRepository->$property[] = fn() => $this->cache->remove('language');
-			$this->orm->moduleRepository->$property[] = fn() => $this->cache->remove('page');
-			$this->orm->pageRepository->$property[] = fn() => $this->cache->remove('page');
-			$this->orm->webRepository->$property[] = fn() => $this->cache->remove('web');
+			$this->orm->languageRepository->$property[] = fn() => $this->cache->clean([Cache::Tags => 'language']);
+			$this->orm->moduleRepository->$property[] = fn() => $this->cache->clean([Cache::Tags => 'page']);
+			$this->orm->pageRepository->$property[] = fn() => $this->cache->clean([Cache::Tags => 'page']);
+			$this->orm->webRepository->$property[] = fn() => $this->cache->clean([Cache::Tags => 'web']);
 		}
 		if ($this->orm->hasRepositoryByName('logRepository')) {
 			$this->orm->languageRepository->onAfterInsert[] = fn (Language $language) => $this->orm->logRepository->createLog($language, Log::TYPE_CREATE);
