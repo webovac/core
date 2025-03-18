@@ -41,6 +41,7 @@ class ContentProcessor implements Service
 
 	public function contentToEditor(string $content): string
 	{
+		bdump($content);
 		return preg_replace_callback_array([
 			'/{\$entity->(.+?)}/' => fn(array $m) => '<span class="mention" data-mention="{$entity->' . $m[1] . '}">{$entity->' . $m[1] . '}</span>',
 			'/{control (.+?)}/' => fn(array $m) => '<p><span class="mention" data-mention="{control ' . $m[1] . '}">{control ' . $m[1] . '}</span></p>',

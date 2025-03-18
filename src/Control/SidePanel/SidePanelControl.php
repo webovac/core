@@ -60,10 +60,10 @@ class SidePanelControl extends BaseControl
 		$this->template->entity = $this->entity;
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
 		$adminPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Admin:Home');
-		$showAdmin =  $adminPageData?->isUserAuthorized($this->cmsUser) ?: false;
+		$showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser) ?: false;
 		$this->template->showAdmin = $showAdmin;
 		if ($showAdmin) {
-			$this->template->languageShortcuts = $this->dataModel->languageRepository->findAllPairs($webData);
+			$this->template->languageShortcuts = $this->dataModel->languageRepository->findAllPairs();
 			$this->template->pageModuleData = $pageData->module ? $this->dataModel->getModuleData($pageData->module) : null;
 			$this->template->webDatas = $this->dataModel->findWebDatas();
 			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';

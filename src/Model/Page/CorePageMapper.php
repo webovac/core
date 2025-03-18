@@ -108,6 +108,6 @@ trait CorePageMapper
 			'parent_page_id' => $page->parentPage?->id,
 			['rank > %i', $page->rank],
 		] + $filter);
-		$this->getRepository()->delete($page);
+		$this->connection->query('DELETE FROM %table WHERE id = %i', $this->getTableName(), $page->getPersistedId());
 	}
 }

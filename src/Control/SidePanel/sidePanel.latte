@@ -1,19 +1,21 @@
 {templateType Webovac\Core\Control\SidePanel\SidePanelTemplate}
 <div class="side-panel" id="side" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn()">
-	<div n:if="$hasSearch && !$isError" class="search menu-item border-bottom" style="height: 57px; min-height: 57px;">
+	<div n:if="$hasSearch && !$isError" class="search menu-item" style="padding-bottom: 0; height: 48px; min-height: 48px;">
 		{$presenter->getComponent('search-searchForm')->render()}
 	</div>
-	<div n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink '//Home:', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="pt-3 user menu-item">
-		<div class="user-icon" style="height: 48px;">
-			<i class="fad fa-fw fa-circle-user" style="font-size: 48px; line-height: 1"></i>
+	<hr n:if="$hasSearch && !$isError">
+	<div n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink '//Home:', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="menu-item">
+		<div class="user-icon" style="height: 32px;">
+			<i class="fad fa-circle-user" style="font-size: 32px; line-height: 1"></i>
 		</div>
-		<div class="user-name mt-1">
+		<div class="user-name ms-2">
 			{$cmsUser->getPerson()->name}
 		</div>
 	</div>
 	<hr>
 	<a n:if="$hasPersons" href="{plink '//Home:', 'Persons:PersonDetailSettings', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}" class="menu-item" href="#"><i class="fass fa-fw fa-cog"></i><span class="ms-2">Nastavení</span></a>
 	<a class="menu-item" n:if="!$isError" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}"><i class="fass fa-fw fa-sign-out"></i><span class="ms-2">{_'Odhlásit'}</span></a>
+	{*
 	<hr n:if="$showAdmin">
 	<div n:if="$showAdmin">
 		<div class="menu-item small">
@@ -29,6 +31,7 @@
 			{$w->host}{if $w->basePath}/{$w->basePath}{/}
 		</a>
 	</div>
+	*}
 	<hr>
 	<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
 		{var $l = $dataModel->getLanguageData($translation->language)}

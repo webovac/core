@@ -80,6 +80,7 @@ trait CoreWebRepository
 		bool $getOriginalByData = false,
 	): StepapoEntity
 	{
+		bdump($data);
 		if (isset($data->iconFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
 			$data->iconFile->upload = $this->styleFile($data->iconFile, $data->complementaryColor, $data->color);
 			$data->iconFile->forceSquare = true;
