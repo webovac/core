@@ -35,13 +35,18 @@
 <div n:class="layout, $pageData->stretched ? stretched"{if $pageData->layoutWidth} style="--cms-layout-width: {$pageData->layoutWidth}px;"{/}>
 	{control core-menu}
 	<div class="horizontal-wrapper">
+		{if !$layoutData->hideBreadcrumbs && $layoutData->code === 'twitter'}
+			{control core-breadcrumbs}
+			{control core-messages}
+		{/}
 		{control core-navigation}
 		<div class="content-image-wrapper">
 			<div class="content-wrapper">
-				{if !$layoutData->hideBreadcrumbs}
+				{if !$layoutData->hideBreadcrumbs && $layoutData->code !== 'twitter'}
 					{control core-breadcrumbs}
+					{control core-messages}
 				{/}
-				{control core-messages}
+
 				<div class="content override-padding">
 					{include 'main.file'}
 				</div>

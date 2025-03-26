@@ -19,6 +19,7 @@ class MenuItemRenderer implements Service
 {
 	public function __construct(
 		private DataModel $dataModel,
+		private PageActivator $pageActivator,
 	) {}
 
 
@@ -48,6 +49,7 @@ class MenuItemRenderer implements Service
 			dataModel: $this->dataModel,
 			context: $context,
 			presenter: $control->presenter,
+			pageActivator: $this->pageActivator,
 		));
 	}
 }

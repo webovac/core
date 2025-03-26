@@ -1,6 +1,6 @@
 {templateType Webovac\Core\Control\SidePanel\SidePanelTemplate}
 <div class="side-panel" id="side" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn()">
-	<div n:if="$hasSearch && !$isError" class="search menu-item" style="padding-bottom: 0; height: 48px; min-height: 48px;">
+	<div n:if="$hasSearch && !$isError" class="search menu-item py-0" style="height: 55px; min-height: 55px;">
 		{$presenter->getComponent('search-searchForm')->render()}
 	</div>
 	<hr n:if="$hasSearch && !$isError">

@@ -6,6 +6,7 @@ namespace Webovac\Core\Control\Breadcrumbs;
 
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\DataProvider;
+use Webovac\Core\Lib\PageActivator;
 
 
 /**
@@ -14,34 +15,19 @@ use Webovac\Core\Lib\DataProvider;
 class BreadcrumbsControl extends BaseControl
 {
 	public array $crumbs;
-	public array $activePages;
 
 
-	public function __construct(private DataProvider $dataProvider)
-	{}
+	public function __construct(
+		private DataProvider $dataProvider,
+		private PageActivator $pageActivator,
+	) {}
 
 
 	public function render(): void
 	{
-		$this->template->crumbs = $this->crumbs;
+		$this->template->crumbs = $this->pageActivator->getCrumbs();
 		$this->template->webData = $this->dataProvider->getWebData();
 		$this->template->render(__DIR__ . '/breadcrumbs.latte');
-	}
-
-
-	public function isActivePage(int $pageId): bool
-	{
-		return array_key_exists($pageId, $this->activePages);
-	}
-
-
-	public function addCrumb(int $id, string $title, $link): void
-	{
-		$this->activePages[$id] = true;
-		$this->crumbs[] = [
-			'title' => $title,
-			'link' => $link,
-		];
 	}
 }
 

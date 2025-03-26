@@ -43,6 +43,7 @@ use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
+use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\RegisterOrmEvents;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
@@ -67,6 +68,7 @@ trait CorePresenter
 	#[Inject] public TemplateFactory $templateFactory;
 	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public RegisterOrmEvents $registerOrmEvents;
+	#[Inject] public PageActivator $pageActivator;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -272,21 +274,17 @@ trait CorePresenter
 							continue;
 						}
 						$path[] = Arrays::first($entity->getParameters());
-						$this->getComponent('core-breadcrumbs')->addCrumb(
-							$id,
-							$entity->getTitle(),
-							$this->presenter->link(
-								'//default',
-								[
-									'pageName' => $pageData->name,
-									'path' => implode('/', $path),
-								],
-							),
-						);
+						$this->pageActivator->addPage($id, $entity->getTitle(), $this->presenter->link(
+							'//default',
+							[
+								'pageName' => $pageData->name,
+								'path' => implode('/', $path),
+							],
+						));
 					}
 				}
 			}
-			$this->getComponent('core-breadcrumbs')->addCrumb(
+			$this->pageActivator->addPage(
 				$id,
 				($pageData->isHomePage ? '<i class="fasl fa-fw fa-home"></i> ' : '') . $title,
 				$this->presenter->link(

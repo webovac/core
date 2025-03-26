@@ -1,14 +1,16 @@
 {templateType Webovac\Core\Control\Navigation\NavigationTemplate}
 <div class="mobile-collapsed wrapper navigation-wrapper secondary-navigation-wrapper" n:if="$activePageData->providesNavigation" n:snippet>
 	<div class="navigation secondary-navigation">
-		<div class="title">
+		<div class="navigation-icon d-none d-lg-block lh-1" n:ifcontent>
 			{if $imageIdentifier}
-				<img n:img="$imageIdentifier, '80x80'" width="40" height="40" class="rounded-5">
+				<img n:img="$imageIdentifier, '90x90'" width="45" height="45" class="rounded-5">
 			{elseif $imageUrl}
-				<img src="{$baseUrl}/{$imageUrl}" height="40">
+				<img src="{$baseUrl}/{$imageUrl}" height="45">
 			{elseif $icon}
-				<i class="fadl fa-fw fa-{$icon}"></i>
+				<i class="fadl fa-fw fa-{$icon} lh-sm"></i>
 			{/}
+		</div>
+		<div class="title">
 			<span>{$title}</span>
 		</div>
 		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw {$layoutData->secondaryIcon ?? fas} fa-bars"></i></a>

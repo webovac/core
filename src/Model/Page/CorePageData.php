@@ -28,6 +28,7 @@ use Stepapo\Utils\Attribute\Type;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsUser;
+use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -149,7 +150,7 @@ trait CorePageData
 	}
 
 
-	public function getClass(string $context, bool $checkActive, IPresenter $presenter, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): string
+	public function getClass(string $context, bool $checkActive, IPresenter $presenter, PageActivator $pageActivator, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): string
 	{
 		return match($context) {
 			'buttons' => 'btn btn-outline-' . ($this->style ?: 'primary'),
@@ -157,8 +158,8 @@ trait CorePageData
 			default => 'menu-item' . ($this->style ? ' btn btn-subtle-' . $this->style : ''),
 		}
 			. ((($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
-			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $this->targetPath))
-			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $this->targetPath)) ? ' active' : '')
+			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath))
+			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath)) ? ' active' : '')
 			;
 	}
 
@@ -187,7 +188,7 @@ trait CorePageData
 			return false;
 		}
 		if ($this->authorizingTag && $entity) {
-			if (!$entity->checkRequirements($cmsUser, $webData, $this->authorizingTag)) {
+			if (method_exists($entity, 'checkRequirements') && !$entity->checkRequirements($cmsUser, $webData, $this->authorizingTag)) {
 				return false;
 			}
 		}
@@ -195,11 +196,11 @@ trait CorePageData
 	}
 
 
-	private function isActive(?CmsEntity $entity, ?CmsEntity $linkedEntity, IPresenter $presenter, ?string $path = null)
+	private function isActive(?CmsEntity $entity, ?CmsEntity $linkedEntity, IPresenter $presenter, PageActivator $pageActivator, ?string $path = null)
 	{
 		if ($linkedEntity && $linkedEntity !== $entity) {
 			return false;
 		}
-		return (!$path || str_contains($presenter->getParameter('path') ?: '', $path)) && $presenter->getComponent('core-breadcrumbs')->isActivePage($this->targetPage ?: $this->id);
+		return (!$path || str_contains($presenter->getParameter('path') ?: '', $path)) && $pageActivator->isActivePage($this->targetPage ?: $this->id);
 	}
 }

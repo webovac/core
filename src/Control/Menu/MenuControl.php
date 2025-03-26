@@ -15,6 +15,7 @@ use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\ModuleChecker;
+use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
 
 

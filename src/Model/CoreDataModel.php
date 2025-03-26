@@ -54,7 +54,7 @@ trait CoreDataModel
 	}
 
 
-	/** @return Collection<WebData> */
+	/** @return WebData[] */
 	public function findWebDatas(): Collection
 	{
 		$webDatas = [];
