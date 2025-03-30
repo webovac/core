@@ -44,7 +44,7 @@ trait CorePageData
 	/** @var ParameterData[] */ #[ArrayOfType(ParameterData::class)] public array|null $parameters;
 	/** @var SignalData[] */ #[ArrayOfType(SignalData::class)] public array|null $signals;
 	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
-	/** @var int[] */ public array|null $authorizedRoles;
+	/** @var string[] */ public array|null $authorizedRoles;
 	/** @var int[] */ public array|null $authorizedPersons;
 	#[DefaultValue(false)] public bool $hideInNavigation;
 	#[DefaultValue(false)] public bool $providesNavigation;
@@ -91,18 +91,18 @@ trait CorePageData
 	 * @throws LoginRequiredException
 	 * @throws MissingPermissionException
 	 */ 
-	public function checkRequirements(CmsUser $cmsUser): void
+	public function checkRequirements(CmsUser $cmsUser, WebData $webData): void
 	{
 		foreach ($this->accessSetups as $accessSetup) {
-			$accessSetup->checkRequirements($cmsUser);
+			$accessSetup->checkRequirements($cmsUser, $webData);
 		}
 	}
 
 
-	public function isUserAuthorized(CmsUser $cmsUser): bool
+	public function isUserAuthorized(CmsUser $cmsUser, WebData $webData): bool
 	{
 		foreach ($this->accessSetups as $accessSetup) {
-			if (!$accessSetup->isUserAuthorized($cmsUser)) {
+			if (!$accessSetup->isUserAuthorized($cmsUser, $webData)) {
 				return false;
 			}
 		}
@@ -184,7 +184,7 @@ trait CorePageData
 
 	public function checkPageRequirements(WebData $webData, CmsUser $cmsUser, ?CmsEntity $entity = null): bool
 	{
-		if (!$this->isUserAuthorized($cmsUser)) {
+		if (!$this->isUserAuthorized($cmsUser, $webData)) {
 			return false;
 		}
 		if ($this->authorizingTag && $entity) {

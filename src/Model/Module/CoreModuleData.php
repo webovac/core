@@ -9,6 +9,7 @@ use App\Model\ModuleTranslation\ModuleTranslationData;
 use App\Model\Page\PageData;
 use DateTimeInterface;
 use Stepapo\Utils\Attribute\ArrayOfType;
+use Stepapo\Utils\Attribute\DefaultValue;
 
 
 trait CoreModuleData
@@ -19,6 +20,7 @@ trait CoreModuleData
 	/** @var ModuleTranslationData[] */ #[ArrayOfType(ModuleTranslationData::class)] public array|null $translations;
 	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
 	public ?string $icon;
+	#[DefaultValue(false)] public bool $internal;
 	public array $tree;
 	public int|string|null $createdByPerson;
 	public int|string|null $updatedByPerson;

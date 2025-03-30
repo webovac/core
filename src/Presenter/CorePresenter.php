@@ -100,7 +100,7 @@ trait CorePresenter
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
 			$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
 			try {
-				$this->pageData->checkRequirements($this->cmsUser);
+				$this->pageData->checkRequirements($this->cmsUser, $this->webData);
 			} catch (MissingPermissionException $e) {
 				throw new ForbiddenRequestException;
 			} catch (LoginRequiredException $e) {

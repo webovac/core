@@ -98,6 +98,7 @@ schemas:
 					name: [type: string, null: false]
 					icon: [type: string, null: true]
 					home_page_id: [type: int, null: true]
+					internal: [type: bool, null: false, default: false]
 				primaryKey: id
 				uniqueKeys: [name]
 				indexes: [created_by_person_id, updated_by_person_id, home_page_id]
@@ -360,6 +361,24 @@ schemas:
 					logo_file_id: [table: file, column: id, onDelete: set null]
 					background_file_id: [table: file, column: id, onDelete: set null]
 					home_page_id: [table: page, column: id, onDelete: set null]
+			web2admin_person:
+				columns:
+					web_id: [type: int, null: false]
+					person_id: [type: int, null: false]
+				primaryKey: [web_id, person_id]
+				indexes: [web_id, person_id]
+				foreignKeys:
+					web_id: [table: web, column: id, reverseName: adminPersons]
+					person_id: [table: person, column: id]
+			web2admin_role:
+				columns:
+					web_id: [type: int, null: false]
+					role_id: [type: int, null: false]
+				primaryKey: [web_id, role_id]
+				indexes: [web_id, role_id]
+				foreignKeys:
+					web_id: [table: web, column: id, reverseName: adminRoles]
+					role_id: [table: role, column: id]
 			web_translation:
 				columns:
 					id: [type: int, null: false, auto: true]

@@ -1,7 +1,9 @@
 {templateType Webovac\Core\Control\Buttons\ButtonsTemplate}
-<div class="mb-3">
-	{renderMenuItem($pageData)}
-	{foreach $pageDatas as $p}
-		{renderMenuItem($p)}
+<div class="mb-3" n:ifcontent>
+	{if $pageDatas->count() > 0}
+		{renderMenuItem($pageData)}
+		{foreach $pageDatas as $p}
+			{renderMenuItem($p)}
+		{/}
 	{/}
 </div>

@@ -46,11 +46,13 @@ trait CorePage
 	public const string ACCESS_FOR_ALL = 'all';
 	public const string ACCESS_FOR_LOGGED = 'logged';
 	public const string ACCESS_FOR_SPECIFIC = 'specific';
+	public const string ACCESS_FOR_ADMIN = 'admin';
 	public const string ACCESS_FOR_GUEST = 'guest';
 	public const array ACCESS_FORS = [
 		Page::ACCESS_FOR_ALL => 'Všechny',
 		Page::ACCESS_FOR_LOGGED => 'Všechny přihlášené',
 		Page::ACCESS_FOR_SPECIFIC => 'Některé přihlášené',
+		Page::ACCESS_FOR_ADMIN => 'Adminy',
 		Page::ACCESS_FOR_GUEST => 'Jen nepřihlášené',
 	];
 	public const string STYLE_PRIMARY = 'primary';

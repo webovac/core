@@ -30,18 +30,18 @@ final class RouterFactory
 		$routeList = new RouteList;
 		$webDatas = $this->dataModel->findWebDatas();
 		foreach ($webDatas as $webData) {
-			$routeList->addRoute(
-				mask: '//'
-				. $webData->host
-				. ($webData->basePath ? ('/' . $webData->basePath) : '')
-				. '/test',
-				metadata: [
-					'presenter' => 'Test',
-					'action' => 'default',
-					'host' => $webData->host,
-					'basePath' => $webData->basePath,
-				],
-			);
+//			$routeList->addRoute(
+//				mask: '//'
+//				. $webData->host
+//				. ($webData->basePath ? ('/' . $webData->basePath) : '')
+//				. '/test',
+//				metadata: [
+//					'presenter' => 'Test',
+//					'action' => 'default',
+//					'host' => $webData->host,
+//					'basePath' => $webData->basePath,
+//				],
+//			);
 			$routeList->addRoute(
 				mask: $webData->getStyleRouteMask(),
 				metadata: $webData->getStyleRouteMetadata(),

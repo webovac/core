@@ -41,6 +41,8 @@ trait CoreWebDataRepository
 		foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $entity) {
 			$key = $this->getIdentifier($entity);
 			$item = $entity->getData(forCache: true);
+			$item->adminRoles = $entity->adminRoles->toCollection()->fetchPairs(null, 'code');
+			$item->adminPersons = $entity->adminPersons->toCollection()->fetchPairs(null, 'id');
 			$rootPageIds = [];
 			foreach ($entity->getPagesForMenu() as $page) {
 				$rootPageIds[] = $page->id;

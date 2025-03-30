@@ -9,6 +9,7 @@ use App\Model\File\File;
 use App\Model\File\FileData;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
+use App\Model\Person\Person;
 use App\Model\Web\Web;
 use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationData;
@@ -42,6 +43,8 @@ trait CoreWebData
 	#[DefaultValue('')] public string $basePath;
 	#[DefaultValue(false)] public bool $isAdmin;
 	#[DontCache] public array $tree;
+	/** @var int[] */ public array|null $adminPersons;
+	/** @var string[] */ public array|null $adminRoles;
 	#[DontCache] public int|string|null $createdByPerson;
 	#[DontCache] public int|string|null $updatedByPerson;
 	public ?DateTimeInterface $createdAt;
@@ -117,6 +120,29 @@ trait CoreWebData
 		}
 		uasort($pageDatas, fn(PageData $a, PageData $b) => $a->rank <=> $b->rank);
 		return new Collection($pageDatas);
+	}
+
+
+	public function isUserAdmin(CmsUser $cmsUser): bool
+	{
+		return $this->isPersonAdmin($cmsUser->getPerson()) || $this->isRoleAdmin($cmsUser->getRoles());
+	}
+
+
+	private function isPersonAdmin(Person $person): bool
+	{
+		return in_array($person->id, $this->adminPersons, true);
+	}
+
+
+	private function isRoleAdmin(array $roles): bool
+	{
+		foreach ($roles as $role) {
+			if (in_array($role, $this->adminRoles, true)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
