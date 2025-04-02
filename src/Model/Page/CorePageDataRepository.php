@@ -25,7 +25,6 @@ trait CorePageDataRepository
 	/** @return Collection<Item> */
 	public function getCollection(): Collection
 	{
-		bdump('getting page collection');
 		if (!isset($this->collection)) {
 			$this->buildCache();
 		}
@@ -38,7 +37,6 @@ trait CorePageDataRepository
 	 */
 	protected function buildCache(): void
 	{
-		bdump('building page cache');
 		$this->cache->remove('routeSetup');
 		$this->cache->remove('pageAliases');
 		$this->cache->clean([Cache::Tags => lcfirst($this->getName())]);
