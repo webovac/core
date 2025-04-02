@@ -159,8 +159,8 @@ trait CorePageData
 			default => 'menu-item' . ($this->style ? ' btn btn-subtle-' . $this->style : ''),
 		}
 			. ((!$this->targetPath && ($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
-			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator))
-			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator)) ? ' active' : '')
+			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath))
+			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath)) ? ' active' : '')
 			;
 	}
 
