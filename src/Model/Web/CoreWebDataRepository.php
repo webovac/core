@@ -37,7 +37,14 @@ trait CoreWebDataRepository
 		$this->cache->remove('routeSetup');
 		$this->cache->remove('webAliases');
 		$this->cache->clean([Cache::Tags => lcfirst($this->getName())]);
-		$items = [];
+		$pageDatas = $this->pageDataRepository->getCollection();
+		$allPages = [];
+		foreach ($pageDatas as $pageData) {
+			if (!$pageData->web) {
+				continue;
+			}
+			$allPages[$pageData->web][$pageData->web . '-' . $pageData->id] = $pageData;
+		}
 		foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $entity) {
 			$key = $this->getIdentifier($entity);
 			$item = $entity->getData(forCache: true);
@@ -48,6 +55,7 @@ trait CoreWebDataRepository
 				$rootPageIds[] = $page->id;
 			}
 			$item->rootPages = $rootPageIds;
+			$item->allPages = $allPages[$entity->id] ?? [];
 			$this->cacheItem($key, $item);
 			$this->addItemToCollection($key, $item);
 		}

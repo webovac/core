@@ -30,18 +30,6 @@ final class RouterFactory
 		$routeList = new RouteList;
 		$webDatas = $this->dataModel->findWebDatas();
 		foreach ($webDatas as $webData) {
-//			$routeList->addRoute(
-//				mask: '//'
-//				. $webData->host
-//				. ($webData->basePath ? ('/' . $webData->basePath) : '')
-//				. '/test',
-//				metadata: [
-//					'presenter' => 'Test',
-//					'action' => 'default',
-//					'host' => $webData->host,
-//					'basePath' => $webData->basePath,
-//				],
-//			);
 			$routeList->addRoute(
 				mask: $webData->getStyleRouteMask(),
 				metadata: $webData->getStyleRouteMetadata(),
@@ -114,6 +102,9 @@ final class RouterFactory
 			}
 		}
 		if (!$pageIn) {
+			$pageIn = $setup['mapIn'][$base]['<path .+>'] ?? null;
+		}
+		if (!$pageIn) {
 			throw new BadRequestException;
 		}
 		$return = [
@@ -130,6 +121,9 @@ final class RouterFactory
 				$newIds[$name] = $ids[$key];
 			}
 			$return['id'] = $newIds;
+		}
+		if ($pageIn['path']) {
+			$return['path'] = $params['p'];
 		}
 		if ($do) {
 			$return['do'] = $pageIn['signals'][$do] ?? $do;
@@ -162,6 +156,9 @@ final class RouterFactory
 			foreach ($p as $key => $word) {
 				if ($word === '<id>') {
 					$p[$key] = array_shift($id);
+				}
+				if ($word === '<path .+>') {
+					$p[$key] = $params['path'];
 				}
 			}
 			$p = implode('/', $p);
@@ -238,6 +235,7 @@ final class RouterFactory
 							'pageName' => $p->name,
 							'lang' => $languageData->shortcut,
 							'id' => $m[1],
+							'path' => $fullPath === '<path .+>' ? $fullPath : null,
 							'signals' => $signals,
 							'parameters' => $parameters,
 						];
@@ -246,7 +244,7 @@ final class RouterFactory
 							'action' => 'default',
 							'host' => $p->host,
 							'basePath' => $p->basePath,
-							'p' => trim($fullPath, '/'),
+							'p' => $fullPath,
 							'signals' => array_flip($signals),
 							'parameters' => array_flip($parameters),
 						];

@@ -53,6 +53,7 @@ trait CoreWebData
 	### for CachedModel ###
 
 	/** @var int[] */ public array|null $rootPages;
+	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $allPages;
 
 
 	public function getStyleRouteMask(): string

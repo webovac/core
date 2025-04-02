@@ -32,7 +32,7 @@
 	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
 </head>
 <body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? (str_contains($themeData->code, 'dark') ? 'dark' : 'light') : 'light'}"{ifset $logStepUrl} data-log-step-url="{$logStepUrl}"{/}>
-<div n:class="layout, $pageData->stretched ? stretched"{if $pageData->layoutWidth} style="--cms-layout-width: {$pageData->layoutWidth}px;"{/}>
+<div n:class="layout, $pageData->stretched ? stretched"{if $layoutData->code !== 'cvut' && $pageData->layoutWidth} style="--cms-layout-width: {$pageData->layoutWidth}px;"{/}>
 	{control core-menu}
 	<div class="horizontal-wrapper">
 		{if !$layoutData->hideBreadcrumbs && $layoutData->code === 'twitter'}

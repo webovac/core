@@ -7,10 +7,12 @@ namespace Webovac\Core\Model\Page;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationDataRepository;
+use App\Model\Web\WebDataRepository;
 use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
 use ReflectionException;
 use Stepapo\Model\Data\Collection;
+use Stepapo\Model\Data\Item;
 use Throwable;
 
 
@@ -20,11 +22,23 @@ trait CorePageDataRepository
 	#[Inject] public PageTranslationDataRepository $pageTranslationDataRepository;
 
 
+	/** @return Collection<Item> */
+	public function getCollection(): Collection
+	{
+		bdump('getting page collection');
+		if (!isset($this->collection)) {
+			$this->buildCache();
+		}
+		return $this->collection;
+	}
+
+
 	/**
 	 * @throws Throwable
 	 */
 	protected function buildCache(): void
 	{
+		bdump('building page cache');
 		$this->cache->remove('routeSetup');
 		$this->cache->remove('pageAliases');
 		$this->cache->clean([Cache::Tags => lcfirst($this->getName())]);

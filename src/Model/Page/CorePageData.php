@@ -152,14 +152,15 @@ trait CorePageData
 
 	public function getClass(string $context, bool $checkActive, IPresenter $presenter, PageActivator $pageActivator, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): string
 	{
+		# TODO fix targetPage
 		return match($context) {
 			'buttons' => 'btn btn-outline-' . ($this->style ?: 'primary'),
 			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->style ? ($this->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->style ? ' btn btn-subtle-' . $this->style : ''),
 		}
-			. ((($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
-			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath))
-			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath)) ? ' active' : '')
+			. ((!$this->targetPath && ($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
+			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator))
+			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator)) ? ' active' : '')
 			;
 	}
 

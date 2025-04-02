@@ -35,9 +35,20 @@ trait CoreDataModel
 
 
 	/** @return Collection<PageData> */
-	public function findPageDatas(): Collection
+	public function findPageDatas(?WebData $webData = null): Collection
 	{
-		return $this->pageRepository->getCollection();
+		/** @var PageData[] $pageDatas */
+		$pageDatas = $this->pageRepository->getCollection();
+		if ($webData) {
+			$result = [];
+			foreach ($pageDatas as $key => $pageData) {
+				if ($pageData->web === $webData->id) {
+					$result[$key] = $pageData;
+				}
+			}
+			return new Collection($result);
+		}
+		return $pageDatas;
 	}
 
 
