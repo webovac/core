@@ -36,7 +36,9 @@ class CoreExtension extends StepapoExtension
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
-			'host' => Expect::string()->required(),
+			'parameters' => Expect::array([
+				'host' => Expect::string()->required(),
+			]),
 			'db' => Expect::structure([
 				'driver' => Expect::string()->required(),
 				'database' => Expect::string()->required(),
@@ -54,7 +56,7 @@ class CoreExtension extends StepapoExtension
 		parent::loadConfiguration();
 		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('neonHandler'))
-			->setFactory(NeonHandler::class, [['host' => $this->config->host], $builder->parameters['debugMode'], $this->config->testMode]);
+			->setFactory(NeonHandler::class, [['host' => $this->config->parameters['host']], $builder->parameters['debugMode'], $this->config->testMode]);
 		$this->createModelExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
@@ -81,7 +83,7 @@ class CoreExtension extends StepapoExtension
 		$this->modelExtension = new ModelExtension;
 		$this->modelExtension->setCompiler($this->compiler, 'stepapo.model');
 		$config = $this->processSchema($this->modelExtension->getConfigSchema(), [
-			'parameters' => ['host' => $this->config->host],
+			'parameters' => $this->config->parameters,
 			'testMode' => $this->config->testMode,
 			'driver' => $this->config->db->driver,
 			'database' => $this->config->db->database,
