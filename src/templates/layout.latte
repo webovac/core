@@ -4,6 +4,7 @@
 <head>
 	<title>{$metaTitle . ' | ' . $webTranslationData->title|truncate:60}</title>
 	<meta charset="utf-8">
+	<meta n:if="$webData->disableIndex" name="robots" content="noindex, nofollow">
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 	<meta name="description" n:if="$description" content="{$description|truncate:300}">
 	<meta name="theme-color" content="{$themeData->contentBg}">

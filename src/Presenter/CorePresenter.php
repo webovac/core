@@ -105,7 +105,11 @@ trait CorePresenter
 				throw new ForbiddenRequestException;
 			} catch (LoginRequiredException $e) {
 				$loginPage = $this->dataModel->getPageDataByName($this->webData->id, 'FsvAuth:Home') ?: $this->dataModel->getPageDataByName($this->webData->id, 'Auth:Home');
-				$this->redirect('Home:default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
+				if ($this->webData->disableBacklink) {
+					$this->redirect('Home:default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
+				} else {
+					$this->redirect('Home:default', ['pageName' => $loginPage->name]);
+				}
 			}
 			if ($this->pageData->hasParameter) {
 				if (!$this->pageData->parentDetailRootPages) {

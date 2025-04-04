@@ -42,6 +42,8 @@ trait CoreWebData
 	/** @var string[] */ public array|null $modules;
 	#[DefaultValue('')] public string $basePath;
 	#[DefaultValue(false)] public bool $isAdmin;
+	#[DefaultValue(false)] public bool $disableIndex;
+	#[DefaultValue(false)] public bool $disableBacklink;
 	#[DontCache] public array $tree;
 	/** @var int[] */ public array|null $adminPersons;
 	/** @var string[] */ public array|null $adminRoles;
