@@ -12,8 +12,8 @@
 					<img src="{$baseUrl}/dist/images/logo-fsv-text.svg">
 				</div>
 			{else}
-				<img class="logo-img" src="{$baseUrl}/{$logoUrl}">
-				<div class="spinner-border text-primary"></div>
+				<img class="logo-img ajax-hide" src="{$baseUrl}/{$logoUrl}">
+				<div class="ajax-spinner spinner-border text-primary"></div>
 			{/}
 		</a>
 		<div class="menu flex-grow-1" id="menu" n:inner-foreach="$pageDatas as $p">

@@ -38,7 +38,7 @@ class CoreExtension extends StepapoExtension
 		return Expect::structure([
 			'parameters' => Expect::array([
 				'host' => Expect::string()->required(),
-			]),
+			])->otherItems(),
 			'db' => Expect::structure([
 				'driver' => Expect::string()->required(),
 				'database' => Expect::string()->required(),
