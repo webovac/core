@@ -106,9 +106,9 @@ trait CorePresenter
 			} catch (LoginRequiredException $e) {
 				$loginPage = $this->dataModel->getPageDataByName($this->webData->id, 'FsvAuth:Home') ?: $this->dataModel->getPageDataByName($this->webData->id, 'Auth:Home');
 				if ($this->webData->disableBacklink) {
-					$this->redirect('Home:default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
-				} else {
 					$this->redirect('Home:default', ['pageName' => $loginPage->name]);
+				} else {
+					$this->redirect('Home:default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
 				}
 			}
 			if ($this->pageData->hasParameter) {
