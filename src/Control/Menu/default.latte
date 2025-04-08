@@ -16,47 +16,74 @@
 				<div class="ajax-spinner spinner-border text-primary"></div>
 			{/}
 		</a>
-		<div class="menu flex-grow-1" id="menu" n:inner-foreach="$pageDatas as $p">
-			{renderMenuItem($p)}
+		<div class="menu flex-grow-1" id="menu">
+			{foreach $pageDatas as $p}
+				{renderMenuItem($p)}
+			{/}
+			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') && $hasSearch && !$isError}
+				<hr class="side-menu-item">
+				<div class="search menu-item side-menu-item">
+					{$presenter->getComponent('search-searchForm')->render()}
+				</div>
+			{/}
+			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') && $cmsUser->isLoggedIn()}
+				<hr class="side-menu-item">
+				<div n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink '//Home:', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="d-none d-xxl-flex menu-item">
+					<i class="fas fa-fw fa-user"></i>
+					<span>
+						{$cmsUser->getPerson()->name}
+					</span>
+				</div>
+				<a class="side-menu-item menu-item" n:if="$cmsUser->isLoggedIn()" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}">
+					<i n:class="$layoutData->primaryIcon, fa-fw, fa-power-off"></i><span>{_'Odhlásit'}</span>
+				</a>
+				<div class="menu-item side-menu-item" n:if="$showAdmin && (!$pageData->module || $webData->isAdmin)">
+					<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+						{_'Obsah'}
+					</a>
+					<span class="mx-1"> · </span>
+					<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+						{_'Nastavení'}
+					</a>
+					{*
+                    <hr>
+                    <a n:foreach="$webDatas as $w" href="{plink '//Home:', 'Home', host: $w->host, basePath: $w->basePath, lang: $languageShortcuts[$w->defaultLanguage]}" class="link-secondary menu-item small">
+                        {$w->host}{if $w->basePath}/{$w->basePath}{/}
+                    </a>
+                    *}
+				</div>
+				<hr>
+				<div class="side-menu-item languages" n:if="count($webData->translations) > 1 && !$isError && $cmsUser->isLoggedIn()" n:inner-foreach="$webData->translations as $translation">
+					{var $l = $dataModel->getLanguageData($translation->language)}
+					{var $t = $l->getCollection('translations')->getByKey($languageData->id) ?: $l->getCollection('translations')->getByKey($webData->defaultLanguage)}
+					{ifset $availableTranslations[$l->id]}
+						{if $cmsUser->isLoggedIn()}
+							<a n:if="$t" href="{plink '//this', language: $l->shortcut, do: 'setLanguage'}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+								<img src="/dist/images/languages/{$l->shortcut}.svg">
+							</a>
+						{else}
+							<a href="{plink '//default', $pageData->name, $entity?->getParameters(), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="right">
+								<img src="/dist/images/languages/{$l->shortcut}.svg">
+							</a>
+						{/}
+					{else}
+						<div n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getByKey($languageData->id)->title} nedostupné" data-tooltip-position="left">
+							<img src="/dist/images/languages/{$l->shortcut}.svg">
+						</div>
+					{/}
+				</div>
+				<div class="side-menu-item languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && count($themeDatas) > 1 && !$isError" n:inner-foreach="$themeDatas as $themeData">
+					{var $translation = $themeData->getCollection('translations')->getByKey($languageData->id) ?: $themeData->getCollection('translations')->getByKey($webData->defaultLanguage)}
+					<a n:if="$translation" href="{plink '//this', 'theme' => $themeData->id, 'do' => 'setTheme'}" data-tooltip="{$translation->title}" data-tooltip-position="right">
+						<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $themeData->code ? 'text-primary' : 'bg-secondary'" style="{if $presenter->template->themeData->code === $themeData->code}background: white; {/}--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
+					</a>
+				</div>
+			{/}
 		</div>
 		<div class="d-flex">
 			<a href="#" class="menu-button side-button user-button" n:if="($cmsUser->isLoggedIn() && !$layoutData->hideSidePanel) || ($hasSearch && !$layoutData->hideSidePanel)"><i n:class="$layoutData->primaryIcon, fa-fw, fa-bars"></i></a>
 {*			<a href="#" class="menu-button side-button search-button" n:if="$hasSearch && !$layoutData->hideSidePanel"><i n:class="$layoutData->primaryIcon, fa-fw, fa-magnifying-glass"></i></a>*}
 			<a href="#" class="menu-button" id="menu-button"><i n:class="$layoutData->primaryIcon, fa-fw, fa-bars"></i></a>
 		</div>
-		<div class="menu" n:if="$layoutData->hideSidePanel && $cmsUser->isLoggedIn()">
-			<div n:if="$hasSearch && !$isError" class="search menu-item">
-				{$presenter->getComponent('search-searchForm')->render()}
-			</div>
-			<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
-				{var $l = $dataModel->getLanguageData($translation->language)}
-				{var $t = $l->getCollection('translations')->getByKey($languageData->id) ?: $l->getCollection('translations')->getByKey($webData->defaultLanguage)}
-				{ifset $availableTranslations[$l->id]}
-					{if $cmsUser->isLoggedIn()}
-						<a n:if="$t" href="{plink '//this', language: $l->shortcut, do: 'setLanguage'}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="left">
-							<img src="/dist/images/languages/{$l->shortcut}.svg">
-						</a>
-					{else}
-						<a href="{plink '//default', $pageData->name, $entity?->getParameters(), lang: $l->shortcut}" n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$t->title}" data-tooltip-position="left">
-							<img src="/dist/images/languages/{$l->shortcut}.svg">
-						</a>
-					{/}
-				{else}
-					<div n:class="gray, $languageData->id === $l->id ? active" data-tooltip="{$l->getCollection('translations')->getByKey($languageData->id)->title} nedostupné" data-tooltip-position="left">
-						<img src="/dist/images/languages/{$l->shortcut}.svg">
-					</div>
-				{/}
-			</div>
-			<div class="languages" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn() && count($themeDatas) > 1 && !$isError" n:inner-foreach="$themeDatas as $themeData">
-				{var $translation = $themeData->getCollection('translations')->getByKey($languageData->id) ?: $themeData->getCollection('translations')->getByKey($webData->defaultLanguage)}
-				<a n:if="$translation" href="{plink '//this', 'theme' => $themeData->id, 'do' => 'setTheme'}" data-tooltip="{$translation->title}" data-tooltip-position="left">
-					<div n:class="badge, rounded-circle, $presenter->template->themeData->code === $themeData->code ? text-bg-primary : text-bg-light" style="--bs-badge-padding-x: 0.55em">{$translation->title|truncate:1,''}</div>
-				</a>
-			</div>
-			<a class="menu-item" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}">
-				<i n:class="$layoutData->primaryIcon, fa-fw, fa-power-off"></i><span>{_'Odhlásit'}</span>
-			</a>
-		</div>
-
 	</div>
 </div>

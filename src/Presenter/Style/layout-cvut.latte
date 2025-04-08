@@ -68,6 +68,23 @@ h1, .title {
     border-color: inherit;
     opacity: 0.25;
 }
+.layout .navigation-wrapper .navigation .side-menu-item {
+    display: none;
+}
+@media (min-width: 1420px) {
+    .layout .side-panel {
+        display: none !important;
+    }
+    .layout .navigation-wrapper .navigation .side-menu-item {
+        display: flex;
+    }
+    .layout .navigation-wrapper .navigation .side-menu-item a {
+        color: var(--cms-primary-link-color);
+    }
+    .layout .navigation-wrapper .navigation .side-menu-item a:hover {
+        color: var(--cms-light);
+    }
+}
 @media (max-width: 1419.8px) and (min-width: 992px) {
     :root {
         --cms-layout-primary-menu-item-padding: 8px 10px;

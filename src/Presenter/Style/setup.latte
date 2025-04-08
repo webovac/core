@@ -23,7 +23,9 @@
     --cms-menu-item-padding-y: 0.5em;
 
     --cms-hr-margin: 0.5rem 0;
-    --cms-background-url: url('{$baseUrl}/{$backgroundUrl}');
+    {if $backgroundUrl}
+        --cms-background-url: url('{$baseUrl}/{$backgroundUrl}');
+    {/}
 
     --cms-primary: {$webData->color};
     --cms-primary-rgb: {$webData->color|rgb};

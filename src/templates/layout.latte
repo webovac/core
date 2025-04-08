@@ -48,14 +48,14 @@
 					{control core-messages}
 				{/}
 
-				<div class="content override-padding">
+				<div n:class="content, override-padding, str_contains($pageTranslation->content, 'ContentForm') ? 'd-flex flex-column'">
 					{include 'main.file'}
 				</div>
 				<div class="footer small" n:ifcontent>
 					{include 'footer.file'}
 				</div>
 			</div>
-			<div class="background"></div>
+			<div class="background" n:if="$webData->backgroundFile && $layoutData->imageDisplay"></div>
 		</div>
 	</div>
 	{if !$layoutData->hideSidePanel}

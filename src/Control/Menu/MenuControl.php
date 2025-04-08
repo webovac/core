@@ -64,9 +64,22 @@ class MenuControl extends BaseControl
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& $searchModuleData
 			&& in_array($searchModuleData->id, $webData->modules, true);
+		$personsModuleData = $this->dataModel->getModuleDataByName('Persons');
+		$this->template->hasPersons = $this->moduleChecker->isModuleInstalled('persons')
+			&& $personsModuleData
+			&& in_array($personsModuleData->id, $webData->modules, true);
+		$adminPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Admin:Home');
+		$showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser, $webData) ?: false;
+		$this->template->showAdmin = $showAdmin;
+		if ($showAdmin) {
+			$this->template->languageShortcuts = $this->dataModel->languageRepository->findAllPairs();
+			$this->template->pageModuleData = $pageData->module ? $this->dataModel->getModuleData($pageData->module) : null;
+			$this->template->webDatas = $this->dataModel->findWebDatas();
+			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
+		}
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$this->template->layoutData = $layoutData;
-			if ($layoutData->hideSidePanel) {
+			if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') {
 				foreach ($this->dataModel->getPageData($webData->id, $pageData->id)->getCollection('translations') as $translationData) {
 					$this->template->availableTranslations[$translationData->language] = $translationData->language;
 				}

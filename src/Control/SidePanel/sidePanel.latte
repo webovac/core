@@ -1,5 +1,5 @@
 {templateType Webovac\Core\Control\SidePanel\SidePanelTemplate}
-<div class="side-panel" id="side" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn()">
+<div n:class="side-panel" id="side" n:if="isModuleInstalled('style') && $cmsUser->isLoggedIn()">
 	<div n:if="$hasSearch && !$isError" class="search menu-item py-0" style="height: 55px; min-height: 55px;">
 		{$presenter->getComponent('search-searchForm')->render()}
 	</div>
@@ -15,16 +15,14 @@
 	<hr>
 	<a n:if="$hasPersons" href="{plink '//Home:', 'Persons:PersonDetailSettings', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}" class="menu-item" href="#"><i class="fass fa-fw fa-cog"></i><span class="ms-2">Nastavení</span></a>
 	<a class="menu-item" n:if="!$isError" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}"><i class="fass fa-fw fa-sign-out"></i><span class="ms-2">{_'Odhlásit'}</span></a>
-	<div n:if="$showAdmin">
-		<div class="menu-item" n:if="!$pageData->module || $webData->isAdmin">
-			<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-				{_'Obsah'}
-			</a>
-			<span class="mx-1"> · </span>
-			<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-				{_'Nastavení'}
-			</a>
-		</div>
+	<div class="menu-item" n:if="$showAdmin && (!$pageData->module || $webData->isAdmin)">
+		<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+			{_'Obsah'}
+		</a>
+		<span class="mx-1"> · </span>
+		<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+			{_'Nastavení'}
+		</a>
 		{*
 		<hr>
 		<a n:foreach="$webDatas as $w" href="{plink '//Home:', 'Home', host: $w->host, basePath: $w->basePath, lang: $languageShortcuts[$w->defaultLanguage]}" class="link-secondary menu-item small">
