@@ -339,7 +339,7 @@ schemas:
 					complementary_color: [type: string, null: false, default: '#888888']
 					host: [type: string, null: false]
 					published_at: [type: datetime, null: true]
-					base_path: [type: string, null: false, default: '']
+					base_path: [type: string, null: false, default: '~']
 					icon_background_color: [type: string, null: false, default: '#ffffff']
 					home_page_id: [type: int, null: true]
 					default_language_id: [type: int, null: true]

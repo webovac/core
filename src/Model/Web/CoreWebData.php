@@ -40,7 +40,7 @@ trait CoreWebData
 	/** @var WebTranslationData[] */ #[ArrayOfType(WebTranslationData::class)] public array|null $translations;
 	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
 	/** @var string[] */ public array|null $modules;
-	#[DefaultValue('')] public string $basePath;
+	#[DefaultValue('~')] public string $basePath;
 	#[DefaultValue(false)] public bool $isAdmin;
 	#[DefaultValue(false)] public bool $disableIndex;
 	#[DefaultValue(false)] public bool $disableBacklink;
@@ -62,7 +62,7 @@ trait CoreWebData
 	{
 		return '//'
 			. $this->host
-			. ($this->basePath ? ('/' . $this->basePath) : '')
+			. ($this->basePath !== '~' ? ('/' . $this->basePath) : '')
 			. '/style';
 	}
 
@@ -82,7 +82,7 @@ trait CoreWebData
 	{
 		return '//'
 			. $this->host
-			. ($this->basePath ? ('/' . $this->basePath) : '')
+			. ($this->basePath !== '~' ? ('/' . $this->basePath) : '')
 			. ($language ? ('/' . $language) : '')
 			. '/manifest.json';
 	}
@@ -104,7 +104,7 @@ trait CoreWebData
 	{
 		return '//'
 			. $this->host
-			. ($this->basePath ? ('/' . $this->basePath) : '')
+			. ($this->basePath !== '~' ? ('/' . $this->basePath) : '')
 			. '[/<p .+>]';
 	}
 

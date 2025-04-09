@@ -2,7 +2,7 @@ services:
 	- App\Model\DataModel
 	- Nette\Caching\Cache
 #	cache.storage: Nette\Caching\Storages\FileStorage(%tempDir%)
-#	cache.storage: Nette\Caching\Storages\SQLiteStorage(%tempDir%/cache.db)
+	cache.storage: Nette\Caching\Storages\SQLiteStorage(%tempDir%/cache.db)
 #	cache.storage: Nette\Caching\Storages\MemcachedStorage
 	- Nextras\Migrations\Extensions\SqlHandler
 	- Webovac\Core\Lib\Dir(%rootDir%)

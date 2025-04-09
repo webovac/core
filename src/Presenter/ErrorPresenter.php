@@ -24,7 +24,7 @@ trait ErrorPresenter
 		$this->onStartup[] = function () {
 			$request = $this->getHttpRequest();
 			$this->host = $request->getUrl()->getHost();
-			$this->basePath = '';
+			$this->basePath = '~';
 			$this->lang = 'cs';
 		};
 	}
