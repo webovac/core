@@ -72,7 +72,7 @@ trait CoreWebDataRepository
 					$aliases["$web->host-$web->basePath"] = $web->id;
 				}
 				return $aliases;
-			});
+			}, [Cache::Tags => lcfirst($this->getName())]);
 		}
 		return $this->aliases;
 	}

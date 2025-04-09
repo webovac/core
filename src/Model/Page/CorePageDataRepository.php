@@ -67,7 +67,7 @@ trait CorePageDataRepository
 					$aliases["$page->web-$page->name"] = $page->id;
 				}
 				return $aliases;
-			});
+			}, [Cache::Tags => lcfirst($this->getName())]);
 		}
 		return $this->aliases;
 	}

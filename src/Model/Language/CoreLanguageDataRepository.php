@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Language;
 
 use App\Model\Language\LanguageData;
+use Nette\Caching\Cache;
 
 
 trait CoreLanguageDataRepository
@@ -22,7 +23,7 @@ trait CoreLanguageDataRepository
 					$aliases[$language->shortcut] = $language->id;
 				}
 				return $aliases;
-			});
+			}, [Cache::Tags => lcfirst($this->getName())]);
 		}
 		return $this->aliases;
 	}

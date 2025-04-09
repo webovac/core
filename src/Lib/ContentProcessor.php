@@ -19,7 +19,6 @@ class ContentProcessor implements Service
 
 	public function editorToContent(string $editor): string
 	{
-		bdump($editor);
 		$content = preg_replace_callback_array([
 			'/(&gt;)/' => fn(array $m) => '>',
 			'/<span.*?>{\$entity->(.+?)}<\/span>/' => fn(array $m) => '{$entity->' . $m[1] . '}',

@@ -251,7 +251,7 @@ final class RouterFactory
 					}
 				}
 				return $setup;
-			});
+			}, [Cache::Tags => ['language', 'web', 'page']]);
 		}
 		return $this->setup;
 	}

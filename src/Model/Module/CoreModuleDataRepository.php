@@ -8,6 +8,7 @@ use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\ModuleTranslation\ModuleTranslationDataRepository;
 use App\Model\Page\PageDataRepository;
+use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Entity\IEntity;
 
@@ -29,7 +30,7 @@ trait CoreModuleDataRepository
 					$aliases[$module->name] = $module->id;
 				}
 				return $aliases;
-			});
+			}, [Cache::Tags => lcfirst($this->getName())]);
 		}
 		return $this->aliases;
 	}
