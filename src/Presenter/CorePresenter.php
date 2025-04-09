@@ -95,6 +95,9 @@ trait CorePresenter
 			}
 			$this->languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 			$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
+			if (!$this->webData) {
+				$this->error();
+			}
 			$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
 			$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->getParameter('pageName') ?: 'Home');
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
