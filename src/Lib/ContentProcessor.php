@@ -25,14 +25,15 @@ class ContentProcessor implements Service
 			'/<p>[^<>]*?<span.*?>{control (.+?)}<\/span>[^<>]*?<\/p>/' => fn(array $m) => '{control ' . $m[1] . '}',
 			'/}&nbsp;/' => fn() => '}',
 			'/<figure class="table"( style=".+")?><table.*?>(.+)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => '<figure class="table override-padding"' . $m[1] . '><table class="table table-bordered">' . $m[2] . '</table>' . $m[3] . '</figure>',
-			'/<a( class=".*?")? href="(.*?)" data-page="(.*?)" data-id="([^"]*)">(.*?)<\/a>/' => function (array $m) {
-				$class = $m[1];
+			'/<a(.*?)? href="(.*?)" data-page="(.*?)" data-id="([^"]*)"(.*?)?>(.*?)<\/a>/' => function (array $m) {
+				$before = $m[1];
 				$url = $m[2];
 				$page = $m[3];
 				$id = $m[4];
-				$text = $m[5];
+				$after = $m[5];
+				$text = $m[6];
 				$href = $url ?: ("{plink '//default', pageName: '" . $page . "'" . ($id ? ", id: '" . $id . "'" : "") . "}");
-				return '<a' . $class . ' href="' . $href . '">' . $text . '</a>';
+				return '<a' . $before . ' href="' . $href . '"' . $after . '>' . $text . '</a>';
 			}
 		], $editor);
 		return strip_tags($content, self::ALLOWED_TAGS);
@@ -45,9 +46,11 @@ class ContentProcessor implements Service
 			'/{\$entity->(.+?)}/' => fn(array $m) => '<span class="mention" data-mention="{$entity->' . $m[1] . '}">{$entity->' . $m[1] . '}</span>',
 			'/{control (.+?)}/' => fn(array $m) => '<p><span class="mention" data-mention="{control ' . $m[1] . '}">{control ' . $m[1] . '}</span></p>',
 			'/<figure class="table override-padding"( style=".+")><table class="table table-bordered">(.+)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => '<figure class="table"' . $m[1] . '><table>' . $m[2] . '</table>' . $m[3] . '</figure>',
-			'/<a href="(.*?)">(.*?)<\/a>/' => function (array $m) {
-				$href = $m[1];
-				$text = $m[2];
+			'/<a(.*?)? href="(.*?)"(.*?)?>(.*?)<\/a>/' => function (array $m) {
+				$before = $m[1];
+				$href = $m[2];
+				$after = $m[3];
+				$text = $m[4];
 				if (preg_match("/{plink '\/\/default', pageName: '(.+?)?'(?:, id: '?(.+?)'?)?}/", $href, $matches)) {
 					$href = '';
 					$pageName = $matches[1];
@@ -56,7 +59,7 @@ class ContentProcessor implements Service
 					$pageName = '';
 					$id = '';
 				}
-				return '<a href="' . $href . '" data-page="' . $pageName . '" data-id="' . $id . '">' . $text . '</a>';
+				return '<a' . $before . ' href="' . $href . '" data-page="' . $pageName . '" data-id="' . $id . '"' . $after . '>' . $text . '</a>';
 			}
 		], $content);
 	}
