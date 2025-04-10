@@ -49,6 +49,7 @@ trait CorePage
 		Page::TYPE_EXTERNAL_LINK => 'Externí odkaz',
 		Page::TYPE_TEXT => 'Text',
 		Page::TYPE_SEPARATOR => 'Oddělovač',
+		Page::TYPE_MODULE => 'Modul',
 	];
 	public const string ACCESS_FOR_ALL = 'all';
 	public const string ACCESS_FOR_LOGGED = 'logged';
