@@ -258,6 +258,9 @@ trait CorePresenter
 	private function buildCrumbs(): void
 	{
 		$parameters = [];
+		if (!in_array($this->webData->homePage, $this->pageData->parentPages, true)) {
+			array_unshift($this->pageData->parentPages, $this->webData->homePage);
+		}
 		foreach ($this->pageData->parentPages as $id) {
 			$pageData = $this->dataModel->getPageData($this->webData->id, $id);
 			$title = $pageData->getCollection('translations')->getByKey($this->languageData->id)->title;

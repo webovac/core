@@ -48,7 +48,7 @@
 					{control core-messages}
 				{/}
 
-				<div n:class="content, override-padding, str_contains($pageTranslation->content, 'ContentForm') ? 'd-flex flex-column'">
+				<div n:class="content, override-padding, str_contains($pageTranslation->content ?: '', 'ContentForm') ? 'd-flex flex-column'">
 					{include 'main.file'}
 				</div>
 				<div class="footer small" n:ifcontent>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
+use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationDataRepository;
@@ -102,6 +103,10 @@ trait CorePageDataRepository
 				: [];
 			unset($pageData);
 			$pageData = $page->getData(forCache: true);
+			if ($hasPages instanceof Module && $page === $hasPages->homePage) {
+				$pageData->icon = $parentPageData->icon;
+				$pageData->hideInNavigation = $parentPageData->hideInNavigation;
+			}
 			$pageData->web = $parentPageData ? $parentPageData->web : $page->web->id;
 			$pageData->module = $page->module?->id;
 			$pageData->host = $parentPageData ? $parentPageData->host : $page->web->host;
@@ -120,8 +125,12 @@ trait CorePageDataRepository
 			$pageData->parentPage = $page->parentPage?->id ?: ($parentPageData->parentPage ?? null);
 			$pageData->childPageIds = [];
 			foreach ($page->translations as $translation) {
-				$parentPath = !$pageData->dontInheritPath && $parentPageData?->getCollection('translations')->getByKey($translation->language->id)
-					? $parentPageData?->getCollection('translations')->getByKey($translation->language->id)->fullPath
+				$parentPageTranslationData = $parentPageData?->getCollection('translations')->getByKey($translation->language->id);
+				if ($hasPages instanceof Module && $page === $hasPages->homePage) {
+					$pageData->translations[$translation->language->id]->title = $parentPageTranslationData?->title ?: $translation->title;
+				}
+				$parentPath = !$pageData->dontInheritPath && $parentPageTranslationData
+					? $parentPageTranslationData->fullPath
 					: '//' . $pageData->host . ($pageData->basePath ? ('/' . $pageData->basePath) : '');
 				$path = $translation->path ? preg_replace('/<id(.*)>/', "<id[" . $pageData->name . "]>", $translation->path) : null;
 				$pageData->translations[$translation->language->id]->fullPath = $parentPath . ($path ? '/' . $path : '');

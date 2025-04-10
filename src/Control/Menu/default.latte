@@ -19,6 +19,11 @@
 		<div class="menu flex-grow-1" id="menu">
 			{foreach $pageDatas as $p}
 				{renderMenuItem($p)}
+				{if $p->id === $homePageData->id}
+					{foreach $homeChildPageDatas as $homeChildP}
+						{renderMenuItem($homeChildP)}
+					{/}
+				{/}
 			{/}
 			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') && $hasSearch && !$isError}
 				<hr class="side-menu-item">

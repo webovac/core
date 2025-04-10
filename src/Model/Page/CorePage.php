@@ -34,7 +34,7 @@ trait CorePage
 	public const string TYPE_TEXT = 'text';
 	public const string TYPE_SEPARATOR = 'separator';
 	public const string TYPE_MODULE = 'module';
-	public const array TYPES = [
+	public const array TYPES_ADMIN = [
 		Page::TYPE_PAGE => 'Stránka',
 		Page::TYPE_SIGNAL => 'Akce',
 		Page::TYPE_INTERNAL_LINK => 'Interní odkaz',
@@ -42,6 +42,13 @@ trait CorePage
 		Page::TYPE_TEXT => 'Text',
 		Page::TYPE_SEPARATOR => 'Oddělovač',
 		Page::TYPE_MODULE => 'Modul',
+	];
+	public const array TYPES = [
+		Page::TYPE_PAGE => 'Stránka',
+		Page::TYPE_INTERNAL_LINK => 'Interní odkaz',
+		Page::TYPE_EXTERNAL_LINK => 'Externí odkaz',
+		Page::TYPE_TEXT => 'Text',
+		Page::TYPE_SEPARATOR => 'Oddělovač',
 	];
 	public const string ACCESS_FOR_ALL = 'all';
 	public const string ACCESS_FOR_LOGGED = 'logged';
@@ -55,6 +62,7 @@ trait CorePage
 		Page::ACCESS_FOR_ADMIN => 'Adminy',
 		Page::ACCESS_FOR_GUEST => 'Jen nepřihlášené',
 	];
+	public const string STYLE_BASIC = 'basic';
 	public const string STYLE_PRIMARY = 'primary';
 	public const string STYLE_SECONDARY = 'secondary';
 	public const string STYLE_SUCCESS = 'success';
@@ -64,6 +72,7 @@ trait CorePage
 	public const string STYLE_LIGHT = 'light';
 	public const string STYLE_DARK = 'dark';
 	public const array STYLES = [
+		Page::STYLE_BASIC => 'Základní',
 		Page::STYLE_PRIMARY => 'Primary',
 		Page::STYLE_SECONDARY => 'Secondary',
 		Page::STYLE_SUCCESS => 'Success',

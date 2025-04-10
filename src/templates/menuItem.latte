@@ -1,6 +1,6 @@
 {templateType Webovac\Core\Control\MenuItem\MenuItemTemplate}
 {if $pageData->type === App\Model\Page\Page::TYPE_SEPARATOR}
-	<hr n:if="$context !== 'content'">
+	<hr n:if="$context !== 'signpost'">
 {else}
 	<a n:tag="$pageData->type === App\Model\Page\Page::TYPE_TEXT ? 'div' : 'a'" n:attr='href: $href, onclick: $pageTranslationData->onclick ? "return confirm(\"$pageTranslationData->onclick\")"' n:if="!$pageData->hideInNavigation" n:class="$class, $context === 'buttons' && in_array($layoutData->code, ['default', 'twitter'], true) ? 'btn-sm', in_array($layoutData->code, ['default', 'twitter'], true) && $pageData->style && $context === 'secondary' ? 'my-1 me-1'">
 		<div n:tag-if="$context === 'signpost'" n:if="$icon" class="rounded-5 d-inline-block bg-white" style="width: 45px; height: 45px; padding: 7.5px 0;">

@@ -128,7 +128,8 @@ trait CoreWebData
 
 	public function isUserAdmin(CmsUser $cmsUser): bool
 	{
-		return $this->isPersonAdmin($cmsUser->getPerson()) || $this->isRoleAdmin($cmsUser->getRoles());
+		return $cmsUser->isLoggedIn() &&
+			($this->isPersonAdmin($cmsUser->getPerson()) || $this->isRoleAdmin($cmsUser->getRoles()));
 	}
 
 

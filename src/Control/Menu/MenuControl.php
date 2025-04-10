@@ -57,8 +57,10 @@ class MenuControl extends BaseControl
 		$this->template->fileUploader = $this->fileUploader;
 		$this->template->pageData = $pageData;
 		$this->template->languageData = $languageData;
+		$homePage = $this->dataModel->getPageData($webData->id, $webData->homePage);
+		$this->template->homeChildPageDatas = $homePage->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
 		$this->template->pageDatas = $webData->getRootPageDatas($this->dataModel, $this->cmsUser, $this->entity);
-		$this->template->homePageData = $this->dataModel->getPageData($webData->id, $webData->homePage);
+		$this->template->homePageData = $homePage;
 		$this->template->dataModel = $this->dataModel;
 		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
