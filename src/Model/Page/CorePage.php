@@ -105,9 +105,7 @@ trait CorePage
 
 	public function getIcon(): ?string
 	{
-		return $this->type === Page::TYPE_MODULE
-			? $this->targetModule->icon
-			: $this->icon;
+		return $this->icon;
 	}
 
 
