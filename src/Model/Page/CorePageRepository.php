@@ -40,6 +40,8 @@ trait CorePageRepository
 		$count ??= $web->getPages()->countStored();
 		$page = new Page;
 		$page->web = $web;
+		$page->hideInNavigation = $module->homePage->hideInNavigation;
+		$page->icon = $module->icon;
 		$page->targetModule = $module;
 //		$page->module = $module;
 		$page->name = $module->name . 'Module';
