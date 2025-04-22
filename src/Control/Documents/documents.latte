@@ -1,0 +1,4 @@
+{templateType Webovac\Core\Control\Documents\DocumentsTemplate}
+<div n:if="$fileCount > 0" n:inner-foreach="$files as $file">
+	{control 'fileItem-' . $file->id}
+</div>

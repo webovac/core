@@ -4,6 +4,8 @@ schemas:
 			file:
 				columns:
 					id: [type: int, null: false, auto: true]
+					web_id: [type: int, null: true]
+					page_id: [type: int, null: true]
 					created_by_person_id: [type: int, null: true]
 					identifier: [type: string, null: false]
 					modern_identifier: [type: string, null: true]
@@ -12,11 +14,33 @@ schemas:
 					extension: [type: string, null: false]
 					content_type: [type: string, null: false]
 					type: [type: string, null: false]
+					width: [type: int, null: true]
+					height: [type: int, null: true]
 					created_at: [type: datetime, null: false, default: now]
 				primaryKey: id
-				indexes: [created_by_person_id]
+				indexes: [web_id, page_id, created_by_person_id]
+				foreignKeys:
+					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseOrder: id]
+					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseOrder: id]
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+			file_translation:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					file_id: [type: int, null: false]
+					language_id: [type: int, null: false]
+					description: [type: text, null: true]
+				primaryKey: id
+				uniqueKeys: [[file_id, language_id]]
+				indexes: [created_by_person_id, updated_by_person_id, file_id, language_id]
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					file_id: [table: file, column: id, reverseName: translations, reverseOrder: language->rank]
+					language_id: [table: language, column: id]
 			index:
 				columns:
 					id: [type: int, null: false, auto: true]

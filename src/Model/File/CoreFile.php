@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\File;
 
 use App\Model\File\File;
+use App\Model\FileTranslation\FileTranslation;
+use App\Model\Language\LanguageData;
 
 
 trait CoreFile
@@ -13,6 +15,13 @@ trait CoreFile
 	public const string TYPE_FILE = 'file';
 	public const string TYPE_IMAGE = 'image';
 	public const string TYPE_SVG = 'svg';
+	public const int SIZE_LIMIT = 1920;
+
+
+	public function getTranslation(LanguageData $language): ?FileTranslation
+	{
+		return $this->translations->toCollection()->getBy(['language' => $language->id]);
+	}
 
 
 	public function getDefaultIdentifier(): ?string
@@ -36,5 +45,31 @@ trait CoreFile
 			return null;
 		}
 		return $this->modernIdentifier;
+	}
+
+
+	public function getLimitedWidth(): ?int
+	{
+		if ($this->type === File::TYPE_FILE) {
+			return null;
+		}
+		if ($this->height <= File::SIZE_LIMIT && $this->width <= File::SIZE_LIMIT) {
+			return $this->width;
+		}
+		$limitRatio = 1920 / max($this->width, $this->height);
+		return (int) round($this->width * $limitRatio);
+	}
+
+
+	public function getLimitedHeight(): ?int
+	{
+		if ($this->type === File::TYPE_FILE) {
+			return null;
+		}
+		if ($this->height <= File::SIZE_LIMIT && $this->width <= File::SIZE_LIMIT) {
+			return $this->height;
+		}
+		$limitRatio = 1920 / max($this->width, $this->height);
+		return (int) round($this->height * $limitRatio);
 	}
 }

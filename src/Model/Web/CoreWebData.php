@@ -39,6 +39,7 @@ trait CoreWebData
 	#[Type(FileData::class)] public ?FileData $backgroundFile;
 	/** @var WebTranslationData[] */ #[ArrayOfType(WebTranslationData::class)] public array|null $translations;
 	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
+	/** @var FileData[] */ #[ArrayOfType(FileData::class)] public array|null $files;
 	/** @var string[] */ public array|null $modules;
 	#[DefaultValue('~')] public string $basePath;
 	#[DefaultValue(false)] public bool $isAdmin;

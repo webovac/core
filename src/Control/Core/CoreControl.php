@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Core;
 
+use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\Command\MigrateCommand;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\Breadcrumbs\BreadcrumbsControl;
 use Webovac\Core\Control\Breadcrumbs\IBreadcrumbsControl;
 use Webovac\Core\Control\Buttons\ButtonsControl;
 use Webovac\Core\Control\Buttons\IButtonsControl;
+use Webovac\Core\Control\Documents\DocumentsControl;
+use Webovac\Core\Control\Documents\IDocumentsControl;
+use Webovac\Core\Control\Gallery\GalleryControl;
+use Webovac\Core\Control\Gallery\IGalleryControl;
 use Webovac\Core\Control\Menu\IMenuControl;
 use Webovac\Core\Control\Menu\MenuControl;
 use Webovac\Core\Control\Messages\IMessagesControl;
@@ -36,6 +41,8 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private ISignpostControl $signpost,
 		private ISidePanelControl $sidePanel,
 		private IBreadcrumbsControl $breadcrumbs,
+		private IGalleryControl $gallery,
+		private IDocumentsControl $documents,
 		private MigrateCommand $command,
 	) {}
 
@@ -90,5 +97,17 @@ class CoreControl extends BaseControl implements MainModuleControl
 	public function createComponentMessages(): MessagesControl
 	{
 		return $this->message->create();
+	}
+
+
+	public function createComponentGallery(): GalleryControl
+	{
+		return $this->gallery->create($this->entity);
+	}
+
+
+	public function createComponentDocuments(): DocumentsControl
+	{
+		return $this->documents->create($this->entity);
 	}
 }

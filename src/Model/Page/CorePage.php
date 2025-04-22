@@ -11,6 +11,7 @@ use App\Model\PageTranslation\PageTranslation;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
+use Nextras\Orm\Relationships\IRelationshipCollection;
 use Webovac\Core\Control\PageItem\IPageItemControl;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
@@ -137,6 +138,12 @@ trait CorePage
 			}
 		}
 		return new ArrayCollection($pages, $this->getRepository());
+	}
+
+
+	public function getFiles(): IRelationshipCollection
+	{
+		return $this->files;
 	}
 
 

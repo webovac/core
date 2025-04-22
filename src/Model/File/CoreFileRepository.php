@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\File;
 
+use App\Model\Article\Article;
 use App\Model\File\File;
 use App\Model\File\FileData;
 use App\Model\File\FileRepository;
+use App\Model\Page\Page;
+use App\Model\Web\Web;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
@@ -15,17 +18,40 @@ use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
+use Webovac\Core\Model\CmsEntity;
 
 
 trait CoreFileRepository
 {
-	public function getByData(FileData|string $data): ?File
+//	public function getByData(FileData|string $data): ?File
+//	{
+//		if ($data instanceof FileData) {
+//			if (!isset($data->identifier)) {
+//				return null;
+//			}
+//			return $this->getBy(['identifier' => $data->identifier]);
+//		}
+//		return $this->getBy(['identifier' => $data]);
+//	}
+
+	public function getByData(FileData $data, ?CmsEntity $entity = null): ?File
 	{
 		if ($data instanceof FileData) {
 			if (!isset($data->identifier)) {
 				return null;
 			}
-			return $this->getBy(['identifier' => $data->identifier]);
+//			return $this->getBy([
+//				'identifier' => $data->identifier,
+////				'web' => $entity instanceof Web ? $entity : null,
+////				'article' => $entity instanceof Article ? $entity : null,
+////				'page' => $entity instanceof Page ? $entity : null,
+//			]);
+			return $this->getBy([
+				'identifier' => $data->identifier,
+				'web' => $entity instanceof Web ? $entity : null,
+				'article' => $entity instanceof Article ? $entity : null,
+				'page' => $entity instanceof Page ? $entity : null,
+			]);
 		}
 		return $this->getBy(['identifier' => $data]);
 	}
@@ -58,9 +84,12 @@ trait CoreFileRepository
 			$data->type = $data->upload->getContentType() === 'image/svg+xml' ? File::TYPE_SVG : ($data->upload->isImage() ? File::TYPE_IMAGE : File::TYPE_FILE);
 			if ($data->upload->getContentType() === 'image/svg+xml') {
 				$compatibleUpload = $this->svg2png($data->upload, $data->forceSquare);
+				$image = Image::fromFile($compatibleUpload->getTemporaryFile());
 				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
 				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
 				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
+				$data->width = $image->getWidth();
+				$data->height = $image->getHeight();
 			} elseif ($data->upload->getContentType() === 'image/webp' || $data->upload->getContentType() === 'image/avif') {
 				$compatibleUpload = $this->image2jpeg($data->upload, $data->forceSquare);
 				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
@@ -82,6 +111,11 @@ trait CoreFileRepository
 			$data->type = $originalFileData->type;
 			$data->compatibleIdentifier = $originalFileData->compatibleIdentifier;
 			$data->modernIdentifier = $originalFileData->modernIdentifier;
+		}
+		if ($data->upload?->isImage()) {
+			$image = Image::fromFile($data->upload->getTemporaryFile());
+			$data->width = $image->getWidth();
+			$data->height = $image->getHeight();
 		}
 		return $data;
 	}

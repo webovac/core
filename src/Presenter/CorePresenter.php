@@ -220,7 +220,7 @@ trait CorePresenter
 				->setPolicy(
 					SecurityPolicy::createSafePolicy()
 						->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox', 'snippet', 'snippetArea'])
-						->allowFilters(['noescape', 'mTime', 'translate'])
+						->allowFilters(['noescape', 'mTime', 'translate', 'localDate'])
 						->allowProperties(stdClass::class, SecurityPolicy::All)
 						->allowProperties(CmsEntity::class, SecurityPolicy::All)
 						->allowProperties(Item::class, SecurityPolicy::All)

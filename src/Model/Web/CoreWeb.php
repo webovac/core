@@ -11,6 +11,7 @@ use App\Model\WebTranslation\WebTranslation;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
+use Nextras\Orm\Relationships\IRelationshipCollection;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 use Webovac\Core\Lib\DataProvider;
@@ -37,6 +38,12 @@ trait CoreWeb
 	public function getTranslation(LanguageData $language): ?WebTranslation
 	{
 		return $this->translations->toCollection()->getBy(['language' => $language->id]);
+	}
+
+
+	public function getFiles(): IRelationshipCollection
+	{
+		return $this->files;
 	}
 
 
