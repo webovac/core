@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
+use App\Model\Language\Language;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;

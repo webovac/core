@@ -47,6 +47,7 @@ use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\RegisterOrmEvents;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
+use Webovac\Core\Model\HasSlugHistory;
 
 
 trait CorePresenter
@@ -126,6 +127,9 @@ trait CorePresenter
 				}
 				if (!$this->entity) {
 					$this->error();
+				}
+				if ($this->entity instanceof HasSlugHistory) {
+					$this->entity->checkForRedirect($this->getParameter('id'), $this->languageData, $this);
 				}
 				if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
 					throw new ForbiddenRequestException;

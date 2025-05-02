@@ -249,6 +249,21 @@ schemas:
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
 					page_id: [table: page, column: id, reverseName: translations, reverseOrder: language->rank]
 					language_id: [table: language, column: id]
+			path:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					web_id: [type: int, null: true]
+					page_translation_id: [type: int, null: false]
+					path: [type: string, null: false]
+					active: [type: bool, null: false, default: false]
+				primaryKey: id
+				uniqueKeys: [[web_id, page_translation_id, path]]
+				indexes: [web_id, page_translation_id]
+				foreignKeys:
+					web_id: [table: page, column: id]
+					page_translation_id: [table: page_translation, column: id, reverseName: paths, reverseOrder: id]
 			parameter:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -321,6 +336,14 @@ schemas:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
 					page_id: [table: page, column: id, reverseName: signals]
+			slug:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					slug: [type: string, null: false]
+					active: [type: bool, null: false, default: false]
+				primaryKey: id
 			text:
 				columns:
 					id: [type: int, null: false, auto: true]

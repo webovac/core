@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Page;
 
 use App\Model\Module\Module;
+use App\Model\Orm;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
+use App\Model\Page\PageDataRepository;
 use App\Model\PageTranslation\PageTranslationDataRepository;
 use App\Model\Web\WebDataRepository;
 use Nette\Caching\Cache;
@@ -41,6 +43,8 @@ trait CorePageDataRepository
 		$this->cache->remove('routeSetup');
 		$this->cache->remove('pageAliases');
 		$this->cache->clean([Cache::Tags => lcfirst($this->getName())]);
+		$this->orm->pageTranslationRepository->rebuildPaths();
+		$this->orm->flush();
 		$collection = new Collection;
 		$this->buildCollection($collection);
 		$array = (array) $collection;
@@ -129,11 +133,6 @@ trait CorePageDataRepository
 				if ($hasPages instanceof Module && $page === $hasPages->homePage) {
 					$pageData->translations[$translation->language->id]->title = $parentPageTranslationData?->title ?: $translation->title;
 				}
-				$parentPath = !$pageData->dontInheritPath && $parentPageTranslationData
-					? $parentPageTranslationData->fullPath
-					: '//' . $pageData->host . ($pageData->basePath ? ('/' . $pageData->basePath) : '');
-				$path = $translation->path ? preg_replace('/<id(.*)>/', "<id[" . $pageData->name . "]>", $translation->path) : null;
-				$pageData->translations[$translation->language->id]->fullPath = $parentPath . ($path ? '/' . $path : '');
 			}
 			if ($pageData->parentPage && $pageData->type !== Page::TYPE_MODULE) {
 				$parentPageData = $collection[$pageData->web . '-' . $pageData->parentPage];

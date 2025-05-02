@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\PageTranslation;
 
+use App\Model\Path\Path;
 use App\Model\Web\Web;
+use Nextras\Orm\Collection\ICollection;
 
 
 trait CorePageTranslation
@@ -30,5 +32,19 @@ trait CorePageTranslation
 			'pageName' => $this->page->name,
 			'lang' => $this->language->shortcut,
 		];
+	}
+
+
+	public function getPaths(Web $web): ICollection
+	{
+		return $web
+			? $this->paths->toCollection()->findBy(['web' => $web])
+			: $this->fullPaths->toCollection();
+	}
+
+
+	public function getActivePath(Web $web): ?Path
+	{
+		return $this->getPaths($web)->getBy(['active' => true]);
 	}
 }

@@ -2,7 +2,7 @@
 <div n:snippet class="alert-wrapper">
 	<div n:foreach="$messages as $flash" n:class="alert-main, alert, 'alert-' . $flash->type, alert-dismissible" role="alert">
 		<div>
-			{$flash->message}
+			{$flash->message|noescape}
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> × </button>
 		</div>
 	</div>

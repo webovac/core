@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Router;
 
 use App\Model\DataModel;
+use App\Model\Orm;
 use App\Model\Page\Page;
 use Nette\Application\BadRequestException;
 use Nette\Caching\Cache;
@@ -22,6 +23,7 @@ final class RouterFactory
 		private DataModel $dataModel,
 		private Cache $cache,
 		private IRequest $request,
+		private Orm $orm,
 	) {}
 
 
@@ -205,16 +207,16 @@ final class RouterFactory
 							$p = $pageData;
 						}
 						$base = '//' . $p->host . ($p->basePath ? '/' . $p->basePath : '');
-						$fullPath = str_replace($base, '', $translationData->fullPath);
-						preg_match_all('/<id\[(.+?)\]>/', $fullPath, $m);
-						$fullPath = preg_replace('/<id\[(.+?)\]>/', '<id>', $fullPath);
-						$fullPath = trim($fullPath, '/');
-						foreach (explode('/', $fullPath) as $part) {
-							if ($part === '<id>' || isset($setup['parts'][$part])) {
-								continue;
-							}
-							$setup['parts'][$part] = $part;
-						}
+//						$fullPath = str_replace($base, '', $translationData->fullPath);
+//						preg_match_all('/<id\[(.+?)\]>/', $fullPath, $m);
+//						$fullPath = preg_replace('/<id\[(.+?)\]>/', '<id>', $fullPath);
+//						$fullPath = trim($fullPath, '/');
+//						foreach (explode('/', $fullPath) as $part) {
+//							if ($part === '<id>' || isset($setup['parts'][$part])) {
+//								continue;
+//							}
+//							$setup['parts'][$part] = $part;
+//						}
 						$parameters = [];
 						if (isset($pageData->parameters)) {
 							foreach ($pageData->parameters as $parameter) {
@@ -227,27 +229,41 @@ final class RouterFactory
 								$signals[$signal->name] = $signal->signal;
 							}
 						}
-						$setup['mapIn'][$base][$fullPath] = [
-							'presenter' => 'Home',
-							'action' => 'default',
-							'host' => $p->host,
-							'basePath' => $p->basePath,
-							'pageName' => $p->name,
-							'lang' => $languageData->shortcut,
-							'id' => $m[1],
-							'path' => $fullPath === '<path .+>' ? $fullPath : null,
-							'signals' => $signals,
-							'parameters' => $parameters,
-						];
-						$setup['mapOut'][$base][$languageData->shortcut][$p->name] = [
-							'presenter' => 'Home',
-							'action' => 'default',
-							'host' => $p->host,
-							'basePath' => $p->basePath,
-							'p' => $fullPath,
-							'signals' => array_flip($signals),
-							'parameters' => array_flip($parameters),
-						];
+						foreach ($translationData->paths as $path) {
+							$f = $path->path;
+							preg_match_all('/<id\[(.+?)\]>/', $f, $m);
+							$f = preg_replace('/<id\[(.+?)\]>/', '<id>', $f);
+							$f = trim($f, '/');
+							foreach (explode('/', $f) as $part) {
+								if ($part === '<id>' || isset($setup['parts'][$part])) {
+									continue;
+								}
+								$setup['parts'][$part] = $part;
+							}
+							$setup['mapIn'][$base][$f] = [
+								'presenter' => 'Home',
+								'action' => 'default',
+								'host' => $p->host,
+								'basePath' => $p->basePath,
+								'pageName' => $p->name,
+								'lang' => $languageData->shortcut,
+								'id' => $m[1],
+								'path' => $f === '<path .+>' ? $f : null,
+								'signals' => $signals,
+								'parameters' => $parameters,
+							];
+							if ($path->active) {
+								$setup['mapOut'][$base][$languageData->shortcut][$p->name] = [
+									'presenter' => 'Home',
+									'action' => 'default',
+									'host' => $p->host,
+									'basePath' => $p->basePath,
+									'p' => $f,
+									'signals' => array_flip($signals),
+									'parameters' => array_flip($parameters),
+								];
+							}
+						}
 					}
 				}
 				return $setup;

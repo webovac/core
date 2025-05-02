@@ -34,7 +34,7 @@ trait CoreDataModel
 	#[Inject] public RoleDataRepository $roleRepository;
 
 
-	/** @return Collection<PageData> */
+	/** @return PageData[] */
 	public function findPageDatas(?WebData $webData = null): Collection
 	{
 		/** @var PageData[] $pageDatas */

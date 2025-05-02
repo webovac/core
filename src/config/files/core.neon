@@ -38,8 +38,10 @@ modules:
 					Webovac\Core\Model\Translation:
 			Preference:
 			Parameter:
+			Path:
 			Role:
 			Signal:
+			Slug:
 			Text:
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
