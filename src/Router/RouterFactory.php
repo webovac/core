@@ -81,7 +81,7 @@ final class RouterFactory
 		$pageIn = $setup['mapIn'][$base][$p] ?? null;
 		if (!$pageIn) {
 			foreach ($setup['mapIn'][$base] as $pagePath => $pageSetup) {
-				if (!str_contains($pagePath, '<id>')) {
+				if (!str_contains((string) $pagePath, '<id>')) {
 					continue;
 				}
 				$pParts = explode('/', $p);
