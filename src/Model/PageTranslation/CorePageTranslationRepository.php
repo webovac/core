@@ -49,7 +49,7 @@ trait CorePageTranslationRepository
 				$parts[] = preg_replace('/<id(.*)>/', "<id[" . $pageTranslation->page->name . "]>", $pageTranslation->path);
 			}
 			$path = implode('/', $parts);
-			$web = $web ?: $pageTranslation->page->web;
+			$web = $pageTranslation->page->web ?: $web;
 			$activePath = $pageTranslation->getActivePath($web);
 			if (!str_contains($path, '<')) {
 				$path = $this->getModel()->pathRepository->getPath($path, $web, $activePath);
