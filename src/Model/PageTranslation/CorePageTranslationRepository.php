@@ -51,14 +51,17 @@ trait CorePageTranslationRepository
 			$path = implode('/', $parts);
 			$web = $web ?: $pageTranslation->page->web;
 			$activePath = $pageTranslation->getActivePath($web);
-			if ($web && $pageTranslation->page->type !== Page::TYPE_MODULE && (!$activePath || $activePath->path !== $path)) {
+			if (!str_contains($path, '<')) {
+				$path = $this->getModel()->pathRepository->getPath($path, $web, $activePath);
+			}
+			if ($pageTranslation->page->type !== Page::TYPE_MODULE && $activePath?->path !== $path) {
 				if ($activePath) {
-					if ($this->getModel()->pathRepository->getBy(['path' => $activePath->path, 'id!=' => $activePath->id])) {
-						$this->getModel()->remove($activePath);
-					} else {
-						$activePath->active = false;
-						$this->getModel()->persist($activePath);
+					$otherPaths = $this->getModel()->pathRepository->findBy(['path' => $activePath->path, 'active' => false]);
+					foreach ($otherPaths as $otherPath) {
+						$this->getModel()->remove($otherPath);
 					}
+					$activePath->active = false;
+					$this->getModel()->persist($activePath);
 				}
 				$existingPath = $this->getModel()->pathRepository->getBy(['path' => $path, 'active' => false]);
 				$newPath = $existingPath ?: new Path;
