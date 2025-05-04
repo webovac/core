@@ -12,6 +12,7 @@ use App\Model\Page\Page;
 use App\Model\Web\Web;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
+use Nette\InvalidArgumentException;
 use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageException;
@@ -23,29 +24,12 @@ use Webovac\Core\Model\CmsEntity;
 
 trait CoreFileRepository
 {
-//	public function getByData(FileData|string $data): ?File
-//	{
-//		if ($data instanceof FileData) {
-//			if (!isset($data->identifier)) {
-//				return null;
-//			}
-//			return $this->getBy(['identifier' => $data->identifier]);
-//		}
-//		return $this->getBy(['identifier' => $data]);
-//	}
-
 	public function getByData(FileData $data, ?CmsEntity $entity = null): ?File
 	{
 		if ($data instanceof FileData) {
 			if (!isset($data->identifier)) {
 				return null;
 			}
-//			return $this->getBy([
-//				'identifier' => $data->identifier,
-////				'web' => $entity instanceof Web ? $entity : null,
-////				'article' => $entity instanceof Article ? $entity : null,
-////				'page' => $entity instanceof Page ? $entity : null,
-//			]);
 			return $this->getBy([
 				'identifier' => $data->identifier,
 				'web' => $entity instanceof Web ? $entity : null,
@@ -73,6 +57,9 @@ trait CoreFileRepository
 			if ($keyProperty) {
 				$data->$keyProperty = $key;
 			}
+		}
+		if ($data->upload->isImage()) {
+			$this->rotateImage($data->upload);
 		}
 		$identifier = $this->fileUploader->upload($data->upload);
 		$file = $this->getModel()->getRepository(FileRepository::class)->getBy(['identifier' => $identifier]);
@@ -113,11 +100,39 @@ trait CoreFileRepository
 			$data->modernIdentifier = $originalFileData->modernIdentifier;
 		}
 		if ($data->upload?->isImage()) {
-			$image = Image::fromFile($data->upload->getTemporaryFile());
+			$file = $data->upload->getTemporaryFile();
+			$image = Image::fromFile($file);
+			$exif = @exif_read_data($file);
+			$data->capturedAt = isset($exif['DateTimeOriginal']) ? preg_replace('/:/', '-', $exif['DateTimeOriginal'], 2) : null;
 			$data->width = $image->getWidth();
 			$data->height = $image->getHeight();
 		}
 		return $data;
+	}
+
+
+	public function rotateImage(FileUpload $upload): void
+	{
+		if (!$upload->isImage()) {
+			throw new InvalidArgumentException('File is not image.');
+		}
+		$file = $upload->getTemporaryFile();
+		$image = Image::fromFile($file);
+		$exif = @exif_read_data($file);
+		if (isset($exif['Orientation'])) {
+			switch ($exif['Orientation']) {
+				case 8:
+					$image->rotate(90, 0);
+					break;
+				case 3:
+					$image->rotate(180, 0);
+					break;
+				case 6:
+					$image->rotate(-90, 0);
+					break;
+			}
+		}
+		$image->save($file, type: Image::detectTypeFromFile($file));
 	}
 
 

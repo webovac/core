@@ -28,6 +28,7 @@ trait CoreFileData
 	#[ValueProperty] public string|FileUpload|null $upload;
 	/** @var FileTranslationData[] */ #[ArrayOfType(FileTranslationData::class)] public array|null $translations;
 	public bool $forceSquare = false;
+	public \DateTimeInterface|null $capturedAt;
 	#[DontCache] public int|string|null $createdByPerson;
 	#[DontCache] public ?\DateTimeInterface $createdAt;
 

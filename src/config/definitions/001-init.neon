@@ -16,6 +16,7 @@ schemas:
 					type: [type: string, null: false]
 					width: [type: int, null: true]
 					height: [type: int, null: true]
+					captured_at: [type: datetime, null: true]
 					created_at: [type: datetime, null: false, default: now]
 				primaryKey: id
 				indexes: [web_id, page_id, created_by_person_id]
