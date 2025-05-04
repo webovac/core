@@ -15,6 +15,7 @@ trait CoreFile
 	public const string TYPE_FILE = 'file';
 	public const string TYPE_IMAGE = 'image';
 	public const string TYPE_SVG = 'svg';
+	public const string TYPE_VIDEO = 'video';
 	public const int SIZE_LIMIT = 1920;
 
 

@@ -13,12 +13,16 @@ use App\Model\Web\Web;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
 use Nette\InvalidArgumentException;
+use Nette\Utils\DateTime;
 use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
+use Nette\Utils\Json;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
+use Nextras\Dbal\Utils\DateTimeImmutable;
+use Tracy\Dumper;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -58,17 +62,29 @@ trait CoreFileRepository
 				$data->$keyProperty = $key;
 			}
 		}
+		$name = pathinfo($data->upload->getSanitizedName(), PATHINFO_FILENAME);
 		if ($data->upload->isImage()) {
+			$exif = @exif_read_data($data->upload->getTemporaryFile());
+			$data->capturedAt = isset($exif['DateTimeOriginal']) ? DateTimeImmutable::createFromFormat('Y:m:d H:i:s', $exif['DateTimeOriginal']) : null;
 			$this->rotateImage($data->upload);
+		}
+		if (str_contains($data->upload->getContentType(), 'video/')) {
+			$data->upload = $this->createVideoUpload($data->upload);
+			$data->capturedAt = $this->getCapturedAt($data->upload);
 		}
 		$identifier = $this->fileUploader->upload($data->upload);
 		$file = $this->getModel()->getRepository(FileRepository::class)->getBy(['identifier' => $identifier]);
-		$data->name = $data->upload->getSanitizedName();
-		$data->extension = $data->upload->getSuggestedExtension();
+		$extension = $data->upload->getSuggestedExtension();
+		$data->name = "$name.$extension";
+		$data->extension = $extension;
 		if (!$file) {
 			$data->identifier = $identifier;
 			$data->contentType = $data->upload->getContentType();
-			$data->type = $data->upload->getContentType() === 'image/svg+xml' ? File::TYPE_SVG : ($data->upload->isImage() ? File::TYPE_IMAGE : File::TYPE_FILE);
+			$data->type = $data->upload->getContentType() === 'image/svg+xml' ? File::TYPE_SVG : (
+				$data->upload->isImage()
+					? File::TYPE_IMAGE
+					: (str_contains($data->upload->getContentType(), 'video/') ? File::TYPE_VIDEO : File::TYPE_FILE)
+			);
 			if ($data->upload->getContentType() === 'image/svg+xml') {
 				$compatibleUpload = $this->svg2png($data->upload, $data->forceSquare);
 				$image = Image::fromFile($compatibleUpload->getTemporaryFile());
@@ -90,6 +106,11 @@ trait CoreFileRepository
 				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
 				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
 				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
+			} elseif (str_contains($data->upload->getContentType(), 'video/')) {
+				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
+				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
 			}
 		} else {
 			$originalFileData = $file->getData();
@@ -99,11 +120,9 @@ trait CoreFileRepository
 			$data->compatibleIdentifier = $originalFileData->compatibleIdentifier;
 			$data->modernIdentifier = $originalFileData->modernIdentifier;
 		}
-		if ($data->upload?->isImage()) {
-			$file = $data->upload->getTemporaryFile();
+		if (isset($compatibleUpload)) {
+			$file = $compatibleUpload->getTemporaryFile();
 			$image = Image::fromFile($file);
-			$exif = @exif_read_data($file);
-			$data->capturedAt = isset($exif['DateTimeOriginal']) ? preg_replace('/:/', '-', $exif['DateTimeOriginal'], 2) : null;
 			$data->width = $image->getWidth();
 			$data->height = $image->getHeight();
 		}
@@ -136,6 +155,29 @@ trait CoreFileRepository
 	}
 
 
+	public function createVideoUpload(FileUpload $upload): FileUpload
+	{
+		$file = $upload->getTemporaryFile();
+		$dir = pathinfo($file, PATHINFO_DIRNAME);
+		$name = pathinfo($upload->getSanitizedName(), PATHINFO_FILENAME);
+		$proc = "ffmpeg -i %s -vcodec libx265 -b:v 2000k -preset medium -vtag hvc1 -vf scale=1920:-2,setsar=1 -pix_fmt yuv420p -acodec aac -b:a 224k -map_metadata 0 -movflags +faststart %s";
+		exec(sprintf($proc, $file, "$dir/$name.mp4"));
+		return $this->createFileUploadFromFile("$dir/$name.mp4");
+	}
+
+
+	public function getCapturedAt(FileUpload $upload): ?DateTimeImmutable
+	{
+		$file = $upload->getTemporaryFile();
+		$proc = "ffprobe -v quiet %s -print_format json -show_entries format_tags=creation_time";
+		exec(sprintf($proc, $file), $output);
+		$result = Json::decode(implode('', $output));
+		return isset($result->format->tags->creation_time)
+			? new DateTimeImmutable($result->format->tags->creation_time)
+			: null;
+	}
+
+
 	public function svg2png(FileUpload $upload, bool $forceSquare): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
@@ -143,6 +185,18 @@ trait CoreFileRepository
 		copy($tmpFile, $cloneFile);
 		Svg::make(file_get_contents($cloneFile))->saveAsPng($cloneFile);
 		$upload = $this->createFileUploadFromFile($cloneFile);
+		return $forceSquare ? $this->image2square($upload) : $upload;
+	}
+
+
+	public function video2jpg(FileUpload $upload, bool $forceSquare): FileUpload
+	{
+		$file = $upload->getTemporaryFile();
+		$dir = pathinfo($file, PATHINFO_DIRNAME);
+		$filename = pathinfo($file, PATHINFO_FILENAME);
+		$proc = "ffmpeg -i %s -vcodec mjpeg -vframes 1 -an -f rawvideo -ss `ffmpeg -i %s 2>&1 | grep Duration | awk '{print $2}' | tr -d , | awk -F ':' '{print ($3+$2*60+$1*3600)/2}'` %s";
+		exec(sprintf($proc, $file, $file, "$dir/$filename.jpg"));
+		$upload = $this->createFileUploadFromFile("$dir/$filename.jpg");
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 

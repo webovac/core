@@ -1,7 +1,7 @@
 {templateType Webovac\Core\Control\Gallery\GalleryTemplate}
-<div n:if="$fileCount > 0" class="photoswipe grid my-3" style="--bs-columns: 4;">
+<div n:if="$fileCount > 0" class="photoswipe grid" style="--bs-columns: 5; --bs-gap: 8px;">
 	<div class="gallery-item" n:foreach="$files as $file">
-		<a href="{$baseUrl}/{$urls[$file->id]['full']}" data-pswp-pid="{$file->modernIdentifier}" data-pswp-width="{$file->getLimitedWidth()}" data-pswp-height="{$file->getLimitedHeight()}">
+		<a href="{$baseUrl}/{$urls[$file->id]['full']}" data-pswp-pid="{$file->modernIdentifier}" data-pswp-width="{$file->getLimitedWidth()}" data-pswp-height="{$file->getLimitedHeight()}" n:attr="data-pswp-type: $file->type === App\Model\File\File::TYPE_VIDEO ? 'video'">
 			<img style="object-fit: cover; width: 100%; aspect-ratio: 1; display: block; border: 0" data-cropped="true" src="{$baseUrl}/{$urls[$file->id]['preview']}" alt="">
 		</a>
 		<div class="hidden-caption-content d-none" n:if="$file->getTranslation($languageData)?->description">

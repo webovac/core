@@ -34,16 +34,24 @@ class GalleryControl extends BaseControl
 	 */
 	public function render(): void
 	{
-		$files = $this->hasFiles->getFiles()->toCollection()->findBy(['type!=' => File::TYPE_FILE])->orderBy('createdAt', ICollection::DESC);
+		$files = $this->hasFiles->getFiles()->toCollection()->findBy(['type!=' => File::TYPE_FILE])->resetOrderBy()->orderBy('capturedAt')->orderBy('createdAt');
 		$this->template->files = $files;
 		$this->template->fileCount = $files->count();
 		$this->template->languageData = $this->dataProvider->getLanguageData();
 		$urls = [];
-		foreach ($files as $item) {
-			$urls[$item->id] = [
-				'full' => $this->fileUploader->getUrl($item->modernIdentifier, '1920x1920', 'fit'),
-				'preview' => $this->fileUploader->getUrl($item->modernIdentifier, '360x360', 'fill'),
-			];
+		/** @var File $file */
+		foreach ($files as $file) {
+			if ($file->type === File::TYPE_VIDEO) {
+				$urls[$file->id] = [
+					'full' => $this->fileUploader->getUrl($file->identifier),
+					'preview' => $this->fileUploader->getUrl($file->modernIdentifier, '360x360', 'fill'),
+				];
+			} else {
+				$urls[$file->id] = [
+					'full' => $this->fileUploader->getUrl($file->modernIdentifier, '1920x1920', 'fit'),
+					'preview' => $this->fileUploader->getUrl($file->modernIdentifier, '360x360', 'fill'),
+				];
+			}
 		}
 		$this->template->urls = $urls;
 		$this->template->render(__DIR__ . '/gallery.latte');
