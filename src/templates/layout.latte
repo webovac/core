@@ -60,8 +60,8 @@
 		{control core-sidePanel}
 	{/}
 </div>
-<script src="https://www.gstatic.com/charts/loader.js"></script>
-{*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBF2GdGmgQ9mvO_iJGv2Zjvo9XbHbWpJM0&region=CZ&language=cs&libraries=geometry"></script>*}
+<script n:if="$pageData->loadCharts" src="https://www.gstatic.com/charts/loader.js"></script>
+<script n:if="$pageData->loadMaps" src="https://maps.googleapis.com/maps/api/js?key={$mapsKey}&region=CZ&language=cs&libraries=geometry"></script>
 <script src="{$baseUrl}/dist/js/bundle.js?m={='dist/js/bundle.js'|mTime}"></script>
 </body>
 </html>

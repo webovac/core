@@ -42,6 +42,7 @@ use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
+use Webovac\Core\Lib\KeyProvider;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\RegisterOrmEvents;
@@ -70,6 +71,7 @@ trait CorePresenter
 	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public RegisterOrmEvents $registerOrmEvents;
 	#[Inject] public PageActivator $pageActivator;
+	#[Inject] public KeyProvider $keyProvider;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -193,6 +195,7 @@ trait CorePresenter
 			$this->template->bodyClasses[] = "web-{$this->webData->code}";
 			$this->template->bodyClasses[] = 'layout-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->layoutData->code : 'cvut');
 			$this->template->bodyClasses[] = 'theme-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->themeData->code : 'light');
+			$this->template->mapsKey = $this->keyProvider->getMapsKey();
 			if ($this->moduleChecker->isModuleInstalled('style')) {
 				foreach ($this->layoutData->screens as $screen) {
 					if ($screen->primaryCollapsed) {

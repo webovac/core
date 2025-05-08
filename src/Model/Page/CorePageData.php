@@ -55,6 +55,8 @@ trait CorePageData
 	#[DefaultValue(false)] public bool $dontInheritPath;
 	#[DefaultValue(false)] public bool $dontInheritAccessSetup;
 	#[DefaultValue(false)] public bool $ajax;
+	#[DefaultValue(false)] public bool $loadCharts;
+	#[DefaultValue(false)] public bool $loadMaps;
 	public ?string $icon;
 	public ?string $repository;
 	public int|string|null $parentPage;
