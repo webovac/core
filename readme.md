@@ -123,11 +123,11 @@ class Book extends CmsEntity implements HasRequirements
             return false;
         }
         return match ($tag) {
+            null => false,
             'read' => $this->isReadableByUser($user), # custom implementation
             'update' => $this->isUpdatableByUser($user), # custom implementation
             'remove' => $this->isRemovableByUser($user), # custom implementation
-        }
-        return false;
+		};
     }
 }
 ```

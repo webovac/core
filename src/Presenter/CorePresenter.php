@@ -146,8 +146,6 @@ trait CorePresenter
 			}
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
 			$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
-
-
 			$this->translator->setLanguageData($this->languageData);
 			$this->templateFactory->onCreate[] = function (Template $template) {
 				$template->getLatte()->setLocale($this->languageData->shortcut);

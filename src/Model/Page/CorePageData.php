@@ -54,6 +54,7 @@ trait CorePageData
 	#[DefaultValue(false)] public bool $stretched;
 	#[DefaultValue(false)] public bool $dontInheritPath;
 	#[DefaultValue(false)] public bool $dontInheritAccessSetup;
+	#[DefaultValue(false)] public bool $ajax;
 	public ?string $icon;
 	public ?string $repository;
 	public int|string|null $parentPage;
@@ -91,7 +92,7 @@ trait CorePageData
 	/**
 	 * @throws LoginRequiredException
 	 * @throws MissingPermissionException
-	 */ 
+	 */
 	public function checkRequirements(CmsUser $cmsUser, WebData $webData): void
 	{
 		foreach ($this->accessSetups as $accessSetup) {

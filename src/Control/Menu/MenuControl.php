@@ -25,8 +25,8 @@ use Webovac\Core\Model\CmsEntity;
 class MenuControl extends BaseControl
 {
 	public const TEMPLATE_DEFAULT = 'default';
-	
-	
+
+
 	public function __construct(
 		private string $moduleClass,
 		private string $templateName,
@@ -63,9 +63,12 @@ class MenuControl extends BaseControl
 		$this->template->homePageData = $homePage;
 		$this->template->dataModel = $this->dataModel;
 		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
+		$searchPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Search:Home');
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& $searchModuleData
 			&& in_array($searchModuleData->id, $webData->modules, true);
+		$showSearch = $searchPageData?->isUserAuthorized($this->cmsUser, $webData) ?: false;
+		$this->template->showSearch = $showSearch;
 		$personsModuleData = $this->dataModel->getModuleDataByName('Persons');
 		$this->template->hasPersons = $this->moduleChecker->isModuleInstalled('persons')
 			&& $personsModuleData

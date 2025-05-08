@@ -116,6 +116,7 @@ trait CorePageDataRepository
 			$pageData->host = $parentPageData ? $parentPageData->host : $page->web->host;
 			$pageData->basePath = $parentPageData ? $parentPageData->basePath : $page->web->basePath;
 			$pageData->accessSetups = $pageData->dontInheritAccessSetup ? [$accessSetup] : array_merge($parentPageData->accessSetups ?? [], [$accessSetup]);
+			$pageData->authorizingTag = $page->authorizingTag ?: $parentPageData?->authorizingTag;
 			$pageData->isHomePage = $page->isHomePage();
 			$pageData->navigationPage = $page->providesNavigation ? $page->id : ($parentPageData->navigationPage ?? null);
 			$pageData->buttonsPage = $page->providesButtons ? $page->id : ($parentPageData->buttonsPage ?? null);

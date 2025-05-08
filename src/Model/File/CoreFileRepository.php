@@ -81,9 +81,9 @@ trait CoreFileRepository
 			$data->identifier = $identifier;
 			$data->contentType = $data->upload->getContentType();
 			$data->type = $data->upload->getContentType() === 'image/svg+xml' ? File::TYPE_SVG : (
-				$data->upload->isImage()
-					? File::TYPE_IMAGE
-					: (str_contains($data->upload->getContentType(), 'video/') ? File::TYPE_VIDEO : File::TYPE_FILE)
+			$data->upload->isImage()
+				? File::TYPE_IMAGE
+				: (str_contains($data->upload->getContentType(), 'video/') ? File::TYPE_VIDEO : File::TYPE_FILE)
 			);
 			if ($data->upload->getContentType() === 'image/svg+xml') {
 				$compatibleUpload = $this->svg2png($data->upload, $data->forceSquare);
@@ -98,6 +98,7 @@ trait CoreFileRepository
 				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
 				$data->modernIdentifier = $identifier;
 			} elseif ($data->upload->isImage()) {
+				$compatibleUpload = $data->upload;
 				$modernUpload = $this->image2webp($data->upload, $data->forceSquare);
 				$data->compatibleIdentifier = $identifier;
 				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);

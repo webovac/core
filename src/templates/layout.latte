@@ -17,10 +17,8 @@
 	<meta name="twitter:title" content="{$metaTitle|truncate:60}">
 	<meta name="twitter:description" n:if="$pageTranslation->description" content="{$pageTranslationData->description|truncate:300}">
 	<meta name="twitter:image" n:if="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
-
 {*	<meta name="twitter:site" content="@USERNAME">*}
 {*	<meta name="twitter:creator" content="@USERNAME">*}
-
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 	<meta name="apple-mobile-web-app-title" content="{$webTranslationData->title|truncate:60}">
@@ -63,6 +61,7 @@
 	{/}
 </div>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
+{*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBF2GdGmgQ9mvO_iJGv2Zjvo9XbHbWpJM0&region=CZ&language=cs&libraries=geometry"></script>*}
 <script src="{$baseUrl}/dist/js/bundle.js?m={='dist/js/bundle.js'|mTime}"></script>
 </body>
 </html>
