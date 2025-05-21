@@ -6,7 +6,9 @@
 		<div n:tag-if="$context === 'signpost'" n:if="$icon" class="rounded-5 d-inline-block bg-white" style="width: 45px; height: 45px; padding: 7.5px 0;">
 			<i n:class="$layoutData->{$context . 'Icon'}, fa-fw, 'fa-' . $icon, $context === 'signpost' ? lh-sm"{if $context === 'signpost'} style="font-size: 24px"{/}></i>
 		</div>
-		<h3 n:tag="$context === 'signpost' ? 'h3' : 'span'" n:class="$context === 'signpost' ? 'mt-2 mb-0'">{$linkedEntity && $pageData->hasParameter ? $linkedEntity->getTitle() : $pageTranslationData?->title}</h3>
-		<span class="text-danger" n:if="$languageData->id !== $targetLanguageData->id" data-tooltip="{_'Nedostupný překlad'}"><i class="fas fa-circle-exclamation fa-fw" ></i></span>
+		<h3 n:tag="$context === 'signpost' ? 'h3' : 'span'" n:class="$context === 'signpost' ? 'mt-2 mb-0'">
+			{$linkedEntity && $pageData->hasParameter ? $linkedEntity->getTitle() : $pageTranslationData?->title}
+			<span class="text-danger" n:if="$languageData->id !== $targetLanguageData->id"><i class="fas fa-circle-exclamation fa-fw" ></i></span>
+		</h3>
 	</a>
 {/}
