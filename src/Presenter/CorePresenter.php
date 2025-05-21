@@ -117,6 +117,15 @@ trait CorePresenter
 					$this->redirect('Home:default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
 				}
 			}
+			if ($this->cmsUser->isLoggedIn()) {
+				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
+				if ($this->preference && $this->preference->language) {
+					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)) {
+						$languageData = $this->dataModel->getLanguageData($this->preference->language->id);
+						$this->lang = $languageData->shortcut;
+					}
+				}
+			}
 			if ($this->pageData->hasParameter) {
 				if (!$this->pageData->parentDetailRootPages) {
 					throw new InvalidStateException;
@@ -135,15 +144,6 @@ trait CorePresenter
 				}
 				if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
 					throw new ForbiddenRequestException;
-				}
-			}
-			if ($this->cmsUser->isLoggedIn()) {
-				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
-				if ($this->preference && $this->preference->language) {
-					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)) {
-						$languageData = $this->dataModel->getLanguageData($this->preference->language->id);
-						$this->lang = $languageData->shortcut;
-					}
 				}
 			}
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
