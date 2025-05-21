@@ -131,7 +131,7 @@ trait CorePresenter
 					$this->error();
 				}
 				if ($this->entity instanceof HasSlugHistory) {
-					$this->entity->checkForRedirect($this->getParameter('id'), $this->languageData, $this);
+					$this->entity->checkForRedirect($this->getParameter('id'), $this->pageData, $this->languageData, $this);
 				}
 				if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
 					throw new ForbiddenRequestException;
