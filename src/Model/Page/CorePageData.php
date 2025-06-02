@@ -45,7 +45,7 @@ trait CorePageData
 	/** @var SignalData[] */ #[ArrayOfType(SignalData::class)] public array|null $signals;
 	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
 	/** @var FileData[] */ #[ArrayOfType(FileData::class)] public array|null $files;
-	/** @var string[] */ public array $assets;
+	/** @var string[] */ public array|null $assets;
 	/** @var string[] */ public array|null $authorizedRoles;
 	/** @var int[] */ public array|null $authorizedPersons;
 	#[DefaultValue(false)] public bool $hideInNavigation;
