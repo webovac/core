@@ -10,6 +10,10 @@ namespace Webovac\Core\Model\Asset;
  */
 trait CoreAsset
 {
+	public const string TYPE_STYLESHEET = 'stylesheet';
+	public const string TYPE_SCRIPT = 'script';
+
+
 	public function getterTitle(): string
 	{
 		return $this->name;

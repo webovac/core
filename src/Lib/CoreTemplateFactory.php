@@ -16,6 +16,7 @@ trait CoreTemplateFactory
 	#[Inject] public CmsTranslator $translator;
 	#[Inject] public CmsUser $cmsUser;
 	#[Inject] public ColorMixer $colorMixer;
+	#[Inject] public KeyProvider $keyProvider;
 
 
 	public function injectCoreCreate(): void
@@ -30,6 +31,7 @@ trait CoreTemplateFactory
 			$template->addFilter('rgb', $this->colorMixer->rgb(...));
 			$template->addFilter('tint', $this->colorMixer->tint(...));
 			$template->addFilter('shade', $this->colorMixer->shade(...));
+			$template->addFilter('replaceKey', $this->keyProvider->replaceKey(...));
 			$template->addFunction('isModuleInstalled', fn(string $name) => $this->moduleChecker->isModuleInstalled($name));
 			$template->addFunction('core', fn(string $name) => __DIR__ . "/../templates/$name.latte");
 		};

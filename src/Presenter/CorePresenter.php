@@ -195,7 +195,6 @@ trait CorePresenter
 			$this->template->bodyClasses[] = "web-{$this->webData->code}";
 			$this->template->bodyClasses[] = 'layout-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->layoutData->code : 'cvut');
 			$this->template->bodyClasses[] = 'theme-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->themeData->code : 'light');
-			$this->template->mapsKey = $this->keyProvider->getMapsKey();
 			if ($this->moduleChecker->isModuleInstalled('style')) {
 				foreach ($this->layoutData->screens as $screen) {
 					if ($screen->primaryCollapsed) {
@@ -225,7 +224,7 @@ trait CorePresenter
 				->setPolicy(
 					SecurityPolicy::createSafePolicy()
 						->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox', 'snippet', 'snippetArea'])
-						->allowFilters(['noescape', 'mTime', 'translate', 'localDate'])
+						->allowFilters(['noescape', 'mTime', 'replaceKey', 'translate', 'localDate'])
 						->allowProperties(stdClass::class, SecurityPolicy::All)
 						->allowProperties(CmsEntity::class, SecurityPolicy::All)
 						->allowProperties(Item::class, SecurityPolicy::All)

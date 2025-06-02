@@ -9,6 +9,7 @@ use App\Model\File\FileRepository;
 use App\Model\FileTranslation\FileTranslationRepository;
 use App\Model\Language\LanguageRepository;
 use App\Model\LanguageTranslation\LanguageTranslationRepository;
+use App\Model\Lib\LibRepository;
 use App\Model\Module\ModuleRepository;
 use App\Model\ModuleTranslation\ModuleTranslationRepository;
 use App\Model\Page\PageRepository;
@@ -32,6 +33,7 @@ use App\Model\WebTranslation\WebTranslationRepository;
  * @property-read FileTranslationRepository $fileTranslationRepository
  * @property-read LanguageRepository $languageRepository
  * @property-read LanguageTranslationRepository $languageTranslationRepository
+ * @property-read LibRepository $libRepository
  * @property-read ModuleRepository $moduleRepository
  * @property-read ModuleTranslationRepository $moduleTranslationRepository
  * @property-read PreferenceRepository $preferenceRepository

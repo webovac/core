@@ -12,6 +12,6 @@ trait CoreAssetRepository
 {
 	public function getByData(AssetData|string $data): ?Asset
 	{
-		return $this->getBy(['name' => $data instanceof AssetData ? $data->name : $data]);
+		return $this->getBy(['link' => $data instanceof AssetData ? $data->link : $data]);
 	}
 }

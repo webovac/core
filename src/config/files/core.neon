@@ -4,6 +4,7 @@ modules:
 		isPackage: true
 		entities:
 			Asset:
+			Lib:
 			Log:
 			Person:
 			File:

@@ -7,6 +7,7 @@ namespace Webovac\Core;
 use App\Model\Asset\AssetData;
 use App\Model\Language\Language;
 use App\Model\Language\LanguageData;
+use App\Model\Lib\LibData;
 use App\Model\Log\Log;
 use App\Model\Module\Module as ModuleEntity;
 use App\Model\Module\ModuleData;
@@ -55,14 +56,15 @@ class Core implements Module, HasDefinitionGroup, HasManipulationGroups, HasOrmE
 	public function getManipulationGroups(): array
 	{
 		return [
-			AssetData::class => new ManipulationGroup('asset', AssetData::class),
+			AssetData::class => new ManipulationGroup('asset', AssetData::class, ['lib']),
+			LibData::class => new ManipulationGroup('lib', LibData::class),
 			WebData::class => new ManipulationGroup('web', WebData::class, ['layout']),
 			RoleData::class => new ManipulationGroup('role', RoleData::class),
 			PersonData::class => new ManipulationGroup('person', PersonData::class, ['role']),
 			LanguageData::class => new ManipulationGroup('language', LanguageData::class),
 			TextData::class => new ManipulationGroup('text', TextData::class, ['language']),
 			ModuleData::class => new ManipulationGroup('module', ModuleData::class, ['language']),
-			PageData::class => new ManipulationGroup('page', PageData::class, ['web', 'module', 'language', 'asset']),
+			PageData::class => new ManipulationGroup('page', PageData::class, ['web', 'module', 'language', 'lib']),
 		];
 	}
 

@@ -13,7 +13,6 @@ use App\Model\Web\Web;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
 use Nette\InvalidArgumentException;
-use Nette\Utils\DateTime;
 use Nette\Utils\Image;
 use Nette\Utils\ImageColor;
 use Nette\Utils\ImageException;
@@ -22,7 +21,6 @@ use Nette\Utils\Json;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
-use Tracy\Dumper;
 use Webovac\Core\Model\CmsEntity;
 
 

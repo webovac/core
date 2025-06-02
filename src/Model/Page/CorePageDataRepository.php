@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
+use App\Model\Asset\Asset;
 use App\Model\Module\Module;
 use App\Model\Orm;
 use App\Model\Page\Page;
@@ -129,7 +130,6 @@ trait CorePageDataRepository
 			$pageData->parentDetailRootPages = array_merge($parentPageData->parentDetailRootPages ?? [], $pageData->isDetailRoot ? [$page->id] : []);
 			$pageData->parentPage = $page->parentPage?->id ?: ($parentPageData->parentPage ?? null);
 			$pageData->childPageIds = [];
-			$pageData->assets = $page->assets->toCollection()->fetchPairs('name', 'name');
 			foreach ($page->translations as $translation) {
 				$parentPageTranslationData = $parentPageData?->getCollection('translations')->getByKey($translation->language->id);
 				if ($hasPages instanceof Module && $page === $hasPages->homePage) {
@@ -140,6 +140,15 @@ trait CorePageDataRepository
 				$parentPageData = $collection[$pageData->web . '-' . $pageData->parentPage];
 				if ($pageData->type !== Page::TYPE_PAGE || $pageData->hasParameter === $parentPageData->hasParameter) {
 					$collection[$pageData->web . '-' . $pageData->parentPage]->childPageIds[] = $page->id;
+				}
+			}
+			foreach ($page->libs as $lib) {
+				foreach ($lib->assets as $asset) {
+					if ($asset->type === Asset::TYPE_STYLESHEET) {
+						$pageData->stylesheets[] = $asset->getData();
+					} else if ($asset->type === Asset::TYPE_SCRIPT) {
+						$pageData->scripts[] = $asset->getData();
+					}
 				}
 			}
 			if ($page->type === Page::TYPE_MODULE) {

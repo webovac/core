@@ -4,15 +4,22 @@ namespace Webovac\Core\Lib;
 
 use Stepapo\Utils\Service;
 
+
 class KeyProvider implements Service
 {
 	public function __construct(
-		private string $mapsKey,
+		private array $keys,
 	) {}
 
 
-	public function getMapsKey(): string
+	public function getKey(string $keyName): ?string
 	{
-		return $this->mapsKey;
+		return $this->keys[$keyName] ?? null;
+	}
+
+
+	public function replaceKey(string $string): string
+	{
+		return preg_replace_callback('/{(.+?)}/', fn(array $m) => $this->getKey($m[1]), $string);
 	}
 }

@@ -4,9 +4,14 @@ schemas:
 			asset:
 				columns:
 					id: [type: int, null: false, auto: true]
-					name: [type: string, null: false]
+					lib_id: [type: int, null: false]
+					link: [type: string, null: false]
+					local: [type: bool, null: false, default: false]
+					type: [type: string, null: false]
 				primaryKey: id
-				uniqueKeys: [name]
+				indexes: [lib_id]
+				foreignKeys:
+					lib_id: [table: lib, column: id, onDelete: cascade, reverseName: assets]
 			file:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -99,6 +104,12 @@ schemas:
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
 					language_id: [table: language, column: id, reverseName: translations, reverseOrder: translationLanguage->rank]
 					translation_language_id: [table: language, column: id]
+			lib:
+				columns:
+					id: [type: int, null: false, auto: true]
+					name: [type: string, null: false]
+				primaryKey: id
+				uniqueKeys: [name]
 			log:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -217,15 +228,15 @@ schemas:
 					template_page_id: [table: page, column: id, onDelete: set null]
 					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank]
 					image_file_id: [table: file, column: id, onDelete: set null]
-			page2asset:
+			page2lib:
 				columns:
 					page_id: [type: int, null: false]
-					asset_id: [type: int, null: false]
-				primaryKey: [page_id, asset_id]
-				indexes: [page_id, asset_id]
+					lib_id: [type: int, null: false]
+				primaryKey: [page_id, lib_id]
+				indexes: [page_id, lib_id]
 				foreignKeys:
-					page_id: [table: page, column: id, reverseName: assets]
-					asset_id: [table: asset, column: id]
+					page_id: [table: page, column: id, reverseName: libs]
+					lib_id: [table: lib, column: id]
 			page2authorized_person:
 				columns:
 					page_id: [type: int, null: false]

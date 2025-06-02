@@ -47,7 +47,7 @@ class CoreExtension extends StepapoExtension
 				'password' => Expect::string(),
 				'schemas' => Expect::arrayOf('string'),
 			]),
-			'mapsKey' => Expect::string(),
+			'keys' => Expect::array(),
 			'testMode' => Expect::bool()->default(false),
 		]);
 	}
@@ -60,7 +60,7 @@ class CoreExtension extends StepapoExtension
 		$builder->addDefinition($this->prefix('neonHandler'))
 			->setFactory(NeonHandler::class, [['host' => $this->config->parameters['host']], $builder->parameters['debugMode'], $this->config->testMode]);
 		$builder->addDefinition($this->prefix('keyProvider'))
-			->setFactory(KeyProvider::class, [$this->config->mapsKey]);
+			->setFactory(KeyProvider::class, [$this->config->keys]);
 		$this->createModelExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();

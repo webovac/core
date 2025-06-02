@@ -1,0 +1,12 @@
+class: App\Model\Lib\LibData
+items:
+	editor:
+		assets:
+			dist/css/editor.css: [type: stylesheet, local: true]
+			dist/js/editor.js: [type: script, local: true]
+	charts:
+		assets:
+			'https://www.gstatic.com/charts/loader.js': [type: script]
+	maps:
+		assets:
+			'https://maps.googleapis.com/maps/api/js?key={maps}&region=CZ&language=cs&libraries=geometry': [type: script]

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
+use App\Model\Asset\AssetData;
 use App\Model\DataModel;
 use App\Model\File\FileData;
 use App\Model\Language\LanguageData;
@@ -11,9 +12,7 @@ use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Parameter\ParameterData;
-use App\Model\Parameter\QueryNameData;
 use App\Model\Signal\SignalData;
-use App\Model\Signal\SignalNameData;
 use App\Model\Web\WebData;
 use DateTimeInterface;
 use Nette\Application\IPresenter;
@@ -45,7 +44,7 @@ trait CorePageData
 	/** @var SignalData[] */ #[ArrayOfType(SignalData::class)] public array|null $signals;
 	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
 	/** @var FileData[] */ #[ArrayOfType(FileData::class)] public array|null $files;
-	/** @var string[] */ public array|null $assets;
+	/** @var string[] */ public array|null $libs;
 	/** @var string[] */ public array|null $authorizedRoles;
 	/** @var int[] */ public array|null $authorizedPersons;
 	#[DefaultValue(false)] public bool $hideInNavigation;
@@ -80,6 +79,8 @@ trait CorePageData
 	public ?string $host;
 	public ?string $basePath;
 	/** @var AccessSetup[] */ public array|null $accessSetups;
+	/** @var AssetData[] */ public array $stylesheets = [];
+	/** @var AssetData[] */ public array $scripts = [];
 	#[DefaultValue(false)] public bool $isHomePage;
 	#[DefaultValue(false)] public bool $isDetailRoot;
 	#[DefaultValue(false)] public bool $hasPath;
