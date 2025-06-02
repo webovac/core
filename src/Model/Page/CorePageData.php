@@ -45,6 +45,7 @@ trait CorePageData
 	/** @var SignalData[] */ #[ArrayOfType(SignalData::class)] public array|null $signals;
 	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
 	/** @var FileData[] */ #[ArrayOfType(FileData::class)] public array|null $files;
+	/** @var string[] */ public array $assets;
 	/** @var string[] */ public array|null $authorizedRoles;
 	/** @var int[] */ public array|null $authorizedPersons;
 	#[DefaultValue(false)] public bool $hideInNavigation;
@@ -55,8 +56,6 @@ trait CorePageData
 	#[DefaultValue(false)] public bool $dontInheritPath;
 	#[DefaultValue(false)] public bool $dontInheritAccessSetup;
 	#[DefaultValue(false)] public bool $ajax;
-	#[DefaultValue(false)] public bool $loadCharts;
-	#[DefaultValue(false)] public bool $loadMaps;
 	public ?string $icon;
 	public ?string $repository;
 	public int|string|null $parentPage;
@@ -207,5 +206,11 @@ trait CorePageData
 			return false;
 		}
 		return (!$path || str_contains($presenter->getParameter('path') ?: '', $path)) && $pageActivator->isActivePage($this->targetPage ?: $this->id);
+	}
+
+
+	public function loadAsset(string $name): bool
+	{
+		return array_key_exists($name, $this->assets);
 	}
 }

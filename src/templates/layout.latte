@@ -26,6 +26,7 @@
 	<link rel="shortcut icon" n:ifset="$smallIconUrl" href="{$baseUrl}/{$smallIconUrl}?m={=$smallIconUrl|mTime}">
 	<link rel="apple-touch-icon" n:ifset="$largeIconUrl" href="{$baseUrl}/{$largeIconUrl}?m={=$largeIconUrl|mTime}">
 	<link rel="manifest" href="{plink '//Manifest:', host: $webData->host, basePath: $webData->basePath, lang: $languageData->shortcut}?m={$webTranslationData->updatedAt ?: $webTranslationData->createdAt|date:'U'}">
+	<link rel="stylesheet" href="{$baseUrl}/dist/css/editor.css?m={='dist/css/editor.css'|mTime}" n:if="$pageData->loadAsset('editor')">
 	<link rel="stylesheet" href="{$baseUrl}/dist/css/bundle.css?m={='dist/css/bundle.css'|mTime}">
 	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
 	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
@@ -60,8 +61,9 @@
 		{control core-sidePanel}
 	{/}
 </div>
-<script n:if="$pageData->loadCharts" src="https://www.gstatic.com/charts/loader.js"></script>
-<script n:if="$pageData->loadMaps" src="https://maps.googleapis.com/maps/api/js?key={$mapsKey}&region=CZ&language=cs&libraries=geometry"></script>
+<script n:if="$pageData->loadAsset('charts')" src="https://www.gstatic.com/charts/loader.js"></script>
+<script n:if="$pageData->loadAsset('maps')" src="https://maps.googleapis.com/maps/api/js?key={$mapsKey}&region=CZ&language=cs&libraries=geometry"></script>
+<script n:if="$pageData->loadAsset('editor')" src="{$baseUrl}/dist/js/editor.js?m={='dist/js/editor.js'|mTime}"></script>
 <script src="{$baseUrl}/dist/js/bundle.js?m={='dist/js/bundle.js'|mTime}"></script>
 </body>
 </html>

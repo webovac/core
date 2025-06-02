@@ -3,6 +3,7 @@ modules:
 		namespace: Webovac
 		isPackage: true
 		entities:
+			Asset:
 			Log:
 			Person:
 			File:

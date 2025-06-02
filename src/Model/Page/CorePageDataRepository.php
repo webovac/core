@@ -129,6 +129,7 @@ trait CorePageDataRepository
 			$pageData->parentDetailRootPages = array_merge($parentPageData->parentDetailRootPages ?? [], $pageData->isDetailRoot ? [$page->id] : []);
 			$pageData->parentPage = $page->parentPage?->id ?: ($parentPageData->parentPage ?? null);
 			$pageData->childPageIds = [];
+			$pageData->assets = $page->assets->toCollection()->fetchPairs('name', 'name');
 			foreach ($page->translations as $translation) {
 				$parentPageTranslationData = $parentPageData?->getCollection('translations')->getByKey($translation->language->id);
 				if ($hasPages instanceof Module && $page === $hasPages->homePage) {

@@ -1,0 +1,5 @@
+class: App\Model\Asset\AssetData
+items:
+	editor:
+	charts:
+	maps:

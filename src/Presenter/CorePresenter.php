@@ -215,6 +215,7 @@ trait CorePresenter
 			} else {
 				$main = $this->pageTranslation->content ?: '';
 			}
+			bdump($this->pageData);
 			$this->template->getLatte()->setLoader(new StringLoader([
 				'@layout.latte' => file_get_contents($this->dir->getAppDir() . "/Presenter/@layout.latte"),
 				'layout.latte' => file_get_contents(__DIR__ . "/../templates/layout.latte"),
@@ -232,6 +233,7 @@ trait CorePresenter
 						->allowMethods(CmsUser::class, SecurityPolicy::All)
 						->allowMethods(CmsEntity::class, SecurityPolicy::All)
 						->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)
+						->allowMethods(Item::class, ['loadAsset'])
 						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'str_contains', 'core'])
 				);
 

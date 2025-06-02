@@ -251,6 +251,7 @@ trait CoreFileRepository
 		$img->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
 		$jpeg = Image::fromString($img->getImageBlob());
 		$jpeg->save($cloneFile, type: ImageType::JPEG);
+		$img->clear();
 		$upload = $this->createFileUploadFromFile($cloneFile);
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}

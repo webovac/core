@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
+use App\Model\Asset\AssetRepository;
 use App\Model\File\FileRepository;
 use App\Model\FileTranslation\FileTranslationRepository;
 use App\Model\Language\LanguageRepository;
@@ -26,6 +27,7 @@ use App\Model\WebTranslation\WebTranslationRepository;
 
 
 /**
+ * @property-read AssetRepository $assetRepository
  * @property-read FileRepository $fileRepository
  * @property-read FileTranslationRepository $fileTranslationRepository
  * @property-read LanguageRepository $languageRepository

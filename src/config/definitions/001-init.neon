@@ -1,6 +1,12 @@
 schemas:
 	%defaultSchema%:
 		tables:
+			asset:
+				columns:
+					id: [type: int, null: false, auto: true]
+					name: [type: string, null: false]
+				primaryKey: id
+				uniqueKeys: [name]
 			file:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -188,8 +194,6 @@ schemas:
 					dont_inherit_access_setup: [type: bool, null: false, default: false]
 					has_parameter: [type: bool, null: false, default: false]
 					ajax: [type: bool, null: false, default: false]
-					load_charts: [type: bool, null: false, default: false]
-					load_maps: [type: bool, null: false, default: false]
 					target_page_id: [type: int, null: true]
 					target_parameter: [type: string, null: true]
 					target_path: [type: string, null: true]
@@ -213,6 +217,15 @@ schemas:
 					template_page_id: [table: page, column: id, onDelete: set null]
 					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank]
 					image_file_id: [table: file, column: id, onDelete: set null]
+			page2asset:
+				columns:
+					page_id: [type: int, null: false]
+					asset_id: [type: int, null: false]
+				primaryKey: [page_id, asset_id]
+				indexes: [page_id, asset_id]
+				foreignKeys:
+					page_id: [table: page, column: id, reverseName: assets]
+					asset_id: [table: asset, column: id]
 			page2authorized_person:
 				columns:
 					page_id: [type: int, null: false]
