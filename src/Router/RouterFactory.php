@@ -230,39 +230,41 @@ final class RouterFactory
 								$signals[$signal->name] = $signal->signal;
 							}
 						}
-						foreach ($translationData->paths as $path) {
-							$f = $path->path;
-							preg_match_all('/<id\[(.+?)\]>/', $f, $m);
-							$f = preg_replace('/<id\[(.+?)\]>/', '<id>', $f);
-							$f = trim($f, '/');
-							foreach (explode('/', $f) as $part) {
-								if ($part === '<id>' || isset($setup['parts'][$part])) {
-									continue;
+						if (isset($translationData->paths)) {
+							foreach ($translationData->paths as $path) {
+								$f = $path->path;
+								preg_match_all('/<id\[(.+?)\]>/', $f, $m);
+								$f = preg_replace('/<id\[(.+?)\]>/', '<id>', $f);
+								$f = trim($f, '/');
+								foreach (explode('/', $f) as $part) {
+									if ($part === '<id>' || isset($setup['parts'][$part])) {
+										continue;
+									}
+									$setup['parts'][$part] = $part;
 								}
-								$setup['parts'][$part] = $part;
-							}
-							$setup['mapIn'][$base][$f] = [
-								'presenter' => 'Home',
-								'action' => 'default',
-								'host' => $p->host,
-								'basePath' => $p->basePath,
-								'pageName' => $p->name,
-								'lang' => $languageData->shortcut,
-								'id' => $m[1],
-								'path' => $f === '<path .+>' ? $f : null,
-								'signals' => $signals,
-								'parameters' => $parameters,
-							];
-							if ($path->active) {
-								$setup['mapOut'][$base][$languageData->shortcut][$p->name] = [
+								$setup['mapIn'][$base][$f] = [
 									'presenter' => 'Home',
 									'action' => 'default',
 									'host' => $p->host,
 									'basePath' => $p->basePath,
-									'p' => $f,
-									'signals' => array_flip($signals),
-									'parameters' => array_flip($parameters),
+									'pageName' => $p->name,
+									'lang' => $languageData->shortcut,
+									'id' => $m[1],
+									'path' => $f === '<path .+>' ? $f : null,
+									'signals' => $signals,
+									'parameters' => $parameters,
 								];
+								if ($path->active) {
+									$setup['mapOut'][$base][$languageData->shortcut][$p->name] = [
+										'presenter' => 'Home',
+										'action' => 'default',
+										'host' => $p->host,
+										'basePath' => $p->basePath,
+										'p' => $f,
+										'signals' => array_flip($signals),
+										'parameters' => array_flip($parameters),
+									];
+								}
 							}
 						}
 					}

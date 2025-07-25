@@ -334,7 +334,7 @@ trait CorePresenter
 	private function getDescription(): ?string
 	{
 		return $this->entity && method_exists($this->entity, 'getDescription')
-			? $this->entity->getDescription()
+			? $this->entity->getDescription($this->languageData)
 			: $this->pageTranslation->description;
 	}
 

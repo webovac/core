@@ -240,6 +240,7 @@ trait CoreFileRepository
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
 		copy($tmpFile, $cloneFile);
 		$img = new \Imagick;
+		$img->setColorspace(\Imagick::COLORSPACE_SRGB);
 		$img->readImage($cloneFile . '[0]');
 		$img->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
 		$img->setImageAlphaChannel(\Imagick::ALPHACHANNEL_REMOVE);

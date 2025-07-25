@@ -12,6 +12,7 @@ use App\Model\Page\PageData;
 use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
 use Stepapo\Model\Data\Collection;
+use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -32,4 +33,5 @@ class MenuTemplate extends BaseTemplate
 	public bool $hasSearch;
 	/** @var string[] */ public array $availableTranslations;
 	/** @var ThemeData[] */ public Collection $themeDatas;
+	public PageActivator $pageActivator;
 }

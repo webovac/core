@@ -38,6 +38,7 @@ class MenuControl extends BaseControl
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
 		private CmsUser $cmsUser,
+		private PageActivator $pageActivator,
 	) {}
 
 
@@ -97,6 +98,7 @@ class MenuControl extends BaseControl
 		$this->template->title = $webData->getCollection('translations')->getByKey($languageData->id)->title;
 		$this->template->wwwDir = $this->dir->getWwwDir();
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
+		$this->template->pageActivator = $this->pageActivator;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData) {
 			$checkActive = $pageData->targetPage
 				? $pageData->targetPage !== $webData->homePage

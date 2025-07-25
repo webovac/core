@@ -2,7 +2,7 @@
 <div n:class="mobile-collapsed, navigation-wrapper, secondary-navigation-wrapper, $pageDatas->count() + (isset($entityMenuItems) ? count($entityMenuItems) : 0) === 0 ? empty" n:if="$activePageData->providesNavigation" n:snippet>
 	<div class="navigation secondary-navigation">
 		<div class="d-flex flex-row">
-			<div class="navigation-icon lh-1"{if !$imageIdentifier && !$imageUrl} style="background: var(--cms-primary); padding: 7.5px 0;"{/} n:ifcontent>
+			<div n:if="in_array($layoutData->code, ['default', 'twitter'], true)" class="navigation-icon lh-1"{if !$imageIdentifier && !$imageUrl} style="background: var(--cms-primary); padding: 7.5px 0;"{/} n:ifcontent>
 				{if $imageIdentifier}
 					<img n:img="$imageIdentifier, '90x90'" width="45" height="45" class="rounded-5">
 				{elseif $imageUrl}
