@@ -7,6 +7,7 @@ namespace Webovac\Core\Presenter;
 use App\Model\DataModel;
 use App\Model\Language\LanguageData;
 use App\Model\Orm;
+use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationData;
@@ -23,6 +24,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
+use Nette\Security\Passwords;
 use Nette\Utils\Arrays;
 use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
@@ -84,6 +86,7 @@ trait CorePresenter
 	private ?CmsEntity $entity = null;
 	/** @var CmsEntity[] */ private ?array $entityList = null;
 	public array $components = [];
+	#[Inject] public Passwords $passwords;
 
 
 	public function injectCoreStartup(): void
@@ -112,9 +115,18 @@ trait CorePresenter
 			} catch (LoginRequiredException $e) {
 				$loginPage = $this->dataModel->getPageDataByName($this->webData->id, 'FsvAuth:Home') ?: $this->dataModel->getPageDataByName($this->webData->id, 'Auth:Home');
 				if ($this->webData->disableBacklink) {
-					$this->redirect('Home:default', ['pageName' => $loginPage->name]);
+					$this->redirect('Home:default', ['pageName' => $loginPage->name, 'host' => $this->host, 'basePath' => $this->basePath, 'lang' => $this->lang]);
 				} else {
 					$this->redirect('Home:default', ['pageName' => $loginPage->name, 'backlink' => $this->storeRequest()]);
+				}
+			}
+			if ($this->cmsUser->isLoggedIn()) {
+				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
+				if ($this->preference && $this->preference->language) {
+					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)) {
+						$languageData = $this->dataModel->getLanguageData($this->preference->language->id);
+						$this->lang = $languageData->shortcut;
+					}
 				}
 			}
 			if ($this->pageData->hasParameter) {
@@ -131,19 +143,10 @@ trait CorePresenter
 					$this->error();
 				}
 				if ($this->entity instanceof HasSlugHistory) {
-					$this->entity->checkForRedirect($this->getParameter('id'), $this->languageData, $this);
+					$this->entity->checkForRedirect($this->getParameter('id'), $this->pageData, $this->languageData, $this);
 				}
 				if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
 					throw new ForbiddenRequestException;
-				}
-			}
-			if ($this->cmsUser->isLoggedIn()) {
-				$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
-				if ($this->preference && $this->preference->language) {
-					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)) {
-						$languageData = $this->dataModel->getLanguageData($this->preference->language->id);
-						$this->lang = $languageData->shortcut;
-					}
 				}
 			}
 			$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
@@ -178,6 +181,8 @@ trait CorePresenter
 			$this->template->imageUrl = $this->getImageUrl();
 			$this->template->pageTranslation = $this->pageTranslation;
 			$this->template->hasSideMenu = (bool) $this->navigationPageData;
+			$this->template->emptyNavigation = $this->navigationPageData?->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity)->count()
+				+ ($this->entityList && method_exists($this->entity, 'getMenuItems') ? count($this->entity->getMenuItems()) : null) === 0;
 			$this->template->entity = $this->entity;
 			$entityName = $this->entity?->getRepository()->getMapper()->getTableName() instanceof Fqn
 				? $this->entity?->getRepository()->getMapper()->getTableName()->name
@@ -190,7 +195,7 @@ trait CorePresenter
 				. ($this->entity ? $this->entity->getTitle() : '');
 			$this->template->metaType = $entityName ?: 'page';
 			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
-			$this->template->metaUrl = $this->request->getPresenterName() === 'Error4xx' ? $this->link('//Home:default', $homePage->name) : $this->link('//this');
+			$this->template->metaUrl = $this->request->getPresenterName() === 'Error4xx' ? $this->link('//Home:default', ['pageName' => $homePage->name, 'host' => $this->host, 'basePath' => $this->basePath, 'lang' => $this->lang]) : $this->link('//this');
 			$this->template->bodyClasses = [];
 			$this->template->bodyClasses[] = "web-{$this->webData->code}";
 			$this->template->bodyClasses[] = 'layout-' . ($this->moduleChecker->isModuleInstalled('style') ? $this->layoutData->code : 'cvut');
@@ -308,6 +313,9 @@ trait CorePresenter
 						'pageName' => $pageData->name,
 						'id' => $pageData->hasParameter ? $parameters : [],
 						'path' => $pageData->hasPath ? $this->getParameter('path') : null,
+						'host' => $this->host,
+						'basePath' => $this->basePath,
+						'lang' => $this->lang,
 					],
 				),
 			);

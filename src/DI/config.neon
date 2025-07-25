@@ -1,11 +1,15 @@
 services:
-	- App\Model\DataModel
-	- Nette\Caching\Cache
+	webovac.core.dataModel: App\Model\DataModel
+	webovac.core.cache: Nette\Caching\Cache
+	webovac.core.sqlHandler: Nextras\Migrations\Extensions\SqlHandler
+	webovac.core.dir: Webovac\Core\Lib\Dir(%rootDir%)
+	webovac.core.sidePanel: Webovac\Core\Control\SidePanel\ISidePanelControl
+	webovac.core.menu: Webovac\Core\Control\Menu\IMenuControl
+
 #	cache.storage: Nette\Caching\Storages\FileStorage(%tempDir%)
 #	cache.storage: Nette\Caching\Storages\SQLiteStorage(%tempDir%/cache.db)
 #	cache.storage: Nette\Caching\Storages\MemcachedStorage
-	- Nextras\Migrations\Extensions\SqlHandler
-	- Webovac\Core\Lib\Dir(%rootDir%)
+
 	latte.templateFactory: App\Lib\TemplateFactory
 	routerFactory: Webovac\Core\Router\RouterFactory
 	router:

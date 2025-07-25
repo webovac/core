@@ -23,6 +23,7 @@ use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Stepapo\Utils\Attribute\DontCache;
 use Stepapo\Utils\Attribute\KeyProperty;
+use Stepapo\Utils\Attribute\SkipInManipulation;
 use Stepapo\Utils\Attribute\Type;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
@@ -43,7 +44,7 @@ trait CorePageData
 	/** @var ParameterData[] */ #[ArrayOfType(ParameterData::class)] public array|null $parameters;
 	/** @var SignalData[] */ #[ArrayOfType(SignalData::class)] public array|null $signals;
 	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
-	/** @var FileData[] */ #[ArrayOfType(FileData::class)] public array|null $files;
+	/** @var FileData[] */ #[ArrayOfType(FileData::class), SkipInManipulation] public array|null $files;
 	/** @var string[] */ public array|null $libs;
 	/** @var string[] */ public array|null $authorizedRoles;
 	/** @var int[] */ public array|null $authorizedPersons;
@@ -213,5 +214,11 @@ trait CorePageData
 	public function loadAsset(string $name): bool
 	{
 		return array_key_exists($name, $this->assets);
+	}
+
+
+	public function hasStyle(): bool
+	{
+		return (bool) $this->style;
 	}
 }

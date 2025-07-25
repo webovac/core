@@ -39,6 +39,7 @@ trait CoreWebRepository
 		?\DateTimeInterface $date = null,
 		bool $skipDefaults = false,
 		bool $getOriginalByData = false,
+		bool $fromNeon = false,
 	): bool
 	{
 		if (isset($data->iconFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
@@ -62,7 +63,7 @@ trait CoreWebRepository
 				$this->processTree((array) $pages, $parentPage, $rank++, $data);
 			}
 		}
-		return parent::createFromDataReturnBool($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData);
+		return parent::createFromDataReturnBool($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData, $fromNeon);
 	}
 
 
@@ -78,6 +79,7 @@ trait CoreWebRepository
 		?\DateTimeInterface $date = null,
 		bool $skipDefaults = false,
 		bool $getOriginalByData = false,
+		bool $fromNeon = false,
 	): StepapoEntity
 	{
 		if (isset($data->iconFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
@@ -101,7 +103,7 @@ trait CoreWebRepository
 				$this->processTree((array) $pages, $parentPage, $rank++, $data);
 			}
 		}
-		return parent::createFromData($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData);
+		return parent::createFromData($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData, $fromNeon);
 	}
 
 

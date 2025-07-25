@@ -7,6 +7,7 @@ namespace Webovac\Core\Control\Navigation;
 use App\Model\DataModel;
 use App\Model\Page\PageData;
 use ReflectionException;
+use Stepapo\Model\Data\Collection;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
@@ -47,7 +48,16 @@ class NavigationControl extends BaseControl
 		if ($this->entityList && method_exists($this->entity, 'getMenuItems')) {
 			$this->template->entityMenuItems = $this->entity->getMenuItems();
 		}
-		$this->template->pageDatas = $navigationPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
+		$pageDatas = $navigationPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
+		$this->template->pageDatas = $pageDatas;
+		$pD = (array) $pageDatas;
+		uasort($pD, function (PageData $a, PageData $b) {
+			if ($a->hasStyle() === $b->hasStyle()) {
+				return $a->rank <=> $b->rank;
+			}
+			return (int) $b->hasStyle() <=> (int) $a->hasStyle();
+		});
+		$this->template->mobilePageDatas = new Collection($pD);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
 			$this->template->layoutData = $layoutData;
 		}

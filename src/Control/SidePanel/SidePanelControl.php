@@ -19,7 +19,12 @@ use Webovac\Core\Model\CmsEntity;
  */
 class SidePanelControl extends BaseControl
 {
+	public const TEMPLATE_DEFAULT = 'default';
+	
+	
 	public function __construct(
+		private string $moduleClass,
+		private string $templateName,
 		private ?CmsEntity $entity,
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
@@ -68,6 +73,6 @@ class SidePanelControl extends BaseControl
 			$this->template->webDatas = $this->dataModel->findWebDatas();
 			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
 		}
-		$this->template->render(__DIR__ . '/sidePanel.latte');
+		$this->template->renderFile($this->moduleClass, SidePanelControl::class, $this->templateName);
 	}
 }

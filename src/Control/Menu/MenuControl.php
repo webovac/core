@@ -62,6 +62,7 @@ class MenuControl extends BaseControl
 		$this->template->pageDatas = $webData->getRootPageDatas($this->dataModel, $this->cmsUser, $this->entity);
 		$this->template->homePageData = $homePage;
 		$this->template->dataModel = $this->dataModel;
+		$this->template->webDatas = $this->dataModel->findWebDatas();
 		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
 		$searchPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Search:Home');
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')

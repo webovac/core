@@ -18,6 +18,9 @@ use Stepapo\Model\DI\ModelExtension;
 use Stepapo\Utils\DI\StepapoExtension;
 use Stepapo\Utils\Injectable;
 use Stepapo\Utils\Service;
+use Webovac\Core\Control\Menu\IMenuControl;
+use Webovac\Core\Control\Menu\MenuControl;
+use Webovac\Core\Control\SidePanel\ISidePanelControl;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Lib\KeyProvider;
 use Webovac\Core\Lib\NeonHandler;
@@ -47,7 +50,6 @@ class CoreExtension extends StepapoExtension
 				'password' => Expect::string(),
 				'schemas' => Expect::arrayOf('string'),
 			]),
-			'keys' => Expect::array(),
 			'testMode' => Expect::bool()->default(false),
 		]);
 	}
@@ -60,7 +62,7 @@ class CoreExtension extends StepapoExtension
 		$builder->addDefinition($this->prefix('neonHandler'))
 			->setFactory(NeonHandler::class, [['host' => $this->config->parameters['host']], $builder->parameters['debugMode'], $this->config->testMode]);
 		$builder->addDefinition($this->prefix('keyProvider'))
-			->setFactory(KeyProvider::class, [$this->config->keys]);
+			->setFactory(KeyProvider::class, [$this->config->parameters]);
 		$this->createModelExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();

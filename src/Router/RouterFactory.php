@@ -12,6 +12,7 @@ use Nette\Caching\Cache;
 use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Nette\Routing\RouteList;
+use Nette\Utils\Arrays;
 
 
 final class RouterFactory

@@ -8,13 +8,14 @@ use App\Model\Path\PathData;
 use DateTimeInterface;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\KeyProperty;
+use Stepapo\Utils\Attribute\SkipInManipulation;
 
 
 trait CorePageTranslationData
 {
 	public ?int $id;
 	#[KeyProperty] public int|string $language;
-	/** @var PathData[] */ #[ArrayOfType(PathData::class)] public array|null $paths;
+	/** @var PathData[] */ #[ArrayOfType(PathData::class),SkipInManipulation] public array|null $paths;
 	public string $title;
 	public ?string $description;
 	public ?string $onclick;

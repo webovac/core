@@ -166,8 +166,10 @@ h1, .title {
     .layout .primary-navigation-wrapper .navigation .menu {
         overflow-y: var(--cms-layout-primary-wrapper-overflow-y);
     }
-    body {
+    .horizontal-wrapper {
         padding-bottom: 48px;
+    }
+    body {
         background: var(--cms-primary-bg)
     }
     .primary-navigation .menu {
@@ -188,7 +190,7 @@ h1, .title {
     }
 }
 @media (max-width: 991.8px) and (display-mode: standalone) and (orientation: portrait) {
-    body {
+    .horizontal-wrapper {
         padding-bottom: calc(48px + 32px);
     }
     .primary-navigation .menu {
@@ -202,7 +204,7 @@ h1, .title {
     }
 }
 @media (max-width: 991.8px) and (display-mode: standalone) and (orientation: landscape) {
-    body {
+    .horizontal-wrapper {
         padding-bottom: calc(48px + 12px);
     }
     .primary-navigation .menu {

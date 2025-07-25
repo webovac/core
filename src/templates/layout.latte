@@ -31,35 +31,40 @@
 	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
 	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
 </head>
-<body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? (str_contains($themeData->code, 'dark') ? 'dark' : 'light') : 'light'}"{ifset $logStepUrl} data-log-step-url="{$logStepUrl}"{/}>
-<div n:class="layout, $pageData->stretched ? stretched"{if $layoutData->code !== 'cvut' && $pageData->layoutWidth} style="--cms-layout-width: {$pageData->layoutWidth}px;"{/}>
-	{control core-menu}
+<body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? (str_contains($themeData->code, 'dark') ? 'dark' : 'light') : 'light'}"{ifset $logStepUrl} data-log-step-url="{$logStepUrl}"{/}{if $layoutData->code !== 'cvut' && $pageData->layoutWidth} style="--cms-layout-width: {$pageData->layoutWidth}px;"{/}>
+<div n:class="layout, $pageData->stretched ? stretched">
+	<div class="navigation-wrapper primary-navigation-wrapper"></div>
 	<div class="horizontal-wrapper">
-		{if !$layoutData->hideBreadcrumbs && $layoutData->code === 'twitter'}
-			{control core-breadcrumbs}
-			{control core-messages}
-		{/}
-		{control core-navigation}
+		<div n:class="mobile-collapsed, navigation-wrapper, secondary-navigation-wrapper, $emptyNavigation ? empty" n:if="$hasSideMenu"></div>
 		<div class="content-image-wrapper">
-			<div class="content-wrapper">
+			<div class="content-wrapper h-100">
 				{if !$layoutData->hideBreadcrumbs && $layoutData->code !== 'twitter'}
 					{control core-breadcrumbs}
 					{control core-messages}
 				{/}
-
 				<div n:class="content, override-padding, str_contains($pageTranslation->content ?: '', 'ContentForm') || str_contains($pageTranslation->content ?: '', 'FooterForm') ? 'd-flex flex-column'">
 					{include 'main.file'}
-				</div>
-				<div class="footer small" n:ifcontent>
-					{include 'footer.file'}
 				</div>
 			</div>
 			<div class="background" n:if="$webData->backgroundFile && $layoutData->imageDisplay"></div>
 		</div>
 	</div>
-	{if !$layoutData->hideSidePanel}
-		{control core-sidePanel}
-	{/}
+	<div n:if="!$webData->hideSidePanel && !$layoutData->hideSidePanel && isModuleInstalled('style') && $cmsUser->isLoggedIn()" n:class="side-panel"></div>
+</div>
+<div class="fixed-wrapper">
+	<div n:class="layout, $pageData->stretched ? stretched">
+		{control core-menu}
+		<div class="horizontal-wrapper">
+			{if !$layoutData->hideBreadcrumbs && $layoutData->code === 'twitter'}
+				{control core-breadcrumbs}
+				{control core-messages}
+			{/}
+			{control core-navigation}
+		</div>
+		{if !$layoutData->hideSidePanel}
+			{control core-sidePanel}
+		{/}
+	</div>
 </div>
 <script n:foreach="$pageData->scripts as $assetData" src="{if $assetData->local}{$baseUrl}/{/}{$assetData->link|replaceKey|noescape}{if $assetData->local}?m={=$assetData->link|mTime}{/}"></script>
 <script src="{$baseUrl}/dist/js/bundle.js?m={='dist/js/bundle.js'|mTime}"></script>

@@ -45,6 +45,7 @@ trait CoreWebData
 	#[DefaultValue(false)] public bool $isAdmin;
 	#[DefaultValue(false)] public bool $disableIndex;
 	#[DefaultValue(false)] public bool $disableBacklink;
+	#[DefaultValue(false)] public bool $hideSidePanel;
 	#[DontCache] public array $tree;
 	/** @var int[] */ public array|null $adminPersons;
 	/** @var string[] */ public array|null $adminRoles;
