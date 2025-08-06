@@ -13,9 +13,10 @@ use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Nette\Routing\RouteList;
 use Nette\Utils\Arrays;
+use Stepapo\Utils\Service;
 
 
-final class CmsRouterFactory
+final class CmsRouterFactory implements Service
 {
 	private array $setup;
 
