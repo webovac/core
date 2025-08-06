@@ -11,7 +11,4 @@ services:
 #	cache.storage: Nette\Caching\Storages\MemcachedStorage
 
 	latte.templateFactory: App\Lib\TemplateFactory
-	routerFactory: Webovac\Core\Router\RouterFactory
-	router:
-		type: Nette\Routing\Router
-		create: @routerFactory::create
+	routerFactory: Webovac\Core\Router\CmsRouterFactory

@@ -15,7 +15,7 @@ use Nette\Routing\RouteList;
 use Nette\Utils\Arrays;
 
 
-final class RouterFactory
+final class CmsRouterFactory
 {
 	private array $setup;
 
@@ -24,7 +24,6 @@ final class RouterFactory
 		private DataModel $dataModel,
 		private Cache $cache,
 		private IRequest $request,
-		private Orm $orm,
 	) {}
 
 
