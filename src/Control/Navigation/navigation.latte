@@ -17,36 +17,17 @@
 		</div>
 		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw {$layoutData->secondaryIcon ?? fas} fa-bars"></i></a>
 		<div class="menu" id="submenu" n:if="$pageDatas->count() + (isset($entityMenuItems) ? count($entityMenuItems) : 0) > 0">
-{*			<div class="menu d-none d-lg-flex">*}
-				{ifset $entityMenuItems}
-					{foreach $entityMenuItems as $e}
-						{renderMenuItem($dataModel->getPageDataByName($webData->id, $entity->getPathPageName()), $e)}
-					{/}
+			{ifset $entityMenuItems}
+				{foreach $entityMenuItems as $e}
+					{renderMenuItem($dataModel->getPageDataByName($webData->id, $entity->getPathPageName()), $e)}
 				{/}
-				{if $pageDatas->count() > 0}
-					{renderMenuItem($activePageData)}
-					{foreach $pageDatas as $p}
-						{renderMenuItem($p)}
-					{/}
+			{/}
+			{if $pageDatas->count() > 0}
+				{renderMenuItem($activePageData)}
+				{foreach $pageDatas as $p}
+					{renderMenuItem($p)}
 				{/}
-{*			</div>*}
-{*			<div class="menu d-flex d-lg-none">*}
-{*				{ifset $entityMenuItems}*}
-{*					{foreach $entityMenuItems as $e}*}
-{*						{renderMenuItem($dataModel->getPageDataByName($webData->id, $entity->getPathPageName()), $e)}*}
-{*					{/}*}
-{*				{/}*}
-{*				{if $mobilePageDatas->count() > 0}*}
-{*					{var $lastP = null}*}
-{*					{foreach $mobilePageDatas as $p}*}
-{*						{if $lastP?->hasStyle() && !$p->hasStyle()}*}
-{*							{renderMenuItem($activePageData)}*}
-{*						{/}*}
-{*						{renderMenuItem($p)}*}
-{*						{php $lastP = $p}*}
-{*					{/}*}
-{*				{/}*}
-{*			</div>*}
+			{/}
 		</div>
 	</div>
 </div>

@@ -8,15 +8,21 @@ use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
 use App\Model\Person\Person;
+use Nette\InvalidArgumentException;
+use Stepapo\Model\Data\Item;
+use Webovac\Core\Model\CmsEntity;
 
 
 trait CoreModuleRepository
 {
-	public function postProcessFromData(ModuleData $data, Module $module, ?Person $person = null, bool $skipDefaults = false): Module
+	public function postProcessFromData(Item $data, CmsEntity $entity, bool $skipDefaults = false): CmsEntity
 	{
-		$module->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['module' => $module, 'name' => $data->homePage]);
-		$this->persist($module);
-		foreach ($module->pages as $page) {
+		if (!$data instanceof ModuleData || !$entity instanceof Module) {
+			throw new InvalidArgumentException;
+		}
+		$entity->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['module' => $entity, 'name' => $data->homePage]);
+		$this->persist($entity);
+		foreach ($entity->pages as $page) {
 			if (!array_key_exists($page->name, $data->pages)) {
 				if (!$skipDefaults) {
 					$this->getModel()->getRepository(PageRepository::class)->delete($page);
@@ -25,7 +31,7 @@ trait CoreModuleRepository
 			}
 			$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, skipDefaults: $skipDefaults);
 		}
-		return $module;
+		return $entity;
 	}
 
 

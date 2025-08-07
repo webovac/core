@@ -208,16 +208,6 @@ final class CmsRouterFactory implements Service
 							$p = $pageData;
 						}
 						$base = '//' . $p->host . ($p->basePath ? '/' . $p->basePath : '');
-//						$fullPath = str_replace($base, '', $translationData->fullPath);
-//						preg_match_all('/<id\[(.+?)\]>/', $fullPath, $m);
-//						$fullPath = preg_replace('/<id\[(.+?)\]>/', '<id>', $fullPath);
-//						$fullPath = trim($fullPath, '/');
-//						foreach (explode('/', $fullPath) as $part) {
-//							if ($part === '<id>' || isset($setup['parts'][$part])) {
-//								continue;
-//							}
-//							$setup['parts'][$part] = $part;
-//						}
 						$parameters = [];
 						if (isset($pageData->parameters)) {
 							foreach ($pageData->parameters as $parameter) {

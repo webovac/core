@@ -23,6 +23,7 @@ modules:
 				entityImplements:
 					Webovac\Core\Model\Page\HasPages:
 					Webovac\Core\Model\HasTranslations:
+				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
 			ModuleTranslation:
 				entityImplements:
@@ -34,6 +35,7 @@ modules:
 					Webovac\Core\Model\Page\HasPages:
 					Webovac\Core\Model\HasTranslations:
 					Webovac\Core\Model\File\HasFiles:
+				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
 			PageTranslation:
 				entityImplements:
@@ -55,6 +57,7 @@ modules:
 					Webovac\Core\Model\Page\HasPages:
 					Webovac\Core\Model\HasTranslations:
 					Webovac\Core\Model\File\HasFiles:
+				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
 			WebTranslation:
 				entityImplements:

@@ -30,6 +30,7 @@ use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\HasRequirements;
 
 
 trait CorePageData
@@ -194,7 +195,7 @@ trait CorePageData
 			return false;
 		}
 		if ($this->authorizingTag && $entity) {
-			if (method_exists($entity, 'checkRequirements') && !$entity->checkRequirements($cmsUser, $webData, $this->authorizingTag)) {
+			if ($entity instanceof HasRequirements && !$entity->checkRequirements($cmsUser, $webData, $this->authorizingTag)) {
 				return false;
 			}
 		}

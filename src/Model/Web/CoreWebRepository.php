@@ -22,7 +22,9 @@ use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\UnknownImageFileException;
 use Stepapo\Model\Data\Item;
+use Stepapo\Model\Orm\EntityProcessorResult;
 use Stepapo\Model\Orm\StepapoEntity;
+use Webovac\Core\Model\CmsEntity;
 
 
 trait CoreWebRepository
@@ -30,7 +32,7 @@ trait CoreWebRepository
 	/**
 	 * @throws \ReflectionException
 	 */
-	public function createFromDataReturnBool(
+	public function createFromDataAndReturnResult(
 		Item $data,
 		?StepapoEntity $original = null,
 		?StepapoEntity $parent = null,
@@ -40,7 +42,7 @@ trait CoreWebRepository
 		bool $skipDefaults = false,
 		bool $getOriginalByData = false,
 		bool $fromNeon = false,
-	): bool
+	): EntityProcessorResult
 	{
 		if (isset($data->iconFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
 			$data->iconFile->upload = $this->styleFile($data->iconFile, $data->complementaryColor, $data->color);
@@ -63,7 +65,7 @@ trait CoreWebRepository
 				$this->processTree((array) $pages, $parentPage, $rank++, $data);
 			}
 		}
-		return parent::createFromDataReturnBool($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData, $fromNeon);
+		return parent::createFromDataAndReturnResult($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData, $fromNeon);
 	}
 
 
@@ -144,15 +146,18 @@ trait CoreWebRepository
 	}
 
 
-	public function postProcessFromData(WebData $data, Web $web, ?Person $person = null, bool $skipDefaults = false): Web
+	public function postProcessFromData(Item $data, CmsEntity $entity, bool $skipDefaults = false): CmsEntity
 	{
-		if (isset($data->homePage)) {
-			$web->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['web' => $web, 'name' => $data->homePage]);
+		if (!$data instanceof WebData || !$entity instanceof Web) {
+			throw new InvalidArgumentException;
 		}
-		$this->persist($web);
+		if (isset($data->homePage)) {
+			$entity->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['web' => $entity, 'name' => $data->homePage]);
+		}
+		$this->persist($entity);
 		if (isset($data->pages)) {
 			/** @var Page $page */
-			foreach ($web->pages->toCollection() as $page) {
+			foreach ($entity->pages->toCollection() as $page) {
 				if (!array_key_exists($page->name, $data->pages)) {
 					if (!$skipDefaults) {
 						$this->getModel()->getRepository(PageRepository::class)->delete($page);
@@ -162,7 +167,7 @@ trait CoreWebRepository
 				$this->getModel()->getRepository(PageRepository::class)->postProcessFromData($data->pages[$page->name], $page, skipDefaults: $skipDefaults);
 			}
 		}
-		return $web;
+		return $entity;
 	}
 
 

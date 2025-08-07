@@ -13,8 +13,11 @@ use App\Model\PageTranslation\PageTranslationRepository;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
 use App\Model\Web\WebData;
+use Nette\InvalidArgumentException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
+use Stepapo\Model\Data\Item;
+use Stepapo\RequestTester\Tester\Dumper;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -162,72 +165,57 @@ trait CorePageRepository
 	}
 
 
-	public function postProcessFromData(PageData $data, Page $page, ?Person $person = null, bool $skipDefaults = false): Page
+	public function postProcessFromData(Item $data, CmsEntity $entity, bool $skipDefaults = false): Page
 	{
+		if (!$data instanceof PageData || !$entity instanceof Page) {
+			throw new InvalidArgumentException;
+		}
 		if (isset($data->redirectPage)) {
-			$page->redirectPage = $this->getBy(
+			$entity->redirectPage = $this->getBy(
 				is_int($data->redirectPage)
 					? ['id' => $data->redirectPage]
 					: [
 						ICollection::AND,
 						['name' => $data->redirectPage],
-						$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
+						$entity->web ? [ICollection::OR, 'web' => $entity->web, 'module' => $entity->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $entity->module],
 					]
 			);
 		}
 		if (isset($data->type) && $data->type === Page::TYPE_INTERNAL_LINK) {
 			if (isset($data->targetPage)) {
-				$page->targetPage = $this->getBy(
+				$entity->targetPage = $this->getBy(
 					is_int($data->targetPage)
 						? ['id' => $data->targetPage]
 						: [
 							ICollection::AND,
 							['name' => $data->targetPage],
-							$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
+							$entity->web ? [ICollection::OR, 'web' => $entity->web, 'module' => $entity->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $entity->module],
 						]
 				);
 			}
 		}
 		if (isset($data->parentPage)) {
-			$page->parentPage = $this->getBy(
+			$entity->parentPage = $this->getBy(
 				is_int($data->parentPage)
 					? ['id' => $data->parentPage]
 					: [
 						ICollection::AND,
 						['name' => $data->parentPage],
-						$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
+						$entity->web ? [ICollection::OR, 'web' => $entity->web, 'module' => $entity->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $entity->module],
 					]
 			);
 		}
-		$this->persist($page);
-		return $page;
+		$this->persist($entity);
+		return $entity;
 	}
-
-
-//	public function postProcessModulePageFromData(WebModuleData $data, Page $page): Page
-//	{
-//		if (isset($data->parentPage)) {
-//			$page->parentPage = $this->getBy(
-//				is_int($data->parentPage)
-//					? ['id' => $data->parentPage]
-//					: [
-//						ICollection::AND,
-//						['name' => $data->parentPage],
-//						$page->web ? [ICollection::OR, 'web' => $page->web, 'module' => $page->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $page->module],
-//					]
-//			);
-//		}
-//		$this->persist($page);
-//		return $page;
-//	}
 
 
 	public function getByData(PageData|string $data, ?HasPages $hasPages = null): ?Page
 	{
 		$code = $data instanceof PageData ? $data->name : $data;
+		$filter = ['name' => $code];
 		if (!$hasPages) {
 			if (isset($data->web) || isset($data->module)) {
-				$filter = ['name' => $code];
 				if (isset($data->web)) {
 					$filter[is_numeric($data->web) ? 'web' : 'web->code'] = $data->web;
 				}
@@ -238,14 +226,16 @@ trait CorePageRepository
 			}
 			return null;
 		}
+		if ($hasPages instanceof Page) {
+			$filter[$hasPages->web ? 'web' : 'module'] = $hasPages->web ?: $hasPages->module;
+			return $this->getBy($filter);
+		}
 		assert($hasPages instanceof CmsEntity);
 		if (!$hasPages->isPersisted()) {
 			return is_numeric($code) ? $this->getById($code) : null;
 		}
-		return $this->getBy([
-			'name' => $code,
-			$hasPages instanceof Web ? 'web' : 'module' => $hasPages,
-		]);
+		$filter[$hasPages instanceof Web ? 'web' : 'module'] = $hasPages;
+		return $this->getBy($filter);
 	}
 
 

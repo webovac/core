@@ -147,12 +147,6 @@ trait CorePage
 	}
 
 
-	public function getParentParameter(?LanguageData $language = null): int
-	{
-		return $this->web?->id ?: $this->module->id;
-	}
-
-
 	public function getParameters(): array
 	{
 		return $this->web

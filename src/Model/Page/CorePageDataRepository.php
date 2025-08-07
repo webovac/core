@@ -6,12 +6,9 @@ namespace Webovac\Core\Model\Page;
 
 use App\Model\Asset\Asset;
 use App\Model\Module\Module;
-use App\Model\Orm;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
-use App\Model\Page\PageDataRepository;
 use App\Model\PageTranslation\PageTranslationDataRepository;
-use App\Model\Web\WebDataRepository;
 use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
 use ReflectionException;
@@ -23,7 +20,6 @@ use Throwable;
 trait CorePageDataRepository
 {
 	private array $aliases;
-	#[Inject] public PageTranslationDataRepository $pageTranslationDataRepository;
 
 
 	/** @return Collection<Item> */

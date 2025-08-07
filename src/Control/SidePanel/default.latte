@@ -23,12 +23,12 @@
 		<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
 			{_'Nastavení'}
 		</a>
-		{*
-		<hr>
-		<a n:foreach="$webDatas as $w" href="{plink '//Home:', 'Home', host: $w->host, basePath: $w->basePath, lang: $languageShortcuts[$w->defaultLanguage]}" class="link-secondary menu-item small">
-			{$w->host}{if $w->basePath}/{$w->basePath}{/}
-		</a>
-		*}
+		{if !$pageData->module}
+			<span class="mx-1"> · </span>
+			<a href="{plink '//Home:', 'pageName' => 'Admin:PageDetailFiles', 'id' => ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+				{_'Soubory'}
+			</a>
+		{/}
 	</div>
 	<hr>
 	<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">

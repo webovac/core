@@ -35,13 +35,6 @@ trait CoreModuleData
 		foreach ($data->tree as $parentPage => $pages) {
 			ModuleData::processTree((array) $pages, $parentPage, $rank++, $data);
 		}
-//		foreach ($data->pages as $pageKey => $pageConfig) {
-//			if (!ModuleData::checkPage($pageKey, $data)) {
-//				unset($data->pages[$pageKey]);
-//				continue;
-//			}
-//			$data->pages[$pageKey] = PageData::createFromArray($pageConfig, $pageKey, $skipDefaults, $parentKey);
-//		}
 		return $data;
 	}
 
