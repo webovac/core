@@ -12,10 +12,10 @@ use App\Model\Slug\SlugData;
 
 trait CoreSlugRepository
 {
-	public function getByData(SlugData|string $data): ?Slug
-	{
-		return $this->getBy([
-			'slug' => $data instanceof SlugData ? $data->slug : $data,
-		]);
-	}
+//	public function getByData(SlugData|string $data): ?Slug
+//	{
+//		return $this->getBy([
+//			'slug' => $data instanceof SlugData ? $data->slug : $data,
+//		]);
+//	}
 }

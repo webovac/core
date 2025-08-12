@@ -9,8 +9,7 @@ requests:
 			language: en
 			do: setLanguage
 		asserts:
-			renders: '//test/en?do=logStep'
-			notRenders: '//test?do=logStep'
+			renders: 'content="://test/en"'
 	theme:
 		query:
 			theme: 3

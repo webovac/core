@@ -438,7 +438,7 @@ schemas:
 					large_icon_file_id: [table: file, column: id, onDelete: set null]
 					logo_file_id: [table: file, column: id, onDelete: set null]
 					background_file_id: [table: file, column: id, onDelete: set null]
-					home_page_id: [table: page, column: id, onDelete: set null]
+					home_page_id: [table: page, column: id, onDelete: restrict]
 			web2admin_person:
 				columns:
 					web_id: [type: int, null: false]

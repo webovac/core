@@ -7,7 +7,7 @@ asserts:
 requests:
 	wrong host:
 		path: //tst
-	wrong path:
-		path: //test/webz
+#	wrong path:
+#		path: //test/webz # netestovatelne, 404 vyhazuje Router
 	wrong id:
 		path: //test/weby/999

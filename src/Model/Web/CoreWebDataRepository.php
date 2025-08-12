@@ -29,14 +29,14 @@ trait CoreWebDataRepository
 	 * @return Collection<Item>
 	 * @throws Throwable
 	 */
-	protected function buildCache(): void
+	public function buildCache(): void
 	{
 		if (isset($this->collection)) {
 			return;
 		}
-		$this->cache->remove('routeSetup');
-		$this->cache->remove('webAliases');
-		$this->cache->clean([Cache::Tags => lcfirst($this->getName())]);
+		$this->cmsCache->remove('routeSetup');
+		$this->cmsCache->remove('webAliases');
+		$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
 		$pageDatas = $this->pageDataRepository->getCollection();
 		$allPages = [];
 		foreach ($pageDatas as $pageData) {

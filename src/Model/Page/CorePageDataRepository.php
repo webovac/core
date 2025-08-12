@@ -35,11 +35,11 @@ trait CorePageDataRepository
 	/**
 	 * @throws Throwable
 	 */
-	protected function buildCache(): void
+	public function buildCache(): void
 	{
-		$this->cache->remove('routeSetup');
-		$this->cache->remove('pageAliases');
-		$this->cache->clean([Cache::Tags => lcfirst($this->getName())]);
+		$this->cmsCache->remove('routeSetup');
+		$this->cmsCache->remove('pageAliases');
+		$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
 		$this->orm->pageTranslationRepository->rebuildPaths();
 		$this->orm->flush();
 		$collection = new Collection;

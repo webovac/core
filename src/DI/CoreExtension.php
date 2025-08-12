@@ -21,7 +21,9 @@ use Stepapo\Utils\Service;
 use Webovac\Core\Control\Menu\IMenuControl;
 use Webovac\Core\Control\Menu\MenuControl;
 use Webovac\Core\Control\SidePanel\ISidePanelControl;
+use Webovac\Core\Core;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
+use Webovac\Core\Lib\CmsCache;
 use Webovac\Core\Lib\KeyProvider;
 use Webovac\Core\Lib\NeonHandler;
 
@@ -63,6 +65,8 @@ class CoreExtension extends StepapoExtension
 			->setFactory(NeonHandler::class, [['host' => $this->config->parameters['host']], $builder->parameters['debugMode'], $this->config->testMode]);
 		$builder->addDefinition($this->prefix('keyProvider'))
 			->setFactory(KeyProvider::class, [$this->config->parameters]);
+		$builder->addDefinition($this->prefix('core'))
+			->setFactory(CmsCache::class, [$this->config->testMode]);
 		$this->createModelExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();

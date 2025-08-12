@@ -67,7 +67,6 @@ trait CorePresenter
 	#[Inject] public Storage $storage;
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public ModuleChecker $moduleChecker;
-	#[Inject] public Cache $cache;
 	#[Inject] public CmsTranslator $translator;
 	#[Inject] public TemplateFactory $templateFactory;
 	#[Inject] public DataProvider $dataProvider;
@@ -261,7 +260,7 @@ trait CorePresenter
 			person: $this->cmsUser->getPerson(),
 			data: ['language' => $this->orm->languageRepository->getBy(['shortcut' => $language])],
 		);
-		$this->redirect('this');
+		$this->redirect('//this');
 	}
 
 
