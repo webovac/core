@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
-use App\Model\Language\Language;
 use App\Model\Module\Module;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
@@ -17,7 +16,6 @@ use Nette\InvalidArgumentException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Model\Data\Item;
-use Stepapo\RequestTester\Tester\Dumper;
 use Webovac\Core\Model\CmsEntity;
 
 

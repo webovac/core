@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Web;
 
-use App\Model\Language\LanguageData;
-use App\Model\Page\PageData;
 use App\Model\Page\PageDataRepository;
 use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Entity\IEntity;
 use Stepapo\Model\Data\Collection;
 use Stepapo\Model\Data\Item;
 use Throwable;

@@ -10,7 +10,6 @@ use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
-use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
 
 

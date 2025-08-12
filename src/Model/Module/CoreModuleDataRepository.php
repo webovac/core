@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Module;
 
-use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\ModuleTranslation\ModuleTranslationDataRepository;
 use App\Model\Page\PageDataRepository;
 use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
-use Nextras\Orm\Entity\IEntity;
 
 
 trait CoreModuleDataRepository

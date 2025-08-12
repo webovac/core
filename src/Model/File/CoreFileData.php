@@ -9,7 +9,6 @@ use App\Model\FileTranslation\FileTranslationData;
 use Nette\Http\FileUpload;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DontCache;
-use Stepapo\Utils\Attribute\SkipInManipulation;
 use Stepapo\Utils\Attribute\ValueProperty;
 
 

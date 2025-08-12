@@ -6,7 +6,6 @@ namespace Webovac\Core\Model\FileTranslation;
 
 use DateTimeInterface;
 use Stepapo\Utils\Attribute\KeyProperty;
-use Stepapo\Utils\Attribute\SkipInManipulation;
 
 
 trait CoreFileTranslationData

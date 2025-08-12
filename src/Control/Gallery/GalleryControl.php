@@ -6,7 +6,6 @@ namespace Webovac\Core\Control\Gallery;
 
 use App\Model\File\File;
 use App\Model\Orm;
-use Nextras\Orm\Collection\ICollection;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\DataProvider;

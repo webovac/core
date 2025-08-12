@@ -6,7 +6,6 @@ namespace Webovac\Core\Model\PageTranslation;
 
 use App\Model\Path\Path;
 use App\Model\Web\Web;
-use Nextras\Orm\Collection\ICollection;
 
 
 trait CorePageTranslation

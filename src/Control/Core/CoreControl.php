@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Core;
 
-use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\Command\MigrateCommand;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\Breadcrumbs\BreadcrumbsControl;

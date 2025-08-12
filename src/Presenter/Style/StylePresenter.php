@@ -7,7 +7,6 @@ namespace Webovac\Core\Presenter\Style;
 use App\Model\DataModel;
 use App\Model\Layout\LayoutData;
 use App\Model\Orm;
-use App\Model\Page\PageData;
 use App\Model\Preference\Preference;
 use App\Model\Theme\ThemeData;
 use App\Model\Web\WebData;
@@ -15,7 +14,6 @@ use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Attributes\Inject;
 use Webovac\Core\Lib\CmsUser;
-use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
 

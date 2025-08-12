@@ -13,7 +13,6 @@ use Webovac\Admin\Control\FileItem\FileItemControl;
 use Webovac\Admin\Control\FileItem\IFileItemControl;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\DataProvider;
-use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Model\File\HasFiles;
 
 

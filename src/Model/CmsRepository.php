@@ -11,7 +11,6 @@ use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
 use Nextras\Dbal\Drivers\Exception\QueryException;
 use Nextras\Orm\Collection\Functions\CollectionFunction;
-use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\StorageReflection\StringHelper;
 use Stepapo\Model\Orm\StepapoRepository;
 use Stepapo\Utils\Injectable;

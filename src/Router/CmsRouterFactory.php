@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Webovac\Core\Router;
 
 use App\Model\DataModel;
-use App\Model\Orm;
 use App\Model\Page\Page;
 use Nette\Application\BadRequestException;
 use Nette\Caching\Cache;
 use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Nette\Routing\RouteList;
-use Nette\Utils\Arrays;
 use Stepapo\Utils\Service;
 
 

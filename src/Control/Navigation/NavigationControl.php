@@ -13,7 +13,6 @@ use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\ModuleChecker;
-use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
 
 

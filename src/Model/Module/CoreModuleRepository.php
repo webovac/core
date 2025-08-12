@@ -7,7 +7,6 @@ namespace Webovac\Core\Model\Module;
 use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
-use App\Model\Person\Person;
 use Nette\InvalidArgumentException;
 use Stepapo\Model\Data\Item;
 use Webovac\Core\Model\CmsEntity;
