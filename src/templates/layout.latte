@@ -17,7 +17,7 @@
 	<meta name="twitter:title" content="{$metaTitle|truncate:60}">
 	<meta name="twitter:description" n:if="$pageTranslation->description" content="{$pageTranslationData->description|truncate:300}">
 	<meta name="twitter:image" n:if="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
-{*	<meta name="twitter:site" content="@USERNAME">*}
+	{*	<meta name="twitter:site" content="@USERNAME">*}
 {*	<meta name="twitter:creator" content="@USERNAME">*}
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -38,8 +38,10 @@
 		<div n:class="mobile-collapsed, navigation-wrapper, secondary-navigation-wrapper, $emptyNavigation ? empty" n:if="$hasSideMenu"></div>
 		<div class="content-image-wrapper">
 			<div class="content-wrapper h-100">
-				{if !$layoutData->hideBreadcrumbs && $layoutData->code !== 'twitter'}
-					{control core-breadcrumbs}
+				{if $layoutData->code !== 'twitter'}
+					{if !$layoutData->hideBreadcrumbs}
+						{control core-breadcrumbs}
+					{/}
 					{control core-messages}
 				{/}
 				<div n:class="content, override-padding, str_contains($pageTranslation->content ?: '', 'ContentForm') || str_contains($pageTranslation->content ?: '', 'FooterForm') ? 'd-flex flex-column'">
@@ -58,8 +60,10 @@
 	<div n:class="layout, $pageData->stretched ? stretched">
 		{control core-menu}
 		<div class="horizontal-wrapper">
-			{if !$layoutData->hideBreadcrumbs && $layoutData->code === 'twitter'}
-				{control core-breadcrumbs}
+			{if $layoutData->code === 'twitter'}
+				{if !$layoutData->hideBreadcrumbs}
+					{control core-breadcrumbs}
+				{/}
 				{control core-messages}
 			{/}
 			{control core-navigation}
