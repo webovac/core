@@ -150,7 +150,7 @@ final class CmsRouterFactory implements Service
 		$host = $params['host'] ?? $this->request->getUrl()->getHost();
 		$basePath = $params['basePath'] ?? null;
 		//$path = $params['path'];
-		$base = '//' . $host . ($basePath ? '/' . $basePath : '');
+		$base = "//$host/" . ($basePath ?: '~');
 		$pageOut = $setup['mapOut'][$base][$lang][$pageName];
 		if ($p = $pageOut['p']) {
 			$p = explode('/', $pageOut['p']);
