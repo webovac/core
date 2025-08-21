@@ -32,7 +32,7 @@ trait CoreWebRepository
 	/**
 	 * @throws \ReflectionException
 	 */
-	public function createFromDataAndReturnResult(
+	public function createFromData(
 		Item $data,
 		?StepapoEntity $original = null,
 		?StepapoEntity $parent = null,
@@ -47,51 +47,11 @@ trait CoreWebRepository
 		if (isset($data->iconFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
 			$data->iconFile->upload = $this->styleFile($data->iconFile, $data->complementaryColor, $data->color);
 			$data->iconFile->forceSquare = true;
-			$data->largeIconFile = $data->largeIconFile ?: new FileData;
-			$data->largeIconFile->upload = $this->createLargeIcon($data->iconFile, $data->iconBackgroundColor);
-		}
-		if (isset($data->logoFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
-			$data->logoFile = $data->logoFile ?: new FileData;
-			$data->logoFile->upload = $this->styleFile($data->logoFile, $data->complementaryColor, $data->color);
-		}
-		if (isset($data->modules)) {
-			foreach ($data->modules as $moduleName) {
-				$data->pages[$moduleName . 'Module'] = $this->createModulePage($moduleName);
-			}
-		}
-		if (isset($data->tree)) {
-			$rank = 1;
-			foreach ($data->tree as $parentPage => $pages) {
-				$this->processTree((array) $pages, $parentPage, $rank++, $data);
-			}
-		}
-		return parent::createFromDataAndReturnResult($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData, $fromNeon);
-	}
-
-
-	/**
-	 * @throws \ReflectionException
-	 */
-	public function createFromData(
-		Item $data,
-		?StepapoEntity $original = null,
-		?StepapoEntity $parent = null,
-		?string $parentName = null,
-		?Person $person = null,
-		?\DateTimeInterface $date = null,
-		bool $skipDefaults = false,
-		bool $getOriginalByData = false,
-		bool $fromNeon = false,
-	): StepapoEntity
-	{
-		if (isset($data->iconFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
-			$data->iconFile->upload = $this->styleFile($data->iconFile, $data->complementaryColor, $data->color);
-			$data->iconFile->forceSquare = true;
 			$data->largeIconFile = $data->largeIconFile ?? new FileData;
 			$data->largeIconFile->upload = $this->createLargeIcon($data->iconFile, $data->iconBackgroundColor);
 		}
 		if (isset($data->logoFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
-			$data->logoFile = $data->logoFile ?? new FileData;
+			$data->logoFile = $data->logoFile ?: new FileData;
 			$data->logoFile->upload = $this->styleFile($data->logoFile, $data->complementaryColor, $data->color);
 		}
 		if (isset($data->modules)) {

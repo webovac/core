@@ -46,7 +46,7 @@ class NeonHandler implements IExtensionHandler, Service
 					return $count;
 				}
 				foreach ($manipulationData->items as $itemData) {
-					$entity = $repository->createFromData($itemData, skipDefaults: $skipDefaults, getOriginalByData: true);
+					$entity = $repository->createFromData($itemData, skipDefaults: $skipDefaults, getOriginalByData: true)->entity;
 					if (method_exists($repository, 'postProcessFromData')) {
 						$repository->postProcessFromData($itemData, $entity, skipDefaults: $skipDefaults);
 					}
@@ -54,7 +54,7 @@ class NeonHandler implements IExtensionHandler, Service
 				}
 			} else {
 				$data = $file->group->migrationGroup->class::createFromNeon($file->path, $this->params, $skipDefaults);
-				$entity = $repository->createFromData($data, skipDefaults: $skipDefaults, getOriginalByData: true);
+				$entity = $repository->createFromData($data, skipDefaults: $skipDefaults, getOriginalByData: true)->entity;
 				if (method_exists($repository, 'postProcessFromData')) {
 					$repository->postProcessFromData($data, $entity, skipDefaults: $skipDefaults);
 				}
