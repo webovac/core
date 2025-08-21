@@ -32,7 +32,7 @@ trait CoreWebRepository
 	/**
 	 * @throws \ReflectionException
 	 */
-	public function createFromData(
+	public function createFromDataAndReturnResult(
 		Item $data,
 		?StepapoEntity $original = null,
 		?StepapoEntity $parent = null,
@@ -65,7 +65,7 @@ trait CoreWebRepository
 				$this->processTree((array) $pages, $parentPage, $rank++, $data);
 			}
 		}
-		return parent::createFromData($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData, $fromNeon);
+		return parent::createFromDataAndReturnResult($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData, $fromNeon);
 	}
 
 
