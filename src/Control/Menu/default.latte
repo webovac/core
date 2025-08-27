@@ -44,18 +44,14 @@
 				</a>
 				<div class="menu-item side-menu-item" n:if="$layoutData->code === 'cvut' && $showAdmin && (!$pageData->module || $webData->isAdmin)">
 					<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-						{_'Obsah'}
+						<i n:class="$layoutData->primaryIcon, fa-fw, fa-pen-to-square"></i>
 					</a>
-					<span class="mx-1"> · </span>
 					<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-						{_'Nastavení'}
+						<i n:class="$layoutData->primaryIcon, fa-fw, fa-cog"></i>
 					</a>
-					{if !$pageData->module}
-						<span class="mx-1"> · </span>
-						<a href="{plink '//Home:', 'pageName' => 'Admin:PageDetailFiles', 'id' => ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-							{_'Soubory'}
-						</a>
-					{/}
+					<a n:if="!$pageData->module" href="{plink '//Home:', 'pageName' => 'Admin:PageDetailFiles', 'id' => ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+						<i n:class="$layoutData->primaryIcon, fa-fw, fa-paperclip"></i>
+					</a>
 				</div>
 				<hr>
 				<div class="side-menu-item languages" n:if="count($webData->translations) > 1 && !$isError && $cmsUser->isLoggedIn()" n:inner-foreach="$webData->translations as $translation">

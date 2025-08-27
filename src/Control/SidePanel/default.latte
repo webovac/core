@@ -13,22 +13,18 @@
 		</div>
 	</div>
 	<hr>
-	<a n:if="$hasPersons" href="{plink '//Home:', 'Persons:PersonDetailSettings', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}" class="menu-item" href="#"><i class="fass fa-fw fa-cog"></i><span class="ms-2">Nastavení</span></a>
-	<a class="menu-item" n:if="!$isError" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}"><i class="fass fa-fw fa-sign-out"></i><span class="ms-2">{_'Odhlásit'}</span></a>
+	<a n:if="$hasPersons" href="{plink '//Home:', 'Persons:PersonDetailSettings', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}" class="menu-item" href="#"><i n:class="$layoutData->secondaryIcon, fa-fw, fa-cog"></i><span class="ms-2">{_'Nastavení'}</span></a>
+	<a class="menu-item" n:if="!$isError" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}"><i n:class="$layoutData->secondaryIcon, fa-fw, fa-sign-out"></i><span class="ms-2">{_'Odhlásit'}</span></a>
 	<div class="menu-item" n:if="$showAdmin && (!$pageData->module || $webData->isAdmin)">
 		<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-			{_'Obsah'}
+			<i n:class="$layoutData->secondaryIcon, fa-fw, fa-pen-to-square"></i>
 		</a>
-		<span class="mx-1"> · </span>
 		<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-			{_'Nastavení'}
+			<i n:class="$layoutData->secondaryIcon, fa-fw, fa-cog"></i>
 		</a>
-		{if !$pageData->module}
-			<span class="mx-1"> · </span>
-			<a href="{plink '//Home:', 'pageName' => 'Admin:PageDetailFiles', 'id' => ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-				{_'Soubory'}
-			</a>
-		{/}
+		<a n:if="!$pageData->module" href="{plink '//Home:', 'pageName' => 'Admin:PageDetailFiles', 'id' => ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+			<i n:class="$layoutData->secondaryIcon, fa-fw, fa-paperclip"></i>
+		</a>
 	</div>
 	<hr>
 	<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
