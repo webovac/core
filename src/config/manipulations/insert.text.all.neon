@@ -147,7 +147,7 @@ items:
 	Ve výchozím stavu se URL cesta stránky skládá z cesty jejích nadřazených stránek a její vlastní: [cs: Ve výchozím stavu se URL cesta stránky skládá z cesty jejích nadřazených stránek a její vlastní, en: 'By default, the URL path of a page consists of the path of its parent pages and its own path']
 	Oprávnění: [cs: Oprávnění, en: Permissions]
 	Komu se zobrazí odkaz na stránku a kdo do ní má přístup: [cs: Komu se zobrazí odkaz na stránku a kdo do ní má přístup, en: Who sees page link and who has access to it]
-	Ve výchozím stavu uživatel pro přístup ke stránce musí mít přístup i k jejím nadřazeným stránkám: [cs: Ve výchozím stavu uživatel pro přístup ke stránce musí mít přístup i k jejím nadřazeným stránkám, en: By default, to access the page, users must have access to all its parent pages]
+	Ve výchozím stavu uživatel pro přístup ke stránce musí mít přístup i k jejím nadřazeným stránkám: [cs: Ve výchozím stavu uživatel pro přístup ke stránce musí mít přístup i k jejím nadřazeným stránkám, en: 'By default, to access the page, users must have access to all its parent pages']
 	Adminy: [cs: Adminy, en: Admins]
 	Parametr: [cs: Parametr, en: Parameter]
 	Přidat parametr: [cs: Přidat parametr, en: Add parameter]
