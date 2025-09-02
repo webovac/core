@@ -16,7 +16,7 @@ trait CoreModuleData
 {
 	public ?int $id;
 	public string $name;
-	public int|string $homePage;
+	public int|string|null $homePage;
 	/** @var ModuleTranslationData[] */ #[ArrayOfType(ModuleTranslationData::class)] public array|null $translations;
 	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
 	public ?string $icon;

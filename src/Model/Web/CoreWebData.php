@@ -17,6 +17,7 @@ use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Stepapo\Utils\Attribute\DontCache;
+use Stepapo\Utils\Attribute\SkipInManipulation;
 use Stepapo\Utils\Attribute\Type;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Model\CmsEntity;
@@ -38,7 +39,7 @@ trait CoreWebData
 	#[Type(FileData::class)] public ?FileData $backgroundFile;
 	/** @var WebTranslationData[] */ #[ArrayOfType(WebTranslationData::class)] public array|null $translations;
 	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
-	/** @var FileData[] */ #[ArrayOfType(FileData::class)] public array|null $files;
+	/** @var FileData[] */ #[ArrayOfType(FileData::class), SkipInManipulation] public array|null $files;
 	/** @var string[] */ public array|null $modules;
 	#[DefaultValue('~')] public string $basePath;
 	#[DefaultValue(false)] public bool $isAdmin;
