@@ -11,6 +11,8 @@ use Nette\Caching\Cache;
 use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Nette\Routing\RouteList;
+use Stepapo\Restful\Application\Routes\CrudRoute;
+use Stepapo\Restful\Application\Routes\ResourceRoute;
 use Stepapo\Utils\Service;
 
 
@@ -30,6 +32,7 @@ final class CmsRouterFactory implements Service
 	{
 		$routeList = new RouteList;
 		$webDatas = $this->dataModel->findWebDatas();
+		$routeList->add(new CrudRoute('api/v1/<entity>[/<id>[/<related>]][.<type>]', 'Api'));
 		foreach ($webDatas as $webData) {
 			$routeList->addRoute(
 				mask: $webData->getStyleRouteMask(),

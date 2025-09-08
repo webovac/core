@@ -25,6 +25,7 @@ use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Security\Passwords;
 use Nette\Utils\Arrays;
+use Nette\Utils\Random;
 use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
