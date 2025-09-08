@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Presenter;
 
 use App\Model\DataModel;
+use App\Model\Deploy\DeployData;
 use App\Model\Language\LanguageData;
 use App\Model\Orm;
 use App\Model\Page\PageData;
@@ -75,6 +76,7 @@ trait CorePresenter
 	private ?PageTranslationData $pageTranslationData;
 	private ?PageData $navigationPageData;
 	private ?PageData $buttonsPageData;
+	private ?DeployData $deployData;
 	private ?Preference $preference;
 	private ?CmsEntity $entity = null;
 	/** @var CmsEntity[] */ private ?array $entityList = null;
@@ -101,6 +103,7 @@ trait CorePresenter
 			$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->getParameter('pageName') ?: 'Home');
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
 			$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
+			$this->deployData = $this->dataModel->getLastDeployData();
 			try {
 				$this->pageData->checkRequirements($this->cmsUser, $this->webData);
 			} catch (MissingPermissionException $e) {
@@ -119,6 +122,7 @@ trait CorePresenter
 					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)) {
 						$languageData = $this->dataModel->getLanguageData($this->preference->language->id);
 						$this->lang = $languageData->shortcut;
+//						$this->redirect('this');
 					}
 				}
 			}
@@ -153,7 +157,8 @@ trait CorePresenter
 				->setWebData($this->webData)
 				->setPageData($this->pageData)
 				->setNavigationPageData($this->navigationPageData)
-				->setButtonsPageData($this->buttonsPageData);
+				->setButtonsPageData($this->buttonsPageData)
+				->setDeployData($this->deployData);
 
 			$this->buildCrumbs();
 		};
@@ -171,6 +176,7 @@ trait CorePresenter
 			}
 			$this->template->webTranslationData = $this->webTranslationData;
 			$this->template->pageData = $this->pageData;
+			$this->template->deployData = $this->deployData;
 			$this->template->imageUrl = $this->getImageUrl();
 			$this->template->pageTranslation = $this->pageTranslation;
 			$this->template->hasSideMenu = (bool) $this->navigationPageData;

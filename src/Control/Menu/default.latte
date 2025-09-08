@@ -18,41 +18,55 @@
 		</a>
 		<div class="menu flex-grow-1" id="menu">
 			{foreach $pageDatas as $p}
+				{if $layoutData->hideSidePanel}
+					{if $p->name === 'Search:Home'}
+						{include search.latte}
+					{elseif in_array($p->name, ['Auth:Name', 'FsvAuth:Name'], true)}
+						{include auth.latte}
+					{/}
+				{/}
 				{renderMenuItem($p)}
 				{if $p->id === $homePageData->id}
 					{foreach $homeChildPageDatas as $homeChildP}
+						{if $layoutData->hideSidePanel}
+							{if $homeChildP->name === 'Search:Home'}
+								{include search.latte}
+							{elseif in_array($homeChildP->name, ['Auth:Name', 'FsvAuth:Name'], true)}
+								{include auth.latte}
+							{/}
+						{/}
 						{renderMenuItem($homeChildP)}
 					{/}
 				{/}
 			{/}
-			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') && $hasSearch && $showSearch && !$isError}
-				<hr class="side-menu-item">
-				<div class="search menu-item side-menu-item">
-					{$presenter->getComponent('search-searchForm')->render()}
-				</div>
-			{/}
+{*			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') && $hasSearch && $showSearch && !$isError}*}
+{*				<hr class="side-menu-item">*}
+{*				<div class="search menu-item side-menu-item">*}
+{*					{$presenter->getComponent('search-searchForm')->render()}*}
+{*				</div>*}
+{*			{/}*}
 			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') && $cmsUser->isLoggedIn()}
-				<hr class="side-menu-item">
-				<div n:if="$layoutData->code === 'cvut'" n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink '//Home:', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="d-none d-xxl-flex menu-item">
-					<i class="fas fa-fw fa-user"></i>
-					<span>
-						{$cmsUser->getPerson()->name}
-					</span>
-				</div>
-				<a class="side-menu-item menu-item" n:if="$cmsUser->isLoggedIn()" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}">
-					<i n:class="$layoutData->primaryIcon, fa-fw, fa-power-off"></i><span>{_'Odhlásit'}</span>
-				</a>
-				<div class="menu-item side-menu-item" n:if="$layoutData->code === 'cvut' && $showAdmin && (!$pageData->module || $webData->isAdmin)">
-					<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-						<i n:class="$layoutData->primaryIcon, fa-fw, fa-pen-to-square"></i>
-					</a>
-					<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-						<i n:class="$layoutData->primaryIcon, fa-fw, fa-cog"></i>
-					</a>
-					<a n:if="!$pageData->module" href="{plink '//Home:', 'pageName' => 'Admin:PageDetailFiles', 'id' => ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
-						<i n:class="$layoutData->primaryIcon, fa-fw, fa-paperclip"></i>
-					</a>
-				</div>
+{*				<hr class="side-menu-item">*}
+{*				<div n:if="$layoutData->code === 'cvut'" n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink '//Home:', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="menu-item">*}
+{*					<i class="fas fa-fw fa-user"></i>*}
+{*					<span>*}
+{*						{$cmsUser->getPerson()->name}*}
+{*					</span>*}
+{*				</div>*}
+{*				<a class="side-menu-item menu-item" n:if="$cmsUser->isLoggedIn()" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}">*}
+{*					<i n:class="$layoutData->primaryIcon, fa-fw, fa-power-off"></i><span>{_'Odhlásit'}</span>*}
+{*				</a>*}
+{*				<div class="menu-item side-menu-item" n:if="$layoutData->code === 'cvut' && $showAdmin && (!$pageData->module || $webData->isAdmin)">*}
+{*					<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">*}
+{*						<i n:class="$layoutData->primaryIcon, fa-fw, fa-pen-to-square"></i>*}
+{*					</a>*}
+{*					<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">*}
+{*						<i n:class="$layoutData->primaryIcon, fa-fw, fa-cog"></i>*}
+{*					</a>*}
+{*					<a n:if="!$pageData->module" href="{plink '//Home:', 'pageName' => 'Admin:PageDetailFiles', 'id' => ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">*}
+{*						<i n:class="$layoutData->primaryIcon, fa-fw, fa-paperclip"></i>*}
+{*					</a>*}
+{*				</div>*}
 				<hr>
 				<div class="side-menu-item languages" n:if="count($webData->translations) > 1 && !$isError && $cmsUser->isLoggedIn()" n:inner-foreach="$webData->translations as $translation">
 					{var $l = $dataModel->getLanguageData($translation->language)}
@@ -82,9 +96,9 @@
 			{/}
 		</div>
 		<div class="d-flex">
-			<a href="#" class="menu-button side-button user-button" n:if="($cmsUser->isLoggedIn() && !$layoutData->hideSidePanel) || ($hasSearch && !$layoutData->hideSidePanel)"><i n:class="$layoutData->primaryIcon, fa-fw, fa-bars"></i></a>
-			{*<a href="#" class="menu-button side-button search-button" n:if="$hasSearch && !$layoutData->hideSidePanel"><i n:class="$layoutData->primaryIcon, fa-fw, fa-magnifying-glass"></i></a>*}
-			<a href="#" class="menu-button" id="menu-button"><i n:class="$layoutData->primaryIcon, fa-fw, fa-bars"></i></a>
+			<a href="javascript:void(0);" class="menu-button side-button user-button" n:if="($cmsUser->isLoggedIn() && !$layoutData->hideSidePanel) || ($hasSearch && !$layoutData->hideSidePanel)"><i n:class="$layoutData->primaryIcon, fa-fw, fa-bars"></i></a>
+			{*javascript:void(0);*}
+			<a href="javascript:void(0);" class="menu-button" id="menu-button"><i n:class="$layoutData->code === 'cvut' ? fasl : $layoutData->primaryIcon, fa-fw, fa-bars"></i></a>
 		</div>
 	</div>
 </div>

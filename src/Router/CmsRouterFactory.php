@@ -220,6 +220,9 @@ final class CmsRouterFactory implements Service
 						}
 						if (isset($translationData->paths)) {
 							foreach ($translationData->paths as $path) {
+								if ($path->web !== $pageData->web) {
+									continue;
+								}
 								$f = $path->path;
 								preg_match_all('/<id\[(.+?)\]>/', $f, $m);
 								$f = preg_replace('/<id\[(.+?)\]>/', '<id>', $f);

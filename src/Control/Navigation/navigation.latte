@@ -15,7 +15,7 @@
 				<span>{$title}</span>
 			</div>
 		</div>
-		<a href="#" class="menu-button" id="submenu-button"><i class="fa-fw {$layoutData->secondaryIcon ?? fas} fa-bars"></i></a>
+		<a href="javascript:void(0);" class="menu-button" id="submenu-button"><i class="fa-fw {$layoutData->code === 'cvut' ? fasl : ($layoutData->secondaryIcon ?? fas)} fa-bars"></i></a>
 		<div class="menu" id="submenu" n:if="$pageDatas->count() + (isset($entityMenuItems) ? count($entityMenuItems) : 0) > 0">
 			{ifset $entityMenuItems}
 				{foreach $entityMenuItems as $e}

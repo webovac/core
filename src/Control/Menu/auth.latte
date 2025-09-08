@@ -1,0 +1,20 @@
+<div n:tag="$hasPersons ? 'a'"{if $hasPersons} href="{plink '//Home:', 'Persons:PersonDetail', ['Persons:PersonDetail' => $cmsUser->getPerson()->id]}"{/} class="menu-item">
+	<i class="fas fa-fw fa-user"></i>
+	<span>
+		{$cmsUser->getPerson()->name}
+	</span>
+</div>
+<a class="side-menu-item menu-item" n:if="$cmsUser->isLoggedIn()" href="{if isModuleInstalled('auth')}{plink '//auth-out!'}{elseif isModuleInstalled('fsvAuth')}{plink '//fsvAuth-out!'}{/}">
+	<i n:class="$layoutData->primaryIcon, fa-fw, fa-power-off"></i><span>{_'Odhlásit'}</span>
+</a>
+<div class="menu-item side-menu-item" n:if="$layoutData->code === 'cvut' && $showAdmin && (!$pageData->module || $webData->isAdmin)">
+	<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetail' : 'Admin:PageDetail', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+		<i n:class="$layoutData->primaryIcon, fa-fw, fa-pen-to-square"></i>
+	</a>
+	<a href="{plink '//Home:', 'pageName' => $pageData->module ? 'TemplateDetailSettings' : 'Admin:PageDetailSettings', 'id' => $pageData->module ? ['ModuleDetail' => $pageModuleData->name, 'TemplateDetail' => $pageData->name] : ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+		<i n:class="$layoutData->primaryIcon, fa-fw, fa-cog"></i>
+	</a>
+	<a n:if="!$pageData->module" href="{plink '//Home:', 'pageName' => 'Admin:PageDetailFiles', 'id' => ['Admin:PageDetail' => $pageData->name], 'lang' => $adminLang}">
+		<i n:class="$layoutData->primaryIcon, fa-fw, fa-paperclip"></i>
+	</a>
+</div>

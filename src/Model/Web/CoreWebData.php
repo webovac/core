@@ -47,6 +47,7 @@ trait CoreWebData
 	#[DefaultValue(false)] public bool $disableBacklink;
 	#[DefaultValue(false)] public bool $hideSidePanel;
 	#[DontCache] public array $tree;
+	public int|string|null $responsiblePerson;
 	/** @var int[] */ public array|null $adminPersons;
 	/** @var string[] */ public array|null $adminRoles;
 	#[DontCache] public int|string|null $createdByPerson;
@@ -114,6 +115,7 @@ trait CoreWebData
 	/** @return Collection<PageData> */
 	public function getRootPageDatas(DataModel $dataModel, CmsUser $cmsUser, ?CmsEntity $entity = null): Collection
 	{
+		$pageDatas = [];
 		foreach ($this->rootPages as $rootPageId) {
 			$pageData = $dataModel->getPageData($this->id, $rootPageId);
 			$pageDataToCheck = $pageData->type === Page::TYPE_INTERNAL_LINK

@@ -1,4 +1,4 @@
 {templateType Webovac\Core\Control\Signpost\SignpostTemplate}
-<div class="grid signpost text-center" n:inner-foreach="$pageDatas as $p" n:inner-if="$p->targetPage !== $pageData->id">
+<div class="grid signpost text-center" n:inner-foreach="$pageDatas as $p" n:inner-if="$p->targetAnchor || $p->targetPage !== $pageData->id">
 	{renderMenuItem($p)}
 </div>

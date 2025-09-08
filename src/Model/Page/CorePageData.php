@@ -66,6 +66,7 @@ trait CorePageData
 	public ?string $targetParameter;
 	public ?string $targetUrl;
 	public ?string $targetPath;
+	public ?string $targetAnchor;
 	public ?string $targetSignal;
 	public ?int $layoutWidth;
 	#[DontCache] public int|string|null $createdByPerson;
@@ -132,10 +133,12 @@ trait CorePageData
 	public function getHref(LanguageData $languageData, WebData $webData, DataModel $dataModel, IPresenter $presenter, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): ?string
 	{
 		$e = $linkedEntity ?: $entity;
+		$anchor = null;
 		if ($this->type === Page::TYPE_INTERNAL_LINK && $this->targetPage) {
 			$p = $dataModel->getPageData($webData->id, $this->targetPage);
 			$path = $this->targetPath;
 			$parameter = $this->targetParameter ? [$e->getPageName() => $this->targetParameter] : null;
+			$anchor = $this->targetAnchor;
 		} else {
 			$p = $this;
 			$parameter = $p->hasParameter && !$presenter->getParameter('path') ? $e?->getParameters() : null;
@@ -144,7 +147,7 @@ trait CorePageData
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $presenter->getName() === 'Error4xx' ? null : $presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $presenter->link('//Home:', [
+			Page::TYPE_PAGE => $presenter->link('//Home:' . ($anchor ? '#' . $anchor : ''), [
 					'pageName' => $p->name,
 					'lang' => $languageData->shortcut,
 					'id' => $parameter,
@@ -164,7 +167,7 @@ trait CorePageData
 			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->style ? ($this->style . '-subtle') : 'light') .  ' p-3',
 			default => 'menu-item' . ($this->style ? ' btn btn-subtle-' . $this->style : ''),
 		}
-			. ((!$this->targetPath && ($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
+			. ((!$this->targetPath && !$this->targetAnchor && ($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
 			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath))
 			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath)) ? ' active' : '')
 			;

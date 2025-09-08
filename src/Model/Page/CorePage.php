@@ -8,6 +8,7 @@ use App\Model\Language\LanguageData;
 use App\Model\Log\Log;
 use App\Model\Page\Page;
 use App\Model\PageTranslation\PageTranslation;
+use App\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
@@ -15,6 +16,7 @@ use Nextras\Orm\Relationships\IRelationshipCollection;
 use Webovac\Core\Control\PageItem\IPageItemControl;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
+use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Model\LinkableTrait;
 use Webovac\Core\Model\RenderableTrait;
@@ -87,6 +89,18 @@ trait CorePage
 
 	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public IPageItemControl $component;
+
+
+	public function checkRequirements(CmsUser $user, WebData $webData, ?string $tag = null): bool
+	{
+		return match ($tag) {
+			null => true,
+			'content' => $this->type !== self::TYPE_MODULE,
+			'files' => $this->type !== self::TYPE_MODULE,
+			'createPage' => $this->type !== self::TYPE_MODULE,
+			'remove' => $this->type !== self::TYPE_MODULE,
+		};
+	}
 
 
 	public function getTranslation(LanguageData $language): ?PageTranslation

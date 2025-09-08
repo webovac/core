@@ -100,9 +100,9 @@ class MenuControl extends BaseControl
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
 		$this->template->pageActivator = $this->pageActivator;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData) {
-			$checkActive = $pageData->targetPage
+			$checkActive = $pageData->targetAnchor ? false : ($pageData->targetPage
 				? $pageData->targetPage !== $webData->homePage
-				: $pageData->id !== $webData->homePage;
+				: $pageData->id !== $webData->homePage);
 			$this->menuItemRenderer->render('primary', $this, $webData, $pageData, $layoutData, $languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->renderFile($this->moduleClass, MenuControl::class, $this->templateName);

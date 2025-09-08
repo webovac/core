@@ -12,6 +12,7 @@ trait CorePathData
 	public ?int $id;
 	public string $path;
 	public bool $active;
+	public int $web;
 	public ?DateTimeInterface $createdAt;
 	public ?DateTimeInterface $updatedAt;
 }

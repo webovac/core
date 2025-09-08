@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
+use App\Model\Deploy\DeployData;
+use App\Model\Deploy\DeployDataRepository;
 use App\Model\Language\LanguageData;
 use App\Model\Language\LanguageDataRepository;
 use App\Model\Module\ModuleData;
@@ -29,6 +31,7 @@ trait CoreDataModel
 	#[Inject] public WebDataRepository $webRepository;
 	#[Inject] public PersonDataRepository $personRepository;
 	#[Inject] public RoleDataRepository $roleRepository;
+	#[Inject] public DeployDataRepository $depoloyRepository;
 
 
 	/** @return PageData[] */
@@ -121,5 +124,11 @@ trait CoreDataModel
 			->getByKey($name)
 			?->getCollection('translations')
 			->getByKey($languageData->id);
+	}
+
+
+	public function getLastDeployData(): ?DeployData
+	{
+		return $this->depoloyRepository->getLastDeployData();
 	}
 }

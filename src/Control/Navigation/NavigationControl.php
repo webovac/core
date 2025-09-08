@@ -76,9 +76,9 @@ class NavigationControl extends BaseControl
 		$this->template->dataModel = $this->dataModel;
 		$this->template->entity = $this->entity;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData, $layoutData, $navigationPageData) {
-			$checkActive = $pageData->targetPage
+			$checkActive = $pageData->targetAnchor ? false : ($pageData->targetPage
 				? $pageData->targetPage !== $navigationPageData->id
-				: $pageData->id !== $navigationPageData->id;
+				: $pageData->id !== $navigationPageData->id);
 			$this->menuItemRenderer->render('secondary', $this, $webData, $pageData, $layoutData, $languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/navigation.latte');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter;
 
+use App\Model\Deploy\DeployData;
 use App\Model\Language\LanguageData;
 use App\Model\Page\PageData;
 use App\Model\PageTranslation\PageTranslation;
@@ -20,6 +21,7 @@ trait CorePresenterTemplate
 	public WebData $webData;
 	public WebTranslationData $webTranslationData;
 	public PageData $pageData;
+	public ?DeployData $deployData;
 	public ?string $imageUrl;
 	public string $smallIconUrl;
 	public string $largeIconUrl;

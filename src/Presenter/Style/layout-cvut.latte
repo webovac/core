@@ -69,27 +69,23 @@ h1, .title {
     opacity: 0.25;
 }
 .layout .navigation-wrapper .navigation .side-menu-item {
-    display: none;
+	display: flex;
 }
-@media (min-width: 1420px) {
-    .layout .side-panel {
-        display: none !important;
-    }
-    .layout .navigation-wrapper .navigation .side-menu-item {
-        display: flex;
-    }
-    .layout .navigation-wrapper .navigation .side-menu-item a {
-        color: var(--cms-primary-link-color);
-    }
-    .layout .navigation-wrapper .navigation .side-menu-item a:hover {
-        color: var(--cms-light);
-    }
+.layout .navigation-wrapper .navigation .side-menu-item a {
+	color: var(--cms-primary-link-color);
+}
+.layout .navigation-wrapper .navigation .side-menu-item a:hover {
+	color: var(--cms-light);
 }
 @media (max-width: 1419.8px) and (min-width: 992px) {
-    :root {
-        --cms-layout-primary-menu-item-padding: 8px 10px;
-        --cms-layout-primary-menu-item-line-height: 1.5;
-    }
+	.layout .primary-navigation-wrapper .navigation .menu {
+		left: 0;
+	}
+	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
+		min-height: 137px;
+		padding: 20px;
+		line-height: 36px;
+	}
 }
 @media (max-width: 1419.8px) {
     .override-padding > * {
@@ -125,14 +121,27 @@ h1, .title {
     .override-padding .ck.ck-toolbar {
         padding: 0;
     }
+	.layout .primary-navigation-wrapper .navigation .menu {
+		overflow-y: auto;
+	}
+	.layout .primary-navigation-wrapper .navigation .menu {
+		padding-top: 0;
+	}
+	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .menu {
+		padding-top: 0;
+	}
+}
+@media (min-width: 1420px) {
+	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
+		min-height: 140px;
+		padding: 20px 20px 25px 20px;
+		line-height: 31px;
+	}
 }
 @media (min-width: 992px) {
     .layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
-        padding: 20px 20px 25px 20px;
-        min-height: 140px;
         white-space: initial;
         display: flex;
-        line-height: 31px;
     }
     .layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title > span {
         align-self: flex-end;
@@ -144,11 +153,6 @@ h1, .title {
     }
 }
 @media (max-width: 991.8px) {
-    :root {
-        --cms-layout-primary-menu-item-padding: 0 8px;
-        --cms-layout-secondary-menu-item-padding: 0 8px;
-        --cms-layout-secondary-menu-item-line-height: 1.5;
-    }
     .alert-main {
         margin-bottom: 0;
     }
@@ -157,63 +161,33 @@ h1, .title {
         padding-top: 12px;
         padding-bottom: 0;
     }
-    .layout .primary-navigation-wrapper .navigation .menu .menu-item {
-        flex-grow: 1;
-    }
     .layout .primary-navigation-wrapper {
         overflow-y: initial;
     }
-    .layout .primary-navigation-wrapper .navigation .menu {
-        overflow-y: var(--cms-layout-primary-wrapper-overflow-y);
-    }
-    .horizontal-wrapper {
-        padding-bottom: 48px;
-    }
-    body {
-        background: var(--cms-primary-bg)
-    }
-    .primary-navigation .menu {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 48px;
-        background: var(--cms-primary-bg);
-        z-index: 100;
-    }
-    .layout .side-panel {
-        bottom: 48px;
-    }
+{*	.layout .primary-navigation-wrapper .navigation .logo {*}
+{*		padding: 10px 12px;*}
+{*	}*}
+{*	.layout .primary-navigation-wrapper .navigation .logo img {*}
+{*		height: 50px;*}
+{*		max-height: 50px;*}
+{*		max-width: 100px;*}
+{*	}*}
     .layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
         font-size: 24px;
-        line-height: 48px;
+        line-height: 1;
+		padding: 23px 12px;
     }
+	.layout .secondary-navigation-wrapper .navigation .menu {
+		overflow-y: auto;
+	}
 }
 @media (max-width: 991.8px) and (display-mode: standalone) and (orientation: portrait) {
     .horizontal-wrapper {
-        padding-bottom: calc(48px + 32px);
-    }
-    .primary-navigation .menu {
-        height: calc(48px + 32px);
-    }
-    .primary-navigation .menu .menu-item {
-        padding-bottom: 32px !important;
-    }
-    .layout .side-panel {
-        bottom: calc(48px + 32px);
+        padding-bottom: 32px;
     }
 }
 @media (max-width: 991.8px) and (display-mode: standalone) and (orientation: landscape) {
     .horizontal-wrapper {
-        padding-bottom: calc(48px + 12px);
-    }
-    .primary-navigation .menu {
-        height: calc(48px + 12px);
-    }
-    .primary-navigation .menu .menu-item {
-        padding-bottom: 12px !important;
-    }
-    .layout .side-panel {
-        bottom: calc(48px + 12px);
+        padding-bottom: 12px;
     }
 }

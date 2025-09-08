@@ -41,9 +41,9 @@ class ButtonsControl extends BaseControl
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData, $buttonsPageData) {
-			$checkActive = $pageData->targetPage
+			$checkActive = $pageData->targetAnchor ? false : ($pageData->targetPage
 				? $pageData->targetPage !== $buttonsPageData->id
-				: $pageData->id !== $buttonsPageData->id;
+				: $pageData->id !== $buttonsPageData->id);
 			$this->menuItemRenderer->render('buttons', $this, $webData, $pageData, $layoutData, $languageData, $checkActive, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/buttons.latte');

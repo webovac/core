@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
+use App\Model\Deploy\DeployData;
 use App\Model\Language\LanguageData;
 use App\Model\Layout\LayoutData;
 use App\Model\Page\PageData;
@@ -21,6 +22,7 @@ class DataProvider implements Service
 	private ?PageData $pageData;
 	private LayoutData $layoutData;
 	private ThemeData $themeData;
+	private ?DeployData $deployData;
 
 
 	public function getWebData(): WebData
@@ -110,6 +112,19 @@ class DataProvider implements Service
 	public function setThemeData(ThemeData $themeData): self
 	{
 		$this->themeData = $themeData;
+		return $this;
+	}
+
+
+	public function getDeployData(): DeployData
+	{
+		return $this->deployData;
+	}
+
+
+	public function setDeployData(?DeployData $deployData): self
+	{
+		$this->deployData = $deployData;
 		return $this;
 	}
 }

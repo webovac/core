@@ -4,6 +4,7 @@ modules:
 		isPackage: true
 		entities:
 			Asset:
+			Deploy:
 			Lib:
 			Log:
 			Person:
@@ -35,6 +36,7 @@ modules:
 					Webovac\Core\Model\Page\HasPages:
 					Webovac\Core\Model\HasTranslations:
 					Webovac\Core\Model\File\HasFiles:
+					Webovac\Core\Model\HasRequirements:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
 			PageTranslation:

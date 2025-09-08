@@ -12,6 +12,11 @@ schemas:
 				indexes: [lib_id]
 				foreignKeys:
 					lib_id: [table: lib, column: id, onDelete: cascade, reverseName: assets]
+			deploy:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_at: [type: datetime, null: false, default: now]
+				primaryKey: id
 			file:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -208,6 +213,7 @@ schemas:
 					target_page_id: [type: int, null: true]
 					target_parameter: [type: string, null: true]
 					target_path: [type: string, null: true]
+					target_anchor: [type: string, null: true]
 					target_url: [type: string, null: true]
 					type: [type: string, null: false, default: page]
 					access_for: [type: string, null: false, default: all]
@@ -427,9 +433,10 @@ schemas:
 					disable_index: [type: bool, null: false, default: false]
 					disable_backlink: [type: bool, null: false, default: false]
 					hide_side_panel: [type: bool, null: false, default: false]
+					responsible_person_id: [type: int, null: true]
 				primaryKey: id
 				uniqueKeys: [[host, base_path], code]
-				indexes: [created_by_person_id, updated_by_person_id, base_path, default_language_id, icon_file_id, large_icon_file_id, logo_file_id, background_file_id, home_page_id]
+				indexes: [created_by_person_id, updated_by_person_id, base_path, default_language_id, icon_file_id, large_icon_file_id, logo_file_id, background_file_id, home_page_id, responsible_person_id]
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
@@ -439,6 +446,7 @@ schemas:
 					logo_file_id: [table: file, column: id, onDelete: set null]
 					background_file_id: [table: file, column: id, onDelete: set null]
 					home_page_id: [table: page, column: id, onDelete: set null] # ne restirct kvůli mysql, nedovolí smazání webu
+					responsible_person_id: [table: person, column: id, onDelete: restrict]
 			web2admin_person:
 				columns:
 					web_id: [type: int, null: false]

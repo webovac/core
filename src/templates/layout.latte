@@ -20,16 +20,16 @@
 	{*	<meta name="twitter:site" content="@USERNAME">*}
 {*	<meta name="twitter:creator" content="@USERNAME">*}
 	<meta name="mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="apple-mobile-web-app-title" content="{$webTranslationData->title|truncate:60}">
 	<link rel="canonical" href="{$metaUrl}">
 	<link rel="shortcut icon" n:ifset="$smallIconUrl" href="{$baseUrl}/{$smallIconUrl}?m={=$smallIconUrl|mTime}">
 	<link rel="apple-touch-icon" n:ifset="$largeIconUrl" href="{$baseUrl}/{$largeIconUrl}?m={=$largeIconUrl|mTime}">
-	<link rel="manifest" href="{plink '//Manifest:', host: $webData->host, basePath: $webData->basePath, lang: $languageData->shortcut}?m={$webTranslationData->updatedAt ?: $webTranslationData->createdAt|date:'U'}">
+	<link rel="manifest" href="{plink '//Manifest:', host: $webData->host, basePath: $webData->basePath, lang: $languageData->shortcut}?m={max($deployData?->createdAt, $webTranslationData->updatedAt ?: $webTranslationData->createdAt)|date:'U'}">
 	<link rel="stylesheet" n:foreach="$pageData->stylesheets as $assetData" href="{if $assetData->local}{$baseUrl}/{/}{$assetData->link|replaceKey|noescape}{if $assetData->local}?m={=$assetData->link|mTime}{/}">
 	<link rel="stylesheet" href="{$baseUrl}/dist/css/bundle.css?m={='dist/css/bundle.css'|mTime}">
-	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
-	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={$webData->updatedAt ?: $webData->createdAt|date:'U'}">
+	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($deployData?->createdAt, $webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
+	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($deployData->createdAt, $webData->updatedAt ?: $webData->createdAt)|date:'U'}">
 </head>
 <body n:class="'layout-' . (isModuleInstalled('style') ? $layoutData->code : 'cvut'), 'web-' . $webData->code, 'theme-' . (isModuleInstalled('style') && $themeData ? $themeData->code : 'light')" data-bs-theme="{isModuleInstalled('style') && $themeData ? (str_contains($themeData->code, 'dark') ? 'dark' : 'light') : 'light'}"{if $layoutData->code !== 'cvut' && $pageData->layoutWidth} style="--cms-layout-width: {$pageData->layoutWidth}px;"{/}>
 <div n:class="layout, $pageData->stretched ? stretched">
