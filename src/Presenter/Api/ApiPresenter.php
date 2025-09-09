@@ -17,31 +17,20 @@ use Nextras\Orm\Relationships\IRelationshipCollection;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Restful\Application\BadRequestException;
 use Stepapo\Restful\Application\UI\ResourcePresenter;
-use Stepapo\Restful\ConvertedResource;
-use Stepapo\Restful\Converters\DateTimeConverter;
-use Stepapo\Restful\Converters\ResourceConverter;
-use Stepapo\Restful\IResource;
-use Stepapo\Restful\Resource;
+use Stepapo\Restful\Security\Process\OAuth2Authentication;
 use Webovac\Core\Lib\DataProvider;
+use Webovac\Core\Model\ApiRepository;
 
 
 class ApiPresenter extends ResourcePresenter
 {
-	public ?string $apiKey = null;
-
+	private ?string $entityName;
 	public ?IEntity $item = null;
-
-	private const array TYPE_MAP = [
-		'json' => IResource::JSON,
-		'xml' => IResource::XML,
-	];
-
-	private string $type;
 
 
 	public function __construct(
 		private Orm $orm,
-//		protected OAuth2Authentication $authenticationProcess,
+		private OAuth2Authentication $authenticationProcess,
 		private ResourceGenerator $resourceGenerator,
 		private DataProvider $dataProvider,
 		private DataModel $dataModel,
@@ -53,25 +42,16 @@ class ApiPresenter extends ResourcePresenter
 	public function startup()
 	{
 		parent::startup();
+//		$this->authentication->setAuthProcess($this->authenticationProcess);
 		$this->dataProvider->setLanguageData($this->dataModel->getLanguageDataByShortcut($this->getParameter('lang') ?: 'cs'));
-		$type = $this->getParameter('type') ?: 'json';
-		if (!isset(self::TYPE_MAP[$type])) {
-			$this->sendErrorResource(BadRequestException::notFound("Type '$type' not supported."), IResource::JSON);
-		}
-		$this->type = self::TYPE_MAP[$type];
-//		if (!$apiKey = $this->getParameter('apiKey')) {
-//			$this->sendErrorResource(BadRequestException::unauthorized('Missing API key.'), $this->typeMap[$type]);
-//		}
-//		if (!$this->loggedPerson = $this->orm->personRepository->getBy(['apiKey' => $apiKey])) {
-//			$this->sendErrorResource(BadRequestException::unauthorized('Unrecognized API key.'), $this->typeMap[$type]);
-//		}
-		if (!$entity = $this->getParameter('entity')) {
-			$this->sendErrorResource(BadRequestException::notFound('No entity.'), $this->type);
+		$this->entityName = $this->getParameter('entity');
+		if (!$this->entityName) {
+			$this->sendErrorResource(BadRequestException::notFound('No entity.'));
 		}
 		if ($id = $this->getParameter('id')) {
 			$this->item = $this->getRepository()->getById($id);
 			if (!$this->item) {
-				$this->sendErrorResource(BadRequestException::notFound("No entity '$entity' with ID '$id' found."), $this->type);
+				$this->sendErrorResource(BadRequestException::notFound("No entity '$this->entityName' with ID '$id' found."));
 			}
 		}
 	}
@@ -80,10 +60,12 @@ class ApiPresenter extends ResourcePresenter
 	private function getRepository(): IRepository
 	{
 		try {
-			$entity = $this->getParameter('entity');
-			$repository = $this->orm->getRepositoryByName($entity . 'Repository');
+			$repository = $this->orm->getRepositoryByName($this->entityName . 'Repository');
+			if (!$repository instanceof ApiRepository) {
+				throw new \InvalidArgumentException;
+			}
 		} catch (\Exception $e) {
-			$this->sendErrorResource(BadRequestException::notFound("Entity '$entity' not found."), $this->type);
+			$this->sendErrorResource(BadRequestException::notFound("Entity '$this->entityName' not found."));
 		}
 		return $repository;
 	}
@@ -91,45 +73,61 @@ class ApiPresenter extends ResourcePresenter
 
 	public function actionRead(string $entity, ?int $id = null, ?string $related = null, string $type = 'json')
 	{
-		$queryParameters = $this->getParameters();
-		unset(
-			$queryParameters['entity'],
-			$queryParameters['id'],
-			$queryParameters['related'],
-			$queryParameters['type'],
-			$queryParameters['action'],
-		);
 		if ($this->item) {
 			if ($related) {
 				try {
 					if (!$this->item->{$related} instanceOf IRelationshipCollection) {
 						throw new InvalidArgumentException("'$related' is not a collection.");
 					}
-					$this->item->getMetadata()->getProperty($related)->relationship->repository;
-					$this->resource = $this->resourceGenerator->createFromArrayQuery(
-						$this->item->getProperty($related)->toCollection(),
-						$queryParameters
-					);
+					$this->sendCollectionResource($this->item->getProperty($related)->toCollection());
 				} catch (InvalidArgumentException $e) {
-					$this->sendErrorResource(BadRequestException::unprocessableEntity([], $e->getMessage()), $this->type);
-				} catch (ValidationException $e) {
-					$this->sendErrorResource(BadRequestException::unprocessableEntity([], $e->getMessage()), $this->type);
+					$this->sendErrorResource(BadRequestException::notFound($e->getMessage()));
 				}
 			} else {
-				$this->resource = $this->resourceGenerator->create($this->item);
+				$this->sendEntityResource($this->item);
 			}
 		} else {
-			try {
-				$this->resource = $this->resourceGenerator->createFromArrayQuery(
-					$this->getRepository()->findAll(),
-					$queryParameters
-				);
-			} catch (BadRequestException $e) {
-				$this->sendErrorResource(BadRequestException::unprocessableEntity([], $e->getMessage()), $this->type);
-			} catch (ValidationException $e) {
-				$this->sendErrorResource(BadRequestException::unprocessableEntity([], $e->getMessage()), $this->type);
-			}
+			$this->sendCollectionResource($this->getRepository()->findAll());
 		}
-		$this->sendResource($this->type);
+	}
+
+
+	private function sendEntityResource(IEntity $entity)
+	{
+		$this->resource = $this->resourceGenerator->createFromArrayQuery(
+			$entity,
+			$this->getQueryParameters(),
+			false,
+		);
+	}
+
+
+	private function sendCollectionResource(ICollection $collection)
+	{
+		try {
+			$this->resource = $this->resourceGenerator->createFromArrayQuery(
+				$collection,
+				$this->getQueryParameters(),
+				false,
+			);
+		} catch (BadRequestException $e) {
+			$this->sendErrorResource(BadRequestException::notFound($e->getMessage()));
+		} catch (ValidationException $e) {
+			$this->sendErrorResource(BadRequestException::notFound($e->getMessage()));
+		}
+	}
+
+
+	private function getQueryParameters(): array
+	{
+		$parameters = $this->getParameters();
+		unset(
+			$parameters['entity'],
+			$parameters['id'],
+			$parameters['related'],
+			$parameters['type'],
+			$parameters['action'],
+		);
+		return $parameters;
 	}
 }

@@ -8,6 +8,8 @@ modules:
 			Lib:
 			Log:
 			Person:
+				repositoryImplements:
+					Webovac\Core\Model\ApiRepository:
 			File:
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
@@ -26,6 +28,7 @@ modules:
 					Webovac\Core\Model\HasTranslations:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
+					Webovac\Core\Model\ApiRepository:
 			ModuleTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
@@ -61,6 +64,7 @@ modules:
 					Webovac\Core\Model\File\HasFiles:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
+					Webovac\Core\Model\ApiRepository:
 			WebTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:

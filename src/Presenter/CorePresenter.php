@@ -30,6 +30,7 @@ use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Stepapo\Model\Data\Item;
+use Stepapo\OAuth2\KeyGenerator;
 use Webovac\Core\Command\DefinitionCommand;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;

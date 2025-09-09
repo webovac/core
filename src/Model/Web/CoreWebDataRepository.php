@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Web;
 
 use App\Model\Page\PageDataRepository;
+use App\Model\Web\Web;
 use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\Caching\Cache;
@@ -64,7 +65,7 @@ trait CoreWebDataRepository
 		if (!isset($this->aliases)) {
 			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
 				$aliases = [];
-				/** @var WebData $web */
+				/** @var Web $web */
 				foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $web) {
 					$aliases["$web->host-$web->basePath"] = $web->id;
 				}
