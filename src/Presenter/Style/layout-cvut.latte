@@ -78,6 +78,9 @@ h1, .title {
 	color: var(--cms-light);
 }
 @media (max-width: 1419.8px) and (min-width: 992px) {
+	:root {
+		scroll-padding-top: calc(var(--cms-secondary-height) + var(--cms-content-padding-top));
+	}
 	.layout .primary-navigation-wrapper .navigation .menu {
 		left: 0;
 	}
@@ -132,6 +135,9 @@ h1, .title {
 	}
 }
 @media (min-width: 1420px) {
+	:root {
+		scroll-padding-top: var(--cms-content-padding-top);
+	}
 	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
 		min-height: 140px;
 		padding: 20px 20px 25px 20px;
@@ -153,6 +159,9 @@ h1, .title {
     }
 }
 @media (max-width: 991.8px) {
+	:root {
+		scroll-padding-top: calc(var(--cms-primary-height) + var(--cms-secondary-height) + var(--cms-content-padding-top));
+	}
     .alert-main {
         margin-bottom: 0;
     }

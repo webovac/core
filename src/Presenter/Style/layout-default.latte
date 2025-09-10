@@ -106,6 +106,9 @@
 	color: var(--cms-active-link-color);
 }
 @media (min-width: 992px) {
+	:root {
+		scroll-padding-top: calc(var(--cms-secondary-height) + var(--cms-content-padding-top));
+	}
 	.logo {
 		border-bottom: 1px solid var(--cms-primary-border-color);
 		margin-bottom: 0.5rem;
@@ -120,6 +123,7 @@
 @media (max-width: 991.8px) {
 	:root {
 		--cms-layout-primary-menu-item-padding: 0 12px;
+		scroll-padding-top: calc(var(--cms-primary-height) + var(--cms-secondary-height) + var(--cms-content-padding-top));
 	}
 	.title i {
 		display: none;

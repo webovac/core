@@ -3,6 +3,6 @@
 namespace Webovac\Core\Model;
 
 
-interface ApiRepository
+interface PrivateRepository
 {
 }

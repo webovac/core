@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter;
 
+use App\Lib\ResourceGenerator\ResourceGenerator;
 use App\Model\DataModel;
 use App\Model\Deploy\DeployData;
 use App\Model\Language\LanguageData;
@@ -25,6 +26,7 @@ use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Security\Passwords;
 use Nette\Utils\Arrays;
+use Nette\Utils\Json;
 use Nette\Utils\Random;
 use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
@@ -70,6 +72,7 @@ trait CorePresenter
 	#[Inject] public RegisterOrmEvents $registerOrmEvents;
 	#[Inject] public PageActivator $pageActivator;
 	#[Inject] public KeyProvider $keyProvider;
+	#[Inject] public ResourceGenerator $resourceGenerator;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -240,7 +243,6 @@ trait CorePresenter
 						->allowMethods(Item::class, ['loadAsset'])
 						->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'str_contains', 'core'])
 				);
-
 			$this->template->setFile('@layout.latte');
 		};
 	}

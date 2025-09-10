@@ -15,11 +15,13 @@ use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use Nextras\Orm\Repository\IRepository;
+use ReflectionClass;
 use Stepapo\Restful\Application\BadRequestException;
 use Stepapo\Restful\Application\UI\ResourcePresenter;
+use Stepapo\Restful\Resource;
 use Stepapo\Restful\Security\Process\OAuth2Authentication;
 use Webovac\Core\Lib\DataProvider;
-use Webovac\Core\Model\ApiRepository;
+use Webovac\Core\Model\PrivateRepository;
 
 
 class ApiPresenter extends ResourcePresenter
@@ -61,7 +63,7 @@ class ApiPresenter extends ResourcePresenter
 	{
 		try {
 			$repository = $this->orm->getRepositoryByName($this->entityName . 'Repository');
-			if (!$repository instanceof ApiRepository) {
+			if ($repository instanceof PrivateRepository) {
 				throw new \InvalidArgumentException;
 			}
 		} catch (\Exception $e) {
@@ -76,7 +78,11 @@ class ApiPresenter extends ResourcePresenter
 		if ($this->item) {
 			if ($related) {
 				try {
-					if (!$this->item->{$related} instanceOf IRelationshipCollection) {
+					$rc = new ReflectionClass($this->item->getMetadata()->getProperty($related)->relationship->repository);
+					if (
+						!$this->item->{$related} instanceOf IRelationshipCollection
+						|| $rc->implementsInterface(PrivateRepository::class)
+					) {
 						throw new InvalidArgumentException("'$related' is not a collection.");
 					}
 					$this->sendCollectionResource($this->item->getProperty($related)->toCollection());
@@ -97,7 +103,6 @@ class ApiPresenter extends ResourcePresenter
 		$this->resource = $this->resourceGenerator->createFromArrayQuery(
 			$entity,
 			$this->getQueryParameters(),
-			false,
 		);
 	}
 
@@ -108,7 +113,6 @@ class ApiPresenter extends ResourcePresenter
 			$this->resource = $this->resourceGenerator->createFromArrayQuery(
 				$collection,
 				$this->getQueryParameters(),
-				false,
 			);
 		} catch (BadRequestException $e) {
 			$this->sendErrorResource(BadRequestException::notFound($e->getMessage()));
