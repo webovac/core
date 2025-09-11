@@ -12,6 +12,8 @@ use Nette\Utils\Arrays;
 use Nextras\Dbal\Drivers\Exception\QueryException;
 use Nextras\Orm\Collection\Functions\CollectionFunction;
 use Nextras\Orm\StorageReflection\StringHelper;
+use Stepapo\Model\Orm\InternalRepository;
+use Stepapo\Model\Orm\PrivateRepository;
 use Stepapo\Model\Orm\StepapoRepository;
 use Stepapo\Utils\Injectable;
 use Webovac\Core\Lib\Dir;
@@ -68,5 +70,23 @@ abstract class CmsRepository extends StepapoRepository implements Injectable
 		$this->onBeforeRemove($entity);
 		$this->mapper->delete($entity);
 		$this->onAfterRemove($entity);
+	}
+
+
+	public function isForbiddenRepository(WebData $webData): bool
+	{
+		if ($this instanceof PrivateRepository) {
+			return true;
+		}
+		if (!$webData->isAdmin && $this instanceof InternalRepository) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public function shouldFilterByWeb(WebData $webData): bool
+	{
+		return !$webData->isAdmin && method_exists($this, 'getFilterByWeb');
 	}
 }

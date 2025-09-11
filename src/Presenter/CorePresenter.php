@@ -17,6 +17,7 @@ use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationData;
 use Latte\Loaders\StringLoader;
 use Latte\Sandbox\SecurityPolicy;
+use Nette\Application\Attributes\Parameter;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Template;
@@ -26,14 +27,10 @@ use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Security\Passwords;
 use Nette\Utils\Arrays;
-use Nette\Utils\Json;
-use Nette\Utils\Random;
 use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Stepapo\Model\Data\Item;
-use Stepapo\OAuth2\KeyGenerator;
-use Webovac\Core\Command\DefinitionCommand;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Exception\LoginRequiredException;
@@ -58,6 +55,9 @@ trait CorePresenter
 	#[Persistent] public string $basePath;
 	#[Persistent] public string $lang;
 	#[Persistent] public string $backlink;
+	#[Parameter] public string $pageName;
+	#[Parameter] public array $id = [];
+	#[Parameter] public ?string $path = null;
 	#[Inject] public ICoreControl $core;
 	#[Inject] public CmsUser $cmsUser;
 	#[Inject] public Orm $orm;
@@ -105,7 +105,7 @@ trait CorePresenter
 				$this->error();
 			}
 			$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
-			$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->getParameter('pageName') ?: 'Home');
+			$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->pageName);
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
 			$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
 			$this->deployData = $this->dataModel->getLastDeployData();
@@ -137,15 +137,15 @@ trait CorePresenter
 				}
 				$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
 				$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
-				$this->entity = $repository->getByParameters($this->getParameter('id'), $this->getParameter('path'), $this->webData);
-				if ($this->getParameter('path')) {
-					$this->entityList = $repository->getEntityListByPath($this->getParameter('path'));
+				$this->entity = $repository->getByParameters($this->id, $this->path ?? null, $this->webData);
+				if ($this->path) {
+					$this->entityList = $repository->getEntityListByPath($this->path);
 				}
 				if (!$this->entity) {
 					$this->error();
 				}
 				if ($this->entity instanceof HasSlugHistory) {
-					$this->entity->checkForRedirect($this->getParameter('id'), $this->pageData, $this->languageData, $this);
+					$this->entity->checkForRedirect($this->id, $this->pageData, $this->languageData, $this);
 				}
 				if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
 					throw new ForbiddenRequestException;
@@ -278,10 +278,10 @@ trait CorePresenter
 			$pageData = $this->dataModel->getPageData($this->webData->id, $id);
 			$title = $pageData->getCollection('translations')->getByKey($this->languageData->id)->title;
 			if ($pageData->hasParameter) {
-				if ($this->getParameter('id')) {
+				if ($this->id) {
 					$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($pageData->parentDetailRootPages));
 					if (!isset($parameters[$lastDetailRootPage->name])) {
-						$parameters[$lastDetailRootPage->name] = $this->getParameter('id')[$lastDetailRootPage->name];
+						$parameters[$lastDetailRootPage->name] = $this->id[$lastDetailRootPage->name];
 					}
 					if ($pageData->isDetailRoot) {
 						$entity = $this->orm
@@ -289,7 +289,7 @@ trait CorePresenter
 							->getByParameters($parameters, null, $this->webData);
 						$title = $entity->getTitle();
 					}
-				} elseif ($this->getParameter('path')) {
+				} elseif ($this->path) {
 					$path = [];
 					$title = $this->entity->getTitle();
 					foreach ($this->entityList as $entity) {
@@ -315,7 +315,7 @@ trait CorePresenter
 					[
 						'pageName' => $pageData->name,
 						'id' => $pageData->hasParameter ? $parameters : [],
-						'path' => $pageData->hasPath ? $this->getParameter('path') : null,
+						'path' => $pageData->hasPath ? $this->path : null,
 						'host' => $this->host,
 						'basePath' => $this->basePath,
 						'lang' => $this->lang,

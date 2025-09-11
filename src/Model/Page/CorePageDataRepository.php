@@ -110,6 +110,7 @@ trait CorePageDataRepository
 			$pageData->module = $page->module?->id;
 			$pageData->host = $parentPageData ? $parentPageData->host : $page->web->host;
 			$pageData->basePath = $parentPageData ? $parentPageData->basePath : $page->web->basePath;
+			$pageData->defaultLanguage = $parentPageData ? $parentPageData->defaultLanguage : $page->web->defaultLanguage->id;
 			$pageData->accessSetups = $pageData->dontInheritAccessSetup ? [$accessSetup] : array_merge($parentPageData->accessSetups ?? [], [$accessSetup]);
 			$pageData->authorizingTag = $page->authorizingTag ?: $parentPageData?->authorizingTag;
 			$pageData->isHomePage = $page->isHomePage();

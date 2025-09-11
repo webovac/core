@@ -296,7 +296,7 @@ schemas:
 				uniqueKeys: [[web_id, page_translation_id, path]]
 				indexes: [web_id, page_translation_id]
 				foreignKeys:
-					web_id: [table: page, column: id]
+					web_id: [table: web, column: id]
 					page_translation_id: [table: page_translation, column: id, reverseName: paths, reverseOrder: id]
 			parameter:
 				columns:

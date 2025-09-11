@@ -10,6 +10,7 @@ use App\Model\File\FileData;
 use App\Model\File\FileRepository;
 use App\Model\Page\Page;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
 use Nette\InvalidArgumentException;
@@ -21,6 +22,7 @@ use Nette\Utils\Json;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
+use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -328,5 +330,16 @@ trait CoreFileRepository
 			'tmp_name' => $path,
 			'error' => $size ? UPLOAD_ERR_OK : UPLOAD_ERR_NO_FILE,
 		]);
+	}
+
+
+	public function getFilterByWeb(WebData $webData): array
+	{
+		return [
+			ICollection::OR,
+			'page->web' => $webData->id,
+			'article->web' => $webData->id,
+			'web' => $webData->id,
+		];
 	}
 }

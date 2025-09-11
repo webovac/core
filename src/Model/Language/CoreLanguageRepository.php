@@ -21,4 +21,14 @@ trait CoreLanguageRepository
 	{
 		return $this->getBy(['shortcut' => $data instanceof LanguageData ? $data->shortcut : $data]);
 	}
+
+
+	public function getFilterByWeb(WebData $webData): array
+	{
+		$ids = [];
+		foreach ($webData->translations as $translation) {
+			$ids[] = $translation->language;
+		}
+		return ['id' => $ids];
+	}
 }

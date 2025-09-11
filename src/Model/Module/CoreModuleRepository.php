@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\Module;
 use App\Model\Module\Module;
 use App\Model\Module\ModuleData;
 use App\Model\Page\PageRepository;
+use App\Model\Web\WebData;
 use Nette\InvalidArgumentException;
 use Stepapo\Model\Data\Item;
 use Webovac\Core\Model\CmsEntity;
@@ -37,5 +38,11 @@ trait CoreModuleRepository
 	public function getByData(ModuleData|string $data): ?Module
 	{
 		return $this->getBy(['name' => $data instanceof ModuleData ? $data->name : $data]);
+	}
+
+
+	public function getFilterByWeb(WebData $webData): array
+	{
+		return ['webs->id' => $webData->id];
 	}
 }

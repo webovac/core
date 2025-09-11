@@ -6,6 +6,7 @@ namespace Webovac\Core\Router;
 
 use App\Model\DataModel;
 use App\Model\Page\Page;
+use App\Model\Web\WebData;
 use Nette\Application\BadRequestException;
 use Nette\Application\Routers\RouteList;
 use Nette\Caching\Cache;
@@ -32,21 +33,31 @@ final class CmsRouterFactory implements Service
 	{
 		$routeList = new RouteList;
 		$webDatas = $this->dataModel->findWebDatas();
-		$routeList->addRoute('api/v1/authorization/<action>', 'Authorization:authorize');
-		$routeList->add(new CrudRoute('api/v1/<entity>[/<id>[/<related>]][.<type>]', 'Api'));
+		$apiModuleData = $this->dataModel->getModuleDataByName('Api');
 		foreach ($webDatas as $webData) {
 			$routeList->addRoute(
 				mask: $webData->getStyleRouteMask(),
-				metadata: $webData->getStyleRouteMetadata(),
+				metadata: $webData->getRouteMetadata('Style'),
 			);
 			foreach ($webData->translations as $webTranslationData) {
 				$languageData = $this->dataModel->getLanguageData($webTranslationData->language);
 				$routeList->addRoute(
 					mask: $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-					metadata: $webData->getManifestRouteMetadata($languageData->shortcut),
+					metadata: $webData->getRouteMetadata('Manifest', $languageData->shortcut),
 				);
+				if (in_array($apiModuleData->id, $webData->modules, true)) {
+					$routeList->addRoute(
+						mask: $webData->getAuthorizationRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
+						metadata: $webData->getRouteMetadata('Authorization', $languageData->shortcut, 'authorize')
+					);
+					$routeList->add(new CrudRoute(
+						mask: $webData->getApiRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
+						metadata: $webData->getRouteMetadata('Api', $languageData->shortcut),
+					));
+				}
 			}
 		}
+		/** @var WebData $webData */
 		foreach (array_reverse((array) $webDatas) as $webData) {
 			$routeList->addRoute(
 				mask: $webData->getPageRouteMask(),
@@ -198,6 +209,9 @@ final class CmsRouterFactory implements Service
 					'mapOut' => [],
 					'parts' => [],
 				];
+				foreach ($this->dataModel->languageRepository->findAllPairs() as $shortcut) {
+					$setup['parts'][$shortcut] = $shortcut;
+				}
 				foreach ($this->dataModel->findPageDatas() as $pageData) {
 					if ($pageData->type !== Page::TYPE_PAGE) {
 						continue;
@@ -237,7 +251,9 @@ final class CmsRouterFactory implements Service
 									}
 									$setup['parts'][$part] = $part;
 								}
-								$setup['mapIn'][$base][$f] = [
+								$l = $p->defaultLanguage === $languageData->id ? null : $languageData->shortcut;
+								$fullPath = implode('/', array_filter([$l, $f]));
+								$setup['mapIn'][$base][$fullPath] = [
 									'presenter' => 'Home',
 									'action' => 'default',
 									'host' => $p->host,
@@ -255,7 +271,7 @@ final class CmsRouterFactory implements Service
 										'action' => 'default',
 										'host' => $p->host,
 										'basePath' => $p->basePath,
-										'p' => $f,
+										'p' => $fullPath,
 										'signals' => array_flip($signals),
 										'parameters' => array_flip($parameters),
 									];

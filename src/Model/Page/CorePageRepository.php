@@ -247,4 +247,14 @@ trait CorePageRepository
 	{
 		$this->getMapper()->removePage($page);
 	}
+
+
+	public function getFilterByWeb(WebData $webData): array
+	{
+		return [
+			ICollection::OR,
+			'web->id' => $webData->id,
+			'module->webs->id' => $webData->webs->id,
+		];
+	}
 }

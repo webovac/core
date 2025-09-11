@@ -11,6 +11,8 @@ use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Path\Path;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
+use Nextras\Orm\Collection\ICollection;
 
 
 trait CorePageTranslationRepository
@@ -52,7 +54,7 @@ trait CorePageTranslationRepository
 			$web = $pageTranslation->page->web ?: $web;
 			$activePath = $pageTranslation->getActivePath($web);
 			if (!str_contains($path, '<')) {
-				$path = $this->getModel()->pathRepository->getPath($path, $web, $activePath);
+				$path = $this->getModel()->pathRepository->getPath($path, $web, $pageTranslation->language, $activePath);
 			}
 			if ($pageTranslation->page->type !== Page::TYPE_MODULE && $activePath?->path !== $path) {
 				if ($activePath) {
@@ -80,5 +82,15 @@ trait CorePageTranslationRepository
 				$path,
 			);
 		}
+	}
+
+
+	public function getFilterByWeb(WebData $webData): array
+	{
+		return [
+			ICollection::OR,
+			'page->web->id' => $webData->id,
+			'page->module->webs->id' => $webData->webs->id,
+		];
 	}
 }

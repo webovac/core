@@ -8,6 +8,8 @@ use App\Lib\ResourceGenerator\ToArrayConverterWithoutMany;
 use App\Lib\ResourceGenerator\ResourceGenerator;
 use App\Model\DataModel;
 use App\Model\Orm;
+use App\Model\Web\WebData;
+use Nette\Application\Attributes\Persistent;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidArgumentException;
 use Nette\Schema\ValidationException;
@@ -30,25 +32,29 @@ use Webovac\Core\Lib\DataProvider;
 
 class AuthorizationPresenter extends OAuthPresenter
 {
-	public function __construct(
-		private Orm $orm,
-	) {
-		parent::__construct();
-	}
+	#[Persistent] public string $host;
+	#[Persistent] public string $basePath;
+	#[Persistent] public string $lang;
+	#[Inject] public DataProvider $dataProvider;
+	#[Inject] public DataModel $dataModel;
+	private ?WebData $webData;
 
 
 	public function startup()
 	{
 		parent::startup();
+		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
+		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
+		$this->dataProvider
+			->setLanguageData($languageData)
+			->setWebData($this->webData);
 	}
-
 
 	public function actionAuthorize(string $response_type, string $redirect_uri, ?string $scope)
 	{
-		if (!$this->user->isLoggedIn()) {
-			$this->redirect('AnyUser:login', ['backlink' => $this->storeRequest()]);
-		}
-
+//		if (!$this->user->isLoggedIn()) {
+//			$this->redirect('AnyUser:login', ['backlink' => $this->storeRequest()]);
+//		}
 		if ($response_type == 'code') {
 			$this->issueAuthorizationCode($response_type, $redirect_uri, $scope);
 		} else if ($response_type == 'token') {

@@ -81,6 +81,7 @@ trait CorePageData
 	public int|string|null $targetModule;
 	public ?string $host;
 	public ?string $basePath;
+	public ?int $defaultLanguage;
 	/** @var AccessSetup[] */ public array|null $accessSetups;
 	/** @var AssetData[] */ public array $stylesheets = [];
 	/** @var AssetData[] */ public array $scripts = [];
@@ -141,8 +142,8 @@ trait CorePageData
 			$anchor = $this->targetAnchor;
 		} else {
 			$p = $this;
-			$parameter = $p->hasParameter && !$presenter->getParameter('path') ? $e?->getParameters() : null;
-			$path = $p->hasPath && $presenter->getParameter('path') ? ($presenter->getParameter('path') . '/' . Arrays::first($e->getParameters())) : '';
+			$parameter = $p->hasParameter && !isset($presenter->path) ? $e?->getParameters() : null;
+			$path = $p->hasPath && isset($presenter->path) ? ($presenter->path . '/' . Arrays::first($e->getParameters())) : '';
 		}
 		return match($p->type) {
 			Page::TYPE_SIGNAL => $presenter->getName() === 'Error4xx' ? null : $presenter->link('//' . $p->targetSignal . '!'),
@@ -211,7 +212,7 @@ trait CorePageData
 		if ($linkedEntity && $linkedEntity !== $entity) {
 			return false;
 		}
-		return (!$path || str_contains($presenter->getParameter('path') ?: '', $path)) && $pageActivator->isActivePage($this->targetPage ?: $this->id);
+		return (!$path || str_contains($presenter->path ?? '', $path)) && $pageActivator->isActivePage($this->targetPage ?: $this->id);
 	}
 
 

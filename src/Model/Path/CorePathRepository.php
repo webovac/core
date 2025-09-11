@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Path;
 
+use App\Model\Language\Language;
 use App\Model\PageTranslation\PageTranslation;
 use App\Model\Path\Path;
 use App\Model\Path\PathData;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
+use Nextras\Orm\Collection\ICollection;
 
 
 trait CorePathRepository
@@ -22,20 +25,30 @@ trait CorePathRepository
 	}
 
 
-	public function getPath(string $p, Web $web, ?Path $path = null, string $separator = '-', int $num = 1): string
+	public function getPath(string $p, Web $web, Language $language, ?Path $path = null, string $separator = '-', int $num = 1): string
 	{
 		$p = $p . ($num > 1 ? '-' . $num : '');
 		$filter = [
 			'path' => $p,
 			'pageTranslation->page->web' => $web,
+			'pageTranslation->language' => $language
 		];
 		$filter['active'] = true;
 		if ($path) {
 			$filter['id!='] = $path->id;
 		}
 		if ($this->getBy($filter)) {
-			return $this->getPath($p, $web, $path, $separator, $num + 1);
+			return $this->getPath($p, $web, $language, $path, $separator, $num + 1);
 		}
 		return $separator === '-' ? $p : str_replace('-', $separator, $p);
+	}
+
+
+	public function getFilterByWeb(WebData $webData): array
+	{
+		return [
+			ICollection::OR,
+			'web->id' => $webData->id,
+		];
 	}
 }

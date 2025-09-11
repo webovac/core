@@ -61,54 +61,57 @@ trait CoreWebData
 	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $allPages;
 
 
+	public function getRouteMetadata(string $presenter, ?string $language = null, string $action = 'default'): array
+	{
+		$return = [
+			'presenter' => $presenter,
+			'action' => $action,
+			'host' => $this->host,
+			'basePath' => $this->basePath,
+		];
+		if ($language) {
+			$return['lang'] = $language;
+		}
+		return $return;
+	}
+
+
+	public function getBaseUrl(?string $language = null): string
+	{
+		return '//'
+			. $this->host
+			. ($this->basePath !== '~' ? ('/' . $this->basePath) : '')
+			. ($language ? ('/' . $language) : '');
+	}
+
+
 	public function getStyleRouteMask(): string
 	{
-		return '//'
-			. $this->host
-			. ($this->basePath !== '~' ? ('/' . $this->basePath) : '')
-			. '/style';
+		return $this->getBaseUrl() . '/style';
 	}
 
 
-	public function getStyleRouteMetadata(): array
+	public function getManifestRouteMask(?string $language = null): string
 	{
-		return [
-			'presenter' => 'Style',
-			'action' => 'default',
-			'host' => $this->host,
-			'basePath' => $this->basePath,
-		];
+		return $this->getBaseUrl($language) . '/manifest.json';
 	}
 
 
-	public function getManifestRouteMask(?string $language): string
+	public function getAuthorizationRouteMask(?string $language = null): string
 	{
-		return '//'
-			. $this->host
-			. ($this->basePath !== '~' ? ('/' . $this->basePath) : '')
-			. ($language ? ('/' . $language) : '')
-			. '/manifest.json';
+		return $this->getBaseUrl($language) . '/api/v1/authorization/<action>';
 	}
 
 
-	public function getManifestRouteMetadata(string $language): array
+	public function getApiRouteMask(?string $language = null): string
 	{
-		return [
-			'presenter' => 'Manifest',
-			'action' => 'default',
-			'host' => $this->host,
-			'basePath' => $this->basePath,
-			'lang' => $language,
-		];
+		return $this->getBaseUrl($language) . '/api/v1/<entityName>[/<id>[/<related>]][.<type>]';
 	}
 
 
 	public function getPageRouteMask(): string
 	{
-		return '//'
-			. $this->host
-			. ($this->basePath !== '~' ? ('/' . $this->basePath) : '')
-			. '[/<p .+>]';
+		return $this->getBaseUrl() . '[/<p .+>]';
 	}
 
 
