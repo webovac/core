@@ -9,14 +9,14 @@ use Stepapo\Utils\Service;
 class CmsCache implements Service
 {
 	public function __construct(
-		private bool $testMode,
 		private Cache $cache,
+		private ModeChecker $modeChecker,
 	) {}
 
 
 	public function clean(?array $conditions = null): void
 	{
-		if (!$this->testMode) {
+		if (!$this->modeChecker->isTest()) {
 			$this->cache->clean($conditions);
 		}
 	}
@@ -24,7 +24,7 @@ class CmsCache implements Service
 
 	public function remove(mixed $key): void
 	{
-		if (!$this->testMode) {
+		if (!$this->modeChecker->isTest()) {
 			$this->cache->remove($key);
 		}
 	}

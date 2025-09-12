@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Presenter\Api;
 
 use App\Lib\ResourceGenerator\ResourceGenerator;
-use App\Lib\ResourceGenerator\ToArrayConverterWithoutMany;
 use App\Model\DataModel;
 use App\Model\Orm;
 use App\Model\Web\WebData;
@@ -21,6 +20,7 @@ use Stepapo\Restful\Application\BadRequestException;
 use Stepapo\Restful\Application\UI\ResourcePresenter;
 use Stepapo\Restful\Security\Process\OAuth2Authentication;
 use Webovac\Core\Lib\DataProvider;
+use Webovac\Core\Lib\ModeChecker;
 use Webovac\Core\Lib\PropertyChecker;
 use Webovac\Core\Model\CmsRepository;
 
@@ -39,6 +39,7 @@ class ApiPresenter extends ResourcePresenter
 	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public DataModel $dataModel;
 	#[Inject] public PropertyChecker $propertyChecker;
+	#[Inject] public ModeChecker $modeChecker;
 	private ?IEntity $item = null;
 	private ?WebData $webData;
 
@@ -46,7 +47,9 @@ class ApiPresenter extends ResourcePresenter
 	public function startup()
 	{
 		parent::startup();
-//		$this->authentication->setAuthProcess($this->authenticationProcess);
+		if ($this->modeChecker->isProd()) {
+			$this->authentication->setAuthProcess($this->authenticationProcess);
+		}
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$this->dataProvider

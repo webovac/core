@@ -21,6 +21,7 @@ use Stepapo\Utils\Service;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Lib\CmsCache;
 use Webovac\Core\Lib\KeyProvider;
+use Webovac\Core\Lib\ModeChecker;
 use Webovac\Core\Lib\NeonHandler;
 
 
@@ -57,12 +58,10 @@ class CoreExtension extends StepapoExtension
 	{
 		parent::loadConfiguration();
 		$builder = $this->getContainerBuilder();
-		$builder->addDefinition($this->prefix('neonHandler'))
-			->setFactory(NeonHandler::class, [['host' => $this->config->parameters['host']], $builder->parameters['debugMode'], $this->config->testMode]);
 		$builder->addDefinition($this->prefix('keyProvider'))
 			->setFactory(KeyProvider::class, [$this->config->parameters]);
-		$builder->addDefinition($this->prefix('core'))
-			->setFactory(CmsCache::class, [$this->config->testMode]);
+		$builder->addDefinition($this->prefix('modeChecker'))
+			->setFactory(ModeChecker::class, [$builder->parameters['debugMode'], $this->config->testMode]);
 		$this->createModelExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
@@ -87,7 +86,7 @@ class CoreExtension extends StepapoExtension
 	protected function createModelExtension(): void
 	{
 		$this->modelExtension = new ModelExtension;
-		$this->modelExtension->setCompiler($this->compiler, 'stepapo.model');
+		$this->modelExtension->setCompiler($this->compiler, $this->prefix('model'));
 		$config = $this->processSchema($this->modelExtension->getConfigSchema(), [
 			'parameters' => $this->config->parameters,
 			'testMode' => $this->config->testMode,
@@ -103,7 +102,7 @@ class CoreExtension extends StepapoExtension
 	protected function createDecoratorExtension(): void
 	{
 		$this->decoratorExtension = new DecoratorExtension;
-		$this->decoratorExtension->setCompiler($this->compiler, 'decorator');
+		$this->decoratorExtension->setCompiler($this->compiler, $this->prefix('decorator'));
 		$config = $this->processSchema($this->decoratorExtension->getConfigSchema(), $this->getDecoratorConfig());
 		$this->decoratorExtension->setConfig($config);
 		$this->decoratorExtension->loadConfiguration();
