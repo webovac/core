@@ -46,7 +46,7 @@ class ApiPresenter extends ResourcePresenter
 	public function startup()
 	{
 		parent::startup();
-		$this->authentication->setAuthProcess($this->authenticationProcess);
+//		$this->authentication->setAuthProcess($this->authenticationProcess);
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$this->dataProvider

@@ -465,6 +465,15 @@ schemas:
 				foreignKeys:
 					web_id: [table: web, column: id, reverseName: adminRoles]
 					role_id: [table: role, column: id]
+			web2person:
+				columns:
+					web_id: [type: int, null: false]
+					person_id: [type: int, null: false]
+				primaryKey: [web_id, person_id]
+				indexes: [web_id, person_id]
+				foreignKeys:
+					web_id: [table: web, column: id, reverseName: persons]
+					person_id: [table: person, column: id, reverseName: webs]
 			web_translation:
 				columns:
 					id: [type: int, null: false, auto: true]

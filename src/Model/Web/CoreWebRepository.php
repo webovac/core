@@ -10,6 +10,7 @@ use App\Model\Module\ModuleRepository;
 use App\Model\Page\Page;
 use App\Model\Page\PageData;
 use App\Model\Page\PageRepository;
+use App\Model\PageTranslation\PageTranslation;
 use App\Model\PageTranslation\PageTranslationData;
 use App\Model\Person\Person;
 use App\Model\Web\Web;
@@ -113,6 +114,20 @@ trait CoreWebRepository
 		}
 		if (isset($data->homePage)) {
 			$entity->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['web' => $entity, 'name' => $data->homePage]);
+	   	}
+		if ($entity->homePage?->isPersisted()) {
+			$defaultTranslation = $entity->homePage->getTranslation($entity->defaultLanguage->getData());
+			foreach ($entity->translations as $translation) {
+				if (!$entity->homePage->getTranslation($translation->language->getData())) {
+					$pageTranslation = new PageTranslation;
+					$pageTranslation->language = $translation->language;
+					$pageTranslation->path = $defaultTranslation->path;
+					$pageTranslation->title = $translation->title;
+					$pageTranslation->content = '<h1>' . $translation->title . '</h1>';
+					$pageTranslation->page = $entity->homePage;
+					$this->getModel()->persist($pageTranslation);
+				}
+			}
 		}
 		$this->persist($entity);
 		if (isset($data->pages)) {

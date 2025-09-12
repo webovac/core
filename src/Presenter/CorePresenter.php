@@ -105,6 +105,11 @@ trait CorePresenter
 				$this->error();
 			}
 			$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
+			if (!$this->webTranslationData) {
+				$this->languageData = $this->dataModel->getLanguageData($this->webData->defaultLanguage);
+				$this->lang = $this->languageData->shortcut;
+				$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
+			}
 			$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->pageName);
 			$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
 			$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;

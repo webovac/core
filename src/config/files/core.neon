@@ -14,8 +14,6 @@ modules:
 					Stepapo\Model\Orm\InternalRepository:
 			Log:
 			Person:
-				repositoryImplements:
-					Stepapo\Model\Orm\InternalRepository:
 			File:
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:

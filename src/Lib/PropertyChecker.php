@@ -26,7 +26,7 @@ class PropertyChecker implements Service
 		if (!$webData->isAdmin && array_key_exists(InternalProperty::class, $propertyMetadata->types)) {
 			return true;
 		}
-		$repository = $propertyMetadata->relationship?->repository ? $this->orm->getRepository($propertyMetadata->relationship?->repository) : null;
+		$repository = $propertyMetadata->relationship?->repository ? $this->orm->getRepository($propertyMetadata->relationship->repository) : null;
 		if ($repository?->isForbiddenRepository($webData)) {
 			return true;
 		}

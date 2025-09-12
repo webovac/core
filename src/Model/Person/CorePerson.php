@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Person;
 
 use App\Model\Log\Log;
+use App\Model\Web\WebData;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 
@@ -57,5 +58,13 @@ trait CorePerson
 			Log::TYPE_UPDATE => $this->updatedAt,
 		};
 		return $log;
+	}
+
+
+	public function addWeb(WebData $webData): void
+	{
+		if (!$this->webs->has($webData->id)) {
+			$this->webs->add($webData->id);
+		}
 	}
 }
