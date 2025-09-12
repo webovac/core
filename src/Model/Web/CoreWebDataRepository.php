@@ -6,7 +6,6 @@ namespace Webovac\Core\Model\Web;
 
 use App\Model\Page\PageDataRepository;
 use App\Model\Web\Web;
-use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;

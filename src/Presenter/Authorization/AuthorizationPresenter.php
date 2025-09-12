@@ -5,28 +5,13 @@ declare(strict_types=1);
 namespace Webovac\Core\Presenter\Authorization;
 
 use App\Lib\ResourceGenerator\ToArrayConverterWithoutMany;
-use App\Lib\ResourceGenerator\ResourceGenerator;
 use App\Model\DataModel;
-use App\Model\Orm;
 use App\Model\Web\WebData;
 use Nette\Application\Attributes\Persistent;
 use Nette\DI\Attributes\Inject;
-use Nette\InvalidArgumentException;
-use Nette\Schema\ValidationException;
-use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Entity\IEntity;
-use Nextras\Orm\Relationships\IRelationshipCollection;
-use Nextras\Orm\Repository\IRepository;
 use Stepapo\OAuth2\Application\OAuthPresenter;
 use Stepapo\OAuth2\Grant\IGrant;
 use Stepapo\OAuth2\OAuthException;
-use Stepapo\Restful\Application\BadRequestException;
-use Stepapo\Restful\Application\UI\ResourcePresenter;
-use Stepapo\Restful\ConvertedResource;
-use Stepapo\Restful\Converters\DateTimeConverter;
-use Stepapo\Restful\Converters\ResourceConverter;
-use Stepapo\Restful\IResource;
-use Stepapo\Restful\Resource;
 use Webovac\Core\Lib\DataProvider;
 
 

@@ -13,7 +13,6 @@ use Nette\Caching\Cache;
 use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Stepapo\Restful\Application\Routes\CrudRoute;
-use Stepapo\Restful\Application\Routes\ResourceRoute;
 use Stepapo\Utils\Service;
 
 

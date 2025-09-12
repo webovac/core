@@ -6,7 +6,6 @@ namespace Webovac\Core\Model\Role;
 
 use App\Model\Role\Role;
 use App\Model\Role\RoleData;
-use Tracy\Dumper;
 
 
 trait CoreRoleRepository

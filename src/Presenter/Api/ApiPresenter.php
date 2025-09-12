@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter\Api;
 
-use App\Lib\ResourceGenerator\ToArrayConverterWithoutMany;
 use App\Lib\ResourceGenerator\ResourceGenerator;
+use App\Lib\ResourceGenerator\ToArrayConverterWithoutMany;
 use App\Model\DataModel;
 use App\Model\Orm;
 use App\Model\Web\WebData;
-use App\Model\WebTranslation\WebTranslationData;
 use Nette\Application\Attributes\Parameter;
 use Nette\Application\Attributes\Persistent;
 use Nette\DI\Attributes\Inject;
@@ -17,18 +16,11 @@ use Nette\InvalidArgumentException;
 use Nette\Schema\ValidationException;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
-use Nextras\Orm\Entity\Reflection\PropertyMetadata;
 use Nextras\Orm\Relationships\IRelationshipCollection;
-use Nextras\Orm\Repository\IRepository;
-use ReflectionClass;
-use Stepapo\Model\Orm\InternalProperty;
-use Stepapo\Model\Orm\PrivateProperty;
 use Stepapo\Restful\Application\BadRequestException;
 use Stepapo\Restful\Application\UI\ResourcePresenter;
-use Stepapo\Restful\Resource;
 use Stepapo\Restful\Security\Process\OAuth2Authentication;
 use Webovac\Core\Lib\DataProvider;
-use Stepapo\Model\Orm\PrivateRepository;
 use Webovac\Core\Lib\PropertyChecker;
 use Webovac\Core\Model\CmsRepository;
 

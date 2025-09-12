@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Deploy;
 
 use App\Model\Deploy\DeployData;
-use Nette\Caching\Cache;
 use Nextras\Orm\Collection\ICollection;
 
 
