@@ -20,7 +20,7 @@ schemas:
 			file:
 				columns:
 					id: [type: int, null: false, auto: true]
-					web_id: [type: int, null: true]
+					web_id: [type: int, null: true, internal: true]
 					page_id: [type: int, null: true]
 					created_by_person_id: [type: int, null: true]
 					identifier: [type: string, null: false]
@@ -189,7 +189,7 @@ schemas:
 					updated_by_person_id: [type: int, null: true]
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
-					web_id: [type: int, null: true]
+					web_id: [type: int, null: true, internal: true]
 					parent_page_id: [type: int, null: true]
 					icon: [type: string, null: true]
 					redirect_page_id: [type: int, null: true]
@@ -288,7 +288,7 @@ schemas:
 					id: [type: int, null: false, auto: true]
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
-					web_id: [type: int, null: true]
+					web_id: [type: int, null: true, internal: true]
 					page_translation_id: [type: int, null: false]
 					path: [type: string, null: false]
 					active: [type: bool, null: false, default: false]

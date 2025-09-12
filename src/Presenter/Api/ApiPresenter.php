@@ -54,7 +54,7 @@ class ApiPresenter extends ResourcePresenter
 	public function startup()
 	{
 		parent::startup();
-//		$this->authentication->setAuthProcess($this->authenticationProcess);
+		$this->authentication->setAuthProcess($this->authenticationProcess);
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$this->dataProvider
@@ -105,7 +105,7 @@ class ApiPresenter extends ResourcePresenter
 					}
 					$collection = $this->item->getProperty($this->related)->toCollection();
 					if ($repository->shouldFilterByWeb($this->webData)) {
-						$collection->findBy($repository->filterByWeb($this->webData));
+						$collection->findBy($repository->getFilterByWeb($this->webData));
 					}
 					$this->sendCollectionResource($this->item->getProperty($this->related)->toCollection());
 				} catch (InvalidArgumentException $e) {

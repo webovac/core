@@ -4,12 +4,18 @@ modules:
 		isPackage: true
 		entities:
 			Asset:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Deploy:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Lib:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Log:
 			Person:
 				repositoryImplements:
-					Stepapo\Model\Orm\PrivateRepository:
+					Stepapo\Model\Orm\InternalRepository:
 			File:
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
@@ -28,7 +34,7 @@ modules:
 					Webovac\Core\Model\HasTranslations:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
-					Stepapo\Model\Orm\PrivateRepository:
+					Stepapo\Model\Orm\InternalRepository:
 			ModuleTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
@@ -47,16 +53,26 @@ modules:
 					Webovac\Core\Model\Translation:
 			Preference:
 			Parameter:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Path:
 			Role:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Signal:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Slug:
 			Text:
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			TextTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Web:
 				entityImplements:
 					Webovac\Core\Model\Page\HasPages:
@@ -64,7 +80,9 @@ modules:
 					Webovac\Core\Model\File\HasFiles:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
-					Stepapo\Model\Orm\PrivateRepository:
+					Stepapo\Model\Orm\InternalRepository:
 			WebTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:

@@ -254,7 +254,7 @@ trait CorePageRepository
 		return [
 			ICollection::OR,
 			'web->id' => $webData->id,
-			'module->webs->id' => $webData->webs->id,
+			'module->webs->id' => $webData->id,
 		];
 	}
 }

@@ -90,7 +90,7 @@ trait CorePageTranslationRepository
 		return [
 			ICollection::OR,
 			'page->web->id' => $webData->id,
-			'page->module->webs->id' => $webData->webs->id,
+			'page->module->webs->id' => $webData->id,
 		];
 	}
 }
