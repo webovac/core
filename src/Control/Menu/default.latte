@@ -18,7 +18,7 @@
 		</a>
 		<div class="menu flex-grow-1" id="menu">
 			{foreach $pageDatas as $p}
-				{if $layoutData->hideSidePanel}
+				{if $layoutData->hideSidePanel && !$isError}
 					{if $p->name === 'Search:Home'}
 						{include search.latte}
 					{elseif in_array($p->name, ['Auth:Name', 'FsvAuth:Name'], true)}
@@ -28,7 +28,7 @@
 				{renderMenuItem($p)}
 				{if $p->id === $homePageData->id}
 					{foreach $homeChildPageDatas as $homeChildP}
-						{if $layoutData->hideSidePanel}
+						{if $layoutData->hideSidePanel && !$isError}
 							{if $homeChildP->name === 'Search:Home'}
 								{include search.latte}
 							{elseif in_array($homeChildP->name, ['Auth:Name', 'FsvAuth:Name'], true)}

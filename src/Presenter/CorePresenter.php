@@ -132,7 +132,7 @@ trait CorePresenter
 					if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)) {
 						$languageData = $this->dataModel->getLanguageData($this->preference->language->id);
 						$this->lang = $languageData->shortcut;
-//						$this->redirect('this');
+						$this->redirect('this');
 					}
 				}
 			}

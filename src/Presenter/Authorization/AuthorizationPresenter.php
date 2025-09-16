@@ -27,12 +27,12 @@ class AuthorizationPresenter extends OAuthPresenter
 
 	public function startup()
 	{
-		parent::startup();
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$this->dataProvider
 			->setLanguageData($languageData)
 			->setWebData($this->webData);
+		parent::startup();
 	}
 
 	public function actionAuthorize(string $response_type, string $redirect_uri, ?string $scope)

@@ -26,6 +26,7 @@ trait ErrorPresenter
 			$this->host = $request->getUrl()->getHost();
 			$this->basePath = '~';
 			$this->lang = 'cs';
+			$this->pageName = 'Home';
 		};
 	}
 }
