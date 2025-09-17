@@ -77,9 +77,6 @@ h1, .title {
 .layout .navigation-wrapper .navigation .side-menu-item a:hover {
 	color: var(--cms-light);
 }
-.layout .horizontal-wrapper .content-image-wrapper {
-	width: 0;
-}
 @media (max-width: 1419.8px) and (min-width: 992px) {
 	:root {
 		scroll-padding-top: calc(var(--cms-secondary-height) + var(--cms-content-padding-top));
@@ -148,6 +145,9 @@ h1, .title {
 	}
 }
 @media (min-width: 992px) {
+	.layout .horizontal-wrapper .content-image-wrapper {
+		width: 0;
+	}
     .layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
         white-space: initial;
         display: flex;
