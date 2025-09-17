@@ -17,7 +17,7 @@ use Nextras\Orm\Relationships\IRelationshipCollection;
 use Stepapo\Restful\Application\BadRequestException;
 use Stepapo\Restful\Application\UI\ResourcePresenter;
 use Stepapo\Restful\Security\Process\OAuth2Authentication;
-use Webovac\Api\Lib\ResourceGenerator;
+use Webovac\Core\Lib\ResourceGenerator;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\ModeChecker;
 use Webovac\Core\Lib\PropertyChecker;

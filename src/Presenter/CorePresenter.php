@@ -31,7 +31,7 @@ use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Stepapo\Model\Data\Item;
-use Webovac\Api\Lib\ResourceGenerator;
+use Webovac\Core\Lib\ResourceGenerator;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Exception\LoginRequiredException;

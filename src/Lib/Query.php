@@ -1,6 +1,6 @@
 <?php
 
-namespace Webovac\Api\Lib;
+namespace Webovac\Core\Lib;
 
 use Nette\Utils\Json;
 use Stepapo\Utils\Config;

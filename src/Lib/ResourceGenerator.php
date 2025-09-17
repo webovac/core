@@ -1,6 +1,6 @@
 <?php
 
-namespace Webovac\Api\Lib;
+namespace Webovac\Core\Lib;
 
 use Nette\Schema\ValidationException;
 use Nextras\Orm\Collection\Functions\ConjunctionOperatorFunction;
@@ -22,13 +22,13 @@ class ResourceGenerator implements Service
 {
 	public function createFromArrayQuery(ICollection|IEntity $collection, ?array $params = null, callable|null $checkProperty = null, bool $showCompleteRelations = false)
 	{
-//		try {
+		try {
 			return $this->create($collection, Query::createFromArray($params ?? []), $checkProperty, $showCompleteRelations);
-//		} catch (ValidationException|InvalidArgumentException $e) {
-//			throw $e;
-//		} catch (\Throwable $e) {
-//			throw new BadRequestException('Invalid query', $e->getCode(), $e);
-//		}
+		} catch (ValidationException|InvalidArgumentException $e) {
+			throw $e;
+		} catch (\Throwable $e) {
+			throw new BadRequestException('Invalid query', $e->getCode(), $e);
+		}
 	}
 
 
