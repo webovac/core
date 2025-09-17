@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter;
 
-use App\Lib\ResourceGenerator\ResourceGenerator;
 use App\Model\DataModel;
 use App\Model\Deploy\DeployData;
 use App\Model\Language\LanguageData;
@@ -27,10 +26,12 @@ use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Security\Passwords;
 use Nette\Utils\Arrays;
+use Nette\Utils\DateTime;
 use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Stepapo\Model\Data\Item;
+use Webovac\Api\Lib\ResourceGenerator;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Exception\LoginRequiredException;
@@ -56,7 +57,7 @@ trait CorePresenter
 	#[Persistent] public string $lang;
 	#[Persistent] public string $backlink;
 	#[Parameter] public string $pageName;
-	#[Parameter] public array $id = [];
+	#[Parameter] public ?array $id = null;
 	#[Parameter] public ?string $path = null;
 	#[Inject] public ICoreControl $core;
 	#[Inject] public CmsUser $cmsUser;

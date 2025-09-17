@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter\Api;
 
-use App\Lib\ResourceGenerator\ResourceGenerator;
 use App\Model\DataModel;
 use App\Model\Orm;
 use App\Model\Web\WebData;
@@ -12,13 +11,13 @@ use Nette\Application\Attributes\Parameter;
 use Nette\Application\Attributes\Persistent;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidArgumentException;
-use Nette\Schema\ValidationException;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use Stepapo\Restful\Application\BadRequestException;
 use Stepapo\Restful\Application\UI\ResourcePresenter;
 use Stepapo\Restful\Security\Process\OAuth2Authentication;
+use Webovac\Api\Lib\ResourceGenerator;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\ModeChecker;
 use Webovac\Core\Lib\PropertyChecker;
@@ -134,7 +133,7 @@ class ApiPresenter extends ResourcePresenter
 				checkProperty: $this->propertyChecker->isForbiddenProperty(...),
 			);
 		} catch (\Throwable $e) {
-			$this->sendErrorResource(BadRequestException::notFound($e->getMessage()));
+//			$this->sendErrorResource(BadRequestException::notFound($e->getMessage()));
 		}
 	}
 

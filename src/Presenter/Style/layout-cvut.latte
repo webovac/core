@@ -84,6 +84,9 @@ h1, .title {
 	.layout .primary-navigation-wrapper .navigation .menu {
 		left: 0;
 	}
+	.layout .horizontal-wrapper .content-image-wrapper {
+		max-width: calc(100% - var(--cms-secondary-width));
+	}
 	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
 		min-height: 137px;
 		padding: 20px;
@@ -137,6 +140,9 @@ h1, .title {
 @media (min-width: 1420px) {
 	:root {
 		scroll-padding-top: var(--cms-content-padding-top);
+	}
+	.layout .horizontal-wrapper .content-image-wrapper .content-wrapper {
+		max-width: var(--cms-content-width);
 	}
 	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
 		min-height: 140px;
