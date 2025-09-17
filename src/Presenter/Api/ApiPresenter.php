@@ -133,7 +133,7 @@ class ApiPresenter extends ResourcePresenter
 				checkProperty: $this->propertyChecker->isForbiddenProperty(...),
 			);
 		} catch (\Throwable $e) {
-//			$this->sendErrorResource(BadRequestException::notFound($e->getMessage()));
+			$this->sendErrorResource(BadRequestException::notFound($e->getMessage()));
 		}
 	}
 

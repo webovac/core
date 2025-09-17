@@ -28,6 +28,7 @@ use Nette\Security\Passwords;
 use Nette\Utils\Arrays;
 use Nette\Utils\DateTime;
 use Nextras\Dbal\Platforms\Data\Fqn;
+use Nextras\Orm\Collection\Expression\LikeExpression;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Stepapo\Model\Data\Item;
@@ -179,6 +180,7 @@ trait CorePresenter
 	public function injectCoreRender(): void
 	{
 		$this->onRender[] = function () {
+//			bdump($this->orm->pageRepository->findAll()->orderBy('translations->id:count')->fetchAll());
 			$this->template->languageData = $this->languageData;
 			$this->template->webData = $this->webData;
 			if ($this->webData->iconFile) {
