@@ -8,7 +8,7 @@ use Stepapo\Utils\Config;
 
 class Query extends Config
 {
-	public const DEFAULT_LIMIT = 50;
+	public const int DEFAULT_LIMIT = 50;
 
 	public ?array $select = null;
 	public ?array $where = null;

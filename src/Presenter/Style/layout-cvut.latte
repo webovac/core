@@ -77,15 +77,15 @@ h1, .title {
 .layout .navigation-wrapper .navigation .side-menu-item a:hover {
 	color: var(--cms-light);
 }
+.layout .horizontal-wrapper .content-image-wrapper {
+	width: 0;
+}
 @media (max-width: 1419.8px) and (min-width: 992px) {
 	:root {
 		scroll-padding-top: calc(var(--cms-secondary-height) + var(--cms-content-padding-top));
 	}
 	.layout .primary-navigation-wrapper .navigation .menu {
 		left: 0;
-	}
-	.layout .horizontal-wrapper .content-image-wrapper {
-		max-width: calc(100% - var(--cms-secondary-width));
 	}
 	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
 		min-height: 137px;
@@ -140,9 +140,6 @@ h1, .title {
 @media (min-width: 1420px) {
 	:root {
 		scroll-padding-top: var(--cms-content-padding-top);
-	}
-	.layout .horizontal-wrapper .content-image-wrapper .content-wrapper {
-		max-width: var(--cms-content-width);
 	}
 	.layout .horizontal-wrapper .secondary-navigation-wrapper .navigation .title {
 		min-height: 140px;
