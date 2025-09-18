@@ -4,38 +4,22 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
-use App\Lib\OrmFunctions;
 use App\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
 use Nextras\Dbal\Drivers\Exception\QueryException;
-use Nextras\Orm\Collection\Functions\CollectionFunction;
-use Nextras\Orm\StorageReflection\StringHelper;
 use Stepapo\Model\Orm\InternalRepository;
 use Stepapo\Model\Orm\PrivateRepository;
 use Stepapo\Model\Orm\StepapoRepository;
-use Stepapo\Utils\Injectable;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 
 
-abstract class CmsRepository extends StepapoRepository implements Injectable
+abstract class CmsRepository extends StepapoRepository
 {
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public Dir $dir;
-	#[Inject] public OrmFunctions $functions;
-
-
-	public function createCollectionFunction(string $name): CollectionFunction
-	{
-		$constName = strtoupper(StringHelper::underscore($name));
-		if (defined("App\\Lib\\OrmFunctions::$constName")) {
-			return $this->functions->call($name);
-		} else {
-			return parent::createCollectionFunction($name);
-		}
-	}
 
 
 	public function getById($id): ?CmsEntity
