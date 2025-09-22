@@ -74,8 +74,6 @@ trait CorePresenter
 	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public RegisterOrmEvents $registerOrmEvents;
 	#[Inject] public PageActivator $pageActivator;
-	#[Inject] public KeyProvider $keyProvider;
-	#[Inject] public ResourceGenerator $resourceGenerator;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -88,8 +86,6 @@ trait CorePresenter
 	private ?Preference $preference;
 	private ?CmsEntity $entity = null;
 	/** @var CmsEntity[] */ private ?array $entityList = null;
-	public array $components = [];
-	#[Inject] public Passwords $passwords;
 
 
 	public function injectCoreStartup(): void
