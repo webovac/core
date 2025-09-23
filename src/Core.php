@@ -73,10 +73,10 @@ class Core implements Module, HasDefinitionGroup, HasManipulationGroups, HasOrmE
 	public function registerOrmEvents(): void
 	{
 		foreach (['onAfterPersist', 'onAfterRemove'] as $property) {
-			$this->orm->languageRepository->$property[] = fn() => $this->cmsCache->clean([Cache::Tags => ['language', 'web', 'page', 'layout']]);
-			$this->orm->moduleRepository->$property[] = fn() => $this->cmsCache->clean([Cache::Tags => ['page', 'web']]);
-			$this->orm->pageRepository->$property[] = fn() => $this->cmsCache->clean([Cache::Tags => ['page', 'web']]);
-			$this->orm->webRepository->$property[] = fn() => $this->cmsCache->clean([Cache::Tags => ['page', 'web']]);
+			$this->orm->languageRepository->$property[] = fn(Language $language) => $this->cmsCache->clean([Cache::Tags => ['language', 'web', 'page', 'layout']]);
+			$this->orm->moduleRepository->$property[] = fn(ModuleEntity $module) => $this->cmsCache->clean([Cache::Tags => ['page', 'web']]);
+			$this->orm->pageRepository->$property[] = fn(Page $page) => $this->cmsCache->clean([Cache::Tags => ['page', 'web']]);
+			$this->orm->webRepository->$property[] = fn(Web $web) => $this->cmsCache->clean([Cache::Tags => ['page', 'web']]);
 		}
 		if ($this->orm->hasRepositoryByName('logRepository')) {
 			$this->orm->languageRepository->onAfterInsert[] = fn (Language $language) => $this->orm->logRepository->createLog($language, Log::TYPE_CREATE);

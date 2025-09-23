@@ -6,6 +6,7 @@ namespace Webovac\Core\Model\Web;
 
 use App\Model\Page\PageDataRepository;
 use App\Model\Web\Web;
+use App\Model\Web\WebData;
 use App\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
@@ -31,8 +32,6 @@ trait CoreWebDataRepository
 		if (isset($this->collection)) {
 			return;
 		}
-		$this->cmsCache->remove('routeSetup');
-		$this->cmsCache->remove('webAliases');
 		$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
 		$pageDatas = $this->pageDataRepository->getCollection();
 		$allPages = [];
@@ -62,10 +61,10 @@ trait CoreWebDataRepository
 	public function getAliases(): array
 	{
 		if (!isset($this->aliases)) {
-			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
+			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
-				/** @var Web $web */
-				foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $web) {
+				/** @var WebData $web */
+				foreach ($this->getCollection() as $web) {
 					$aliases["$web->host-$web->basePath"] = $web->id;
 				}
 				return $aliases;

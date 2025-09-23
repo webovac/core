@@ -58,14 +58,14 @@ trait CorePageTranslationRepository
 			}
 			if ($pageTranslation->page->type !== Page::TYPE_MODULE && $activePath?->path !== $path) {
 				if ($activePath) {
-					$otherPaths = $this->getModel()->pathRepository->findBy(['path' => $activePath->path, 'active' => false]);
+					$otherPaths = $this->getModel()->pathRepository->findBy(['web' => $web, 'path' => $activePath->path, 'active' => false]);
 					foreach ($otherPaths as $otherPath) {
 						$this->getModel()->remove($otherPath);
 					}
 					$activePath->active = false;
 					$this->getModel()->persist($activePath);
 				}
-				$existingPath = $this->getModel()->pathRepository->getBy(['path' => $path, 'active' => false]);
+				$existingPath = $this->getModel()->pathRepository->getBy(['web' => $web, 'path' => $path, 'active' => false]);
 				$newPath = $existingPath ?: new Path;
 				$newPath->pageTranslation = $pageTranslation;
 				$newPath->web = $web;

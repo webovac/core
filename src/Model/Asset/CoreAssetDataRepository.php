@@ -16,7 +16,7 @@ trait CoreAssetDataRepository
 	protected function getAliases(): array
 	{
 		if (!isset($this->aliases)) {
-			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
+			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
 				/** @var AssetData $asset */
 				foreach ($this->getCollection() as $asset) {

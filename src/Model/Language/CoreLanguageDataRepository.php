@@ -16,10 +16,10 @@ trait CoreLanguageDataRepository
 	protected function getAliases(): array
 	{
 		if (!isset($this->aliases)) {
-			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
+			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
 				/** @var LanguageData $page */
-				foreach ($this->getOrmRepository()->findAll() as $language) {
+				foreach ($this->getCollection() as $language) {
 					$aliases[$language->shortcut] = $language->id;
 				}
 				return $aliases;

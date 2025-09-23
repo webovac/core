@@ -16,11 +16,11 @@ trait CoreLibDataRepository
 	protected function getAliases(): array
 	{
 		if (!isset($this->aliases)) {
-			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
+			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
-				/** @var LibData $Lib */
-				foreach ($this->getCollection() as $Lib) {
-					$aliases[$Lib->name] = $Lib->id;
+				/** @var LibData $lib */
+				foreach ($this->getCollection() as $lib) {
+					$aliases[$lib->name] = $lib->id;
 				}
 				return $aliases;
 			}, [Cache::Tags => lcfirst($this->getName())]);

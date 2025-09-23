@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Webovac\Core\Lib;
 
 use Nette\Http\FileUpload;
+use Stepapo\Utils\Service;
 
 
-interface FileUploader
+interface FileUploader extends Service
 {
 	function upload(FileUpload $upload, string $namespace = 'cms'): string;
 	function delete(string $identifier): void;

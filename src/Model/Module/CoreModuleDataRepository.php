@@ -21,10 +21,10 @@ trait CoreModuleDataRepository
 	protected function getAliases(): array
 	{
 		if (!isset($this->aliases)) {
-			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
+			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
 				/** @var ModuleData $module */
-				foreach ($this->getOrmRepository()->findAll() as $module) {
+				foreach ($this->getCollection() as $module) {
 					$aliases[$module->name] = $module->id;
 				}
 				return $aliases;

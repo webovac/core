@@ -188,7 +188,7 @@ trait CoreWebRepository
 					$image = $iconFile->upload->toImage();
 				}
 			} else {
-				$image = Image::fromString(base64_decode($iconFile));
+				$image = Image::fromString(base64_decode($iconFile->upload));
 			}
 		} else {
 			$image = Image::fromString(file_get_contents($this->fileUploader->getPath($iconFile->identifier)));

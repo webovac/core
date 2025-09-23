@@ -35,22 +35,22 @@ trait CorePageDataRepository
 	 */
 	public function buildCache(): void
 	{
-		$this->cmsCache->remove('routeSetup');
-		$this->cmsCache->remove('pageAliases');
 		$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
-		$this->orm->pageTranslationRepository->rebuildPaths();
-		$this->orm->flush();
-		$collection = new Collection;
-		$this->buildCollection($collection);
-		$array = (array) $collection;
-		uasort($array, function(PageData $a, PageData $b) {
-			return [$a->host, $a->basePath, $a->hasPath, $a->hasParameter]
-				<=> [$b->host, $b->basePath, $b->hasPath, $b->hasParameter];
-		});
+		$collection = $this->rebuild();
 		foreach ($collection as $key => $item) {
 			$this->cacheItem($key, $item);
 		}
 		$this->collection = $collection;
+	}
+
+
+	public function rebuild(): Collection
+	{
+		$this->orm->pageTranslationRepository->rebuildPaths();
+		$this->orm->flush();
+		$collection = new Collection;
+		$this->buildCollection($collection);
+		return $collection;
 	}
 
 
@@ -60,7 +60,7 @@ trait CorePageDataRepository
 	protected function getAliases(): array
 	{
 		if (!isset($this->aliases)) {
-			$this->aliases = $this->cache->load(lcfirst($this->getName()) . 'Aliases', function () {
+			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
 				/** @var PageData $page */
 				foreach ($this->getCollection() as $page) {
@@ -160,5 +160,15 @@ trait CorePageDataRepository
 	public function getKey(int $webId, string $pageName): ?int
 	{
 		return $this->getAliases()["$webId-$pageName"] ?? null;
+	}
+
+
+	public function cacheItem(mixed $key, PageData|Item $item): void
+	{
+		$this->cache->save(
+			lcfirst($this->getName()) . '/' . $key,
+			$item,
+			[Cache::Tags => [lcfirst($this->getName()), 'web/'. $item->web]],
+		);
 	}
 }

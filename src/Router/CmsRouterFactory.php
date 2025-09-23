@@ -10,6 +10,7 @@ use App\Model\Web\WebData;
 use Nette\Application\BadRequestException;
 use Nette\Application\Routers\RouteList;
 use Nette\Caching\Cache;
+use Nette\Caching\Storage;
 use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Stepapo\Restful\Application\Routes\CrudRoute;
@@ -19,13 +20,16 @@ use Stepapo\Utils\Service;
 final class CmsRouterFactory implements Service
 {
 	private array $setup;
+	private Cache $cache;
 
 
 	public function __construct(
 		private DataModel $dataModel,
-		private Cache $cache,
+		private Storage $storage,
 		private IRequest $request,
-	) {}
+	) {
+		$this->cache = new Cache($this->storage, 'cms');
+	}
 
 
 	public function create(): RouteList

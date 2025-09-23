@@ -30,7 +30,7 @@ trait CorePathRepository
 		$p = $p . ($num > 1 ? '-' . $num : '');
 		$filter = [
 			'path' => $p,
-			'pageTranslation->page->web' => $web,
+			'web' => $web,
 			'pageTranslation->language' => $language
 		];
 		$filter['active'] = true;
