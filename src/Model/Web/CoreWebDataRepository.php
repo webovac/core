@@ -29,7 +29,7 @@ trait CoreWebDataRepository
 	 */
 	public function buildCache(): void
 	{
-		if (isset($this->collection)) {
+		if ($this->isReady()) {
 			return;
 		}
 		$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
@@ -55,6 +55,7 @@ trait CoreWebDataRepository
 			$this->cacheItem($key, $item);
 			$this->addItemToCollection($key, $item);
 		}
+		$this->setReady();
 	}
 
 

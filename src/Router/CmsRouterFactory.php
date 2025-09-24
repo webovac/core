@@ -48,7 +48,7 @@ final class CmsRouterFactory implements Service
 					mask: $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
 					metadata: $webData->getRouteMetadata('Manifest', $languageData->shortcut),
 				);
-				if (in_array($apiModuleData->id, $webData->modules, true)) {
+				if ($apiModuleData && in_array($apiModuleData->id, $webData->modules, true)) {
 					$routeList->addRoute(
 						mask: $webData->getAuthorizationRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
 						metadata: $webData->getRouteMetadata('Authorization', $languageData->shortcut, 'authorize')
