@@ -42,19 +42,7 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private IBreadcrumbsControl $breadcrumbs,
 		private IGalleryControl $gallery,
 		private IDocumentsControl $documents,
-		private MigrateCommand $command,
 	) {}
-
-
-	public function handleReset(): void
-	{
-		$_SERVER['argv'][] = 'a';
-		$_SERVER['argv'][] = '--reset';
-		$this->command->run();
-		ob_clean();
-		$this->presenter->flashMessage('Obnoveno', 'success');
-		$this->presenter->redirect('this');
-	}
 
 
 	public function createComponentMenu(): MenuControl
