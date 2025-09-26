@@ -79,7 +79,6 @@ class MenuControl extends BaseControl
 				$pageDatas = array_merge($pageDatas, (array) $homeChildPageDatas);
 			}
 		}
-
 		$this->template->pageDatas = new Collection($pageDatas);
 		$this->template->homePageData = $homePage;
 		$this->template->dataModel = $this->dataModel;
@@ -119,12 +118,12 @@ class MenuControl extends BaseControl
 		$this->template->wwwDir = $this->dir->getWwwDir();
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
 		$this->template->pageActivator = $this->pageActivator;
-//		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($this->webData, $this->layoutData, $this->languageData) {
-//			$checkActive = $pageData->targetAnchor ? false : ($pageData->targetPage
-//				? $pageData->targetPage !== $this->webData->homePage
-//				: $pageData->id !== $this->webData->homePage);
-//			$this->menuItemRenderer->render('primary', $this, $this->webData, $pageData, $this->layoutData, $this->languageData, $checkActive, $this->entity, $linkedEntity);
-//		});
+		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
+			$checkActive = !$pageData->targetAnchor && ($pageData->targetPage
+				? $pageData->targetPage !== $this->webData->homePage
+				: $pageData->id !== $this->webData->homePage);
+			$this->menuItemRenderer->render('primary', $this, $this->webData, $pageData, $this->layoutData, $this->languageData, $checkActive, $this->entity, $linkedEntity);
+		});
 		$this->template->renderFile($this->moduleClass, MenuControl::class, $this->templateName);
 	}
 
@@ -166,7 +165,7 @@ class MenuControl extends BaseControl
 		return 'menu-item' . ($pageData->style ? ' btn btn-subtle-' . $pageData->style : '')
 			. ((!$pageData->targetPath && !$pageData->targetAnchor && ($pageData->id === $this->presenter->pageData->id || $pageData->targetPage === $this->presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $this->entity))
 			|| ($checkActive && $this->isActive($pageData, $linkedEntity, $pageData->targetPath))
-			|| ($checkActive && $pageData->targetPage && $this->isActive($linkedEntity, $this->targetPath)) ? ' active' : '')
+			|| ($checkActive && $pageData->targetPage && $this->isActive($pageData, $linkedEntity, $this->targetPath)) ? ' active' : '')
 			;
 	}
 

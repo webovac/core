@@ -25,7 +25,7 @@
 						{include auth.latte}
 					{/}
 				{/}
-				{* *}
+				{*
 				{if $p->type === App\Model\Page\Page::TYPE_SEPARATOR}
 					<hr>
 				{else}
@@ -40,8 +40,8 @@
 						</span>
 					</a>
 				{/}
-				{* *}
-{*				{renderMenuItem($p)}*}
+				*}
+				{renderMenuItem($p)}
 			{/}
 			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') && $cmsUser->isLoggedIn()}
 				<hr>
