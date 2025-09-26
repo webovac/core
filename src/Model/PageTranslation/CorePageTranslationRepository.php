@@ -53,26 +53,28 @@ trait CorePageTranslationRepository
 			$path = implode('/', $parts);
 			$web = $pageTranslation->page->web ?: $web;
 			$activePath = $pageTranslation->getActivePath($web);
-			if (!str_contains($path, '<')) {
-				$path = $this->getModel()->pathRepository->getPath($path, $web, $pageTranslation->language, $activePath);
-			}
-			if ($pageTranslation->page->type !== Page::TYPE_MODULE && $activePath?->path !== $path) {
-				if ($activePath) {
-					$otherPaths = $this->getModel()->pathRepository->findBy(['web' => $web, 'path' => $activePath->path, 'active' => false]);
-					foreach ($otherPaths as $otherPath) {
-						$this->getModel()->remove($otherPath);
-					}
-					$activePath->active = false;
-					$this->getModel()->persist($activePath);
+			if ($pageTranslation->page->type !== Page::TYPE_MODULE) {
+				if (!str_contains($path, '<')) {
+					$path = $this->getModel()->pathRepository->getPath($path, $web, $pageTranslation->language, $activePath);
 				}
-				$existingPath = $this->getModel()->pathRepository->getBy(['web' => $web, 'path' => $path, 'active' => false]);
-				$newPath = $existingPath ?: new Path;
-				$newPath->pageTranslation = $pageTranslation;
-				$newPath->web = $web;
-				$newPath->path = $path;
-				$newPath->active = true;
-				$newPath->updatedAt = $existingPath ? new \DateTimeImmutable : null;
-				$this->getModel()->persist($newPath);
+				if ($activePath?->path !== $path) {
+					if ($activePath) {
+						$otherPaths = $this->getModel()->pathRepository->findBy(['web' => $web, 'path' => $activePath->path, 'active' => false]);
+						foreach ($otherPaths as $otherPath) {
+							$this->getModel()->remove($otherPath);
+						}
+						$activePath->active = false;
+						$this->getModel()->persist($activePath);
+					}
+					$existingPath = $this->getModel()->pathRepository->getBy(['web' => $web, 'path' => $path, 'active' => false]);
+					$newPath = $existingPath ?: new Path;
+					$newPath->pageTranslation = $pageTranslation;
+					$newPath->web = $web;
+					$newPath->path = $path;
+					$newPath->active = true;
+					$newPath->updatedAt = $existingPath ? new \DateTimeImmutable : null;
+					$this->getModel()->persist($newPath);
+				}
 			}
 			$this->rebuildPaths(
 				$web,

@@ -29,9 +29,6 @@ trait CoreWebDataRepository
 	 */
 	public function buildCache(): void
 	{
-		if ($this->isReady()) {
-			return;
-		}
 		$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
 		$pageDatas = $this->pageDataRepository->getCollection();
 		$allPages = [];
