@@ -5,8 +5,8 @@ identity:
 asserts:
 	httpCode: 404
 requests:
-	wrong host:
-		path: //tst
+#	wrong host:
+#		path: //tst # TODO konfigurovatelny error presenter RequestTester:155
 #	wrong path:
 #		path: //test/webz # netestovatelne, 404 vyhazuje Router
 	wrong id:

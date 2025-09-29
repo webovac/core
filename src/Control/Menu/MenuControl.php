@@ -116,7 +116,7 @@ class MenuControl extends BaseControl
 		$this->template->entity = $this->entity;
 		$this->template->title = $this->webData->getCollection('translations')->getByKey($this->languageData->id)->title;
 		$this->template->wwwDir = $this->dir->getWwwDir();
-		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
+		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Core:Error4xx';
 		$this->template->pageActivator = $this->pageActivator;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
 			$checkActive = !$pageData->targetAnchor && ($pageData->targetPage
@@ -143,7 +143,7 @@ class MenuControl extends BaseControl
 			$path = $p->hasPath && isset($this->presenter->path) ? ($this->presenter->path . '/' . Arrays::first($e->getParameters())) : '';
 		}
 		return match($p->type) {
-			Page::TYPE_SIGNAL => $this->presenter->getName() === 'Error4xx' ? null : $this->presenter->link('//' . $p->targetSignal . '!'),
+			Page::TYPE_SIGNAL => $this->presenter->getName() === 'Core:Error4xx' ? null : $this->presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
 			Page::TYPE_PAGE => $this->presenter->link(
 				'//Home:' . ($anchor ? '#' . $anchor : ''),

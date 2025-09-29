@@ -146,7 +146,7 @@ trait CorePageData
 			$path = $p->hasPath && isset($presenter->path) ? ($presenter->path . '/' . Arrays::first($e->getParameters())) : '';
 		}
 		return match($p->type) {
-			Page::TYPE_SIGNAL => $presenter->getName() === 'Error4xx' ? null : $presenter->link('//' . $p->targetSignal . '!'),
+			Page::TYPE_SIGNAL => $presenter->getName() === 'Core:Error4xx' ? null : $presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
 			Page::TYPE_PAGE => $presenter->link('//Home:' . ($anchor ? '#' . $anchor : ''), [
 					'pageName' => $p->name,

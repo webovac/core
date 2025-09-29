@@ -63,7 +63,7 @@ class SidePanelControl extends BaseControl
 			$this->template->availableTranslations[$translationData->language] = $translationData->language;
 		}
 		$this->template->entity = $this->entity;
-		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Error4xx';
+		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Core:Error4xx';
 		$adminPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Admin:Home');
 		$showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser, $webData) ?: false;
 		$this->template->showAdmin = $showAdmin;

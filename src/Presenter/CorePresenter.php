@@ -357,7 +357,7 @@ trait CorePresenter
 	private function getMetaUrl(): string
 	{
 		$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
-		return $this->request->getPresenterName() === 'Error4xx'
+		return $this->request->getPresenterName() === 'Core:Error4xx'
 			? $this->link('//Home:default', [
 				'pageName' => $homePage->name,
 				'host' => $this->host,
@@ -393,7 +393,7 @@ trait CorePresenter
 
 	private function render(): void
 	{
-		if ($this->request->getPresenterName() === 'Error4xx') {
+		if ($this->request->getPresenterName() === 'Core:Error4xx') {
 			$file = __DIR__ . "/Error4xx/{$this->getParameter('exception')->getCode()}.latte";
 			$main = file_get_contents(is_file($file) ? $file : __DIR__ . '/4xx.latte');
 		} else {

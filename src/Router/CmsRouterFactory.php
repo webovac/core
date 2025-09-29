@@ -40,22 +40,22 @@ final class CmsRouterFactory implements Service
 		foreach ($webDatas as $webData) {
 			$routeList->addRoute(
 				mask: $webData->getStyleRouteMask(),
-				metadata: $webData->getRouteMetadata('Style'),
+				metadata: $webData->getRouteMetadata('Core:Style'),
 			);
 			foreach ($webData->translations as $webTranslationData) {
 				$languageData = $this->dataModel->getLanguageData($webTranslationData->language);
 				$routeList->addRoute(
 					mask: $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-					metadata: $webData->getRouteMetadata('Manifest', $languageData->shortcut),
+					metadata: $webData->getRouteMetadata('Core:Manifest', $languageData->shortcut),
 				);
 				if ($apiModuleData && in_array($apiModuleData->id, $webData->modules, true)) {
 					$routeList->addRoute(
 						mask: $webData->getAuthorizationRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-						metadata: $webData->getRouteMetadata('Authorization', $languageData->shortcut, 'authorize')
+						metadata: $webData->getRouteMetadata('Api:Authorization', $languageData->shortcut, 'authorize')
 					);
 					$routeList->add(new CrudRoute(
 						mask: $webData->getApiRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-						metadata: $webData->getRouteMetadata('Api', $languageData->shortcut),
+						metadata: $webData->getRouteMetadata('Api:Home', $languageData->shortcut),
 					));
 				}
 			}
@@ -65,7 +65,7 @@ final class CmsRouterFactory implements Service
 			$routeList->addRoute(
 				mask: $webData->getPageRouteMask(),
 				metadata: [
-					'presenter' => 'Home',
+					'presenter' => 'Core:Home',
 					'action' => 'default',
 					'host' => $webData->host,
 					'basePath' => $webData->basePath,
@@ -127,7 +127,7 @@ final class CmsRouterFactory implements Service
 			throw new BadRequestException;
 		}
 		$return = [
-			'presenter' => 'Home',
+			'presenter' => 'Core:Home',
 			'action' => 'default',
 			'host' => $pageIn['host'],
 			'basePath' => $pageIn['basePath'],
@@ -183,7 +183,7 @@ final class CmsRouterFactory implements Service
 			$p = implode('/', $p);
 		}
 		$return = [
-			'presenter' => 'Home',
+			'presenter' => 'Core:Home',
 			'action' => 'default',
 			'host' => $pageOut['host'],
 			'basePath' => $pageOut['basePath'],
@@ -257,8 +257,6 @@ final class CmsRouterFactory implements Service
 								$l = $p->defaultLanguage === $languageData->id ? null : $languageData->shortcut;
 								$fullPath = implode('/', array_filter([$l, $f]));
 								$setup['mapIn'][$base][$fullPath] = [
-									'presenter' => 'Home',
-									'action' => 'default',
 									'host' => $p->host,
 									'basePath' => $p->basePath,
 									'pageName' => $p->name,
@@ -270,8 +268,6 @@ final class CmsRouterFactory implements Service
 								];
 								if ($path->active) {
 									$setup['mapOut'][$base][$languageData->shortcut][$p->name] = [
-										'presenter' => 'Home',
-										'action' => 'default',
 										'host' => $p->host,
 										'basePath' => $p->basePath,
 										'p' => $fullPath,
