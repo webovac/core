@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webovac\Core\Command;
 
 use App\Model\Deploy\Deploy;
