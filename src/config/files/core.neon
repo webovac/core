@@ -32,7 +32,6 @@ modules:
 					Webovac\Core\Model\HasTranslations:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
-					Stepapo\Model\Orm\InternalRepository:
 			ModuleTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
@@ -50,6 +49,8 @@ modules:
 				entityImplements:
 					Webovac\Core\Model\Translation:
 			Preference:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Parameter:
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
