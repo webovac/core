@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\DI;
 
-use App\Model\Orm;
+use Build\Model\Orm;
 use Contributte\FormMultiplier\DI\MultiplierExtension;
 use Nette\DI\Extensions\DecoratorExtension;
 use Nette\DI\Extensions\SearchExtension;
@@ -19,7 +19,6 @@ use Stepapo\Utils\DI\StepapoExtension;
 use Stepapo\Utils\Injectable;
 use Stepapo\Utils\Service;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
-use Webovac\Core\Lib\CmsCache;
 use Webovac\Core\Lib\KeyProvider;
 use Webovac\Core\Lib\ModeChecker;
 use Webovac\Core\Lib\NeonHandler;
@@ -199,8 +198,10 @@ class CoreExtension extends StepapoExtension
 	{
 		$rootDir = $this->getContainerBuilder()->parameters['rootDir'];
 		$appDir = "$rootDir/app";
+		$buildDir = "$rootDir/build";
 		return [
 			['in' => $appDir, 'implements' => Service::class],
+			['in' => $buildDir, 'implements' => Service::class],
 		];
 	}
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter\Style;
 
-use App\Control\BaseTemplate;
-use App\Model\Layout\LayoutData;
-use App\Model\Theme\ThemeData;
-use App\Model\Web\WebData;
+use Build\Control\BaseTemplate;
+use Build\Model\Layout\LayoutData;
+use Build\Model\Theme\ThemeData;
+use Build\Model\Web\WebData;
 
 
 class StyleTemplate extends BaseTemplate

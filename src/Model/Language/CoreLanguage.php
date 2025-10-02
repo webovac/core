@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Language;
 
-use App\Model\Language\LanguageData;
-use App\Model\LanguageTranslation\LanguageTranslation;
-use App\Model\Log\Log;
+use Build\Model\Language\LanguageData;
+use Build\Model\LanguageTranslation\LanguageTranslation;
+use Build\Model\Log\Log;
 use Nette\DI\Attributes\Inject;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;

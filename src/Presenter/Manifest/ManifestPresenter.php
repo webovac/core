@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter\Manifest;
 
-use App\Model\DataModel;
-use App\Model\Web\WebData;
-use App\Model\WebTranslation\WebTranslationData;
+use Build\Model\DataModel;
+use Build\Model\Web\WebData;
+use Build\Model\WebTranslation\WebTranslationData;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Attributes\Inject;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\PageTranslation;
 
-use App\Model\Language\Language;
-use App\Model\Module\Module;
-use App\Model\Page\Page;
-use App\Model\PageTranslation\PageTranslation;
-use App\Model\PageTranslation\PageTranslationData;
-use App\Model\Path\Path;
-use App\Model\Web\Web;
-use App\Model\Web\WebData;
+use Build\Model\Language\Language;
+use Build\Model\Module\Module;
+use Build\Model\Page\Page;
+use Build\Model\PageTranslation\PageTranslation;
+use Build\Model\PageTranslation\PageTranslationData;
+use Build\Model\Path\Path;
+use Build\Model\Web\Web;
+use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
 
 

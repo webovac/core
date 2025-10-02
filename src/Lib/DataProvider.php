@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
-use App\Model\Deploy\DeployData;
-use App\Model\Language\LanguageData;
-use App\Model\Layout\LayoutData;
-use App\Model\Page\PageData;
-use App\Model\Theme\ThemeData;
-use App\Model\Web\WebData;
+use Build\Model\Deploy\DeployData;
+use Build\Model\Language\LanguageData;
+use Build\Model\Layout\LayoutData;
+use Build\Model\Page\PageData;
+use Build\Model\Theme\ThemeData;
+use Build\Model\Web\WebData;
 use Stepapo\Utils\Service;
 
 

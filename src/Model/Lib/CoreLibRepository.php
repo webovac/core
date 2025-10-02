@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Lib;
 
-use App\Model\Lib\Lib;
-use App\Model\Lib\LibData;
+use Build\Model\Lib\Lib;
+use Build\Model\Lib\LibData;
 
 
 trait CoreLibRepository

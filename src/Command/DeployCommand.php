@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Command;
 
-use App\Model\Deploy\Deploy;
-use App\Model\Orm;
+use Build\Model\Deploy\Deploy;
+use Build\Model\Orm;
 use Stepapo\Utils\Command\Command;
 
 

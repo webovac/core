@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
-use App\Model\Asset\AssetData;
-use App\Model\DataModel;
-use App\Model\File\FileData;
-use App\Model\Language\LanguageData;
-use App\Model\Page\Page;
-use App\Model\Page\PageData;
-use App\Model\PageTranslation\PageTranslationData;
-use App\Model\Parameter\ParameterData;
-use App\Model\Signal\SignalData;
-use App\Model\Web\WebData;
+use Build\Model\Asset\AssetData;
+use Build\Model\DataModel;
+use Build\Model\File\FileData;
+use Build\Model\Language\LanguageData;
+use Build\Model\Page\Page;
+use Build\Model\Page\PageData;
+use Build\Model\PageTranslation\PageTranslationData;
+use Build\Model\Parameter\ParameterData;
+use Build\Model\Signal\SignalData;
+use Build\Model\Web\WebData;
 use DateTimeInterface;
 use Nette\Application\IPresenter;
 use Nette\Utils\Arrays;

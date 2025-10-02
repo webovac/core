@@ -19,12 +19,12 @@ trait LinkableTrait
 	}
 
 
-	public function redirectToDetail(Component $component): string
+	public function redirectToDetail(Component $component): void
 	{
 		if (!$this instanceof Linkable) {
 			throw new InvalidArgumentException("Object of class '" . $this::class . "' does not implement interface '" . Linkable::class . "'.");
 		}
-		return $component->redirect('//Home:default', [$this->getPageName(), $this->getParameters()]);
+		$component->redirect('//Home:default', [$this->getPageName(), $this->getParameters()]);
 	}
 
 

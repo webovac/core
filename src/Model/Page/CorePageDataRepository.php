@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
-use App\Model\Asset\Asset;
-use App\Model\Module\Module;
-use App\Model\Page\Page;
-use App\Model\Page\PageData;
+use Build\Model\Asset\Asset;
+use Build\Model\Module\Module;
+use Build\Model\Page\Page;
+use Build\Model\Page\PageData;
 use Nette\Caching\Cache;
 use ReflectionException;
 use Stepapo\Model\Data\Collection;

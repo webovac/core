@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Person;
 
-use App\Model\Person\Person;
-use App\Model\Person\PersonData;
-use App\Model\Web\WebData;
+use Build\Model\Person\Person;
+use Build\Model\Person\PersonData;
+use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
 
 
@@ -14,6 +14,9 @@ trait CorePersonRepository
 {
 	public function getByData(PersonData|string $data): ?Person
 	{
+		if (method_exists($this, 'getByDataCustom')) {
+			return $this->getByDataCustom($data);
+		}
 		return $this->getBy(['email' => $data instanceof PersonData ? $data->email : $data]);
 	}
 

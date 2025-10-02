@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Lib;
 
-use App\Model\Asset\AssetData;
+use Build\Model\Asset\AssetData;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\KeyProperty;
 

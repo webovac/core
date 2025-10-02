@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter\Home;
 
-use App\Presenter\BasePresenterTemplate;
+use Build\Presenter\BasePresenterTemplate;
 
 
 class HomeTemplate extends BasePresenterTemplate

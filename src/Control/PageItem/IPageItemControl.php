@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\PageItem;
 
-use App\Model\Page\Page;
+use Build\Model\Page\Page;
 use Stepapo\Utils\Factory;
 use Webovac\Core\Core;
 

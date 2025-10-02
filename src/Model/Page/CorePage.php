@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
-use App\Model\Language\LanguageData;
-use App\Model\Log\Log;
-use App\Model\Page\Page;
-use App\Model\PageTranslation\PageTranslation;
-use App\Model\Web\WebData;
+use Build\Model\Language\LanguageData;
+use Build\Model\Log\Log;
+use Build\Model\Page\Page;
+use Build\Model\PageTranslation\PageTranslation;
+use Build\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;

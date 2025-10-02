@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Log;
 
-use App\Model\Log\Log;
+use Build\Model\Log\Log;
 
 
 /**

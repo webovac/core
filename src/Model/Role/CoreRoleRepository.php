@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Role;
 
-use App\Model\Role\Role;
-use App\Model\Role\RoleData;
+use Build\Model\Role\Role;
+use Build\Model\Role\RoleData;
 
 
 trait CoreRoleRepository

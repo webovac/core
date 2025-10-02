@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Text;
 
-use App\Model\Language\LanguageData;
-use App\Model\TextTranslation\TextTranslation;
+use Build\Model\Language\LanguageData;
+use Build\Model\TextTranslation\TextTranslation;
 
 
 trait CoreText

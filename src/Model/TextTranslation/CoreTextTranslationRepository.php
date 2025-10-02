@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\TextTranslation;
 
-use App\Model\Text\Text;
-use App\Model\TextTranslation\TextTranslation;
-use App\Model\TextTranslation\TextTranslationData;
+use Build\Model\Text\Text;
+use Build\Model\TextTranslation\TextTranslation;
+use Build\Model\TextTranslation\TextTranslationData;
 
 
 trait CoreTextTranslationRepository

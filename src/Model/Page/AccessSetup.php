@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
-use App\Model\Page\Page;
-use App\Model\Person\Person;
-use App\Model\Web\WebData;
+use Build\Model\Page\Page;
+use Build\Model\Person\Person;
+use Build\Model\Web\WebData;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsUser;

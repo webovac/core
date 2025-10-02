@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Module;
 
-use App\Model\Module\Module;
-use App\Model\Module\ModuleData;
-use App\Model\Page\PageRepository;
-use App\Model\Web\WebData;
+use Build\Model\Module\Module;
+use Build\Model\Module\ModuleData;
+use Build\Model\Page\PageRepository;
+use Build\Model\Web\WebData;
 use Nette\InvalidArgumentException;
 use Stepapo\Model\Data\Item;
 use Webovac\Core\Model\CmsEntity;

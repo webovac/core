@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
-use App\Model\DataModel;
-use App\Model\Language\LanguageData;
-use App\Model\Layout\LayoutData;
-use App\Model\Page\PageData;
-use App\Model\Web\WebData;
+use Build\Model\DataModel;
+use Build\Model\Language\LanguageData;
+use Build\Model\Layout\LayoutData;
+use Build\Model\Page\PageData;
+use Build\Model\Web\WebData;
 use Nette\Application\UI\Control;
 use Stepapo\Utils\Service;
 use Webovac\Core\Control\MenuItem\MenuItemTemplate;

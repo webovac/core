@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Person;
 
-use App\Model\Log\Log;
-use App\Model\Web\WebData;
+use Build\Model\Log\Log;
+use Build\Model\Web\WebData;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 

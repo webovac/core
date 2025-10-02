@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\PageTranslation;
 
-use App\Model\Path\Path;
-use App\Model\Web\Web;
+use Build\Model\Path\Path;
+use Build\Model\Web\Web;
 
 
 trait CorePageTranslation

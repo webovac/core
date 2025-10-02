@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter;
 
-use App\Model\Deploy\DeployData;
-use App\Model\Language\LanguageData;
-use App\Model\Page\PageData;
-use App\Model\PageTranslation\PageTranslation;
-use App\Model\PageTranslation\PageTranslationData;
-use App\Model\Web\WebData;
-use App\Model\WebTranslation\WebTranslationData;
+use Build\Model\Deploy\DeployData;
+use Build\Model\Language\LanguageData;
+use Build\Model\Page\PageData;
+use Build\Model\PageTranslation\PageTranslation;
+use Build\Model\PageTranslation\PageTranslationData;
+use Build\Model\Web\WebData;
+use Build\Model\WebTranslation\WebTranslationData;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;
 
@@ -37,4 +37,5 @@ trait CorePresenterTemplate
 	public string $metaType;
 	public string $metaUrl;
 	public array $bodyClasses;
+	public bool $emptyNavigation;
 }

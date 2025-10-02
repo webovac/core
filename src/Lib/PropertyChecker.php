@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
-use App\Model\Orm;
+use Build\Model\Orm;
 use Nextras\Orm\Entity\Reflection\PropertyMetadata;
 use Stepapo\Model\Orm\InternalProperty;
 use Stepapo\Model\Orm\PrivateProperty;

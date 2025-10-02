@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Breadcrumbs;
 
-use App\Control\BaseTemplate;
-use App\Model\Web\WebData;
+use Build\Control\BaseTemplate;
+use Build\Model\Web\WebData;
 
 
 class BreadcrumbsTemplate extends BaseTemplate

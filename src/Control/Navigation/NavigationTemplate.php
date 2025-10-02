@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Navigation;
 
-use App\Control\BaseTemplate;
-use App\Model\DataModel;
-use App\Model\Layout\LayoutData;
-use App\Model\Page\PageData;
-use App\Model\Web\WebData;
+use Build\Control\BaseTemplate;
+use Build\Model\DataModel;
+use Build\Model\Layout\LayoutData;
+use Build\Model\Page\PageData;
+use Build\Model\Web\WebData;
 use Nextras\Orm\Entity\IEntity;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
-use App\Model\Orm;
-use App\Model\Person\Person;
+use Build\Model\Orm;
+use Build\Model\Person\Person;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IIdentity;
 use Nette\Security\User;

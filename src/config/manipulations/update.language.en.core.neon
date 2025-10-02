@@ -1,4 +1,4 @@
-class: App\Model\Language\LanguageData
+class: Build\Model\Language\LanguageData
 iteration: 2
 items:
 	en:

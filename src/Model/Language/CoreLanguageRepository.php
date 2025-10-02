@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Language;
 
-use App\Model\Language\Language;
-use App\Model\Language\LanguageData;
-use App\Model\Web\WebData;
+use Build\Model\Language\Language;
+use Build\Model\Language\LanguageData;
+use Build\Model\Web\WebData;
 
 
 trait CoreLanguageRepository

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Documents;
 
-use App\Model\File\File;
-use App\Model\Orm;
+use Build\Model\File\File;
+use Build\Model\Orm;
 use Nette\Application\UI\Multiplier;
 use Nextras\Orm\Collection\ICollection;
 use ReflectionException;

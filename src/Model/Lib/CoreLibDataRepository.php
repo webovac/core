@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Lib;
 
-use App\Model\Lib\LibData;
+use Build\Model\Lib\LibData;
 use Nette\Caching\Cache;
 
 

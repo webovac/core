@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
-use App\Model\Language\LanguageData;
-use App\Model\Page\PageData;
+use Build\Model\Language\LanguageData;
+use Build\Model\Page\PageData;
 use Nette\Application\UI\Component;
 
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Documents;
 
-use App\Control\BaseTemplate;
-use App\Model\File\File;
-use App\Model\Language\LanguageData;
+use Build\Control\BaseTemplate;
+use Build\Model\File\File;
+use Build\Model\Language\LanguageData;
 
 
 class DocumentsTemplate extends BaseTemplate

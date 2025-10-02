@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Command;
 
-use App\Model\Orm;
+use Build\Model\Orm;
 use Nette\Utils\Finder;
 use Nextras\Migrations\Drivers\PgSqlDriver;
 use Nextras\Migrations\Extensions\SqlHandler;

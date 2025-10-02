@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Module;
 
-use App\Model\Language\LanguageData;
-use App\Model\Log\Log;
-use App\Model\ModuleTranslation\ModuleTranslation;
-use App\Model\Page\Page;
+use Build\Model\Language\LanguageData;
+use Build\Model\Log\Log;
+use Build\Model\ModuleTranslation\ModuleTranslation;
+use Build\Model\Page\Page;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\IndexDefinition;

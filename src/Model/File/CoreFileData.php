@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\File;
 
-use App\Model\File\File;
-use App\Model\FileTranslation\FileTranslationData;
+use Build\Model\File\File;
+use Build\Model\FileTranslation\FileTranslationData;
 use Nette\Http\FileUpload;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DontCache;

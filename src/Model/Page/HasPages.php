@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
-use App\Model\Page\Page;
+use Build\Model\Page\Page;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 

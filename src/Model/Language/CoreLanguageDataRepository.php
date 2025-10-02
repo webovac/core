@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Language;
 
-use App\Model\Language\LanguageData;
+use Build\Model\Language\LanguageData;
 use Nette\Caching\Cache;
 
 

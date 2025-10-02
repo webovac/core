@@ -88,7 +88,7 @@ class BookRepository extends CmsRepository
 ```
 
 ```html
-{varType App\Model\Book\Book $book}
+{varType Build\Model\Book\Book $book}
 <a href="{$book->getLink($presenter)}">{$book->title}</a>
 ```
 
@@ -106,7 +106,7 @@ class Book extends CmsEntity implements Renderable
 ```
 
 ```html
-{varType App\Model\Book\Book $book}
+{varType Build\Model\Book\Book $book}
 {$book->render(App\Module\Books\Books::class, 'default')}
 ```
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\WebTranslation;
 
-use App\Model\Web\Web;
-use App\Model\WebTranslation\WebTranslation;
-use App\Model\WebTranslation\WebTranslationData;
+use Build\Model\Web\Web;
+use Build\Model\WebTranslation\WebTranslation;
+use Build\Model\WebTranslation\WebTranslationData;
 
 
 trait CoreWebTranslationRepository

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Slug;
 
 
-use App\Model\Web\WebData;
+use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
 
 trait CoreSlugRepository

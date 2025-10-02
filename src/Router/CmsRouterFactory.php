@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Router;
 
-use App\Model\DataModel;
-use App\Model\Page\Page;
-use App\Model\Web\WebData;
+use Build\Model\DataModel;
+use Build\Model\Page\Page;
+use Build\Model\Web\WebData;
 use Nette\Application\BadRequestException;
 use Nette\Application\Routers\RouteList;
 use Nette\Caching\Cache;

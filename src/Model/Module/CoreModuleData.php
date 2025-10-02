@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Module;
 
-use App\Model\Module\ModuleData;
-use App\Model\ModuleTranslation\ModuleTranslationData;
-use App\Model\Page\PageData;
+use Build\Model\Module\ModuleData;
+use Build\Model\ModuleTranslation\ModuleTranslationData;
+use Build\Model\Page\PageData;
 use DateTimeInterface;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;

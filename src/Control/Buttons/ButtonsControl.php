@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Buttons;
 
-use App\Model\DataModel;
-use App\Model\Page\PageData;
+use Build\Model\DataModel;
+use Build\Model\Page\PageData;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\MenuItem;
 
-use App\Model\DataModel;
-use App\Model\Language\LanguageData;
-use App\Model\Layout\LayoutData;
-use App\Model\Page\PageData;
-use App\Model\PageTranslation\PageTranslationData;
-use App\Model\Web\WebData;
+use Build\Model\DataModel;
+use Build\Model\Language\LanguageData;
+use Build\Model\Layout\LayoutData;
+use Build\Model\Page\PageData;
+use Build\Model\PageTranslation\PageTranslationData;
+use Build\Model\Web\WebData;
 use Nette\Application\UI\Presenter;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;

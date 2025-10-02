@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Preference;
 
-use App\Model\Person\Person;
-use App\Model\Preference\Preference;
-use App\Model\Web\WebData;
-use App\Model\Web\WebRepository;
+use Build\Model\Person\Person;
+use Build\Model\Preference\Preference;
+use Build\Model\Web\WebData;
+use Build\Model\Web\WebRepository;
 
 
 trait CorePreferenceRepository

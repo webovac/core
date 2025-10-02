@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\SidePanel;
 
-use App\Control\BaseTemplate;
-use App\Model\DataModel;
-use App\Model\Language\LanguageData;
-use App\Model\Layout\LayoutData;
-use App\Model\Module\ModuleData;
-use App\Model\Page\PageData;
-use App\Model\Theme\ThemeData;
-use App\Model\Web\WebData;
+use Build\Control\BaseTemplate;
+use Build\Model\DataModel;
+use Build\Model\Language\LanguageData;
+use Build\Model\Layout\LayoutData;
+use Build\Model\Module\ModuleData;
+use Build\Model\Page\PageData;
+use Build\Model\Theme\ThemeData;
+use Build\Model\Web\WebData;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;
 

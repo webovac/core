@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Text;
 
-use App\Model\Text\Text;
-use App\Model\Text\TextData;
+use Build\Model\Text\Text;
+use Build\Model\Text\TextData;
 
 
 trait CoreTextRepository

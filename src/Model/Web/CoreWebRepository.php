@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Web;
 
-use App\Model\File\FileData;
-use App\Model\File\FileRepository;
-use App\Model\Module\ModuleRepository;
-use App\Model\Page\Page;
-use App\Model\Page\PageData;
-use App\Model\Page\PageRepository;
-use App\Model\PageTranslation\PageTranslation;
-use App\Model\PageTranslation\PageTranslationData;
-use App\Model\Person\Person;
-use App\Model\Web\Web;
-use App\Model\Web\WebData;
+use Build\Model\File\FileData;
+use Build\Model\File\FileRepository;
+use Build\Model\Module\ModuleRepository;
+use Build\Model\Page\Page;
+use Build\Model\Page\PageData;
+use Build\Model\Page\PageRepository;
+use Build\Model\PageTranslation\PageTranslation;
+use Build\Model\PageTranslation\PageTranslationData;
+use Build\Model\Person\Person;
+use Build\Model\Web\Web;
+use Build\Model\Web\WebData;
 use Nette\Http\FileUpload;
 use Nette\InvalidArgumentException;
 use Nette\Utils\Image;

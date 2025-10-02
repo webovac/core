@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Deploy;
 
-use App\Model\Deploy\DeployData;
+use Build\Model\Deploy\DeployData;
 use Nextras\Orm\Collection\ICollection;
 
 

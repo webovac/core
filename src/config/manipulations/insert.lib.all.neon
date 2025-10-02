@@ -1,4 +1,4 @@
-class: App\Model\Lib\LibData
+class: Build\Model\Lib\LibData
 items:
 	editor:
 		assets:

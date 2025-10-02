@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\File;
 
-use App\Model\File\File;
-use App\Model\FileTranslation\FileTranslation;
-use App\Model\Language\LanguageData;
+use Build\Model\File\File;
+use Build\Model\FileTranslation\FileTranslation;
+use Build\Model\Language\LanguageData;
 
 
 trait CoreFile

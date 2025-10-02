@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
-use App\Model\Deploy\DeployData;
-use App\Model\Deploy\DeployDataRepository;
-use App\Model\Language\LanguageData;
-use App\Model\Language\LanguageDataRepository;
-use App\Model\Module\ModuleData;
-use App\Model\Module\ModuleDataRepository;
-use App\Model\Page\PageData;
-use App\Model\Page\PageDataRepository;
-use App\Model\Person\PersonDataRepository;
-use App\Model\Role\RoleDataRepository;
-use App\Model\Text\TextDataRepository;
-use App\Model\TextTranslation\TextTranslationData;
-use App\Model\Web\WebData;
-use App\Model\Web\WebDataRepository;
+use Build\Model\Deploy\DeployData;
+use Build\Model\Deploy\DeployDataRepository;
+use Build\Model\Language\LanguageData;
+use Build\Model\Language\LanguageDataRepository;
+use Build\Model\Module\ModuleData;
+use Build\Model\Module\ModuleDataRepository;
+use Build\Model\Page\PageData;
+use Build\Model\Page\PageDataRepository;
+use Build\Model\Person\PersonDataRepository;
+use Build\Model\Role\RoleDataRepository;
+use Build\Model\Text\TextDataRepository;
+use Build\Model\TextTranslation\TextTranslationData;
+use Build\Model\Web\WebData;
+use Build\Model\Web\WebDataRepository;
 use Nette\DI\Attributes\Inject;
 use Stepapo\Model\Data\Collection;
 

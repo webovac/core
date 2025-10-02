@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Path;
 
-use App\Model\Language\Language;
-use App\Model\PageTranslation\PageTranslation;
-use App\Model\Path\Path;
-use App\Model\Path\PathData;
-use App\Model\Web\Web;
-use App\Model\Web\WebData;
+use Build\Model\Language\Language;
+use Build\Model\PageTranslation\PageTranslation;
+use Build\Model\Path\Path;
+use Build\Model\Path\PathData;
+use Build\Model\Web\Web;
+use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
 
 

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\File;
 
-use App\Model\Article\Article;
-use App\Model\File\File;
-use App\Model\File\FileData;
-use App\Model\File\FileRepository;
-use App\Model\Page\Page;
-use App\Model\Web\Web;
-use App\Model\Web\WebData;
+use Build\Model\Article\Article;
+use Build\Model\File\File;
+use Build\Model\File\FileData;
+use Build\Model\File\FileRepository;
+use Build\Model\Page\Page;
+use Build\Model\Web\Web;
+use Build\Model\Web\WebData;
 use Choowx\RasterizeSvg\Svg;
 use Nette\Http\FileUpload;
 use Nette\InvalidArgumentException;

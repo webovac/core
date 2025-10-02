@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\SidePanel;
 
-use App\Model\DataModel;
-use App\Model\Theme\ThemeData;
+use Build\Model\DataModel;
+use Build\Model\Theme\ThemeData;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;

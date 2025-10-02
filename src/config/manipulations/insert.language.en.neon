@@ -1,4 +1,4 @@
-class: App\Model\Language\LanguageData
+class: Build\Model\Language\LanguageData
 skipDefaults: true
 items:
 	en:

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Web;
 
-use App\Model\DataModel;
-use App\Model\File\File;
-use App\Model\File\FileData;
-use App\Model\Page\Page;
-use App\Model\Page\PageData;
-use App\Model\Person\Person;
-use App\Model\Web\Web;
-use App\Model\WebTranslation\WebTranslationData;
+use Build\Model\DataModel;
+use Build\Model\File\File;
+use Build\Model\File\FileData;
+use Build\Model\Page\Page;
+use Build\Model\Page\PageData;
+use Build\Model\Person\Person;
+use Build\Model\Web\Web;
+use Build\Model\WebTranslation\WebTranslationData;
 use DateTimeInterface;
 use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Attribute\ArrayOfType;

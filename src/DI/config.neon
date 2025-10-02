@@ -1,8 +1,8 @@
 services:
-	webovac.core.dataModel: App\Model\DataModel
+	webovac.core.dataModel: Build\Model\DataModel
 	webovac.core.sqlHandler: Nextras\Migrations\Extensions\SqlHandler
 	webovac.core.dir: Webovac\Core\Lib\Dir(%rootDir%)
 	webovac.core.sidePanel: Webovac\Core\Control\SidePanel\ISidePanelControl
 	webovac.core.menu: Webovac\Core\Control\Menu\IMenuControl
-	latte.templateFactory: App\Lib\TemplateFactory
+	latte.templateFactory: Build\Lib\BaseTemplateFactory
 	routerFactory: Webovac\Core\Router\CmsRouterFactory

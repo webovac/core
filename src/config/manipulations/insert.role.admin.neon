@@ -1,4 +1,4 @@
-class: App\Model\Role\RoleData
+class: Build\Model\Role\RoleData
 items:
 	admin:
 		code: admin

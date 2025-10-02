@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter;
 
-use App\Model\DataModel;
-use App\Model\Deploy\DeployData;
-use App\Model\Language\LanguageData;
-use App\Model\Orm;
-use App\Model\Page\PageData;
-use App\Model\PageTranslation\PageTranslation;
-use App\Model\PageTranslation\PageTranslationData;
-use App\Model\Preference\Preference;
-use App\Model\Web\WebData;
-use App\Model\WebTranslation\WebTranslationData;
+use Build\Model\DataModel;
+use Build\Model\Deploy\DeployData;
+use Build\Model\Language\LanguageData;
+use Build\Model\Orm;
+use Build\Model\Page\PageData;
+use Build\Model\PageTranslation\PageTranslation;
+use Build\Model\PageTranslation\PageTranslationData;
+use Build\Model\Preference\Preference;
+use Build\Model\Web\WebData;
+use Build\Model\WebTranslation\WebTranslationData;
 use Latte\Loaders\StringLoader;
 use Latte\Sandbox\SecurityPolicy;
 use Nette\Application\Attributes\Parameter;

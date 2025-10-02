@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Web;
 
-use App\Model\Page\PageDataRepository;
-use App\Model\Web\Web;
-use App\Model\Web\WebData;
-use App\Model\WebTranslation\WebTranslationDataRepository;
+use Build\Model\Page\PageDataRepository;
+use Build\Model\Web\WebData;
+use Build\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;

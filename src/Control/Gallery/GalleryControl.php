@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Gallery;
 
-use App\Model\File\File;
-use App\Model\Orm;
+use Build\Model\File\File;
+use Build\Model\Orm;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\DataProvider;

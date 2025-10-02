@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
-use App\Model\Web\WebData;
+use Build\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Utils\Arrays;

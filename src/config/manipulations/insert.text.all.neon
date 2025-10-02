@@ -1,4 +1,4 @@
-class: App\Model\Text\TextData
+class: Build\Model\Text\TextData
 items:
 	Administrace: [cs: Administrace, en: Administration]
 	Odhlásit: [cs: Odhlásit, en: Sign out]

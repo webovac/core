@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Presenter\Style;
 
-use App\Model\DataModel;
-use App\Model\Layout\LayoutData;
-use App\Model\Orm;
-use App\Model\Preference\Preference;
-use App\Model\Theme\ThemeData;
-use App\Model\Web\WebData;
+use Build\Model\DataModel;
+use Build\Model\Layout\LayoutData;
+use Build\Model\Orm;
+use Build\Model\Preference\Preference;
+use Build\Model\Theme\ThemeData;
+use Build\Model\Web\WebData;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Attributes\Inject;

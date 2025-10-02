@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Text;
 
-use App\Model\TextTranslation\TextTranslationData;
+use Build\Model\TextTranslation\TextTranslationData;
 use DateTimeInterface;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\KeyProperty;

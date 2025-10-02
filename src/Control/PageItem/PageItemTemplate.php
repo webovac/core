@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\PageItem;
 
-use App\Control\BaseTemplate;
-use App\Model\Page\Page;
+use Build\Control\BaseTemplate;
+use Build\Model\Page\Page;
 
 
 class PageItemTemplate extends BaseTemplate

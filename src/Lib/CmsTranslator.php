@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
-use App\Model\DataModel;
-use App\Model\Language\LanguageData;
+use Build\Model\DataModel;
+use Build\Model\Language\LanguageData;
 use Nette\Localization\Translator;
 use Stepapo\Utils\Service;
 

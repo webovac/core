@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\FileTranslation;
 
-use App\Model\File\File;
-use App\Model\FileTranslation\FileTranslation;
-use App\Model\FileTranslation\FileTranslationData;
-use App\Model\Web\WebData;
+use Build\Model\File\File;
+use Build\Model\FileTranslation\FileTranslation;
+use Build\Model\FileTranslation\FileTranslationData;
+use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
 
 

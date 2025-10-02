@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Page;
 
-use App\Model\Module\Module;
-use App\Model\Page\Page;
-use App\Model\Page\PageData;
-use App\Model\PageTranslation\PageTranslation;
-use App\Model\PageTranslation\PageTranslationRepository;
-use App\Model\Person\Person;
-use App\Model\Web\Web;
-use App\Model\Web\WebData;
+use Build\Model\Module\Module;
+use Build\Model\Page\Page;
+use Build\Model\Page\PageData;
+use Build\Model\PageTranslation\PageTranslation;
+use Build\Model\PageTranslation\PageTranslationRepository;
+use Build\Model\Person\Person;
+use Build\Model\Web\Web;
+use Build\Model\Web\WebData;
 use Nette\InvalidArgumentException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;

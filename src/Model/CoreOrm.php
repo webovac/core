@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model;
 
-use App\Model\Asset\AssetRepository;
-use App\Model\Deploy\DeployRepository;
-use App\Model\File\FileRepository;
-use App\Model\FileTranslation\FileTranslationRepository;
-use App\Model\Language\LanguageRepository;
-use App\Model\LanguageTranslation\LanguageTranslationRepository;
-use App\Model\Lib\LibRepository;
-use App\Model\Module\ModuleRepository;
-use App\Model\ModuleTranslation\ModuleTranslationRepository;
-use App\Model\Page\PageRepository;
-use App\Model\PageTranslation\PageTranslationRepository;
-use App\Model\Parameter\ParameterRepository;
-use App\Model\Path\PathRepository;
-use App\Model\Person\PersonRepository;
-use App\Model\Preference\PreferenceRepository;
-use App\Model\Role\RoleRepository;
-use App\Model\Signal\SignalRepository;
-use App\Model\Slug\SlugRepository;
-use App\Model\Text\TextRepository;
-use App\Model\TextTranslation\TextTranslationRepository;
-use App\Model\Web\WebRepository;
-use App\Model\WebTranslation\WebTranslationRepository;
+use Build\Model\Asset\AssetRepository;
+use Build\Model\Deploy\DeployRepository;
+use Build\Model\File\FileRepository;
+use Build\Model\FileTranslation\FileTranslationRepository;
+use Build\Model\Language\LanguageRepository;
+use Build\Model\LanguageTranslation\LanguageTranslationRepository;
+use Build\Model\Lib\LibRepository;
+use Build\Model\Module\ModuleRepository;
+use Build\Model\ModuleTranslation\ModuleTranslationRepository;
+use Build\Model\Page\PageRepository;
+use Build\Model\PageTranslation\PageTranslationRepository;
+use Build\Model\Parameter\ParameterRepository;
+use Build\Model\Path\PathRepository;
+use Build\Model\Person\PersonRepository;
+use Build\Model\Preference\PreferenceRepository;
+use Build\Model\Role\RoleRepository;
+use Build\Model\Signal\SignalRepository;
+use Build\Model\Slug\SlugRepository;
+use Build\Model\Text\TextRepository;
+use Build\Model\TextTranslation\TextTranslationRepository;
+use Build\Model\Web\WebRepository;
+use Build\Model\WebTranslation\WebTranslationRepository;
 
 
 /**

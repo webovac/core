@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Parameter;
 
-use App\Model\Page\Page;
-use App\Model\Parameter\Parameter;
-use App\Model\Parameter\ParameterData;
+use Build\Model\Page\Page;
+use Build\Model\Parameter\Parameter;
+use Build\Model\Parameter\ParameterData;
 
 
 trait CoreParameterRepository

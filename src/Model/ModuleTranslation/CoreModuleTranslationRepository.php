@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\ModuleTranslation;
 
-use App\Model\Module\Module;
-use App\Model\ModuleTranslation\ModuleTranslation;
-use App\Model\ModuleTranslation\ModuleTranslationData;
-use App\Model\Web\WebData;
+use Build\Model\Module\Module;
+use Build\Model\ModuleTranslation\ModuleTranslation;
+use Build\Model\ModuleTranslation\ModuleTranslationData;
+use Build\Model\Web\WebData;
 
 
 trait CoreModuleTranslationRepository

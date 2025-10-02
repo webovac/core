@@ -26,13 +26,13 @@
 					{/}
 				{/}
 				{*
-				{if $p->type === App\Model\Page\Page::TYPE_SEPARATOR}
+				{if $p->type === Build\Model\Page\Page::TYPE_SEPARATOR}
 					<hr>
 				{else}
 					{var $t = $p->getCollection('translations')->getByKey($languageData->id) ?: $p->getCollection('translations')->getByKey($webData->defaultLanguage)}
 					{var $targetLanguageData = $t ? $languageData : $defaultLanguageData}
 					{var $checkActive = $p->targetAnchor ? false : ($p->targetPage ? $p->targetPage !== $webData->homePage : $p->id !== $webData->homePage)}
-					<a n:tag="$p->type === App\Model\Page\Page::TYPE_TEXT ? 'div' : 'a'" n:attr='href: $control->getHref($p), data-confirm: $p->ajax && $t->onclick ? $t->onclick, onclick: !$p->ajax && $t->onclick ? "return confirm(\"$t->onclick\")", data-naja-history: $p->ajax ? "off"' n:if="!$p->hideInNavigation" n:class="$control->getClass($p, $checkActive), $p->ajax ? ajax">
+					<a n:tag="$p->type === Build\Model\Page\Page::TYPE_TEXT ? 'div' : 'a'" n:attr='href: $control->getHref($p), data-confirm: $p->ajax && $t->onclick ? $t->onclick, onclick: !$p->ajax && $t->onclick ? "return confirm(\"$t->onclick\")", data-naja-history: $p->ajax ? "off"' n:if="!$p->hideInNavigation" n:class="$control->getClass($p, $checkActive), $p->ajax ? ajax">
 						<i n:if="$p->icon" n:class="$layoutData->primaryIcon, fa-fw, 'fa-' . $p->icon"></i>
 						<span>
 							{$t?->title}

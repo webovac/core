@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Asset;
 
-use App\Model\Asset\AssetData;
+use Build\Model\Asset\AssetData;
 use Nette\Caching\Cache;
 
 
