@@ -113,8 +113,7 @@ trait CorePresenter
 			$this->template->hasSideMenu = (bool) $this->navigationPageData;
 			$this->template->emptyNavigation = $this->getEmptyNavigation();
 			$this->template->entity = $this->entity;
-			$entityName = $this->getEntityName();
-			$this->template->entityName = $entityName;
+			$this->template->entityName = $entityName = $this->getEntityName();
 			$this->template->description = $this->getDescription();
 			$this->template->title = $this->getTitle();
 			$this->template->metaTitle = $this->getMetaTitle();
