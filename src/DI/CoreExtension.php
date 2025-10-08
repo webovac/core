@@ -21,7 +21,6 @@ use Stepapo\Utils\Service;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Lib\KeyProvider;
 use Webovac\Core\Lib\ModeChecker;
-use Webovac\Core\Lib\NeonHandler;
 
 
 class CoreExtension extends StepapoExtension
