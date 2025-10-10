@@ -30,7 +30,6 @@ class CoreExtension extends StepapoExtension
 	private MultiplierExtension $multiplierExtension;
 	private DbalExtension $dbalExtension;
 	private MigrationsExtension $migrationsExtension;
-	private DecoratorExtension $decoratorExtension;
 	private SearchExtension $projectSearchExtension;
 
 
@@ -64,7 +63,6 @@ class CoreExtension extends StepapoExtension
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();
 		$this->createProjectSearchExtension();
-		$this->createDecoratorExtension();
 		$this->createDbalExtension();
 		$this->createMigrationsExtension();
 	}
@@ -94,16 +92,6 @@ class CoreExtension extends StepapoExtension
 		]);
 		$this->modelExtension->setConfig($config);
 		$this->modelExtension->loadConfiguration();
-	}
-
-
-	protected function createDecoratorExtension(): void
-	{
-		$this->decoratorExtension = new DecoratorExtension;
-		$this->decoratorExtension->setCompiler($this->compiler, $this->prefix('decorator'));
-		$config = $this->processSchema($this->decoratorExtension->getConfigSchema(), $this->getDecoratorConfig());
-		$this->decoratorExtension->setConfig($config);
-		$this->decoratorExtension->loadConfiguration();
 	}
 
 
@@ -172,7 +160,6 @@ class CoreExtension extends StepapoExtension
 		parent::beforeCompile();
 		$this->modelExtension->beforeCompile();
 		$this->projectSearchExtension->beforeCompile();
-		$this->decoratorExtension->beforeCompile();
 		$this->ormExtension->beforeCompile();
 		$this->multiplierExtension->beforeCompile();
 		$this->dbalExtension->beforeCompile();
@@ -185,7 +172,6 @@ class CoreExtension extends StepapoExtension
 		parent::afterCompile($class);
 		$this->modelExtension->afterCompile($class);
 		$this->projectSearchExtension->afterCompile($class);
-		$this->decoratorExtension->afterCompile($class);
 		$this->ormExtension->afterCompile($class);
 		$this->multiplierExtension->afterCompile($class);
 		$this->dbalExtension->afterCompile($class);
@@ -201,14 +187,6 @@ class CoreExtension extends StepapoExtension
 		return [
 			['in' => $appDir, 'implements' => Service::class],
 			['in' => $buildDir, 'implements' => Service::class],
-		];
-	}
-
-
-	private function getDecoratorConfig(): array
-	{
-		return [
-			Injectable::class => ['inject' => true],
 		];
 	}
 }
