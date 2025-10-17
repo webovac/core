@@ -160,7 +160,7 @@ schemas:
 				primaryKey: [module_id, web_id]
 				indexes: [module_id, web_id]
 				foreignKeys:
-					module_id: [table: module, column: id, reverseName: webs]
+					module_id: [table: module, column: id, reverseName: webs, reverseSkipInManipulation: true]
 					web_id: [table: web, column: id, reverseName: modules]
 			module_translation:
 				columns:
@@ -228,7 +228,7 @@ schemas:
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
 					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank]
 					target_module_id: [table: module, column: id]
-					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank]
+					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank, reverseSkipInManipulation: true]
 					redirect_page_id: [table: page, column: id, onDelete: cascade]
 					target_page_id: [table: page, column: id, onDelete: cascade]
 					template_page_id: [table: page, column: id, onDelete: set null]
@@ -352,7 +352,7 @@ schemas:
 				primaryKey: [role_id, person_id]
 				indexes: [role_id, person_id]
 				foreignKeys:
-					role_id: [table: role, column: id, reverseName: persons]
+					role_id: [table: role, column: id, reverseName: persons, reverseSkipInManipulation: true]
 					person_id: [table: person, column: id, reverseName: roles]
 			signal:
 				columns:
