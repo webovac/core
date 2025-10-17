@@ -6,25 +6,15 @@ namespace Webovac\Core\Model\Page;
 
 use Build\Model\Asset\AssetData;
 use Build\Model\DataModel;
-use Build\Model\File\FileData;
 use Build\Model\Language\LanguageData;
 use Build\Model\Page\Page;
 use Build\Model\Page\PageData;
-use Build\Model\PageTranslation\PageTranslationData;
-use Build\Model\Parameter\ParameterData;
-use Build\Model\Signal\SignalData;
 use Build\Model\Web\WebData;
-use DateTimeInterface;
 use Nette\Application\IPresenter;
 use Nette\Utils\Arrays;
 use ReflectionException;
 use Stepapo\Model\Data\Collection;
-use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultValue;
-use Stepapo\Utils\Attribute\DontCache;
-use Stepapo\Utils\Attribute\KeyProperty;
-use Stepapo\Utils\Attribute\SkipInManipulation;
-use Stepapo\Utils\Attribute\Type;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsUser;
@@ -35,50 +25,6 @@ use Webovac\Core\Model\HasRequirements;
 
 trait CorePageData
 {
-	public ?int $id;
-	#[KeyProperty] public string $name;
-	public int|null $rank;
-	#[DefaultValue(Page::TYPE_PAGE)] public string $type;
-	#[DefaultValue(Page::ACCESS_FOR_ALL)] public string $accessFor;
-	public ?string $authorizingTag;
-	public ?string $style;
-	/** @var ParameterData[] */ #[ArrayOfType(ParameterData::class)] public array|null $parameters;
-	/** @var SignalData[] */ #[ArrayOfType(SignalData::class)] public array|null $signals;
-	/** @var PageTranslationData[] */ #[ArrayOfType(PageTranslationData::class)] public array|null $translations;
-	/** @var FileData[] */ #[ArrayOfType(FileData::class), SkipInManipulation] public array|null $files;
-	/** @var string[] */ public array|null $libs;
-	/** @var string[] */ public array|null $authorizedRoles;
-	/** @var int[] */ public array|null $authorizedPersons;
-	#[DefaultValue(false)] public bool $hideInNavigation;
-	#[DefaultValue(false)] public bool $providesNavigation;
-	#[DefaultValue(false)] public bool $providesButtons;
-	#[DefaultValue(false)] public bool $hasParameter;
-	#[DefaultValue(false)] public bool $stretched;
-	#[DefaultValue(false)] public bool $dontInheritPath;
-	#[DefaultValue(false)] public bool $dontInheritAccessSetup;
-	#[DefaultValue(false)] public bool $ajax;
-	public ?string $icon;
-	public ?string $repository;
-	public int|string|null $parentPage;
-	public int|string|null $redirectPage;
-	public int|string|null $targetPage;
-	#[Type(FileData::class)] public ?FileData $imageFile;
-	public ?string $targetParameter;
-	public ?string $targetUrl;
-	public ?string $targetPath;
-	public ?string $targetAnchor;
-	public ?string $targetSignal;
-	public ?int $layoutWidth;
-	#[DontCache] public int|string|null $createdByPerson;
-	#[DontCache] public int|string|null $updatedByPerson;
-	#[DontCache] public ?DateTimeInterface $createdAt;
-	#[DontCache] public ?DateTimeInterface $updatedAt;
-
-	### for CachedModel ###
-
-	public int|string|null $web;
-	public int|string|null $module;
-	public int|string|null $targetModule;
 	public ?string $host;
 	public ?string $basePath;
 	public ?int $defaultLanguage;

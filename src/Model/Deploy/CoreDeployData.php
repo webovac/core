@@ -7,5 +7,4 @@ namespace Webovac\Core\Model\Deploy;
 
 trait CoreDeployData
 {
-	public \DateTimeInterface $createdAt;
 }

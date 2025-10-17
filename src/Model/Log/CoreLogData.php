@@ -7,5 +7,4 @@ namespace Webovac\Core\Model\Log;
 
 trait CoreLogData
 {
-	public ?int $id;
 }

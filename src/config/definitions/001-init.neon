@@ -5,7 +5,7 @@ schemas:
 				columns:
 					id: [type: int, null: false, auto: true]
 					lib_id: [type: int, null: false]
-					link: [type: string, null: false]
+					link: [type: string, null: false, keyProperty: true]
 					local: [type: bool, null: false, default: false]
 					type: [type: string, null: false]
 				primaryKey: id
@@ -22,7 +22,7 @@ schemas:
 					id: [type: int, null: false, auto: true]
 					web_id: [type: int, null: true, internal: true]
 					page_id: [type: int, null: true]
-					created_by_person_id: [type: int, null: true]
+					created_by_person_id: [type: int, null: true, dontCache: true]
 					identifier: [type: string, null: false]
 					modern_identifier: [type: string, null: true]
 					compatible_identifier: [type: string, null: true]
@@ -33,12 +33,12 @@ schemas:
 					width: [type: int, null: true]
 					height: [type: int, null: true]
 					captured_at: [type: datetime, null: true]
-					created_at: [type: datetime, null: false, default: now]
+					created_at: [type: datetime, null: false, default: now, dontCache: true]
 				primaryKey: id
 				indexes: [web_id, page_id, created_by_person_id]
 				foreignKeys:
-					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseOrder: id]
-					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseOrder: id]
+					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseOrder: id, reverseSkipInManipulation: true]
+					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseOrder: id, reverseSkipInManipulation: true]
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 			file_translation:
 				columns:
@@ -48,7 +48,7 @@ schemas:
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
 					file_id: [type: int, null: false]
-					language_id: [type: int, null: false]
+					language_id: [type: int, null: false, keyProperty: true]
 					description: [type: text, null: true]
 				primaryKey: id
 				uniqueKeys: [[file_id, language_id]]
@@ -98,8 +98,8 @@ schemas:
 					updated_by_person_id: [type: int, null: true]
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
-					language_id: [type: int, null: false]
-					translation_language_id: [type: int, null: false]
+					language_id: [type: int, null: false,]
+					translation_language_id: [type: int, null: false, keyProperty: true]
 					title: [type: string, null: false]
 				primaryKey: id
 				uniqueKeys: [[language_id, translation_language_id]]
@@ -112,7 +112,7 @@ schemas:
 			lib:
 				columns:
 					id: [type: int, null: false, auto: true]
-					name: [type: string, null: false]
+					name: [type: string, null: false, keyProperty: true]
 				primaryKey: id
 				uniqueKeys: [name]
 			log:
@@ -170,7 +170,7 @@ schemas:
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
 					module_id: [type: int, null: false]
-					language_id: [type: int, null: false]
+					language_id: [type: int, null: false, keyProperty: true]
 					title: [type: string, null: false]
 					description: [type: text, null: true]
 					base_path: [type: string, null: true]
@@ -185,10 +185,10 @@ schemas:
 			page:
 				columns:
 					id: [type: int, null: false, auto: true]
-					created_by_person_id: [type: int, null: true]
-					updated_by_person_id: [type: int, null: true]
-					created_at: [type: datetime, null: false, default: now]
-					updated_at: [type: datetime, null: true]
+					created_by_person_id: [type: int, null: true, dontCache: true]
+					updated_by_person_id: [type: int, null: true, dontCache: true]
+					created_at: [type: datetime, null: false, default: now, dontCache: true]
+					updated_at: [type: datetime, null: true, dontCache: true]
 					web_id: [type: int, null: true, internal: true]
 					parent_page_id: [type: int, null: true]
 					icon: [type: string, null: true]
@@ -199,11 +199,11 @@ schemas:
 					image_file_id: [type: int, null: true]
 					layout_width: [type: int, null: true]
 					published_at: [type: datetime, null: true]
-					name: [type: string, null: false]
+					name: [type: string, null: false, keyProperty: true]
 					style: [type: string, null: true]
 					repository: [type: string, null: true]
 					provides_navigation: [type: bool, null: false, default: false]
-					rank: [type: int, null: false, default: 1]
+					rank: [type: int, null: true, default: 1]
 					hide_in_navigation: [type: bool, null: false, default: false]
 					provides_buttons: [type: bool, null: false, default: false]
 					dont_inherit_path: [type: bool, null: false, default: false]
@@ -269,7 +269,7 @@ schemas:
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
 					page_id: [type: int, null: false]
-					language_id: [type: int, null: false]
+					language_id: [type: int, null: false, keyProperty: true]
 					path: [type: string, null: true]
 					title: [type: string, null: true]
 					description: [type: text, null: true]
@@ -297,15 +297,15 @@ schemas:
 				indexes: [web_id, page_translation_id]
 				foreignKeys:
 					web_id: [table: web, column: id]
-					page_translation_id: [table: page_translation, column: id, reverseName: paths, reverseOrder: id]
+					page_translation_id: [table: page_translation, column: id, reverseName: paths, reverseOrder: id, reverseSkipInManipulation: true]
 			parameter:
 				columns:
 					id: [type: int, null: false, auto: true]
 					created_by_person_id: [type: int, null: true]
 					updated_by_person_id: [type: int, null: true]
 					page_id: [type: int, null: false]
-					query: [type: string, null: false]
-					parameter: [type: string, null: false]
+					query: [type: string, null: false, keyProperty: true]
+					parameter: [type: string, null: false, valueProperty: true]
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
 				primaryKey: id
@@ -360,8 +360,8 @@ schemas:
 					created_by_person_id: [type: int, null: true]
 					updated_by_person_id: [type: int, null: true]
 					page_id: [type: int, null: false]
-					name: [type: string, null: false]
-					signal: [type: string, null: false]
+					name: [type: string, null: false, keyProperty: true]
+					signal: [type: string, null: false, valueProperty: true]
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
 				primaryKey: id
@@ -385,7 +385,7 @@ schemas:
 					updated_by_person_id: [type: int, null: true]
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
-					name: [type: string, null: false]
+					name: [type: string, null: false, keyProperty: true]
 				primaryKey: id
 				indexes: [created_by_person_id, updated_by_person_id]
 				foreignKeys:
@@ -399,8 +399,8 @@ schemas:
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
 					text_id: [type: int, null: false]
-					language_id: [type: int, null: false]
-					string: [type: string, null: false]
+					language_id: [type: int, null: false, keyProperty: true]
+					string: [type: string, null: false, valueProperty: true]
 				primaryKey: id
 				uniqueKeys: [[text_id, language_id]]
 				indexes: [created_by_person_id, updated_by_person_id, text_id, language_id]
@@ -412,18 +412,18 @@ schemas:
 			web:
 				columns:
 					id: [type: int, null: false, auto: true]
-					created_by_person_id: [type: int, null: true]
-					updated_by_person_id: [type: int, null: true]
+					created_by_person_id: [type: int, null: true, dontCache: true]
+					updated_by_person_id: [type: int, null: true, dontCache: true]
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
-					color: [type: string, null: true]
+					color: [type: string, null: false, default: '#2196f3']
 					complementary_color: [type: string, null: false, default: '#888888']
 					host: [type: string, null: false]
 					published_at: [type: datetime, null: true]
 					base_path: [type: string, null: false, default: '~']
 					icon_background_color: [type: string, null: false, default: '#ffffff']
 					home_page_id: [type: int, null: true]
-					default_language_id: [type: int, null: true]
+					default_language_id: [type: int, null: true, dataDefault: cs]
 					icon_file_id: [type: int, null: true]
 					large_icon_file_id: [type: int, null: true]
 					logo_file_id: [type: int, null: true]
@@ -482,7 +482,7 @@ schemas:
 					created_at: [type: datetime, null: false, default: now]
 					updated_at: [type: datetime, null: true]
 					web_id: [type: int, null: false]
-					language_id: [type: int, null: false]
+					language_id: [type: int, null: false, keyProperty: true]
 					title: [type: string, null: false]
 					footer: [type: string, null: true]
 				primaryKey: id

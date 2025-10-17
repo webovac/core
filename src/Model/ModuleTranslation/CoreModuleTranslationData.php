@@ -10,13 +10,13 @@ use Stepapo\Utils\Attribute\KeyProperty;
 
 trait CoreModuleTranslationData
 {
-	public ?int $id;
-	#[KeyProperty] public null|int|string $language;
-	public null|string $title;
-	public null|string $basePath;
-	public ?string $description;
-	public int|string|null $createdByPerson;
-	public int|string|null $updatedByPerson;
-	public ?DateTimeInterface $createdAt;
-	public ?DateTimeInterface $updatedAt;
+//	public ?int $id;
+//	#[KeyProperty] public null|int|string $language;
+//	public null|string $title;
+//	public null|string $basePath;
+//	public ?string $description;
+//	public int|string|null $createdByPerson;
+//	public int|string|null $updatedByPerson;
+//	public ?DateTimeInterface $createdAt;
+//	public ?DateTimeInterface $updatedAt;
 }

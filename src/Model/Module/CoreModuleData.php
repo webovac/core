@@ -14,18 +14,7 @@ use Stepapo\Utils\Attribute\DefaultValue;
 
 trait CoreModuleData
 {
-	public ?int $id;
-	public string $name;
-	public int|string|null $homePage;
-	/** @var ModuleTranslationData[] */ #[ArrayOfType(ModuleTranslationData::class)] public array|null $translations;
-	/** @var PageData[]|array */ #[ArrayOfType(PageData::class)] public array|null $pages;
-	public ?string $icon;
-	#[DefaultValue(false)] public bool $internal;
 	public array $tree;
-	public int|string|null $createdByPerson;
-	public int|string|null $updatedByPerson;
-	public ?DateTimeInterface $createdAt;
-	public ?DateTimeInterface $updatedAt;
 
 
 	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
