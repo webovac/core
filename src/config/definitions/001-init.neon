@@ -37,8 +37,8 @@ schemas:
 				primaryKey: id
 				indexes: [web_id, page_id, created_by_person_id]
 				foreignKeys:
-					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseOrder: id, reverseSkipInManipulation: true]
-					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseOrder: id, reverseSkipInManipulation: true]
+					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseOrder: id, reverseSkipInManipulation: true, reverseDontCache: true]
+					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseOrder: id, reverseSkipInManipulation: true, reverseDontCache: true]
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 			file_translation:
 				columns:
@@ -226,13 +226,13 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank]
+					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank, reverseSkipInManipulation: true, reverseDontCache: true]
 					target_module_id: [table: module, column: id]
-					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank, reverseSkipInManipulation: true]
+					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank, reverseSkipInManipulation: true, reverseDontCache: true]
 					redirect_page_id: [table: page, column: id, onDelete: cascade]
 					target_page_id: [table: page, column: id, onDelete: cascade]
 					template_page_id: [table: page, column: id, onDelete: set null]
-					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank]
+					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank, reverseSkipInManipulation: true, reverseDontCache: true]
 					image_file_id: [table: file, column: id, onDelete: set null]
 			page2lib:
 				columns:
@@ -472,7 +472,7 @@ schemas:
 				primaryKey: [web_id, person_id]
 				indexes: [web_id, person_id]
 				foreignKeys:
-					web_id: [table: web, column: id, reverseName: persons]
+					web_id: [table: web, column: id, reverseName: persons, reverseSkipInManipulation: true, reverseDontCache: true]
 					person_id: [table: person, column: id, reverseName: webs]
 			web_translation:
 				columns:
