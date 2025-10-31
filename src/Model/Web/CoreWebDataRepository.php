@@ -17,7 +17,6 @@ use Throwable;
 
 trait CoreWebDataRepository
 {
-	#[Inject] public WebTranslationDataRepository $webTranslationDataRepository;
 	#[Inject] public PageDataRepository $pageDataRepository;
 	private array $aliases;
 

@@ -226,13 +226,13 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank, reverseSkipInManipulation: true, reverseDontCache: true]
+					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank, reverseDontCache: true]
 					target_module_id: [table: module, column: id]
 					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank, reverseSkipInManipulation: true, reverseDontCache: true]
 					redirect_page_id: [table: page, column: id, onDelete: cascade]
 					target_page_id: [table: page, column: id, onDelete: cascade]
 					template_page_id: [table: page, column: id, onDelete: set null]
-					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank, reverseSkipInManipulation: true, reverseDontCache: true]
+					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank, reverseDontCache: true]
 					image_file_id: [table: file, column: id, onDelete: set null]
 			page2lib:
 				columns:

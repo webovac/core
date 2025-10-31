@@ -13,8 +13,6 @@ use Nette\DI\Attributes\Inject;
 
 trait CoreModuleDataRepository
 {
-	#[Inject] public ModuleTranslationDataRepository $moduleTranslationDataRepository;
-	#[Inject] public PageDataRepository $pageDataRepository;
 	private array $aliases;
 
 

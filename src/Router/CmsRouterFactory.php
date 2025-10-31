@@ -212,7 +212,7 @@ final class CmsRouterFactory implements Service
 					'mapOut' => [],
 					'parts' => [],
 				];
-				foreach ($this->dataModel->languageRepository->findAllPairs() as $shortcut) {
+				foreach ($this->dataModel->languageDataRepository->findAllPairs() as $shortcut) {
 					$setup['parts'][$shortcut] = $shortcut;
 				}
 				foreach ($this->dataModel->findPageDatas() as $pageData) {

@@ -12,9 +12,6 @@ use Nextras\Orm\Entity\IEntity;
 
 trait CoreTextDataRepository
 {
-	#[Inject] public TextTranslationDataRepository $textTranslationDataRepository;
-
-
 	protected function getIdentifier(IEntity $entity): mixed
 	{
 		assert($entity instanceof Text);

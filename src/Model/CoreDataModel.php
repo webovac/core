@@ -5,40 +5,21 @@ declare(strict_types=1);
 namespace Webovac\Core\Model;
 
 use Build\Model\Deploy\DeployData;
-use Build\Model\Deploy\DeployDataRepository;
 use Build\Model\Language\LanguageData;
-use Build\Model\Language\LanguageDataRepository;
 use Build\Model\Module\ModuleData;
-use Build\Model\Module\ModuleDataRepository;
 use Build\Model\Page\PageData;
-use Build\Model\Page\PageDataRepository;
-use Build\Model\Person\PersonDataRepository;
-use Build\Model\Role\RoleDataRepository;
-use Build\Model\Text\TextDataRepository;
 use Build\Model\TextTranslation\TextTranslationData;
 use Build\Model\Web\WebData;
-use Build\Model\Web\WebDataRepository;
-use Nette\DI\Attributes\Inject;
 use Stepapo\Model\Data\Collection;
 
 
 trait CoreDataModel
 {
-	#[Inject] public LanguageDataRepository $languageRepository;
-	#[Inject] public ModuleDataRepository $moduleRepository;
-	#[Inject] public PageDataRepository $pageRepository;
-	#[Inject] public TextDataRepository $textRepository;
-	#[Inject] public WebDataRepository $webRepository;
-	#[Inject] public PersonDataRepository $personRepository;
-	#[Inject] public RoleDataRepository $roleRepository;
-	#[Inject] public DeployDataRepository $depoloyRepository;
-
-
 	/** @return PageData[] */
 	public function findPageDatas(?WebData $webData = null): Collection
 	{
 		/** @var PageData[] $pageDatas */
-		$pageDatas = $this->pageRepository->getCollection();
+		$pageDatas = $this->pageDataRepository->getCollection();
 		if ($webData) {
 			$result = [];
 			foreach ($pageDatas as $key => $pageData) {
@@ -54,13 +35,13 @@ trait CoreDataModel
 
 	public function getPageData(int $webId, int $pageId): ?PageData
 	{
-		return $this->pageRepository->getByKey("$webId-$pageId");
+		return $this->pageDataRepository->getByKey("$webId-$pageId");
 	}
 
 
 	public function getPageDataByName(int $webId, string $pageName): ?PageData
 	{
-		$pageId = $this->pageRepository->getKey($webId, $pageName);
+		$pageId = $this->pageDataRepository->getKey($webId, $pageName);
 		return $pageId ? $this->getPageData($webId, $pageId) : null;
 	}
 
@@ -69,7 +50,7 @@ trait CoreDataModel
 	public function findWebDatas(): Collection
 	{
 		$webDatas = [];
-		foreach ($this->webRepository->getAliases() as $webId) {
+		foreach ($this->webDataRepository->getAliases() as $webId) {
 			$webDatas[] = $this->getWebData($webId);
 		}
 		return new Collection($webDatas);
@@ -78,39 +59,39 @@ trait CoreDataModel
 
 	public function getWebData(int $key): ?WebData
 	{
-		return $this->webRepository->getByKey($key);
+		return $this->webDataRepository->getByKey($key);
 	}
 
 
 	public function getWebDataByHost(string $host, ?string $basePath): ?WebData
 	{
-		$webId = $this->webRepository->getKey($host, $basePath);
-		return $webId ? $this->webRepository->getByKey($webId) : null;
+		$webId = $this->webDataRepository->getKey($host, $basePath);
+		return $webId ? $this->webDataRepository->getByKey($webId) : null;
 	}
 
 
 	public function getLanguageData(int $key): ?LanguageData
 	{
-		return $this->languageRepository->getByKey($key);
+		return $this->languageDataRepository->getByKey($key);
 	}
 
 
 	public function getLanguageDataByShortcut(string $shortcut): ?LanguageData
 	{
-		$languageId = $this->languageRepository->getKey($shortcut);
+		$languageId = $this->languageDataRepository->getKey($shortcut);
 		return $languageId ? $this->getLanguageData($languageId) : null;
 	}
 
 
 	public function getModuleData(int $key): ?ModuleData
 	{
-		return $this->moduleRepository->getByKey($key);
+		return $this->moduleDataRepository->getByKey($key);
 	}
 
 
 	public function getModuleDataByName(string $name): ?ModuleData
 	{
-		$moduleId = $this->moduleRepository->getKey($name);
+		$moduleId = $this->moduleDataRepository->getKey($name);
 		return $moduleId ? $this->getModuleData($moduleId) : null;
 	}
 
@@ -120,7 +101,7 @@ trait CoreDataModel
 		if (!$name) {
 			return null;
 		}
-		return $this->textRepository
+		return $this->textDataRepository
 			->getByKey($name)
 			?->getCollection('translations')
 			->getByKey($languageData->id);
@@ -129,6 +110,6 @@ trait CoreDataModel
 
 	public function getLastDeployData(): ?DeployData
 	{
-		return $this->depoloyRepository->getLastDeployData();
+		return $this->deployDataRepository->getLastDeployData();
 	}
 }
