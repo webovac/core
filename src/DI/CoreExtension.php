@@ -101,7 +101,6 @@ class CoreExtension extends StepapoExtension
 		$this->ormExtension->setCompiler($this->compiler, $this->prefix('orm'));
 		$config = $this->processSchema($this->ormExtension->getConfigSchema(), [
 			'model' => Orm::class,
-			'repositoryFinder' => CmsPhpDocRepositoryFinder::class,
 		]);
 		$this->ormExtension->setConfig($config);
 		$this->ormExtension->loadConfiguration();

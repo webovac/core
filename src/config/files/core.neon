@@ -7,6 +7,7 @@ modules:
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
 			Deploy:
+				withDataRepository: true
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
 			Lib:
@@ -21,12 +22,14 @@ modules:
 				entityImplements:
 					Webovac\Core\Model\Translation:
 			Language:
+				withDataRepository: true
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
 			LanguageTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
 			Module:
+				withDataRepository: true
 				entityImplements:
 					Webovac\Core\Model\Page\HasPages:
 					Webovac\Core\Model\HasTranslations:
@@ -36,6 +39,7 @@ modules:
 				entityImplements:
 					Webovac\Core\Model\Translation:
 			Page:
+				withDataRepository: true
 				entityImplements:
 					Webovac\Core\Model\Linkable:
 					Webovac\Core\Model\Renderable:
@@ -63,6 +67,7 @@ modules:
 					Stepapo\Model\Orm\InternalRepository:
 			Slug:
 			Text:
+				withDataRepository: true
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
 				repositoryImplements:
@@ -73,6 +78,7 @@ modules:
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
 			Web:
+				withDataRepository: true
 				entityImplements:
 					Webovac\Core\Model\Page\HasPages:
 					Webovac\Core\Model\HasTranslations:
