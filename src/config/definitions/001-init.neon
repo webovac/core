@@ -107,7 +107,7 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					language_id: [table: language, column: id, reverseName: translations, reverseOrder: translationLanguage->rank]
+					language_id: [table: language, column: id, reverseName: translations]
 					translation_language_id: [table: language, column: id]
 			lib:
 				columns:
