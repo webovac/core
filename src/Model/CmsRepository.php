@@ -22,16 +22,6 @@ abstract class CmsRepository extends StepapoRepository
 	#[Inject] public Dir $dir;
 
 
-	public function getById($id): ?CmsEntity
-	{
-		try {
-			return parent::getById($id);
-		} catch (QueryException $e) {
-			return null;
-		}
-	}
-
-
 	public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?CmsEntity
 	{
 		if ($parameters) {
@@ -46,14 +36,6 @@ abstract class CmsRepository extends StepapoRepository
 	public function getEntityListByPath(string $path, ?WebData $webData = null): array
 	{
 		return $this->findBy(['id' => explode('/', $path)])->fetchPairs('id');
-	}
-
-
-	public function delete(CmsEntity $entity): void
-	{
-		$this->onBeforeRemove($entity);
-		$this->mapper->delete($entity);
-		$this->onAfterRemove($entity);
 	}
 
 

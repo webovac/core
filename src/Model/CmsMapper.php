@@ -7,21 +7,9 @@ namespace Webovac\Core\Model;
 use Nextras\Orm\Mapper\Dbal\Conventions\Conventions;
 use Nextras\Orm\Mapper\Dbal\Conventions\IConventions;
 use Nextras\Orm\Mapper\Dbal\DbalMapper;
+use Stepapo\Model\Orm\StepapoMapper;
 
 
-abstract class CmsMapper extends DbalMapper
+abstract class CmsMapper extends StepapoMapper
 {
-	protected function createConventions(): IConventions
-	{
-		$conventions = parent::createConventions();
-		assert($conventions instanceof Conventions);
-		$conventions->manyHasManyStorageNamePattern = '%s2%s';
-		return $conventions;
-	}
-
-
-	public function delete(CmsEntity $entity): void
-	{
-		$this->connection->query('DELETE FROM %table WHERE id = %i', $this->getTableName(), $entity->getPersistedId());
-	}
 }

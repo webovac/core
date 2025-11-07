@@ -36,22 +36,18 @@ trait CoreWebRepository
 	public function createFromDataAndReturnResult(
 		Item $data,
 		?StepapoEntity $original = null,
-		?StepapoEntity $parent = null,
-		?string $parentName = null,
 		?Person $person = null,
 		?\DateTimeInterface $date = null,
-		bool $skipDefaults = false,
-		bool $getOriginalByData = false,
 		bool $fromNeon = false,
 	): EntityProcessorResult
 	{
-		if (isset($data->iconFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
+		if (isset($data->iconFile)) {
 			$data->iconFile->upload = $this->styleFile($data->iconFile, $data->complementaryColor, $data->color);
 			$data->iconFile->forceSquare = true;
 			$data->largeIconFile = $data->largeIconFile ?? new FileData;
 			$data->largeIconFile->upload = $this->createLargeIcon($data->iconFile, $data->iconBackgroundColor);
 		}
-		if (isset($data->logoFile) || ($skipDefaults && (isset($data->color) || isset($data->complementaryColor)))) {
+		if (isset($data->logoFile)) {
 			$data->logoFile = $data->logoFile ?: new FileData;
 			$data->logoFile->upload = $this->styleFile($data->logoFile, $data->complementaryColor, $data->color);
 		}
@@ -66,7 +62,7 @@ trait CoreWebRepository
 				$this->processTree((array) $pages, $parentPage, $rank++, $data);
 			}
 		}
-		return parent::createFromDataAndReturnResult($data, $original, $parent, $parentName, $person, $date, $skipDefaults, $getOriginalByData, $fromNeon);
+		return parent::createFromDataAndReturnResult($data, $original, $person, $date, $fromNeon);
 	}
 
 
