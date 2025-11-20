@@ -114,12 +114,13 @@ trait CoreFileRepository
 				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
 			}
 		} else {
-			$originalFileData = $file->getData();
-			$data->identifier = $originalFileData->identifier;
-			$data->contentType = $originalFileData->contentType;
-			$data->type = $originalFileData->type;
-			$data->compatibleIdentifier = $originalFileData->compatibleIdentifier;
-			$data->modernIdentifier = $originalFileData->modernIdentifier;
+			$data->identifier = $file->identifier;
+			$data->contentType = $file->contentType;
+			$data->type = $file->type;
+			$data->compatibleIdentifier = $file->compatibleIdentifier;
+			$data->modernIdentifier = $file->modernIdentifier;
+			$data->width = $file->width;
+			$data->height = $file->height;
 		}
 		if (isset($compatibleUpload)) {
 			$file = $compatibleUpload->getTemporaryFile();
