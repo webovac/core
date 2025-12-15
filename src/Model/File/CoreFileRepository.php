@@ -45,7 +45,7 @@ trait CoreFileRepository
 	}
 
 
-	public function createFileData(FileData $data, ?string $key = null): ?FileData
+	public function createFileData(FileData $data, ?string $key = null, string $namespace = 'cms'): ?FileData
 	{
 		if (!isset($data->upload)) {
 			return $data;
@@ -72,7 +72,7 @@ trait CoreFileRepository
 			$data->upload = $this->createVideoUpload($data->upload);
 			$data->capturedAt = $this->getCapturedAt($data->upload);
 		}
-		$identifier = $this->fileUploader->upload($data->upload);
+		$identifier = $this->fileUploader->upload($data->upload, $namespace);
 		$file = $this->getModel()->getRepository(FileRepository::class)->getBy(['identifier' => $identifier]);
 		$extension = $data->upload->getSuggestedExtension();
 		$data->name = "$name.$extension";
@@ -88,30 +88,30 @@ trait CoreFileRepository
 			if ($data->upload->getContentType() === 'image/svg+xml') {
 				$compatibleUpload = $this->svg2png($data->upload, $data->forceSquare);
 				$image = Image::fromFile($compatibleUpload->getTemporaryFile());
-				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
-				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
-				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare, 1920);
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 				$data->width = $image->getWidth();
 				$data->height = $image->getHeight();
 			} elseif ($data->upload->getContentType() === 'image/webp' || $data->upload->getContentType() === 'image/avif') {
 				$compatibleUpload = $this->image2jpeg($data->upload, $data->forceSquare);
-				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
 				$data->modernIdentifier = $identifier;
 			} elseif ($data->upload->isImage()) {
 				$compatibleUpload = $data->upload;
-				$modernUpload = $this->image2webp($data->upload, $data->forceSquare);
+				$modernUpload = $this->image2webp($data->upload, $data->forceSquare, 1920);
 				$data->compatibleIdentifier = $identifier;
-				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			} elseif ($data->upload->getContentType() === 'application/pdf') {
 				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
-				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
 				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
-				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			} elseif (str_contains($data->upload->getContentType(), 'video/')) {
 				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
-				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload);
-				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
-				$data->modernIdentifier = $this->fileUploader->upload($modernUpload);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare, 1920);
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			}
 		} else {
 			$data->identifier = $file->identifier;
@@ -207,12 +207,12 @@ trait CoreFileRepository
 	 * @throws ImageException
 	 * @throws UnknownImageFileException
 	 */
-	public function image2webp(FileUpload $upload, bool $forceSquare): FileUpload
+	public function image2webp(FileUpload $upload, bool $forceSquare, ?int $maxHeight = null): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
 		copy($tmpFile, $cloneFile);
-		Image::fromFile($cloneFile)->resize(1920, null)->save($cloneFile, type: ImageType::WEBP);
+		Image::fromFile($cloneFile)->resize(1920, $maxHeight, Image::ShrinkOnly)->save($cloneFile, type: ImageType::WEBP);
 		$upload = $this->createFileUploadFromFile($cloneFile);
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
@@ -334,7 +334,7 @@ trait CoreFileRepository
 	}
 
 
-	public function getFilterByWeb(WebData $webData): array
+	public function getWebFilter(WebData $webData): array
 	{
 		return [
 			ICollection::OR,

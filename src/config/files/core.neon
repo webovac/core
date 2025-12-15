@@ -15,16 +15,24 @@ modules:
 					Stepapo\Model\Orm\InternalRepository:
 			Log:
 			Person:
+				repositoryImplements:
+					Webovac\Core\Model\HasWebFilter:
 			File:
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
+				repositoryImplements:
+					Webovac\Core\Model\HasWebFilter:
 			FileTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
+				repositoryImplements:
+					Webovac\Core\Model\HasWebFilter:
 			Language:
 				withDataRepository: true
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
+				repositoryImplements:
+					Webovac\Core\Model\HasWebFilter:
 			LanguageTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
@@ -35,9 +43,12 @@ modules:
 					Webovac\Core\Model\HasTranslations:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
+					Webovac\Core\Model\HasWebFilter:
 			ModuleTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
+				repositoryImplements:
+					Webovac\Core\Model\HasWebFilter:
 			Page:
 				withDataRepository: true
 				entityImplements:
@@ -49,9 +60,12 @@ modules:
 					Webovac\Core\Model\HasRequirements:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
+					Webovac\Core\Model\HasWebFilter:
 			PageTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:
+				repositoryImplements:
+					Webovac\Core\Model\HasWebFilter:
 			Preference:
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
@@ -59,6 +73,8 @@ modules:
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
 			Path:
+				repositoryImplements:
+					Webovac\Core\Model\HasWebFilter:
 			Role:
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
@@ -66,6 +82,8 @@ modules:
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
 			Slug:
+				repositoryImplements:
+					Webovac\Core\Model\HasWebFilter:
 			Text:
 				withDataRepository: true
 				entityImplements:

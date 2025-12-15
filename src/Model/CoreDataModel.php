@@ -51,7 +51,7 @@ trait CoreDataModel
 	{
 		$webDatas = [];
 		foreach ($this->webDataRepository->getAliases() as $webId) {
-			$webDatas[] = $this->getWebData($webId);
+			$webDatas[$webId] = $this->getWebData($webId);
 		}
 		return new Collection($webDatas);
 	}
@@ -66,6 +66,13 @@ trait CoreDataModel
 	public function getWebDataByHost(string $host, ?string $basePath): ?WebData
 	{
 		$webId = $this->webDataRepository->getKey($host, $basePath);
+		return $webId ? $this->webDataRepository->getByKey($webId) : null;
+	}
+
+
+	public function getWebDataByCode(string $code): ?WebData
+	{
+		$webId = $this->webDataRepository->getKeyByCode($code);
 		return $webId ? $this->webDataRepository->getByKey($webId) : null;
 	}
 

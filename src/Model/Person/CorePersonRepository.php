@@ -21,11 +21,8 @@ trait CorePersonRepository
 	}
 
 
-	public function getFilterByWeb(WebData $webData): array
+	public function getWebFilter(WebData $webData): array
 	{
-		return [
-			ICollection::OR,
-			'webs->id' => $webData->id,
-		];
+		return ['webs->id' => $webData->id];
 	}
 }

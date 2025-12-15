@@ -10,5 +10,5 @@ use Webovac\Core\Lib\CmsUser;
 
 interface HasRequirements
 {
-	function checkRequirements(CmsUser $user, WebData $webData, ?string $tag = null): bool;
+	function checkRequirements(CmsUser $user, ?string $tag = null): bool;
 }

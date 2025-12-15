@@ -145,7 +145,7 @@ trait CorePageData
 			return false;
 		}
 		if ($this->authorizingTag && $entity) {
-			if ($entity instanceof HasRequirements && !$entity->checkRequirements($cmsUser, $webData, $this->authorizingTag)) {
+			if ($entity instanceof HasRequirements && !$entity->check($cmsUser, $webData, $this->authorizingTag)) {
 				return false;
 			}
 		}

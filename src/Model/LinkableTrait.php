@@ -30,6 +30,9 @@ trait LinkableTrait
 
 	public function getParameters(): array
 	{
-		return [$this->getPageName() => $this->id];
+		return [$this->getPageName() => $this->{$this->getRepository()->getKeyParameter()}];
 	}
+
+
+	abstract public function getPageName(): string;
 }

@@ -11,10 +11,14 @@ use Build\Model\Path\PathData;
 use Build\Model\Web\Web;
 use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
+use Webovac\Core\Model\HasWebFilterTrait;
 
 
 trait CorePathRepository
 {
+	use HasWebFilterTrait;
+
+
 	public function getByData(PathData|string $data, PageTranslation $pageTranslation): ?Path
 	{
 		return $this->getBy([
@@ -44,11 +48,8 @@ trait CorePathRepository
 	}
 
 
-	public function getFilterByWeb(WebData $webData): array
+	public function getWebFilter(WebData $webData): array
 	{
-		return [
-			ICollection::OR,
-			'web->id' => $webData->id,
-		];
+		return ['web->id' => $webData->id];
 	}
 }

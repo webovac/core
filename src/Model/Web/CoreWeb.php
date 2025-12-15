@@ -7,7 +7,9 @@ namespace Webovac\Core\Model\Web;
 use Build\Model\Language\LanguageData;
 use Build\Model\Log\Log;
 use Build\Model\Page\Page;
+use Build\Model\Person\Person;
 use Build\Model\WebTranslation\WebTranslation;
+use DateTimeInterface;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
@@ -15,6 +17,7 @@ use Nextras\Orm\Relationships\IRelationshipCollection;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 use Webovac\Core\Lib\DataProvider;
+use Webovac\Core\Model\File\HasFilesTrait;
 
 
 /**
@@ -22,6 +25,8 @@ use Webovac\Core\Lib\DataProvider;
  */
 trait CoreWeb
 {
+	use HasFilesTrait;
+
 	public const string DEFAULT_COLOR = '#2196f3';
 	public const string DEFAULT_COMPLEMENTARY_COLOR = '#cccccc';
 	public const string DEFAULT_ICON_BACKGROUND_COLOR = '#d3eafd';
@@ -38,12 +43,6 @@ trait CoreWeb
 	public function getTranslation(LanguageData $language): ?WebTranslation
 	{
 		return $this->translations->toCollection()->getBy(['language' => $language->id]);
-	}
-
-
-	public function getFiles(): IRelationshipCollection
-	{
-		return $this->files;
 	}
 
 
@@ -75,37 +74,5 @@ trait CoreWeb
 	public function getMenuItems(): array
 	{
 		return $this->getRepository()->findBy(['id!=' => $this->id])->fetchPairs('id');
-	}
-
-
-	public function getIndexDefinition(): IndexDefinition
-	{
-		$definition = new IndexDefinition;
-		$definition->entity = $this;
-		$definition->entityName = 'web';
-		foreach ($this->translations as $translation) {
-			$translationDefinition = new IndexTranslationDefinition;
-			$translationDefinition->language = $translation->language;
-			$translationDefinition->documents = ['A' => $this->code, 'B' => $translation->title];
-			$definition->translations[] = $translationDefinition;
-		}
-		return $definition;
-	}
-
-
-	public function createLog(string $type): ?Log
-	{
-		$log = new Log;
-		$log->web = $this;
-		$log->type = $type;
-		$log->createdByPerson = match($type) {
-			Log::TYPE_CREATE => $this->createdByPerson,
-			Log::TYPE_UPDATE => $this->updatedByPerson,
-		};
-		$log->date = match($type) {
-			Log::TYPE_CREATE => $this->createdAt,
-			Log::TYPE_UPDATE => $this->updatedAt,
-		};
-		return $log;
 	}
 }

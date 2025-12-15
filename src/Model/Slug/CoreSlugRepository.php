@@ -19,10 +19,9 @@ trait CoreSlugRepository
 
 
 
-	public function getFilterByWeb(WebData $webData): array
+	public function getWebFilter(WebData $webData): array
 	{
 		return [
-			ICollection::OR,
 			'articleTranslation->article->web->id' => $webData->id,
 		];
 	}

@@ -42,7 +42,7 @@ trait CoreModuleRepository
 	}
 
 
-	public function getFilterByWeb(WebData $webData): array
+	public function getWebFilter(WebData $webData): array
 	{
 		return ['webs->id' => $webData->id];
 	}

@@ -297,7 +297,7 @@ trait CorePresenter
 			if ($this->entity instanceof HasSlugHistory) {
 				$this->entity->checkForRedirect($this->id, $this->pageData, $this->languageData, $this);
 			}
-			if ($this->entity instanceof HasRequirements && !$this->entity->checkRequirements($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
+			if (!$this->entity->check($this->cmsUser, $this->webData, $this->pageData->authorizingTag)) {
 				throw new ForbiddenRequestException;
 			}
 		}

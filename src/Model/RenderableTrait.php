@@ -9,15 +9,15 @@ use Webovac\Core\Control\BaseControl;
 
 trait RenderableTrait
 {
-	public function getComponent(string $moduleClass, string $templateName): BaseControl
+	public function getComponent(string $templateName = 'default', ?string $moduleClass = null): BaseControl
 	{
-		return $this->component->create($this, $moduleClass, $templateName);
+		return $this->component->create($this, $moduleClass ?: $this->getModuleClass(), $templateName);
 	}
 
 
-	public function render(string $moduleClass, string $template): void
+	public function render(string $templateName = 'default', ?string $moduleClass = null): void
 	{
-		$this->getComponent($moduleClass, $template)->render();
+		$this->getComponent($templateName, $moduleClass ?: $this->getModuleClass())->render();
 	}
 
 
@@ -25,4 +25,13 @@ trait RenderableTrait
 	{
 		return null;
 	}
+
+
+	public function __toString(): string
+	{
+		return $this->getTitle();
+	}
+
+
+	abstract public function getModuleClass(): string;
 }

@@ -13,11 +13,14 @@ use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Relationships\IRelationshipCollection;
+use Webovac\Admin\Admin;
 use Webovac\Core\Control\PageItem\IPageItemControl;
+use Webovac\Core\Core;
 use Webovac\Core\IndexDefinition;
 use Webovac\Core\IndexTranslationDefinition;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
+use Webovac\Core\Model\File\HasFilesTrait;
 use Webovac\Core\Model\LinkableTrait;
 use Webovac\Core\Model\RenderableTrait;
 
@@ -29,6 +32,7 @@ trait CorePage
 {
 	use LinkableTrait;
 	use RenderableTrait;
+	use HasFilesTrait;
 
 	public const string TYPE_PAGE = 'page';
 	public const string TYPE_SIGNAL = 'signal';
@@ -91,7 +95,7 @@ trait CorePage
 	#[Inject] public IPageItemControl $component;
 
 
-	public function checkRequirements(CmsUser $user, WebData $webData, ?string $tag = null): bool
+	public function checkRequirements(CmsUser $user, ?string $tag = null): bool
 	{
 		return match ($tag) {
 			null => true,
@@ -155,12 +159,6 @@ trait CorePage
 	}
 
 
-	public function getFiles(): IRelationshipCollection
-	{
-		return $this->files;
-	}
-
-
 	public function getParameters(): array
 	{
 		return $this->web
@@ -177,38 +175,12 @@ trait CorePage
 
 	public function getEntityIcon(): string
 	{
-		return 'file';
+		return $this->icon ?: 'file';
 	}
 
 
-	public function getIndexDefinition(): IndexDefinition
+	public function getModuleClass(): string
 	{
-		$definition = new IndexDefinition;
-		$definition->entity = $this;
-		$definition->entityName = 'page';
-		foreach ($this->translations as $translation) {
-			$translationDefinition = new IndexTranslationDefinition;
-			$translationDefinition->language = $translation->language;
-			$translationDefinition->documents = ['A' => $this->name, 'B' => $translation->title, 'C' => $translation->description];
-			$definition->translations[] = $translationDefinition;
-		}
-		return $definition;
-	}
-
-
-	public function createLog(string $type): ?Log
-	{
-		$log = new Log;
-		$log->page = $this;
-		$log->type = $type;
-		$log->createdByPerson = match($type) {
-			Log::TYPE_CREATE => $this->createdByPerson,
-			Log::TYPE_UPDATE => $this->updatedByPerson,
-		};
-		$log->date = match($type) {
-			Log::TYPE_CREATE => $this->createdAt,
-			Log::TYPE_UPDATE => $this->updatedAt,
-		};
-		return $log;
+		return Admin::class;
 	}
 }

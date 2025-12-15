@@ -87,7 +87,7 @@ trait CorePageTranslationRepository
 	}
 
 
-	public function getFilterByWeb(WebData $webData): array
+	public function getWebFilter(WebData $webData): array
 	{
 		return [
 			ICollection::OR,

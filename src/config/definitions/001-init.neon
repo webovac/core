@@ -11,7 +11,7 @@ schemas:
 				primaryKey: id
 				indexes: [lib_id]
 				foreignKeys:
-					lib_id: [table: lib, column: id, onDelete: cascade, reverseName: assets]
+					lib_id: [table: lib, column: id, onDelete: cascade, reverseName: assets, reverseData: true]
 			deploy:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -37,8 +37,8 @@ schemas:
 				primaryKey: id
 				indexes: [web_id, page_id, created_by_person_id]
 				foreignKeys:
-					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseOrder: id, reverseSkipInManipulation: true, reverseDontCache: true]
-					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseOrder: id, reverseSkipInManipulation: true, reverseDontCache: true]
+					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseOrder: id]
+					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseOrder: id]
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 			file_translation:
 				columns:
@@ -56,7 +56,7 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					file_id: [table: file, column: id, reverseName: translations, reverseOrder: language->rank]
+					file_id: [table: file, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true]
 					language_id: [table: language, column: id]
 			index:
 				columns:
@@ -66,6 +66,7 @@ schemas:
 					page_id: [type: int, null: true]
 					web_id: [type: int, null: true]
 					person_id: [type: int, null: true]
+					date: [type: datetime, null: true]
 				primaryKey: id
 				uniqueKeys: [language_id, module_id, page_id, web_id, person_id]
 				indexes: [language_id, module_id, page_id, web_id, person_id]
@@ -107,7 +108,7 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					language_id: [table: language, column: id, reverseName: translations]
+					language_id: [table: language, column: id, reverseName: translations, reverseData: true]
 					translation_language_id: [table: language, column: id]
 			lib:
 				columns:
@@ -117,7 +118,7 @@ schemas:
 				uniqueKeys: [name]
 			log:
 				columns:
-					id: [type: int, null: false, auto: true]
+					id: [type: bigint, null: false]
 					created_by_person_id: [type: int, null: true]
 					date: [type: datetime, null: true]
 					language_id: [type: int, null: true]
@@ -127,9 +128,9 @@ schemas:
 					person_id: [type: int, null: true]
 					type: [type: string, null: false]
 				primaryKey: id
-				indexes: [created_by_person_id, language_id, module_id, page_id, web_id, person_id]
+				indexes: [created_by_person_id, language_id, module_id, page_id, web_id, person_id, type, date]
 				foreignKeys:
-					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					created_by_person_id: [table: person, column: id, onDelete: set null]
 					language_id: [table: language, column: id]
 					module_id: [table: module, column: id]
 					page_id: [table: page, column: id]
@@ -160,8 +161,8 @@ schemas:
 				primaryKey: [module_id, web_id]
 				indexes: [module_id, web_id]
 				foreignKeys:
-					module_id: [table: module, column: id, reverseName: webs, reverseSkipInManipulation: true]
-					web_id: [table: web, column: id, reverseName: modules]
+					module_id: [table: module, column: id, reverseName: webs]
+					web_id: [table: web, column: id, reverseName: modules, reverseData: true]
 			module_translation:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -180,7 +181,7 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					module_id: [table: module, column: id, reverseName: translations, reverseOrder: language->rank]
+					module_id: [table: module, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true]
 					language_id: [table: language, column: id]
 			page:
 				columns:
@@ -226,13 +227,13 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank, reverseDontCache: true]
+					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank, reverseData: true, reverseDontCache: true]
 					target_module_id: [table: module, column: id]
-					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank, reverseSkipInManipulation: true, reverseDontCache: true]
+					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank]
 					redirect_page_id: [table: page, column: id, onDelete: cascade]
 					target_page_id: [table: page, column: id, onDelete: cascade]
 					template_page_id: [table: page, column: id, onDelete: set null]
-					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank, reverseDontCache: true]
+					web_id: [table: web, column: id, reverseName: pages, reverseOrder: rank, reverseData: true, reverseDontCache: true]
 					image_file_id: [table: file, column: id, onDelete: set null]
 			page2lib:
 				columns:
@@ -241,7 +242,7 @@ schemas:
 				primaryKey: [page_id, lib_id]
 				indexes: [page_id, lib_id]
 				foreignKeys:
-					page_id: [table: page, column: id, reverseName: libs]
+					page_id: [table: page, column: id, reverseName: libs, reverseData: true]
 					lib_id: [table: lib, column: id]
 			page2authorized_person:
 				columns:
@@ -250,7 +251,7 @@ schemas:
 				primaryKey: [page_id, person_id]
 				indexes: [page_id, person_id]
 				foreignKeys:
-					page_id: [table: page, column: id, reverseName: authorizedPersons]
+					page_id: [table: page, column: id, reverseName: authorizedPersons, reverseData: true]
 					person_id: [table: person, column: id]
 			page2authorized_role:
 				columns:
@@ -259,7 +260,7 @@ schemas:
 				primaryKey: [page_id, role_id]
 				indexes: [page_id, role_id]
 				foreignKeys:
-					page_id: [table: page, column: id, reverseName: authorizedRoles]
+					page_id: [table: page, column: id, reverseName: authorizedRoles, reverseData: true]
 					role_id: [table: role, column: id]
 			page_translation:
 				columns:
@@ -281,7 +282,7 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					page_id: [table: page, column: id, reverseName: translations, reverseOrder: language->rank]
+					page_id: [table: page, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true]
 					language_id: [table: language, column: id]
 			path:
 				columns:
@@ -297,7 +298,7 @@ schemas:
 				indexes: [web_id, page_translation_id]
 				foreignKeys:
 					web_id: [table: web, column: id]
-					page_translation_id: [table: page_translation, column: id, reverseName: paths, reverseOrder: id, reverseSkipInManipulation: true]
+					page_translation_id: [table: page_translation, column: id, reverseName: paths, reverseOrder: id, reverseData: true, reverseSkipInManipulation: true]
 			parameter:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -313,10 +314,12 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					page_id: [table: page, column: id, reverseName: parameters]
+					page_id: [table: page, column: id, reverseName: parameters, reverseData: true]
 			person:
 				columns:
 					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
 					email: [type: string, null: true]
 					first_name: [type: string, null: false]
 					last_name: [type: string, null: false]
@@ -325,6 +328,10 @@ schemas:
 					updated_at: [type: datetime, null: true]
 				primaryKey: id
 				uniqueKeys: [email]
+				indexes: [created_by_person_id, updated_by_person_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: set null]
+					updated_by_person_id: [table: person, column: id, onDelete: set null]
 			preference:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -336,7 +343,7 @@ schemas:
 				primaryKey: id
 				indexes: [person_id, web_id, language_id]
 				foreignKeys:
-					person_id: [table: person, column: id, reverseName: preferences]
+					person_id: [table: person, column: id, reverseName: preferences, reverseData: true]
 					web_id: [table: web, column: id]
 					language_id: [table: language, column: id]
 			role:
@@ -352,8 +359,8 @@ schemas:
 				primaryKey: [role_id, person_id]
 				indexes: [role_id, person_id]
 				foreignKeys:
-					role_id: [table: role, column: id, reverseName: persons, reverseSkipInManipulation: true]
-					person_id: [table: person, column: id, reverseName: roles]
+					role_id: [table: role, column: id, reverseName: persons]
+					person_id: [table: person, column: id, reverseName: roles, reverseData: true]
 			signal:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -369,7 +376,7 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					page_id: [table: page, column: id, reverseName: signals]
+					page_id: [table: page, column: id, reverseName: signals, reverseData: true]
 			slug:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -378,6 +385,7 @@ schemas:
 					slug: [type: string, null: false]
 					active: [type: bool, null: false, default: false]
 				primaryKey: id
+				indexes: [slug]
 			text:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -407,7 +415,7 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					text_id: [table: text, column: id, reverseName: translations, reverseOrder: language->rank]
+					text_id: [table: text, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true]
 					language_id: [table: language, column: id]
 			web:
 				columns:
@@ -446,7 +454,7 @@ schemas:
 					logo_file_id: [table: file, column: id, onDelete: set null]
 					background_file_id: [table: file, column: id, onDelete: set null]
 					home_page_id: [table: page, column: id, onDelete: set null] # ne restirct kvůli mysql, nedovolí smazání webu
-					responsible_person_id: [table: person, column: id, onDelete: restrict, reverseName: responsibleForWebs, reverseSkipInManipulation: true]
+					responsible_person_id: [table: person, column: id, onDelete: restrict, reverseName: responsibleForWebs]
 			web2admin_person:
 				columns:
 					web_id: [type: int, null: false]
@@ -454,7 +462,7 @@ schemas:
 				primaryKey: [web_id, person_id]
 				indexes: [web_id, person_id]
 				foreignKeys:
-					web_id: [table: web, column: id, reverseName: adminPersons]
+					web_id: [table: web, column: id, reverseName: adminPersons, reverseData: true]
 					person_id: [table: person, column: id]
 			web2admin_role:
 				columns:
@@ -463,7 +471,7 @@ schemas:
 				primaryKey: [web_id, role_id]
 				indexes: [web_id, role_id]
 				foreignKeys:
-					web_id: [table: web, column: id, reverseName: adminRoles]
+					web_id: [table: web, column: id, reverseName: adminRoles, reverseData: true]
 					role_id: [table: role, column: id]
 			web2person:
 				columns:
@@ -472,7 +480,7 @@ schemas:
 				primaryKey: [web_id, person_id]
 				indexes: [web_id, person_id]
 				foreignKeys:
-					web_id: [table: web, column: id, reverseName: persons, reverseSkipInManipulation: true, reverseDontCache: true]
+					web_id: [table: web, column: id, reverseName: persons]
 					person_id: [table: person, column: id, reverseName: webs]
 			web_translation:
 				columns:
@@ -491,5 +499,5 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
-					web_id: [table: web, column: id, reverseName: translations, reverseOrder: language->rank]
+					web_id: [table: web, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true]
 					language_id: [table: language, column: id]

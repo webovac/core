@@ -23,6 +23,6 @@ trait CoreLog
 
 	public function getterTypeLabel(): string
 	{
-		return self::TYPES[$this->type];
+		return self::TYPES[$this->type] ?? $this->type;
 	}
 }

@@ -12,4 +12,5 @@ interface Linkable
 	function getPageName(): string;
 	function getParameters(): array;
 	function getLink(Component $component): string;
+	function redirectToDetail(Component $component): void;
 }

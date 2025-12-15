@@ -78,17 +78,5 @@ class Core implements Module, HasDefinitionGroup, HasManipulationGroups, HasOrmE
 			$this->orm->pageRepository->$property[] = fn(Page $page) => $this->cmsCache->clean([Cache::Tags => ['page', 'web']]);
 			$this->orm->webRepository->$property[] = fn(Web $web) => $this->cmsCache->clean([Cache::Tags => ['page', 'web']]);
 		}
-		if ($this->orm->hasRepositoryByName('logRepository')) {
-			$this->orm->languageRepository->onAfterInsert[] = fn (Language $language) => $this->orm->logRepository->createLog($language, Log::TYPE_CREATE);
-			$this->orm->moduleRepository->onAfterInsert[] = fn (ModuleEntity $module) => $this->orm->logRepository->createLog($module, Log::TYPE_CREATE);
-			$this->orm->pageRepository->onAfterInsert[] = fn (Page $page) => $this->orm->logRepository->createLog($page, Log::TYPE_CREATE);
-			$this->orm->webRepository->onAfterInsert[] = fn (Web $web) => $this->orm->logRepository->createLog($web, Log::TYPE_CREATE);
-			$this->orm->personRepository->onAfterInsert[] = fn (Person $person) => $this->orm->logRepository->createLog($person, Log::TYPE_CREATE);
-			$this->orm->languageRepository->onAfterUpdate[] = fn (Language $language) => $this->orm->logRepository->createLog($language, Log::TYPE_UPDATE);
-			$this->orm->moduleRepository->onAfterUpdate[] = fn (ModuleEntity $module) => $this->orm->logRepository->createLog($module, Log::TYPE_UPDATE);
-			$this->orm->pageRepository->onAfterUpdate[] = fn (Page $page) => $this->orm->logRepository->createLog($page, Log::TYPE_UPDATE);
-			$this->orm->webRepository->onAfterUpdate[] = fn (Web $web) => $this->orm->logRepository->createLog($web, Log::TYPE_UPDATE);
-			$this->orm->personRepository->onAfterUpdate[] = fn (Person $person) => $this->orm->logRepository->createLog($person, Log::TYPE_UPDATE);
-		}
 	}
 }

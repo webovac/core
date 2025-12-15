@@ -62,6 +62,7 @@ trait CoreWebDataRepository
 				/** @var WebData $web */
 				foreach ($this->getCollection() as $web) {
 					$aliases["$web->host-$web->basePath"] = $web->id;
+					$aliases[$web->code] = $web->id;
 				}
 				return $aliases;
 			}, [Cache::Tags => lcfirst($this->getName())]);
@@ -73,5 +74,11 @@ trait CoreWebDataRepository
 	public function getKey(string $host, ?string $basePath): ?int
 	{
 		return $this->getAliases()["$host-$basePath"] ?? null;
+	}
+
+
+	public function getKeyByCode(string $code): ?int
+	{
+		return $this->getAliases()[$code] ?? null;
 	}
 }

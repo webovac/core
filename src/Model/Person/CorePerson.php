@@ -35,32 +35,6 @@ trait CorePerson
 	}
 
 
-	public function getIndexDefinition(): IndexDefinition
-	{
-		$definition = new IndexDefinition;
-		$definition->entity = $this;
-		$definition->entityName = 'person';
-		$translationDefinition = new IndexTranslationDefinition;
-		$translationDefinition->documents = ['A' => $this->name];
-		$definition->translations[] = $translationDefinition;
-		return $definition;
-	}
-
-
-	public function createLog(string $type): ?Log
-	{
-		$log = new Log;
-		$log->person = $this;
-		$log->type = $type;
-		$log->createdByPerson = $this;
-		$log->date = match($type) {
-			Log::TYPE_CREATE => $this->createdAt,
-			Log::TYPE_UPDATE => $this->updatedAt,
-		};
-		return $log;
-	}
-
-
 	public function addWeb(WebData $webData): void
 	{
 		if (!$this->webs->has($webData->id)) {

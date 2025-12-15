@@ -53,36 +53,4 @@ trait CoreModule
 	{
 		return $this->getTranslation($this->dataProvider->getLanguageData())?->description;
 	}
-
-
-	public function getIndexDefinition(): IndexDefinition
-	{
-		$definition = new IndexDefinition;
-		$definition->entity = $this;
-		$definition->entityName = 'module';
-		foreach ($this->translations as $translation) {
-			$translationDefinition = new IndexTranslationDefinition;
-			$translationDefinition->language = $translation->language;
-			$translationDefinition->documents = ['A' => $this->name, 'B' => $translation->title, 'C' => $translation->description];
-			$definition->translations[] = $translationDefinition;
-		}
-		return $definition;
-	}
-
-
-	public function createLog(string $type): ?Log
-	{
-		$log = new Log;
-		$log->module = $this;
-		$log->type = $type;
-		$log->createdByPerson = match($type) {
-			Log::TYPE_CREATE => $this->createdByPerson,
-			Log::TYPE_UPDATE => $this->updatedByPerson,
-		};
-		$log->date = match($type) {
-			Log::TYPE_CREATE => $this->createdAt,
-			Log::TYPE_UPDATE => $this->updatedAt,
-		};
-		return $log;
-	}
 }

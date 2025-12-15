@@ -11,9 +11,9 @@ use Build\Model\Web\WebData;
 
 trait CoreLanguageRepository
 {
-	public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?Language
+	public function getKeyParameter(): string
 	{
-		return $this->getBy(['shortcut' => $parameters['LanguageDetail']]);
+		return 'shortcut';
 	}
 
 
@@ -23,7 +23,7 @@ trait CoreLanguageRepository
 	}
 
 
-	public function getFilterByWeb(WebData $webData): array
+	public function getWebFilter(WebData $webData): array
 	{
 		$ids = [];
 		foreach ($webData->translations as $translation) {
