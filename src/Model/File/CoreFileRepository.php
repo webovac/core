@@ -23,6 +23,7 @@ use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
+use Tracy\Debugger;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -104,9 +105,11 @@ trait CoreFileRepository
 				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			} elseif ($data->upload->getContentType() === 'application/pdf') {
 				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
-				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
-				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
-				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+				if ($compatibleUpload) {
+					$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+					$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
+					$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+				}
 			} elseif (str_contains($data->upload->getContentType(), 'video/')) {
 				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
 				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
@@ -237,25 +240,30 @@ trait CoreFileRepository
 	 * @throws ImageException
 	 * @throws UnknownImageFileException
 	 */
-	public function pdf2jpeg(FileUpload $upload, bool $forceSquare): FileUpload
+	public function pdf2jpeg(FileUpload $upload, bool $forceSquare): ?FileUpload
 	{
-		$tmpFile = $upload->getTemporaryFile();
-		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
-		copy($tmpFile, $cloneFile);
-		$img = new \Imagick;
-		$img->setColorspace(\Imagick::COLORSPACE_SRGB);
-		$img->readImage($cloneFile . '[0]');
-		$img->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
-		$img->setImageAlphaChannel(\Imagick::ALPHACHANNEL_REMOVE);
-		$img->setImageFormat('jpg');
-		$img->setImageCompression(\Imagick::COMPRESSION_JPEG);
-		$img->setImageCompressionQuality(90);
-		$img->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
-		$jpeg = Image::fromString($img->getImageBlob());
-		$jpeg->save($cloneFile, type: ImageType::JPEG);
-		$img->clear();
-		$upload = $this->createFileUploadFromFile($cloneFile);
-		return $forceSquare ? $this->image2square($upload) : $upload;
+		try {
+			$tmpFile = $upload->getTemporaryFile();
+			$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
+			copy($tmpFile, $cloneFile);
+			$img = new \Imagick;
+			$img->setColorspace(\Imagick::COLORSPACE_SRGB);
+			$img->readImage($cloneFile . '[0]');
+			$img->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
+			$img->setImageAlphaChannel(\Imagick::ALPHACHANNEL_REMOVE);
+			$img->setImageFormat('jpg');
+			$img->setImageCompression(\Imagick::COMPRESSION_JPEG);
+			$img->setImageCompressionQuality(90);
+			$img->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
+			$jpeg = Image::fromString($img->getImageBlob());
+			$jpeg->save($cloneFile, type: ImageType::JPEG);
+			$img->clear();
+			$upload = $this->createFileUploadFromFile($cloneFile);
+			return $forceSquare ? $this->image2square($upload) : $upload;
+		} catch (\ImagickException $e) {
+			Debugger::log($e->getMessage());
+			return null;
+		}
 	}
 
 
