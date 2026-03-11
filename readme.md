@@ -233,7 +233,7 @@ trait LibraryBook
 
 #### HasWeb
 
-CMS prevents users from accessing entities from websites other than website entity is connected to.
+CMS prevents users from accessing entities from websites other than the website entity is connected to.
 
 ```php
 trait LibraryBook
@@ -241,7 +241,7 @@ trait LibraryBook
     use HasWebTrait;
 }
 
-class LibraryBookRepository
+trait LibraryBookRepository
 {
     use HasWebFilterTrait;
 }
