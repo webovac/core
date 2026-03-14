@@ -6,7 +6,6 @@ namespace Webovac\Core\Model\Slug;
 
 
 use Build\Model\Web\WebData;
-use Nextras\Orm\Collection\ICollection;
 
 trait CoreSlugRepository
 {

@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Language;
 
-use Build\Model\LanguageTranslation\LanguageTranslationData;
-use DateTimeInterface;
-use Stepapo\Utils\Attribute\ArrayOfType;
-
 
 trait CoreLanguageData
 {

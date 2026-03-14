@@ -10,7 +10,6 @@ use Build\Model\Path\Path;
 use Build\Model\Path\PathData;
 use Build\Model\Web\Web;
 use Build\Model\Web\WebData;
-use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Model\HasWebFilterTrait;
 
 

@@ -6,7 +6,6 @@ namespace Webovac\Core\DI;
 
 use Build\Model\Orm;
 use Contributte\FormMultiplier\DI\MultiplierExtension;
-use Nette\DI\Extensions\DecoratorExtension;
 use Nette\DI\Extensions\SearchExtension;
 use Nette\PhpGenerator\ClassType;
 use Nette\Schema\Expect;
@@ -16,9 +15,7 @@ use Nextras\Migrations\Bridges\NetteDI\MigrationsExtension;
 use Nextras\Orm\Bridges\NetteDI\OrmExtension;
 use Stepapo\Model\DI\ModelExtension;
 use Stepapo\Utils\DI\StepapoExtension;
-use Stepapo\Utils\Injectable;
 use Stepapo\Utils\Service;
-use Tracy\Dumper;
 use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Lib\KeyProvider;
 use Webovac\Core\Lib\ModeChecker;

@@ -6,7 +6,6 @@ namespace Webovac\Core\Model\Text;
 
 use Build\Model\Text\Text;
 use Build\Model\TextTranslation\TextTranslationDataRepository;
-use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Entity\IEntity;
 
 

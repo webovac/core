@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\TextTranslation;
 
-use DateTimeInterface;
-use Stepapo\Utils\Attribute\KeyProperty;
-use Stepapo\Utils\Attribute\ValueProperty;
-
 
 trait CoreTextTranslationData
 {

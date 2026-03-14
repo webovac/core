@@ -26,7 +26,7 @@
 	<link rel="shortcut icon" n:ifset="$smallIconUrl" href="{$baseUrl}/{$smallIconUrl}?m={=$smallIconUrl|mTime}">
 	<link rel="apple-touch-icon" n:ifset="$largeIconUrl" href="{$baseUrl}/{$largeIconUrl}?m={=$largeIconUrl|mTime}">
 	<link rel="manifest" href="{plink '//Manifest:', host: $webData->host, basePath: $webData->basePath, lang: $languageData->shortcut}?m={max($deployData?->createdAt, $webTranslationData->updatedAt ?: $webTranslationData->createdAt)|date:'U'}">
-	<link rel="stylesheet" n:foreach="$pageData->stylesheets as $assetData" href="{if $assetData->local}{$baseUrl}/{/}{$assetData->link|replaceKey|noescape}{if $assetData->local}?m={=$assetData->link|mTime}{/}">
+	<link rel="stylesheet" n:foreach="$pageData->stylesheets as $assetData" href="{if $assetData->local}{$baseUrl}/{/}{$assetData->link|replaceKey|escapeUrl}{if $assetData->local}?m={=$assetData->link|mTime}{/}">
 	<link rel="stylesheet" href="{$baseUrl}/dist/css/bundle.css?m={='dist/css/bundle.css'|mTime}">
 	<link rel="stylesheet" n:if="isModuleInstalled('style')" href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($deployData?->createdAt, $webData->updatedAt ?: $webData->createdAt, $layoutData->updatedAt ?: $layoutData->createdAt)|date:'U'}">
 	<link rel="stylesheet" n:else href="{plink '//Style:', host: $webData->host, basePath: $webData->basePath}?m={max($deployData->createdAt, $webData->updatedAt ?: $webData->createdAt)|date:'U'}">
@@ -73,7 +73,7 @@
 		{/}
 	</div>
 </div>
-<script n:foreach="$pageData->scripts as $assetData" src="{if $assetData->local}{$baseUrl}/{/}{$assetData->link|replaceKey|noescape}{if $assetData->local}?m={=$assetData->link|mTime}{/}"></script>
+<script n:foreach="$pageData->scripts as $assetData" src="{if $assetData->local}{$baseUrl}/{/}{$assetData->link|replaceKey|escapeUrl}{if $assetData->local}?m={=$assetData->link|mTime}{/}"></script>
 <script src="{$baseUrl}/dist/js/bundle.js?m={='dist/js/bundle.js'|mTime}"></script>
 </body>
 </html>

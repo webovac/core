@@ -7,7 +7,6 @@ namespace Webovac\Core\Model\Person;
 use Build\Model\Person\Person;
 use Build\Model\Person\PersonData;
 use Build\Model\Web\WebData;
-use Nextras\Orm\Collection\ICollection;
 
 
 trait CorePersonRepository

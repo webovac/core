@@ -6,9 +6,7 @@ namespace Webovac\Core\Model\Module;
 
 use Build\Model\Module\ModuleData;
 use Build\Model\ModuleTranslation\ModuleTranslationDataRepository;
-use Build\Model\Page\PageDataRepository;
 use Nette\Caching\Cache;
-use Nette\DI\Attributes\Inject;
 
 
 trait CoreModuleDataRepository

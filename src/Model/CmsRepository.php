@@ -8,12 +8,10 @@ use Build\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
-use Nextras\Dbal\Drivers\Exception\QueryException;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Model\Orm\InternalRepository;
 use Stepapo\Model\Orm\PrivateRepository;
 use Stepapo\Model\Orm\StepapoRepository;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 

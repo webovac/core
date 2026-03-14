@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\PageTranslation;
 
-use Build\Model\Path\PathData;
-use DateTimeInterface;
-use Stepapo\Utils\Attribute\ArrayOfType;
-use Stepapo\Utils\Attribute\KeyProperty;
-use Stepapo\Utils\Attribute\SkipInManipulation;
-
 
 trait CorePageTranslationData
 {

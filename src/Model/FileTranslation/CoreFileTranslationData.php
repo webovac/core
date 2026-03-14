@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\FileTranslation;
 
-use DateTimeInterface;
-use Stepapo\Utils\Attribute\KeyProperty;
-
 
 trait CoreFileTranslationData
 {

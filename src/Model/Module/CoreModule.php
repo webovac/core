@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Module;
 
 use Build\Model\Language\LanguageData;
-use Build\Model\Log\Log;
 use Build\Model\ModuleTranslation\ModuleTranslation;
 use Build\Model\Page\Page;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
-use Webovac\Core\IndexDefinition;
-use Webovac\Core\IndexTranslationDefinition;
 use Webovac\Core\Lib\DataProvider;
 
 

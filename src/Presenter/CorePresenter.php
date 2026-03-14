@@ -41,7 +41,6 @@ use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\RegisterOrmEvents;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\HasRequirements;
 use Webovac\Core\Model\HasSlugHistory;
 
 
@@ -408,7 +407,7 @@ trait CorePresenter
 			->setPolicy(
 				SecurityPolicy::createSafePolicy()
 					->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox', 'snippet', 'snippetArea'])
-					->allowFilters(['noescape', 'mTime', 'replaceKey', 'translate', 'localDate'])
+					->allowFilters(['replaceKey', 'mTime', 'translate', 'localDate'])
 					->allowProperties(stdClass::class, SecurityPolicy::All)
 					->allowProperties(CmsEntity::class, SecurityPolicy::All)
 					->allowProperties(Item::class, SecurityPolicy::All)

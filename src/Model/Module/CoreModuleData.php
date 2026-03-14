@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Module;
 
 use Build\Model\Module\ModuleData;
-use Build\Model\ModuleTranslation\ModuleTranslationData;
-use Build\Model\Page\PageData;
-use DateTimeInterface;
-use Stepapo\Utils\Attribute\ArrayOfType;
-use Stepapo\Utils\Attribute\DefaultValue;
 
 
 trait CoreModuleData
