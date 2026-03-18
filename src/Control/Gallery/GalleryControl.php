@@ -36,7 +36,6 @@ class GalleryControl extends BaseControl
 		$files = $this->hasFiles->getFiles()->toCollection()->findBy(['type!=' => File::TYPE_FILE])->resetOrderBy()->orderBy('capturedAt')->orderBy('createdAt');
 		$this->template->files = $files;
 		$this->template->fileCount = $files->count();
-		bdump($files->count());
 		$this->template->languageData = $this->dataProvider->getLanguageData();
 		$urls = [];
 		/** @var File $file */
