@@ -96,8 +96,6 @@ trait CorePresenter
 	public function injectCoreRender(): void
 	{
 		$this->onRender[] = function () {
-//			bdump($this->orm->pageRepository->findBy(['translations->content:contains' => 'Stránka'])->fetchAll());
-//			bdump($this->orm->pageRepository->findBy(['translations->id:count' => 2])->fetchAll());
 			$this->template->languageData = $this->languageData;
 			$this->template->webData = $this->webData;
 			if ($this->webData->iconFile) {

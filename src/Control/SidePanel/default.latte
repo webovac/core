@@ -26,7 +26,7 @@
 			<i n:class="$layoutData->secondaryIcon, fa-fw, fa-paperclip"></i>
 		</a>
 	</div>
-	<hr>
+	<hr n:if="!$isError && (count($webData->translations) > 1 || (isModuleInstalled('style') && count($themeDatas) > 1 && $cmsUser->isLoggedIn()))">
 	<div class="languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
 		{var $l = $dataModel->getLanguageData($translation->language)}
 			{var $t = $l->getCollection('translations')->getByKey($languageData->id) ?: $l->getCollection('translations')->getByKey($webData->defaultLanguage)}

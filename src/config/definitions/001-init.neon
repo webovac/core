@@ -37,8 +37,8 @@ schemas:
 				primaryKey: id
 				indexes: [web_id, page_id, created_by_person_id]
 				foreignKeys:
-					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseOrder: id]
-					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseOrder: id]
+					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseData: true, reverseDontCache: true, reverseOrder: id]
+					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseData: true, reverseDontCache: true, reverseOrder: id]
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 			file_translation:
 				columns:

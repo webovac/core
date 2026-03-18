@@ -25,27 +25,11 @@
 						{include auth.latte}
 					{/}
 				{/}
-				{*
-				{if $p->type === Build\Model\Page\Page::TYPE_SEPARATOR}
-					<hr>
-				{else}
-					{var $t = $p->getCollection('translations')->getByKey($languageData->id) ?: $p->getCollection('translations')->getByKey($webData->defaultLanguage)}
-					{var $targetLanguageData = $t ? $languageData : $defaultLanguageData}
-					{var $checkActive = $p->targetAnchor ? false : ($p->targetPage ? $p->targetPage !== $webData->homePage : $p->id !== $webData->homePage)}
-					<a n:tag="$p->type === Build\Model\Page\Page::TYPE_TEXT ? 'div' : 'a'" n:attr='href: $control->getHref($p), data-confirm: $p->ajax && $t->onclick ? $t->onclick, onclick: !$p->ajax && $t->onclick ? "return confirm(\"$t->onclick\")", data-naja-history: $p->ajax ? "off"' n:if="!$p->hideInNavigation" n:class="$control->getClass($p, $checkActive), $p->ajax ? ajax">
-						<i n:if="$p->icon" n:class="$layoutData->primaryIcon, fa-fw, 'fa-' . $p->icon"></i>
-						<span>
-							{$t?->title}
-							<span class="text-danger" n:if="$languageData->id !== $targetLanguageData->id"><i class="fas fa-circle-exclamation fa-fw" ></i></span>
-						</span>
-					</a>
-				{/}
-				*}
 				{renderMenuItem($p)}
 			{/}
-			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut') && $cmsUser->isLoggedIn()}
-				<hr>
-				<div class="side-menu-item languages" n:if="count($webData->translations) > 1 && !$isError && $cmsUser->isLoggedIn()" n:inner-foreach="$webData->translations as $translation">
+			{if ($layoutData->hideSidePanel || $layoutData->code === 'cvut')}
+				<hr n:if="!$isError && (count($webData->translations) > 1 || (isModuleInstalled('style') && count($themeDatas) > 1 && $cmsUser->isLoggedIn()))">
+				<div class="side-menu-item languages" n:if="count($webData->translations) > 1 && !$isError" n:inner-foreach="$webData->translations as $translation">
 					{var $l = $dataModel->getLanguageData($translation->language)}
 					{var $t = $l->getCollection('translations')->getByKey($languageData->id) ?: $l->getCollection('translations')->getByKey($webData->defaultLanguage)}
 					{ifset $availableTranslations[$l->id]}

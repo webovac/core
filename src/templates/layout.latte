@@ -51,7 +51,6 @@
 					{include 'footer.file'}
 				</div>
 			</div>
-			<div class="background" n:if="$webData->backgroundFile && $layoutData->imageDisplay"></div>
 		</div>
 	</div>
 	<div n:if="!$webData->hideSidePanel && !$layoutData->hideSidePanel && isModuleInstalled('style') && $cmsUser->isLoggedIn()" n:class="side-panel"></div>
@@ -60,13 +59,18 @@
 	<div n:class="layout, $pageData->stretched ? stretched">
 		{control core-menu}
 		<div class="horizontal-wrapper">
-			{if $layoutData->code === 'twitter'}
-				{if !$layoutData->hideBreadcrumbs}
-					{control core-breadcrumbs}
-				{/}
-				{control core-messages}
-			{/}
 			{control core-navigation}
+			<div class="content-image-wrapper">
+				<div class="content-wrapper h-100">
+					{if $layoutData->code === 'twitter'}
+						{if !$layoutData->hideBreadcrumbs}
+							{control core-breadcrumbs}
+						{/}
+						{control core-messages}
+					{/}
+				</div>
+				<div class="background" n:if="$webData->backgroundFile && $layoutData->imageDisplay"></div>
+			</div>
 		</div>
 		{if !$layoutData->hideSidePanel}
 			{control core-sidePanel}
