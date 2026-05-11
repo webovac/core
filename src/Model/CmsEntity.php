@@ -16,7 +16,7 @@ abstract class CmsEntity extends StepapoEntity
 		if ($this instanceof HasWeb && !$this->checkWeb($webData)) {
 			return false;
 		}
-		if ($this instanceof HasRequirements && !$this->checkRequirements($cmsUser, $tag)) {
+		if ($this instanceof HasRequirements && !$this->checkRequirements($cmsUser, $webData, $tag)) {
 			return false;
 		}
 		return true;

@@ -8,10 +8,10 @@ use Build\Model\Asset\Asset;
 use Build\Model\Module\Module;
 use Build\Model\Page\Page;
 use Build\Model\Page\PageData;
+use Build\Model\Web\Web;
 use Nette\Caching\Cache;
 use ReflectionException;
 use Stepapo\Model\Data\Collection;
-use Stepapo\Model\Data\Item;
 use Throwable;
 
 
@@ -20,37 +20,33 @@ trait CorePageDataRepository
 	private array $aliases;
 
 
-	/** @return Collection<Item> */
-	public function getCollection(): Collection
-	{
-		if (!isset($this->collection)) {
-			$this->buildCache();
-		}
-		return $this->collection;
-	}
-
-
 	/**
 	 * @throws Throwable
 	 */
-	public function buildCache(): void
+	public function buildCache(?Web $web = null): void
 	{
-		$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
-		$collection = $this->rebuild();
+		if (!$web) {
+			$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
+		} else {
+			$this->cache->remove('aliases');
+			$this->cmsCache->clean([Cache::Tags => 'router']);
+		}
+		$collection = $this->rebuild($web);
 		foreach ($collection as $key => $item) {
 			$this->cacheItem($key, $item);
 		}
-		$this->collection = $collection;
 		$this->setReady();
 	}
 
 
-	public function rebuild(): Collection
+	public function rebuild(?Web $web = null): Collection
 	{
-		$this->orm->pageTranslationRepository->rebuildPaths();
+		$collection = $web ? $this->getCollection() : new Collection;
+		$this->orm->pageTranslationRepository->rebuildPaths($web);
 		$this->orm->flush();
-		$collection = new Collection;
-		$this->buildCollection($collection);
+		$this->buildCollection($collection, $web);
+		$this->collection = $collection;
+		$this->cache->save('collection', $collection, [Cache::Tags => lcfirst($this->getName())]);
 		return $collection;
 	}
 
@@ -115,6 +111,7 @@ trait CorePageDataRepository
 			$pageData->accessSetups = $pageData->dontInheritAccessSetup ? [$accessSetup] : array_merge($parentPageData->accessSetups ?? [], [$accessSetup]);
 			$pageData->authorizingTag = $page->authorizingTag ?: $parentPageData?->authorizingTag;
 			$pageData->isHomePage = $page->isHomePage();
+			$pageData->menuPage = $page->providesMenu ? $page->id : ($parentPageData->menuPage ?? null);
 			$pageData->navigationPage = $page->providesNavigation ? $page->id : ($parentPageData->navigationPage ?? null);
 			$pageData->buttonsPage = $page->providesButtons ? $page->id : ($parentPageData->buttonsPage ?? null);
 			$pageData->hasParameter = ($page->hasParameter ?: $parentPageData?->hasParameter) ?: false;
@@ -161,15 +158,5 @@ trait CorePageDataRepository
 	public function getKey(int $webId, string $pageName): ?int
 	{
 		return $this->getAliases()["$webId-$pageName"] ?? null;
-	}
-
-
-	public function cacheItem(mixed $key, PageData|Item $item): void
-	{
-		$this->cache->save(
-			lcfirst($this->getName()) . '/' . $key,
-			$item,
-			[Cache::Tags => [lcfirst($this->getName()), 'web/'. $item->web]],
-		);
 	}
 }

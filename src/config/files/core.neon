@@ -6,6 +6,9 @@ modules:
 			Asset:
 				repositoryImplements:
 					Stepapo\Model\Orm\InternalRepository:
+			Command:
+				repositoryImplements:
+					Stepapo\Model\Orm\InternalRepository:
 			Deploy:
 				withDataRepository: true
 				repositoryImplements:

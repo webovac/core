@@ -1,5 +1,6 @@
 name: Core - signal Core
-path: //test
+host: test
+path: ''
 identity:
 	id: 1
 	roles: admin

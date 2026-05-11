@@ -27,7 +27,7 @@ abstract class CmsRepository extends StepapoRepository
 		$filter = [
 			ICollection::AND,
 		];
-		if ($webData && !$webData->isAdmin && $this instanceof HasWebFilter) {
+		if ($webData && !$webData->isAdmin && $this instanceof HasWebFilter && $this->getWebFilter($webData)) {
 			$filter[] = $this->getWebFilter($webData);
 		}
 		if ($parameters) {
@@ -44,7 +44,7 @@ abstract class CmsRepository extends StepapoRepository
 	public function getEntityListByPath(string $path, ?WebData $webData = null): array
 	{
 		$filter = [];
-		if ($webData && !$webData->isAdmin && $this instanceof HasWebFilter) {
+		if ($webData && !$webData->isAdmin && $this instanceof HasWebFilter && $this->getWebFilter($webData)) {
 			$filter[] = $this->findBy($this->getWebFilter($webData));
 		}
 		$filter[$this->getKeyParameter()] = explode('/', $path);

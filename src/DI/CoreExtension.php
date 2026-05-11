@@ -16,7 +16,6 @@ use Nextras\Orm\Bridges\NetteDI\OrmExtension;
 use Stepapo\Model\DI\ModelExtension;
 use Stepapo\Utils\DI\StepapoExtension;
 use Stepapo\Utils\Service;
-use Webovac\Core\Ext\Orm\CmsPhpDocRepositoryFinder;
 use Webovac\Core\Lib\KeyProvider;
 use Webovac\Core\Lib\ModeChecker;
 
@@ -45,6 +44,7 @@ class CoreExtension extends StepapoExtension
 				'schemas' => Expect::arrayOf('string'),
 			]),
 			'testMode' => Expect::bool()->default(false),
+			'cliMode' => Expect::bool()->default(false),
 		]);
 	}
 
@@ -56,7 +56,7 @@ class CoreExtension extends StepapoExtension
 		$builder->addDefinition($this->prefix('keyProvider'))
 			->setFactory(KeyProvider::class, [$this->config->parameters]);
 		$builder->addDefinition($this->prefix('modeChecker'))
-			->setFactory(ModeChecker::class, [$builder->parameters['debugMode'], $this->config->testMode]);
+			->setFactory(ModeChecker::class, [$builder->parameters['debugMode'], $this->config->testMode, $this->config->cliMode]);
 		$this->createModelExtension();
 		$this->createOrmExtension();
 		$this->createMultiplierExtension();

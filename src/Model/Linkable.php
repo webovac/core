@@ -9,8 +9,8 @@ use Nette\Application\UI\Component;
 
 interface Linkable
 {
-	function getPageName(): string;
-	function getParameters(): array;
-	function getLink(Component $component): string;
-	function redirectToDetail(Component $component): void;
+	function getPageName(?string $context = null): string;
+	function getParameters(?string $context = null): array;
+	function getLink(Component $component, ?string $context = null): string;
+	function redirectToDetail(Component $component, ?string $context = null): void;
 }

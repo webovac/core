@@ -28,6 +28,8 @@ use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Stepapo\Model\Data\Item;
+use Throwable;
+use Tracy\Dumper;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Exception\LoginRequiredException;
@@ -71,6 +73,7 @@ trait CorePresenter
 	public ?PageData $pageData;
 	protected ?PageTranslation $pageTranslation;
 	private ?PageTranslationData $pageTranslationData;
+	private ?PageData $menuPageData;
 	private ?PageData $navigationPageData;
 	private ?PageData $buttonsPageData;
 	private ?DeployData $deployData;
@@ -104,6 +107,7 @@ trait CorePresenter
 			}
 			$this->template->webTranslationData = $this->webTranslationData;
 			$this->template->pageData = $this->pageData;
+			$this->template->menuPageData = $this->menuPageData;
 			$this->template->deployData = $this->deployData;
 			$this->template->imageUrl = $this->getImageUrl();
 			$this->template->pageTranslation = $this->pageTranslation;
@@ -228,6 +232,7 @@ trait CorePresenter
 		$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
 		$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
 		$this->deployData = $this->dataModel->getLastDeployData();
+		$this->menuPageData = $this->pageData->menuPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->menuPage) : null;
 		$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
 		$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
 		$this->translator->setLanguageData($this->languageData);
@@ -238,6 +243,7 @@ trait CorePresenter
 			->setLanguageData($this->languageData)
 			->setWebData($this->webData)
 			->setPageData($this->pageData)
+			->setMenuPageData($this->menuPageData)
 			->setNavigationPageData($this->navigationPageData)
 			->setButtonsPageData($this->buttonsPageData)
 			->setDeployData($this->deployData);
@@ -401,6 +407,10 @@ trait CorePresenter
 			'main.file' => $main,
 			'footer.file' => $this->webTranslationData->footer ?: '',
 		]))
+			->setExceptionHandler(function (Throwable $e, \Latte\Runtime\Template $template) {
+				bdump($e->getMessage());
+				Dumper::log($e->getMessage());
+			})
 			->setSandboxMode()
 			->setPolicy(
 				SecurityPolicy::createSafePolicy()

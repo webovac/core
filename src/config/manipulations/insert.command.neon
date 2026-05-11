@@ -1,0 +1,3 @@
+class: Build\Model\Command\CommandData
+items:
+	processFiles: []

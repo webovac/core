@@ -12,6 +12,16 @@ schemas:
 				indexes: [lib_id]
 				foreignKeys:
 					lib_id: [table: lib, column: id, onDelete: cascade, reverseName: assets, reverseData: true]
+			command:
+				columns:
+					id: [type: int, null: false, auto: true]
+					code: [type: string, null: false, keyProperty: true]
+					should_run: [type: bool, null: false, default: false]
+					running: [type: bool, null: false, default: false]
+					last_start_at: [type: datetime, null: true, skipInManipulation: true]
+					last_end_at: [type: datetime, null: true, skipInManipulation: true]
+				primaryKey: id
+				uniqueKeys: [code]
 			deploy:
 				columns:
 					id: [type: int, null: false, auto: true]
@@ -32,6 +42,7 @@ schemas:
 					type: [type: string, null: false]
 					width: [type: int, null: true]
 					height: [type: int, null: true]
+					ready: [type: bool, null: false, default: false]
 					captured_at: [type: datetime, null: true]
 					created_at: [type: datetime, null: false, default: now, dontCache: true]
 				primaryKey: id
@@ -203,6 +214,7 @@ schemas:
 					name: [type: string, null: false, keyProperty: true]
 					style: [type: string, null: true]
 					repository: [type: string, null: true]
+					provides_menu: [type: bool, null: false, default: false]
 					provides_navigation: [type: bool, null: false, default: false]
 					rank: [type: int, null: true, default: 1]
 					hide_in_navigation: [type: bool, null: false, default: false]
@@ -229,7 +241,7 @@ schemas:
 					updated_by_person_id: [table: person, column: id, onDelete: restrict]
 					module_id: [table: module, column: id, reverseName: pages, reverseOrder: rank, reverseData: true, reverseDontCache: true]
 					target_module_id: [table: module, column: id]
-					parent_page_id: [table: page, column: id, onDelete: set null, reverseName: childPages, reverseOrder: rank]
+					parent_page_id: [table: page, column: id, onDelete: cascade, reverseName: childPages, reverseOrder: rank]
 					redirect_page_id: [table: page, column: id, onDelete: cascade]
 					target_page_id: [table: page, column: id, onDelete: cascade]
 					template_page_id: [table: page, column: id, onDelete: set null]

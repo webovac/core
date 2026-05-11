@@ -34,6 +34,7 @@ trait CorePageData
 	#[DefaultValue(false)] public bool $isHomePage;
 	#[DefaultValue(false)] public bool $isDetailRoot;
 	#[DefaultValue(false)] public bool $hasPath;
+	public ?int $menuPage;
 	public ?int $navigationPage;
 	public ?int $buttonsPage;
 	/** @var int[] */ public array|null $parentPages;

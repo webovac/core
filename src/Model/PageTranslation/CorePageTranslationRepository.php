@@ -35,6 +35,8 @@ trait CorePageTranslationRepository
 			$filter = ['page->module' => $module, 'page->parentPage' => null];
 		} elseif ($parentPage) {
 			$filter = ['page->parentPage' => $parentPage];
+		} elseif ($web) {
+			$filter = ['page->web' => $web, 'page->parentPage' => null];
 		} else {
 			$filter = ['page->web!=' => null, 'page->parentPage' => null];
 		}

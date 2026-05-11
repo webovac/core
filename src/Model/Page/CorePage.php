@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\Page;
 use Build\Model\Language\LanguageData;
 use Build\Model\Page\Page;
 use Build\Model\PageTranslation\PageTranslation;
+use Build\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
@@ -89,7 +90,7 @@ trait CorePage
 	#[Inject] public IPageItemControl $component;
 
 
-	public function checkRequirements(CmsUser $user, ?string $tag = null): bool
+	public function checkRequirements(CmsUser $user, WebData $webData, ?string $tag = null): bool
 	{
 		return match ($tag) {
 			null => true,
@@ -153,15 +154,15 @@ trait CorePage
 	}
 
 
-	public function getParameters(): array
+	public function getParameters(?string $context = null): array
 	{
 		return $this->web
-			? [$this->getPageName() => $this->name]
-			: [$this->module->getPageName() => $this->module->name, $this->getPageName() => $this->name];
+			? [$this->getPageName($context) => $this->name]
+			: [$this->module->getPageName($context) => $this->module->name, $this->getPageName() => $this->name];
 	}
 
 
-	public function getPageName(): string
+	public function getPageName(?string $context = null): string
 	{
 		return $this->web ? 'Admin:PageDetail' : 'TemplateDetail';
 	}

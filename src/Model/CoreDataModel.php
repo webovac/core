@@ -5,16 +5,25 @@ declare(strict_types=1);
 namespace Webovac\Core\Model;
 
 use Build\Model\Deploy\DeployData;
+use Build\Model\Language\Language;
 use Build\Model\Language\LanguageData;
+use Build\Model\Module\Module;
 use Build\Model\Module\ModuleData;
+use Build\Model\Page\Page;
 use Build\Model\Page\PageData;
 use Build\Model\TextTranslation\TextTranslationData;
+use Build\Model\Web\Web;
 use Build\Model\Web\WebData;
+use Nette\DI\Attributes\Inject;
 use Stepapo\Model\Data\Collection;
+use Webovac\Core\Lib\ModeChecker;
 
 
 trait CoreDataModel
 {
+	#[Inject] public ModeChecker $modeChecker;
+
+
 	/** @return PageData[] */
 	public function findPageDatas(?WebData $webData = null): Collection
 	{
@@ -118,5 +127,47 @@ trait CoreDataModel
 	public function getLastDeployData(): ?DeployData
 	{
 		return $this->deployDataRepository->getLastDeployData();
+	}
+
+
+	public function refreshCacheWithPage(?Page $page = null): void
+	{
+		if ($this->modeChecker->isTest()) {
+			return;
+		}
+		$this->pageDataRepository->buildCache($page?->web);
+		$this->webDataRepository->buildCache($page?->web);
+	}
+
+
+	public function refreshCacheWithModule(?Module $module = null): void
+	{
+		if ($this->modeChecker->isTest()) {
+			return;
+		}
+		$this->pageDataRepository->buildCache();
+		$this->webDataRepository->buildCache();
+	}
+
+
+	public function refreshCacheWithWeb(?Web $web = null): void
+	{
+		if ($this->modeChecker->isTest()) {
+			return;
+		}
+		$this->pageDataRepository->buildCache($web);
+		$this->webDataRepository->buildCache($web);
+	}
+
+
+	public function refreshCacheWithLanguage(?Language $language = null): void
+	{
+		if ($this->modeChecker->isTest()) {
+			return;
+		}
+		$this->languageDataRepository->buildCache();
+		$this->pageDataRepository->buildCache();
+		$this->webDataRepository->buildCache();
+		$this->layoutDataRepository->buildCache();
 	}
 }

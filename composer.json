@@ -28,7 +28,7 @@
 		"latte/latte": "^3.0",
 		"tracy/tracy": "^2.10",
 		"nextras/migrations": "^3.4",
-		"nextras/orm": "^5.0",
+		"nextras/orm": "^5.1",
 		"choowx/rasterize-svg": "^0.1",
 		"stepapo/crosstab": "^1.0",
 		"stepapo/dataset": "^2.0",

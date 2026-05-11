@@ -70,12 +70,12 @@ trait CoreFileRepository
 			$this->rotateImage($data->upload);
 		}
 		if (str_contains($data->upload->getContentType(), 'video/')) {
-			$data->upload = $this->createVideoUpload($data->upload);
-			$data->capturedAt = $this->getCapturedAt($data->upload);
+//			$data->upload = $this->createVideoUpload($data->upload);
+//			$data->capturedAt = $this->getCapturedAt($data->upload);
 		}
 		$identifier = $this->fileUploader->upload($data->upload, $namespace);
 		$file = $this->getModel()->getRepository(FileRepository::class)->getBy(['identifier' => $identifier]);
-		$extension = $data->upload->getSuggestedExtension();
+		$extension = pathinfo($data->upload->getSanitizedName(), PATHINFO_EXTENSION) ?: $data->upload->getSuggestedExtension();
 		$data->name = "$name.$extension";
 		$data->extension = $extension;
 		if (!$file) {
@@ -104,17 +104,17 @@ trait CoreFileRepository
 				$data->compatibleIdentifier = $identifier;
 				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			} elseif ($data->upload->getContentType() === 'application/pdf') {
-				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
-				if ($compatibleUpload) {
-					$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
-					$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
-					$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
-				}
+//				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
+//				if ($compatibleUpload) {
+//					$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+//					$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
+//					$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+//				}
 			} elseif (str_contains($data->upload->getContentType(), 'video/')) {
-				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
-				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
-				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare, 1920);
-				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+//				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
+//				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+//				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare, 1920);
+//				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			}
 		} else {
 			$data->identifier = $file->identifier;
@@ -130,6 +130,9 @@ trait CoreFileRepository
 			$image = Image::fromFile($file);
 			$data->width = $image->getWidth();
 			$data->height = $image->getHeight();
+		}
+		if ($data->upload->getContentType() !== 'application/pdf' && !str_contains($data->upload->getContentType(), 'video/')) {
+			$data->ready = true;
 		}
 		return $data;
 	}
@@ -164,8 +167,8 @@ trait CoreFileRepository
 	{
 		$file = $upload->getTemporaryFile();
 		$dir = pathinfo($file, PATHINFO_DIRNAME);
-		$name = pathinfo($upload->getSanitizedName(), PATHINFO_FILENAME);
-		$proc = "ffmpeg -i %s -vcodec libx265 -b:v 2000k -preset medium -vtag hvc1 -vf scale=1920:-2,setsar=1 -pix_fmt yuv420p -acodec aac -b:a 224k -map_metadata 0 -movflags +faststart %s";
+		$name = Random::generate(8);
+		$proc = "ffmpeg -y -i %s -vcodec libx265 -b:v 2000k -preset medium -vtag hvc1 -vf scale=1920:-2,setsar=1 -pix_fmt yuv420p -acodec aac -b:a 224k -map_metadata 0 -movflags +faststart %s";
 		exec(sprintf($proc, $file, "$dir/$name.mp4"));
 		return $this->createFileUploadFromFile("$dir/$name.mp4");
 	}
@@ -183,7 +186,7 @@ trait CoreFileRepository
 	}
 
 
-	public function svg2png(FileUpload $upload, bool $forceSquare): FileUpload
+	public function svg2png(FileUpload $upload, bool $forceSquare = false): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
@@ -194,7 +197,7 @@ trait CoreFileRepository
 	}
 
 
-	public function video2jpg(FileUpload $upload, bool $forceSquare): FileUpload
+	public function video2jpg(FileUpload $upload, bool $forceSquare = false): FileUpload
 	{
 		$file = $upload->getTemporaryFile();
 		$dir = pathinfo($file, PATHINFO_DIRNAME);
@@ -210,7 +213,7 @@ trait CoreFileRepository
 	 * @throws ImageException
 	 * @throws UnknownImageFileException
 	 */
-	public function image2webp(FileUpload $upload, bool $forceSquare, ?int $maxHeight = null): FileUpload
+	public function image2webp(FileUpload $upload, bool $forceSquare = false, ?int $maxHeight = null): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
@@ -225,7 +228,7 @@ trait CoreFileRepository
 	 * @throws ImageException
 	 * @throws UnknownImageFileException
 	 */
-	public function image2jpeg(FileUpload $upload, bool $forceSquare): FileUpload
+	public function image2jpeg(FileUpload $upload, bool $forceSquare = false): FileUpload
 	{
 		$tmpFile = $upload->getTemporaryFile();
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
@@ -240,7 +243,7 @@ trait CoreFileRepository
 	 * @throws ImageException
 	 * @throws UnknownImageFileException
 	 */
-	public function pdf2jpeg(FileUpload $upload, bool $forceSquare): ?FileUpload
+	public function pdf2jpeg(FileUpload $upload, bool $forceSquare = false): ?FileUpload
 	{
 		try {
 			$tmpFile = $upload->getTemporaryFile();

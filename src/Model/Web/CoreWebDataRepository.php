@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Web;
 
 use Build\Model\Page\PageDataRepository;
+use Build\Model\Web\Web;
 use Build\Model\Web\WebData;
 use Build\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\Caching\Cache;
@@ -25,9 +26,15 @@ trait CoreWebDataRepository
 	 * @return Collection<Item>
 	 * @throws Throwable
 	 */
-	public function buildCache(): void
+	public function buildCache(?Web $web = null): void
 	{
-		$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
+		if (!$web) {
+			$this->cmsCache->clean([Cache::Tags => lcfirst($this->getName())]);
+		} else {
+			$this->cache->remove('aliases');
+			$this->cmsCache->clean([Cache::Tags => 'router']);
+		}
+		$collection = $web ? $this->getCollection() : new Collection;
 		$pageDatas = $this->pageDataRepository->getCollection();
 		$allPages = [];
 		foreach ($pageDatas as $pageData) {
@@ -36,7 +43,10 @@ trait CoreWebDataRepository
 			}
 			$allPages[$pageData->web][$pageData->web . '-' . $pageData->id] = $pageData;
 		}
-		foreach ($this->getOrmRepository()->findAll()->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $entity) {
+		$ormCollection = $web
+			? $this->getOrmRepository()->findBy(['id' => $web->id])
+			: $this->getOrmRepository()->findAll();
+		foreach ($ormCollection->orderBy('basePath', ICollection::ASC_NULLS_FIRST) as $entity) {
 			$key = $this->getIdentifier($entity);
 			$item = $entity->getData(forCache: true);
 			$item->adminRoles = $entity->adminRoles->toCollection()->fetchPairs(null, 'code');
@@ -48,8 +58,10 @@ trait CoreWebDataRepository
 			$item->rootPages = $rootPageIds;
 			$item->allPages = $allPages[$entity->id] ?? [];
 			$this->cacheItem($key, $item);
-			$this->addItemToCollection($key, $item);
+			$collection[$key] = $item;
 		}
+		$this->collection = $collection;
+		$this->cache->save('collection', $collection, [Cache::Tags => lcfirst($this->getName())]);
 		$this->setReady();
 	}
 

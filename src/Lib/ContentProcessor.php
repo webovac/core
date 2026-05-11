@@ -21,10 +21,10 @@ class ContentProcessor implements Service
 	{
 		$content = preg_replace_callback_array([
 			'/(&gt;)/' => fn(array $m) => '>',
-			'/<span.*?>{\$entity->(.+?)}<\/span>/' => fn(array $m) => '{$entity->' . $m[1] . '}',
-			'/<p>[^<>]*?(<span.*?>)?{control (.+?)}(<\/span>)?[^<>]*?<\/p>/' => fn(array $m) => '{control ' . $m[2] . '}',
+			'/<span.*?>{\$entity->(.+?)}<\/span>/' => fn(array $m) => "{$entity->$m[1]}",
+			'/<p>[^<>]*?(<span.*?>)?{control (.+?)}(<\/span>)?[^<>]*?<\/p>/' => fn(array $m) => "{control $m[2]}",
 			'/}&nbsp;/' => fn() => '}',
-			'/<figure class="table"( style=".+")?><table.*?>(.+)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => '<figure class="table override-padding"' . $m[1] . '><table class="table table-bordered">' . $m[2] . '</table>' . $m[3] . '</figure>',
+			'/<figure class="table"( style=".+?")?><table.*?>(.+?)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => "<figure class=\"table override-padding\"$m[1]><table class=\"table table-bordered\">$m[2]</table>$m[3]</figure>",
 		], $editor);
 		return strip_tags($content, self::ALLOWED_TAGS);
 	}
@@ -33,9 +33,9 @@ class ContentProcessor implements Service
 	public function contentToEditor(string $content): string
 	{
 		return preg_replace_callback_array([
-			'/{\$entity->(.+?)}/' => fn(array $m) => '<span class="mention" data-mention="{$entity->' . $m[1] . '}">{$entity->' . $m[1] . '}</span>',
-			'/{control (.+?)}/' => fn(array $m) => '<p><span class="mention" data-mention="{control ' . $m[1] . '}">{control ' . $m[1] . '}</span></p>',
-			'/<figure class="table override-padding"( style=".+")><table class="table table-bordered">(.+)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => '<figure class="table"' . $m[1] . '><table>' . $m[2] . '</table>' . $m[3] . '</figure>',
+			'/{\$entity->(.+?)}/' => fn(array $m) => "<span class=\"mention\" data-mention=\"{\$entity->$m[1]}\">{\$entity->$m[1]}</span>",
+			'/{control (.+?)}/' => fn(array $m) => "<p><span class=\"mention\" data-mention=\"{control $m[1]}\">{control $m[1]}</span></p>",
+			'/<figure class="table override-padding"( style=".+?")><table class="table table-bordered">(.+?)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => "<figure class=\"table\"$m[1]><table>$m[2]</table>$m[3]</figure>",
 		], $content);
 	}
 }

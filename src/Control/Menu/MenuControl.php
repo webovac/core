@@ -56,6 +56,7 @@ class MenuControl extends BaseControl
 	 */
 	public function render(): void
 	{
+		$menuPageData = $this->dataProvider->getMenuPageData();
 		$this->webData = $this->dataProvider->getWebData();
 		$this->layoutData = $this->dataProvider->getLayoutData();
 		$pageData = $this->dataProvider->getPageData();
@@ -68,18 +69,24 @@ class MenuControl extends BaseControl
 		$this->template->pageData = $pageData;
 		$this->template->languageData = $this->languageData;
 		$this->template->defaultLanguageData = $this->dataModel->getLanguageData($this->webData->defaultLanguage);
-		$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
-		$homeChildPageDatas = $homePage->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity);
-		$rootPageDatas = $this->webData->getRootPageDatas($this->dataModel, $this->cmsUser, $this->entity);
-		$pageDatas = [];
-		foreach ($rootPageDatas as $rootPageData) {
-			$pageDatas[] = $rootPageData;
-			if ($rootPageData->id === $this->webData->homePage) {
-				$pageDatas = array_merge($pageDatas, (array) $homeChildPageDatas);
+		$this->template->menuPageData = $menuPageData;
+		if ($menuPageData) {
+			$this->template->pageDatas = $menuPageData->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity);
+			$this->template->homePageData = $menuPageData;
+		} else {
+			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
+			$homeChildPageDatas = $homePage->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity);
+			$rootPageDatas = $this->webData->getRootPageDatas($this->dataModel, $this->cmsUser, $this->entity);
+			$pageDatas = [];
+			foreach ($rootPageDatas as $rootPageData) {
+				$pageDatas[] = $rootPageData;
+				if ($rootPageData->id === $this->webData->homePage) {
+					$pageDatas = array_merge($pageDatas, (array) $homeChildPageDatas);
+				}
 			}
-		}
-		$this->template->pageDatas = new Collection($pageDatas);
-		$this->template->homePageData = $homePage;
+			$this->template->pageDatas = new Collection($pageDatas);
+			$this->template->homePageData = $homePage;
+		}		
 		$this->template->dataModel = $this->dataModel;
 		$this->template->webDatas = $this->dataModel->findWebDatas();
 		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
@@ -166,6 +173,13 @@ class MenuControl extends BaseControl
 			|| ($checkActive && $this->isActive($pageData, $linkedEntity, $pageData->targetPath))
 			|| ($checkActive && $pageData->targetPage && $this->isActive($pageData, $linkedEntity, $this->targetPath)) ? ' active' : '')
 			;
+	}
+
+
+	public function setModuleClass(string $moduleClass): self
+	{
+		$this->moduleClass = $moduleClass;
+		return $this;
 	}
 
 

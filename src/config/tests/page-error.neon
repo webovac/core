@@ -6,8 +6,11 @@ asserts:
 	httpCode: 404
 requests:
 #	wrong host:
-#		path: //tst # TODO konfigurovatelny error presenter RequestTester:155
+#		host: tst # TODO konfigurovatelny error presenter RequestTester:155
+#		path: weby/1
 #	wrong path:
-#		path: //test/webz # netestovatelne, 404 vyhazuje Router
+#		host: test
+#		path: webz # netestovatelne, 404 vyhazuje Router
 	wrong id:
-		path: //test/weby/999
+		host: test
+		path: weby/999

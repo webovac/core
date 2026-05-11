@@ -17,6 +17,7 @@ class DataProvider implements Service
 {
 	private WebData $webData;
 	private LanguageData $languageData;
+	private ?PageData $menuPageData;
 	private ?PageData $navigationPageData;
 	private ?PageData $buttonsPageData;
 	private ?PageData $pageData;
@@ -60,6 +61,19 @@ class DataProvider implements Service
 	public function setPageData(?PageData $pageData): self
 	{
 		$this->pageData = $pageData;
+		return $this;
+	}
+
+
+	public function getMenuPageData(): ?PageData
+	{
+		return $this->menuPageData;
+	}
+
+
+	public function setMenuPageData(?PageData $menuPageData): self
+	{
+		$this->menuPageData = $menuPageData;
 		return $this;
 	}
 

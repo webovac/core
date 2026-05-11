@@ -21,6 +21,7 @@ trait CorePresenterTemplate
 	public WebData $webData;
 	public WebTranslationData $webTranslationData;
 	public PageData $pageData;
+	public ?PageData $menuPageData;
 	public ?DeployData $deployData;
 	public ?string $imageUrl;
 	public string $smallIconUrl;

@@ -69,7 +69,7 @@ final class CmsRouterFactory implements Service
 					'action' => 'default',
 					'host' => $webData->host,
 					'basePath' => $webData->basePath,
-					null => [
+					'' => [
 						Route::FilterIn => $this->filterIn(...),
 						Route::FilterOut => $this->filterOut(...),
 					],
@@ -169,6 +169,9 @@ final class CmsRouterFactory implements Service
 		$basePath = $params['basePath'] ?? null;
 		//$path = $params['path'];
 		$base = "//$host/" . ($basePath ?: '~');
+//		Dumper::dump($base);
+//		Dumper::dump($lang);
+//		Dumper::dump($pageName);
 		$pageOut = $setup['mapOut'][$base][$lang][$pageName];
 		if ($p = $pageOut['p']) {
 			$p = explode('/', $pageOut['p']);
@@ -280,7 +283,7 @@ final class CmsRouterFactory implements Service
 					}
 				}
 				return $setup;
-			}, [Cache::Tags => ['language', 'web', 'page']]);
+			}, [Cache::Tags => ['language', 'web', 'page', 'router']]);
 		}
 		return $this->setup;
 	}

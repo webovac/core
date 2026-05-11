@@ -39,6 +39,7 @@ trait CoreWebRepository
 		?Person $person = null,
 		?\DateTimeInterface $date = null,
 		bool $fromNeon = false,
+		string $namespace = 'cms',
 	): EntityProcessorResult
 	{
 		if (isset($data->iconFile)) {
@@ -53,7 +54,8 @@ trait CoreWebRepository
 		}
 		if (isset($data->modules)) {
 			foreach ($data->modules as $moduleName) {
-				$data->pages[$moduleName . 'Module'] = $this->createModulePage($moduleName);
+				$modulePageData = $data->pages[$moduleName . 'Module'] ?? null;
+				$data->pages[$moduleName . 'Module'] = $this->createModulePage($moduleName, $modulePageData);
 			}
 		}
 		if (isset($data->tree)) {
@@ -62,14 +64,14 @@ trait CoreWebRepository
 				$this->processTree((array) $pages, $parentPage, $rank++, $data);
 			}
 		}
-		return parent::createFromDataAndReturnResult($data, $original, $person, $date, $fromNeon);
+		return parent::createFromDataAndReturnResult($data, $original, $person, $date, $fromNeon, $namespace);
 	}
 
 
-	public function createModulePage(string $moduleName): PageData
+	public function createModulePage(string $moduleName, ?PageData $modulePageData): PageData
 	{
 		$module = $this->getModel()->getRepository(ModuleRepository::class)->getBy(['name' => $moduleName]);
-		$page = new PageData;
+		$page = $modulePageData ?: new PageData;
 		$page->name = $module->name . 'Module';
 		$page->hideInNavigation = $module->homePage->hideInNavigation;
 		$page->icon = $module->icon;
@@ -142,9 +144,12 @@ trait CoreWebRepository
 	}
 
 
-	public function getByData(WebData $data): ?Web
+	public function getByData(WebData|string $data): ?Web
 	{
-		return $this->getBy(['host' => $data->host, 'basePath' => $data->basePath]);
+		if ($data instanceof WebData) {
+			return $this->getBy(['host' => $data->host, 'basePath' => $data->basePath]);
+		}
+		return $this->getBy(['code' => $data]);
 	}
 
 

@@ -25,6 +25,7 @@ class MenuTemplate extends BaseTemplate
 	/** @var Collection<PageData> */ public Collection $pageDatas;
 	public LayoutData $layoutData;
 	public ?PageData $homePageData;
+	public ?PageData $menuPageData;
 	public DataModel $dataModel;
 	public ?CmsEntity $entity;
 	public string $title;

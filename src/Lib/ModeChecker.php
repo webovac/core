@@ -12,6 +12,7 @@ class ModeChecker implements Service
 	public function __construct(
 		private bool $debugMode = false,
 		private bool $testMode = false,
+		private bool $cliMode = false,
 	) {}
 
 
@@ -24,6 +25,12 @@ class ModeChecker implements Service
 	public function isTest(): bool
 	{
 		return $this->testMode;
+	}
+
+
+	public function isCli(): bool
+	{
+		return $this->cliMode;
 	}
 
 

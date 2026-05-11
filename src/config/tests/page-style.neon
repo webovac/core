@@ -1,4 +1,5 @@
 name: Core - access Style
-path: //test/style
+host: test
+path: style
 asserts:
 	renders: ':root {'
