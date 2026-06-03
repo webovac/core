@@ -9,6 +9,7 @@ use Build\Model\DataModel;
 use Build\Model\Language\LanguageData;
 use Build\Model\Layout\LayoutData;
 use Build\Model\Module\ModuleData;
+use Build\Model\Orm;
 use Build\Model\Page\PageData;
 use Build\Model\Theme\ThemeData;
 use Build\Model\Web\WebData;
@@ -24,6 +25,7 @@ class SidePanelTemplate extends BaseTemplate
 	public LayoutData $layoutData;
 	/** @var ThemeData[] */ public Collection $themeDatas;
 	public DataModel $dataModel;
+	public Orm $orm;
 	public ?CmsEntity $entity;
 	public bool $isError;
 	public bool $hasSearch;

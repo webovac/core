@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Control\SidePanel;
 
 use Build\Model\DataModel;
+use Build\Model\Orm;
 use Build\Model\Theme\ThemeData;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
@@ -20,8 +21,8 @@ use Webovac\Core\Model\CmsEntity;
 class SidePanelControl extends BaseControl
 {
 	public const TEMPLATE_DEFAULT = 'default';
-	
-	
+
+
 	public function __construct(
 		private string $moduleClass,
 		private string $templateName,
@@ -30,6 +31,7 @@ class SidePanelControl extends BaseControl
 		private ModuleChecker $moduleChecker,
 		private DataProvider $dataProvider,
 		private CmsUser $cmsUser,
+		private Orm $orm,
 	) {}
 
 
@@ -45,6 +47,7 @@ class SidePanelControl extends BaseControl
 		$this->template->pageData = $pageData;
 		$this->template->languageData = $languageData;
 		$this->template->dataModel = $this->dataModel;
+		$this->template->orm = $this->orm;
 		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& $searchModuleData

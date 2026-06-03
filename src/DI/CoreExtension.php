@@ -45,6 +45,7 @@ class CoreExtension extends StepapoExtension
 			]),
 			'testMode' => Expect::bool()->default(false),
 			'cliMode' => Expect::bool()->default(false),
+			'fulltext' => Expect::bool(false),
 		]);
 	}
 
@@ -87,6 +88,7 @@ class CoreExtension extends StepapoExtension
 			'driver' => $this->config->db->driver,
 			'database' => $this->config->db->database,
 			'schemas' => $this->config->db->schemas ?: ($this->config->db->driver === 'pgsql' ? ['public'] : [$this->config->db->database]),
+			'fulltext' => $this->config->fulltext,
 		]);
 		$this->modelExtension->setConfig($config);
 		$this->modelExtension->loadConfiguration();
