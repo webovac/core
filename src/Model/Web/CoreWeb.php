@@ -40,14 +40,14 @@ trait CoreWeb
 	}
 
 
-	/** @return Page[]&ICollection */ 
+	/** @return Page[]&ICollection */
 	public function getPages(): ICollection
 	{
 		return $this->pages->toCollection()->findBy(['parentPage' => null]);
 	}
 
 
-	/** @return Page[]&ICollection */ 
+	/** @return Page[]&ICollection */
 	public function getPagesForMenu(): ICollection
 	{
 		$pages = [];
@@ -57,7 +57,7 @@ trait CoreWeb
 				foreach ($page->targetModule->getPages() as $modulePage) {
 					$pages[] = $modulePage;
 				}
-			} else {
+			} elseif (!$page->hasParameter) {
 				$pages[] = $page;
 			}
 		}
