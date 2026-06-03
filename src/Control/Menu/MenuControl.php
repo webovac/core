@@ -13,7 +13,6 @@ use Build\Model\Theme\ThemeData;
 use Build\Model\Web\WebData;
 use Nette\Utils\Arrays;
 use ReflectionException;
-use Stepapo\Model\Data\Collection;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
@@ -75,16 +74,7 @@ class MenuControl extends BaseControl
 			$this->template->homePageData = $menuPageData;
 		} else {
 			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
-			$homeChildPageDatas = $homePage->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity);
-			$rootPageDatas = $this->webData->getRootPageDatas($this->dataModel, $this->cmsUser, $this->entity);
-			$pageDatas = [];
-			foreach ($rootPageDatas as $rootPageData) {
-				$pageDatas[] = $rootPageData;
-				if ($rootPageData->id === $this->webData->homePage) {
-					$pageDatas = array_merge($pageDatas, (array) $homeChildPageDatas);
-				}
-			}
-			$this->template->pageDatas = new Collection($pageDatas);
+			$this->template->pageDatas = $this->webData->getRootPageDatas($this->dataModel, $this->cmsUser, $this->entity);
 			$this->template->homePageData = $homePage;
 		}		
 		$this->template->dataModel = $this->dataModel;

@@ -30,7 +30,7 @@ class ProcessFiles implements Command
 		$command->running = true;
 		$command->lastStartAt = new DateTimeImmutable;
 		$this->orm->persistAndFlush($command);
-		foreach ($this->orm->fileRepository->findBy(['ready' => false]) as $file) {
+		foreach ($this->orm->fileRepository->findBy(['ready' => false, 'id>' => 8734]) as $file) {
 			$this->processFile($file);
 		}
 		$command->running = false;
@@ -60,6 +60,9 @@ class ProcessFiles implements Command
 			$oldIdentifier = $file->identifier;
 			$namespace = strtok($oldIdentifier, '/');
 			$upload = $this->orm->fileRepository->createVideoUpload($upload);
+			$file->extension = 'mp4';
+			$file->name = pathinfo($file->name, PATHINFO_FILENAME) . '.mp4';
+			$file->contentType = 'video/mp4';
 			$compatibleUpload = $this->orm->fileRepository->video2jpg($upload);
 			$modernUpload = $this->orm->fileRepository->image2webp($compatibleUpload, maxHeight: 1920);
 			$file->capturedAt = $this->orm->fileRepository->getCapturedAt($upload);

@@ -77,7 +77,7 @@
 		{/}
 	</div>
 </div>
-<script n:foreach="$pageData->scripts as $assetData" src="{if $assetData->local}{$baseUrl}/{/}{$assetData->link|replaceKey|escapeUrl}{if $assetData->local}?m={=$assetData->link|mTime}{/}"></script>
+<script n:foreach="$pageData->scripts as $assetData" src="{if $assetData->local}{$baseUrl}/{/}{$assetData->link|replaceKey}{if $assetData->local}?m={=$assetData->link|mTime}{/}"></script>
 <script src="{$baseUrl}/dist/js/bundle.js?m={='dist/js/bundle.js'|mTime}"></script>
 </body>
 </html>

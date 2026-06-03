@@ -50,7 +50,8 @@ class DocumentsControl extends BaseControl
 	{
 		return new Multiplier(function ($id): FileItemControl {
 			return $this->fileItem->create(
-				$this->template->files[$id] ?? $this->orm->fileRepository->getById($id)
+				$this->template->files[$id] ?? $this->orm->fileRepository->getById($id),
+				templateName: 'block',
 			);
 		});
 	}

@@ -63,6 +63,23 @@ class CmsUser implements Clearable, Service
 	}
 
 
+	public function isAnyId(array $ids): bool
+	{
+		return in_array($this->getId(), $ids, true);
+	}
+
+
+	public function hasAnyRole(array $roles): bool
+	{
+		foreach ($roles as $role) {
+			if ($this->user->isInRole($role)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	/**
 	 * @throws AuthenticationException
 	 */

@@ -19,6 +19,7 @@ use Nette\Utils\ImageColor;
 use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Json;
+use Nette\Utils\Process;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
@@ -165,12 +166,26 @@ trait CoreFileRepository
 
 	public function createVideoUpload(FileUpload $upload): FileUpload
 	{
-		$file = $upload->getTemporaryFile();
-		$dir = pathinfo($file, PATHINFO_DIRNAME);
+		$inputFile = $upload->getTemporaryFile();
+		$dir = pathinfo($inputFile, PATHINFO_DIRNAME);
 		$name = Random::generate(8);
-		$proc = "ffmpeg -y -i %s -vcodec libx265 -b:v 2000k -preset medium -vtag hvc1 -vf scale=1920:-2,setsar=1 -pix_fmt yuv420p -acodec aac -b:a 224k -map_metadata 0 -movflags +faststart %s";
-		exec(sprintf($proc, $file, "$dir/$name.mp4"));
-		return $this->createFileUploadFromFile("$dir/$name.mp4");
+		$outputFile = "$dir/$name.mp4";
+		$process = Process::runExecutable('ffmpeg', [
+			'-y',
+			'-i', $inputFile,
+			'-vcodec', 'libx265',
+			'-b:v', '2000k',
+			'-preset', 'medium',
+			'-vtag', 'hvc1',
+			'-vf', 'scale=1920:-2,setsar=1',
+			'-pix_fmt', 'yuv420p',
+			'-acodec', 'aac',
+			'-b:a', '224k',
+			'-map_metadata', '0',
+			'-movflags', '+faststart',
+			$outputFile
+		], timeout: null)->ensureSuccess();
+		return $this->createFileUploadFromFile($outputFile);
 	}
 
 
@@ -178,8 +193,13 @@ trait CoreFileRepository
 	{
 		$file = $upload->getTemporaryFile();
 		$proc = "ffprobe -v quiet %s -print_format json -show_entries format_tags=creation_time";
-		exec(sprintf($proc, $file), $output);
-		$result = Json::decode(implode('', $output));
+		$process = Process::runExecutable('ffprobe', [
+			'-v', 'quiet',
+			$file,
+			'-print_format', 'json',
+			'-show_entries', 'format_tags=creation_time',
+		], timeout: null);
+		$result = Json::decode($process->getStdOutput());
 		return isset($result->format->tags->creation_time)
 			? new DateTimeImmutable($result->format->tags->creation_time)
 			: null;
@@ -199,12 +219,13 @@ trait CoreFileRepository
 
 	public function video2jpg(FileUpload $upload, bool $forceSquare = false): FileUpload
 	{
-		$file = $upload->getTemporaryFile();
-		$dir = pathinfo($file, PATHINFO_DIRNAME);
-		$filename = pathinfo($file, PATHINFO_FILENAME);
-		$proc = "ffmpeg -i %s -vcodec mjpeg -vframes 1 -an -f rawvideo -ss `ffmpeg -i %s 2>&1 | grep Duration | awk '{print $2}' | tr -d , | awk -F ':' '{print ($3+$2*60+$1*3600)/2}'` %s";
-		exec(sprintf($proc, $file, $file, "$dir/$filename.jpg"));
-		$upload = $this->createFileUploadFromFile("$dir/$filename.jpg");
+		$inputFile = $upload->getTemporaryFile();
+		$dir = pathinfo($inputFile, PATHINFO_DIRNAME);
+		$filename = pathinfo($inputFile, PATHINFO_FILENAME);
+		$outputFile = "$dir/$filename.jpg";
+		$command = "ffmpeg -i %s -vcodec mjpeg -vframes 1 -an -f rawvideo -ss `ffmpeg -i %s 2>&1 | grep Duration | awk '{print $2}' | tr -d , | awk -F ':' '{print ($3+$2*60+$1*3600)/2}'` %s";
+		Process::runCommand(sprintf($command, $inputFile, $inputFile, $outputFile))->ensureSuccess();
+		$upload = $this->createFileUploadFromFile($outputFile);
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
 
@@ -319,7 +340,7 @@ trait CoreFileRepository
 
 	public function createFileUploadFromFile(string $file): FileUpload
 	{
-		$size = filesize($file);
+		$size = @filesize($file);
 		return new FileUpload([
 			'name' => basename($file),
 			'full_path' => $file,

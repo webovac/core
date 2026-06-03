@@ -170,4 +170,14 @@ trait CoreDataModel
 		$this->webDataRepository->buildCache();
 		$this->layoutDataRepository->buildCache();
 	}
+
+
+	public function refreshCache(): void
+	{
+		$this->languageDataRepository->buildCache();
+		$this->pageDataRepository->buildCache();
+		$this->webDataRepository->buildCache();
+		$this->layoutDataRepository->buildCache();
+		$this->themeDataRepository->buildCache();
+	}
 }
