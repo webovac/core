@@ -170,7 +170,10 @@ trait CoreFileRepository
 		$dir = pathinfo($inputFile, PATHINFO_DIRNAME);
 		$name = Random::generate(8);
 		$outputFile = "$dir/$name.mp4";
-		$process = Process::runExecutable('ffmpeg', [
+		$process = Process::runExecutable('systemd-run', [
+			'--scope',
+			'-p', 'CPUQuota=100%',
+			'ffmpeg',
 			'-y',
 			'-i', $inputFile,
 			'-vcodec', 'libx265',
@@ -183,7 +186,7 @@ trait CoreFileRepository
 			'-b:a', '224k',
 			'-map_metadata', '0',
 			'-movflags', '+faststart',
-			$outputFile
+			$outputFile,
 		], timeout: null)->ensureSuccess();
 		return $this->createFileUploadFromFile($outputFile);
 	}
