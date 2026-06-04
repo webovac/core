@@ -6,9 +6,12 @@ namespace Webovac\Core\Command;
 
 use Build\Model\File\File;
 use Build\Model\Orm;
+use Nette\Utils\ProcessFailedException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Stepapo\Utils\Command\Command;
+use Tracy\Debugger;
 use Webovac\Core\Lib\FileUploader;
+use Webovac\Core\Model\File\FileException;
 
 
 class ProcessFiles implements Command
@@ -21,6 +24,7 @@ class ProcessFiles implements Command
 
 	public function run(): int
 	{
+		$error = false;
 		$command = $this->orm->commandRepository->getBy(['code' => 'processFiles']);
 		$now = new DateTimeImmutable();
 		if ($command->running && $command->lastStartAt->modify('+1 hour') > $now) {
@@ -30,14 +34,19 @@ class ProcessFiles implements Command
 		$command->running = true;
 		$command->lastStartAt = new DateTimeImmutable;
 		$this->orm->persistAndFlush($command);
-		foreach ($this->orm->fileRepository->findBy(['ready' => false, 'id>' => 8734]) as $file) {
-			$this->processFile($file);
+		try {
+			foreach ($this->orm->fileRepository->findBy(['ready' => false, 'id>' => 8734]) as $file) {
+				$this->processFile($file);
+			}
+		} catch (FileException $e) {
+			Debugger::log($e->getMessage(), Debugger::EXCEPTION);
+			$error = true;
 		}
 		$command->running = false;
 		$command->lastEndAt = new DateTimeImmutable;
 		$this->orm->persistAndFlush($command);
-		print('Finished successfully.' . PHP_EOL);
-		return 0;
+		print(($error ? 'Finished with error' : 'Finished successfully.') . PHP_EOL);
+		return $error ? 1 : 0;
 	}
 
 
@@ -71,7 +80,7 @@ class ProcessFiles implements Command
 			$file->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			$file->ready = true;
 			$this->orm->persistAndFlush($file);
-			$this->fileUploader->delete($oldIdentifier);
+//			$this->fileUploader->delete($oldIdentifier);
 		}
 	}
 }

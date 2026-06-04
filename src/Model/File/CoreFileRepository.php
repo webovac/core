@@ -20,6 +20,7 @@ use Nette\Utils\ImageException;
 use Nette\Utils\ImageType;
 use Nette\Utils\Json;
 use Nette\Utils\Process;
+use Nette\Utils\ProcessFailedException;
 use Nette\Utils\Random;
 use Nette\Utils\UnknownImageFileException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
@@ -170,24 +171,31 @@ trait CoreFileRepository
 		$dir = pathinfo($inputFile, PATHINFO_DIRNAME);
 		$name = Random::generate(8);
 		$outputFile = "$dir/$name.mp4";
-		$process = Process::runExecutable('systemd-run', [
-			'--scope',
-			'-p', 'CPUQuota=100%',
-			'ffmpeg',
-			'-y',
-			'-i', $inputFile,
-			'-vcodec', 'libx265',
-			'-b:v', '2000k',
-			'-preset', 'medium',
-			'-vtag', 'hvc1',
-			'-vf', 'scale=1920:-2,setsar=1',
-			'-pix_fmt', 'yuv420p',
-			'-acodec', 'aac',
-			'-b:a', '224k',
-			'-map_metadata', '0',
-			'-movflags', '+faststart',
-			$outputFile,
-		], timeout: null)->ensureSuccess();
+		try {
+			$process = Process::runExecutable('systemd-run', [
+				'--scope',
+				'-p', 'CPUQuota=100%',
+				'ffmpeg',
+				'-y',
+				'-i', $inputFile,
+				'-vcodec', 'libx265',
+				'-b:v', '2000k',
+				'-preset', 'medium',
+				'-vtag', 'hvc1',
+				'-vf', 'scale=1920:-2,setsar=1',
+				'-pix_fmt', 'yuv420p',
+				'-acodec', 'aac',
+				'-b:a', '224k',
+				'-map_metadata', '0',
+				'-movflags', '+faststart',
+				$outputFile,
+			], timeout: null);
+			$process->ensureSuccess();
+		} catch (ProcessFailedException $e) {
+			Debugger::log([$process->getStdOutput(), $process->getStdError()], Debugger::EXCEPTION);
+			throw new FileException('Process failed.');
+		}
+		
 		return $this->createFileUploadFromFile($outputFile);
 	}
 
