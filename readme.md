@@ -157,6 +157,10 @@ modules:
                 repositoryImplements:
                     Webovac\Core\Model\HasWebFilter:
                     Webovac\Core\Model\HasRequirementFilter:
+                requirements:
+                    read: isReadable
+                    update: isUpdatable
+                    remove: isRemovable
             BookTranslation:
                 entityImplements:
                     Webovac\Core\Model\Translation:
@@ -166,7 +170,7 @@ modules:
 php bin/generate.php
 ```
 
-This will add listed interfaces to Book and BookTranslation entity and repository classes. You will implement the interfaces in LibraryBook and LibraryBookTranslation traits.
+This will add listed interfaces and a method to check requirements to Book and BookTranslation entity and repository classes. You will implement the interfaces in LibraryBook and LibraryBookTranslation traits.
 
 #### Linkable
 
@@ -254,14 +258,19 @@ If requirements are defined, they are checked automatically when accessing the p
 ```php
 trait LibraryBook
 {
-    public function checkRequirements(CmsUser $user, ?string $tag = null): bool
+    public function isReadableByUser(CmsUser $user, WebData $webData): bool
     {
-        return match ($tag) {
-            null => false,
-            'read' => $this->isReadableByUser($user), # custom implementation
-            'update' => $this->isUpdatableByUser($user), # custom implementation
-            'remove' => $this->isRemovableByUser($user), # custom implementation
-        };
+        # custom implementation
+    }
+    
+    public function isUpdatableByUser(CmsUser $user, WebData $webData): bool
+    {
+        # custom implementation
+    }
+    
+    public function isRemovableByUser(CmsUser $user, WebData $webData): bool
+    {
+        # custom implementation
     }
 }
 
