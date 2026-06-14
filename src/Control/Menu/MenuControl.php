@@ -21,6 +21,7 @@ use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageActivator;
+use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -47,6 +48,7 @@ class MenuControl extends BaseControl
 		private DataProvider $dataProvider,
 		private CmsUser $cmsUser,
 		private PageActivator $pageActivator,
+		private PageRequirementChecker $requirementChecker,
 	) {}
 
 
@@ -70,13 +72,13 @@ class MenuControl extends BaseControl
 		$this->template->defaultLanguageData = $this->dataModel->getLanguageData($this->webData->defaultLanguage);
 		$this->template->menuPageData = $menuPageData;
 		if ($menuPageData) {
-			$this->template->pageDatas = $menuPageData->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity);
+			$pageDatas = $menuPageData->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser);
 			$this->template->homePageData = $menuPageData;
 		} else {
-			$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
-			$this->template->pageDatas = $this->webData->getRootPageDatas($this->dataModel, $this->cmsUser, $this->entity);
-			$this->template->homePageData = $homePage;
-		}		
+			$pageDatas = $this->webData->getRootPageDatas($this->dataModel, $this->cmsUser);
+			$this->template->homePageData = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
+		}
+		$this->template->pageDatas = $this->requirementChecker->filterPages($pageDatas, $this->entity);
 		$this->template->dataModel = $this->dataModel;
 		$this->template->webDatas = $this->dataModel->findWebDatas();
 		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
@@ -84,14 +86,14 @@ class MenuControl extends BaseControl
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
 			&& $searchModuleData
 			&& in_array($searchModuleData->id, $this->webData->modules, true);
-		$showSearch = $searchPageData?->isUserAuthorized($this->cmsUser, $this->webData) ?: false;
+		$showSearch = $searchPageData && $this->requirementChecker->isPageAccessible($searchPageData);
 		$this->template->showSearch = $showSearch;
 		$personsModuleData = $this->dataModel->getModuleDataByName('Persons');
 		$this->template->hasPersons = $this->moduleChecker->isModuleInstalled('persons')
 			&& $personsModuleData
 			&& in_array($personsModuleData->id, $this->webData->modules, true);
 		$adminPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Admin:Home');
-		$showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser, $this->webData) ?: false;
+		$showAdmin = $adminPageData && $this->requirementChecker->isPageAccessible($adminPageData);
 		$this->template->showAdmin = $showAdmin;
 		if ($showAdmin) {
 			$this->template->languageShortcuts = $this->dataModel->languageDataRepository->findAllPairs();
@@ -114,6 +116,7 @@ class MenuControl extends BaseControl
 		$this->template->wwwDir = $this->dir->getWwwDir();
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Core:Error4xx';
 		$this->template->pageActivator = $this->pageActivator;
+		$this->template->requirementChecker = $this->requirementChecker;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
 			$checkActive = !$pageData->targetAnchor && ($pageData->targetPage
 				? $pageData->targetPage !== $this->webData->homePage

@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Core;
 
+use Build\Model\Page\Page;
+use Build\Model\Person\Person;
+use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Control\Breadcrumbs\BreadcrumbsControl;
 use Webovac\Core\Control\Breadcrumbs\IBreadcrumbsControl;
 use Webovac\Core\Control\Buttons\ButtonsControl;
 use Webovac\Core\Control\Buttons\IButtonsControl;
+use Webovac\Core\Control\ContentForm\ContentFormControl;
+use Webovac\Core\Control\ContentForm\IContentFormControl;
 use Webovac\Core\Control\Documents\DocumentsControl;
 use Webovac\Core\Control\Documents\IDocumentsControl;
 use Webovac\Core\Control\Gallery\GalleryControl;
@@ -19,12 +24,15 @@ use Webovac\Core\Control\Messages\IMessagesControl;
 use Webovac\Core\Control\Messages\MessagesControl;
 use Webovac\Core\Control\Navigation\INavigationControl;
 use Webovac\Core\Control\Navigation\NavigationControl;
+use Webovac\Core\Control\PersonForm\IPersonFormControl;
+use Webovac\Core\Control\PersonForm\PersonFormControl;
 use Webovac\Core\Control\SidePanel\ISidePanelControl;
 use Webovac\Core\Control\SidePanel\SidePanelControl;
 use Webovac\Core\Control\Signpost\ISignpostControl;
 use Webovac\Core\Control\Signpost\SignpostControl;
 use Webovac\Core\MainModuleControl;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\HasTranslations;
 
 
 class CoreControl extends BaseControl implements MainModuleControl
@@ -41,6 +49,8 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private IBreadcrumbsControl $breadcrumbs,
 		private IGalleryControl $gallery,
 		private IDocumentsControl $documents,
+		private IPersonFormControl $personForm,
+		private IContentFormControl $contentForm,
 	) {}
 
 
@@ -95,5 +105,31 @@ class CoreControl extends BaseControl implements MainModuleControl
 	public function createComponentDocuments(): DocumentsControl
 	{
 		return $this->documents->create($this->entity);
+	}
+
+
+	#[RequiresEntity(Person::class)]
+	public function createComponentPersonForm(): PersonFormControl
+	{
+		assert($this->entity instanceof Person);
+		$control = $this->personForm->create($this->entity);
+		$control->onSave[] = function (PersonFormControl $control, Person $person) {
+			$this->presenter->flashMessage('Změny byly uloženy', 'success');
+			$this->presenter->redirect('this');
+		};
+		return $control;
+	}
+
+
+	#[RequiresEntity(HasTranslations::class)]
+	public function createComponentContentForm(): ContentFormControl
+	{
+		assert($this->entity instanceof HasTranslations);
+		$control = $this->contentForm->create($this->entity);
+		$control->onSave[] = function (ContentFormControl $control, HasTranslations $hasTranslations) {
+			$this->presenter->flashMessage('Změny byly uloženy.', 'success');
+			$this->presenter->redirect('this');
+		};
+		return $control;
 	}
 }

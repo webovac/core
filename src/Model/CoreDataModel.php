@@ -17,6 +17,8 @@ use Build\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Lib\ModeChecker;
+use Webovac\Core\Lib\RouteSetupProvider;
+use Webovac\Core\Router\CmsRouterFactory;
 
 
 trait CoreDataModel
@@ -127,57 +129,5 @@ trait CoreDataModel
 	public function getLastDeployData(): ?DeployData
 	{
 		return $this->deployDataRepository->getLastDeployData();
-	}
-
-
-	public function refreshCacheWithPage(?Page $page = null): void
-	{
-		if ($this->modeChecker->isTest()) {
-			return;
-		}
-		$this->pageDataRepository->buildCache($page?->web);
-		$this->webDataRepository->buildCache($page?->web);
-	}
-
-
-	public function refreshCacheWithModule(?Module $module = null): void
-	{
-		if ($this->modeChecker->isTest()) {
-			return;
-		}
-		$this->pageDataRepository->buildCache();
-		$this->webDataRepository->buildCache();
-	}
-
-
-	public function refreshCacheWithWeb(?Web $web = null): void
-	{
-		if ($this->modeChecker->isTest()) {
-			return;
-		}
-		$this->pageDataRepository->buildCache($web);
-		$this->webDataRepository->buildCache($web);
-	}
-
-
-	public function refreshCacheWithLanguage(?Language $language = null): void
-	{
-		if ($this->modeChecker->isTest()) {
-			return;
-		}
-		$this->languageDataRepository->buildCache();
-		$this->pageDataRepository->buildCache();
-		$this->webDataRepository->buildCache();
-		$this->layoutDataRepository->buildCache();
-	}
-
-
-	public function refreshCache(): void
-	{
-		$this->languageDataRepository->buildCache();
-		$this->pageDataRepository->buildCache();
-		$this->webDataRepository->buildCache();
-		$this->layoutDataRepository->buildCache();
-		$this->themeDataRepository->buildCache();
 	}
 }

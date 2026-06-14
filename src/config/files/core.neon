@@ -18,8 +18,14 @@ modules:
 					Stepapo\Model\Orm\InternalRepository:
 			Log:
 			Person:
+				entityImplements:
+					Webovac\Core\Model\HasTranslations:
+					Webovac\Core\Model\File\HasFiles:
 				repositoryImplements:
 					Webovac\Core\Model\HasWebFilter:
+			PersonTranslation:
+				entityImplements:
+					Webovac\Core\Model\Translation:
 			File:
 				entityImplements:
 					Webovac\Core\Model\HasTranslations:
@@ -64,6 +70,11 @@ modules:
 				repositoryImplements:
 					Stepapo\Model\Orm\PostProcessable:
 					Webovac\Core\Model\HasWebFilter:
+				requirements:
+					content: isEditable
+					files: isEditable
+					createPage: isEditable
+					remove: isEditable
 			PageTranslation:
 				entityImplements:
 					Webovac\Core\Model\Translation:

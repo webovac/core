@@ -13,6 +13,7 @@ use Build\Model\Theme\ThemeData;
 use Build\Model\Web\WebData;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Lib\PageActivator;
+use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -35,4 +36,5 @@ class MenuTemplate extends BaseTemplate
 	/** @var string[] */ public array $availableTranslations;
 	/** @var ThemeData[] */ public Collection $themeDatas;
 	public PageActivator $pageActivator;
+	public PageRequirementChecker $requirementChecker;
 }

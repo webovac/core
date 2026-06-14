@@ -12,6 +12,7 @@ use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\ModuleChecker;
+use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -32,6 +33,7 @@ class SidePanelControl extends BaseControl
 		private DataProvider $dataProvider,
 		private CmsUser $cmsUser,
 		private Orm $orm,
+		private PageRequirementChecker $requirementChecker,
 	) {}
 
 
@@ -68,7 +70,7 @@ class SidePanelControl extends BaseControl
 		$this->template->entity = $this->entity;
 		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Core:Error4xx';
 		$adminPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Admin:Home');
-		$showAdmin = $adminPageData?->isUserAuthorized($this->cmsUser, $webData) ?: false;
+		$showAdmin = $adminPageData && $this->requirementChecker->isPageAccessible($adminPageData);
 		$this->template->showAdmin = $showAdmin;
 		if ($showAdmin) {
 			$this->template->languageShortcuts = $this->dataModel->languageDataRepository->findAllPairs();

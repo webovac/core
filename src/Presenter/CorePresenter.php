@@ -29,7 +29,9 @@ use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Stepapo\Model\Data\Item;
 use Throwable;
+use Tracy\Debugger;
 use Tracy\Dumper;
+use Tracy\ILogger;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Exception\LoginRequiredException;
@@ -39,9 +41,11 @@ use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
+use Webovac\Core\Lib\LinkProvider;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\RegisterOrmEvents;
+use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasSlugHistory;
 
@@ -67,6 +71,9 @@ trait CorePresenter
 	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public RegisterOrmEvents $registerOrmEvents;
 	#[Inject] public PageActivator $pageActivator;
+	#[Inject] public PageRequirementChecker $requirementChecker;
+	#[Inject] public LinkProvider $linkProvider;
+	private SecurityPolicy $policy;
 	public ?WebData $webData;
 	private ?WebTranslationData $webTranslationData;
 	private ?LanguageData $languageData;
@@ -92,6 +99,7 @@ trait CorePresenter
 			$this->checkPreferences();
 			$this->setEntity();
 			$this->activatePages();
+			$this->setPolicy();
 		};
 	}
 
@@ -128,10 +136,7 @@ trait CorePresenter
 
 	public function createComponentCore(): CoreControl
 	{
-		return $this->core->create(
-			$this->entity,
-			$this->entityList,
-		);
+		return $this->core->create($this->entity, $this->entityList);
 	}
 
 
@@ -253,7 +258,7 @@ trait CorePresenter
 	private function checkPageRequirements(): void
 	{
 		try {
-			$this->pageData->checkRequirements($this->cmsUser, $this->webData);
+			$this->requirementChecker->checkPageRequirements($this->pageData);
 		} catch (MissingPermissionException $e) {
 			throw new ForbiddenRequestException;
 		} catch (LoginRequiredException $e) {
@@ -307,6 +312,22 @@ trait CorePresenter
 	}
 
 
+	private function setPolicy(): void
+	{
+		$this->policy = SecurityPolicy::createSafePolicy()
+			->allowTags(['include', 'control', 'plink', 'pageLink', 'contentType', 'sandbox', 'snippet', 'snippetArea'])
+			->allowFilters(['replaceKey', 'mTime', 'translate', 'localDate'])
+			->allowProperties(stdClass::class, SecurityPolicy::All)
+			->allowProperties(CmsEntity::class, SecurityPolicy::All)
+			->allowProperties(Item::class, SecurityPolicy::All)
+			->allowMethods(CmsUser::class, SecurityPolicy::All)
+			->allowMethods(CmsEntity::class, SecurityPolicy::All)
+			->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)
+			->allowMethods(Item::class, ['loadAsset'])
+			->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'str_contains', 'core']);
+	}
+
+
 	private function getTitle(): ?string
 	{
 		return $this->entity && method_exists($this->entity, 'getTitle')
@@ -351,7 +372,8 @@ trait CorePresenter
 
 	private function getEmptyNavigation(): bool
 	{
-		return $this->navigationPageData?->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity)->count()
+		$pageDatas = $this->navigationPageData?->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity);
+		return $pageDatas && $this->requirementChecker->filterPages($pageDatas)->count()
 			+ ($this->entityList && method_exists($this->entity, 'getMenuItems') ? count($this->entity->getMenuItems()) : null) === 0;
 	}
 
@@ -409,22 +431,16 @@ trait CorePresenter
 		]))
 			->setExceptionHandler(function (Throwable $e, \Latte\Runtime\Template $template) {
 				bdump($e->getMessage());
-				Dumper::log($e->getMessage());
+				Debugger::log($e->getMessage(), ILogger::EXCEPTION);
 			})
 			->setSandboxMode()
-			->setPolicy(
-				SecurityPolicy::createSafePolicy()
-					->allowTags(['include', 'control', 'plink', 'contentType', 'sandbox', 'snippet', 'snippetArea'])
-					->allowFilters(['replaceKey', 'mTime', 'translate', 'localDate'])
-					->allowProperties(stdClass::class, SecurityPolicy::All)
-					->allowProperties(CmsEntity::class, SecurityPolicy::All)
-					->allowProperties(Item::class, SecurityPolicy::All)
-					->allowMethods(CmsUser::class, SecurityPolicy::All)
-					->allowMethods(CmsEntity::class, SecurityPolicy::All)
-					->allowMethods(IRelationshipCollection::class, SecurityPolicy::All)
-					->allowMethods(Item::class, ['loadAsset'])
-					->allowFunctions(['is_numeric', 'max', 'isModuleInstalled', 'lcfirst', 'in_array', 'str_contains', 'core'])
-			);
+			->setPolicy($this->policy);
 		$this->template->setFile('@layout.latte');
+	}
+
+
+	public function pageLink(string $pageName): string
+	{
+		return $this->link('//default', $pageName);
 	}
 }

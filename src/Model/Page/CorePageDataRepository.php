@@ -36,6 +36,7 @@ trait CorePageDataRepository
 			$this->cacheItem($key, $item);
 		}
 		$this->setReady();
+		$this->getAliases();
 	}
 
 
@@ -44,10 +45,22 @@ trait CorePageDataRepository
 		$collection = $web ? $this->getCollection() : new Collection;
 		$this->orm->pageTranslationRepository->rebuildPaths($web);
 		$this->orm->flush();
-		$this->buildCollection($collection, $web);
-		$this->collection = $collection;
-		$this->cache->save('collection', $collection, [Cache::Tags => lcfirst($this->getName())]);
-		return $collection;
+		if ($web) {
+			$c = new Collection;
+			foreach ($collection as $key => $item) {
+				if ($item->web === $web->id) {
+					$this->removeItem($key);
+					continue;
+				}
+				$c[$key] = $item;
+			}
+		} else {
+			$c = $collection;
+		}
+		$this->buildCollection($c, $web);
+		$this->collection = $c;
+		$this->cache->save('collection', $c, [Cache::Tags => lcfirst($this->getName())]);
+		return $c;
 	}
 
 

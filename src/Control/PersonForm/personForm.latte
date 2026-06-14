@@ -1,0 +1,38 @@
+{templateType Webovac\Core\Control\PersonForm\PersonFormTemplate}
+{snippet}
+	{form form class: "small values"}
+		<div n:if="$form->errors" class="alert alert-danger">
+			<p class="mb-1"><b>{_'Chyba'}:</b></p>
+			<p n:inner-foreach="$form->errors as $error">
+				{$error}{sep}<br>{/}
+			</p>
+		</div>
+		<div id="form-translations">
+			<h6 class="mb-2">Překlady</h6>
+			{multiplier translations}
+				<div class="mb-3">
+					<div class="d-flex flex-row mb-1">
+						<div class="row flex-grow-1">
+							<div class="col-3 form-group">
+								{label 'language' class => "form-label" /}
+								<div>{input 'language' class => "form-control form-control-sm"}</div>
+							</div>
+							<div class="col-9 form-group">
+								{label 'title' class => "form-label" /}
+								{input 'title' class => "form-control form-control-sm"}
+							</div>
+						</div>
+						<div class="ms-1 position-relative" style="width: 24px;" n:ifcontent>
+							<div class="position-absolute bottom-0">{multiplier:remove 'translations'}</div>
+						</div>
+					</div>
+				</div>
+			{/}
+			<div class="mb-3">
+				{multiplier:add translations}
+			</div>
+		</div>
+
+		{input send class => "btn btn-primary"}
+	{/}
+{/}

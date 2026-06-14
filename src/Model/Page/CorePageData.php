@@ -43,29 +43,6 @@ trait CorePageData
 
 
 	/**
-	 * @throws LoginRequiredException
-	 * @throws MissingPermissionException
-	 */
-	public function checkRequirements(CmsUser $cmsUser, WebData $webData): void
-	{
-		foreach ($this->accessSetups as $accessSetup) {
-			$accessSetup->checkRequirements($cmsUser, $webData);
-		}
-	}
-
-
-	public function isUserAuthorized(CmsUser $cmsUser, WebData $webData): bool
-	{
-		foreach ($this->accessSetups as $accessSetup) {
-			if (!$accessSetup->isUserAuthorized($cmsUser, $webData)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-
-	/**
 	 * @throws ReflectionException
 	 */
 	public function getLanguageIds(): array
@@ -123,34 +100,14 @@ trait CorePageData
 
 
 	/** @return Collection<PageData> */
-	public function getChildPageDatas(DataModel $dataModel, WebData $webData, CmsUser $cmsUser, ?CmsEntity $entity = null): Collection
+	public function getChildPageDatas(DataModel $dataModel, WebData $webData, CmsUser $cmsUser): Collection
 	{
 		$pageDatas = [];
 		foreach ($this->childPageIds as $childPageId) {
-			$pageData = $dataModel->getPageData($webData->id, $childPageId);
-			$pageDataToCheck = $pageData->type === Page::TYPE_INTERNAL_LINK
-				? $dataModel->getPageData($webData->id, $pageData->targetPage)
-				: $pageData;
-			if ($pageDataToCheck->checkPageRequirements($webData, $cmsUser, $entity)) {
-				$pageDatas[] = $pageData;
-			}
+			$pageDatas[] = $dataModel->getPageData($webData->id, $childPageId);
 		}
 		uasort($pageDatas, fn(PageData $a, PageData $b) => $a->rank <=> $b->rank);
 		return new Collection($pageDatas);
-	}
-
-
-	public function checkPageRequirements(WebData $webData, CmsUser $cmsUser, ?CmsEntity $entity = null): bool
-	{
-		if (!$this->isUserAuthorized($cmsUser, $webData)) {
-			return false;
-		}
-		if ($this->authorizingTag && $entity) {
-			if ($entity instanceof HasRequirements && !$entity->check($cmsUser, $webData, $this->authorizingTag)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 

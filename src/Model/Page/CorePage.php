@@ -87,17 +87,11 @@ trait CorePage
 
 	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public IPageItemControl $component;
-
-
-	public function checkRequirements(CmsUser $user, WebData $webData, ?string $tag = null): bool
+	
+	
+	public function isEditable(CmsUser $user, WebData $webData): bool
 	{
-		return match ($tag) {
-			null => true,
-			'content' => $this->type !== self::TYPE_MODULE,
-			'files' => $this->type !== self::TYPE_MODULE,
-			'createPage' => $this->type !== self::TYPE_MODULE,
-			'remove' => $this->type !== self::TYPE_MODULE,
-		};
+		return $this->type !== self::TYPE_MODULE;
 	}
 
 

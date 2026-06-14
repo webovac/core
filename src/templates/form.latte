@@ -17,6 +17,15 @@
 				<input class="form-check-input" n:name="$input->getName():$key">
 				<label class="form-check-label" n:name="$input->getName():$key">{_$caption}</label>
 			</div>
+		{elseif $input->getOption('type') === 'file'}
+			{label $input class: "form-label"/}
+			<div>
+				{input $input class: "form-control form-control-sm"}
+				<div n:if="$file = $input->getOption('file')" n:class="mt-1">
+					{$control->getComponent('fileItem-' . $file->id)->render('45x45', 'fill')}
+					<a href="#" class="link-danger ms-1" onclick="return confirm('Opravdu chcete smazat soubor?')" data-file-remover="{$input->getParent()->getComponent('identifier')?->getHtmlId()}" title="Smazat"><i class="fas fa-width-auto fa-times"></i></a>
+				</div>
+			</div>
 		{else}
 			{label $input class: "form-label"/}
 			<div n:class="$input->getOption('type') !== 'select' ? 'input-group input-group-sm'" n:tag-if="$input->getOption('type') === 'select' || $input->getOption('prefix') || $input->getOption('suffix')">

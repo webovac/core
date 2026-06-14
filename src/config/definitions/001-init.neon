@@ -32,6 +32,7 @@ schemas:
 					id: [type: int, null: false, auto: true]
 					web_id: [type: int, null: true, internal: true]
 					page_id: [type: int, null: true]
+					person_id: [type: int, null: true]
 					created_by_person_id: [type: int, null: true, dontCache: true]
 					identifier: [type: string, null: false]
 					modern_identifier: [type: string, null: true]
@@ -46,10 +47,11 @@ schemas:
 					captured_at: [type: datetime, null: true]
 					created_at: [type: datetime, null: false, default: now, dontCache: true]
 				primaryKey: id
-				indexes: [web_id, page_id, created_by_person_id]
+				indexes: [web_id, page_id, person_id, created_by_person_id]
 				foreignKeys:
 					web_id: [table: web, column: id, onDelete: cascade, reverseName: files, reverseSkipInManipulation: true, reverseData: true, reverseDontCache: true, reverseOrder: id]
 					page_id: [table: page, column: id, onDelete: cascade, reverseName: files, reverseSkipInManipulation: true, reverseData: true, reverseDontCache: true, reverseOrder: id]
+					person_id: [table: person, column: id, onDelete: cascade, reverseName: files, reverseSkipInManipulation: true, reverseData: true, reverseDontCache: true, reverseOrder: id]
 					created_by_person_id: [table: person, column: id, onDelete: restrict]
 			file_translation:
 				columns:
@@ -344,6 +346,25 @@ schemas:
 				foreignKeys:
 					created_by_person_id: [table: person, column: id, onDelete: set null]
 					updated_by_person_id: [table: person, column: id, onDelete: set null]
+			person_translation:
+				columns:
+					id: [type: int, null: false, auto: true]
+					created_by_person_id: [type: int, null: true]
+					updated_by_person_id: [type: int, null: true]
+					created_at: [type: datetime, null: false, default: now]
+					updated_at: [type: datetime, null: true]
+					person_id: [type: int, null: false]
+					language_id: [type: int, null: false, keyProperty: true]
+					title: [type: text, null: true]
+					content: [type: text, null: true]
+				primaryKey: id
+				uniqueKeys: [[person_id, language_id]]
+				indexes: [created_by_person_id, updated_by_person_id, person_id, language_id]
+				foreignKeys:
+					created_by_person_id: [table: person, column: id, onDelete: restrict]
+					updated_by_person_id: [table: person, column: id, onDelete: restrict]
+					person_id: [table: person, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true]
+					language_id: [table: language, column: id]
 			preference:
 				columns:
 					id: [type: int, null: false, auto: true]

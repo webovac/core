@@ -1,5 +1,5 @@
 {templateType Webovac\Core\Control\Buttons\ButtonsTemplate}
-<div class="mb-3" n:ifcontent>
+<div class="mb-3 d-flex flex-wrap gap-1" n:ifcontent>
 	{if $pageDatas->count() > 0}
 		{renderMenuItem($pageData)}
 		{foreach $pageDatas as $p}

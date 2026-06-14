@@ -7,6 +7,7 @@ namespace Webovac\Core\Lib;
 use Nette\Application\UI\Template;
 use Nette\DI\Attributes\Inject;
 use Stepapo\Utils\Latte\Filters;
+use Webovac\Core\Latte\CoreExtension;
 
 
 trait CoreTemplateFactory
@@ -22,6 +23,7 @@ trait CoreTemplateFactory
 	public function injectCoreCreate(): void
 	{
 		$this->onCreate[] = function (Template $template) {
+			$template->getLatte()->addExtension(new CoreExtension);
 			$template->setTranslator($this->translator);
 			$template->addFilter('plural', [Filters::class, 'plural']);
 			$template->addFilter('intlDate', [Filters::class, 'intlDate']);

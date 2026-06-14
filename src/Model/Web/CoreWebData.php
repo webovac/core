@@ -77,17 +77,11 @@ trait CoreWebData
 
 
 	/** @return Collection<PageData> */
-	public function getRootPageDatas(DataModel $dataModel, CmsUser $cmsUser, ?CmsEntity $entity = null): Collection
+	public function getRootPageDatas(DataModel $dataModel, CmsUser $cmsUser): Collection
 	{
 		$pageDatas = [];
 		foreach ($this->rootPages as $rootPageId) {
-			$pageData = $dataModel->getPageData($this->id, $rootPageId);
-			$pageDataToCheck = $pageData->type === Page::TYPE_INTERNAL_LINK
-				? $dataModel->getPageData($this->id, $pageData->targetPage)
-				: $pageData;
-			if ($pageDataToCheck->checkPageRequirements($this, $cmsUser, $entity)) {
-				$pageDatas[] = $pageData;
-			}
+			$pageDatas[] = $dataModel->getPageData($this->id, $rootPageId);
 		}
 		uasort($pageDatas, fn(PageData $a, PageData $b) => $a->rank <=> $b->rank);
 		return new Collection($pageDatas);

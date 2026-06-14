@@ -1,0 +1,21 @@
+{templateType Webovac\Core\Control\ContentForm\ContentFormTemplate}
+<div n:snippet class="flex-grow-1 d-flex flex-column override-padding" n:if="$hasTranslations->translations->count() > 0">
+	<div n:if="$hasTranslations->translations->count() > 1" class="mb-3">
+		<a n:foreach="$hasTranslations->translations as $translation" n:href="//changeLang! $translation->language->shortcut" n:class="btn, $translation->language->shortcut === $lang ? btn-primary : btn-outline-primary">{$translation->language->title}</a>
+	</div>
+	{form form class => "flex-grow-1 d-flex flex-column override-padding"}
+		<div n:if="$form->errors" class="alert alert-danger">
+			<p class="mb-1"><b>{_'Chyba'}:</b></p>
+			<p n:inner-foreach="$form->errors as $error">
+				{$error}{sep}<br>{/}
+			</p>
+		</div>
+		<div class="mb-3 flex-grow-1 d-flex override-padding">
+			{input 'content' class => "form-control", id => "editor", data-items: $mentions, data-link-groups: $linkGroups}
+		</div>
+		<div>
+			{input send class => "btn btn-primary"}
+		</div>
+	{/}
+</div>
+<p n:else>Nejdřív založte stránku v nastavení.</p>

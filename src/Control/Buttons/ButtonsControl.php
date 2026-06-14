@@ -10,6 +10,7 @@ use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
+use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -24,6 +25,7 @@ class ButtonsControl extends BaseControl
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
 		private CmsUser $cmsUser,
+		private PageRequirementChecker $requirementChecker,
 	) {}
 
 
@@ -37,7 +39,8 @@ class ButtonsControl extends BaseControl
 		$layoutData = $this->dataProvider->getLayoutData();
 		$languageData = $this->dataProvider->getLanguageData();
 		$this->template->pageData = $buttonsPageData;
-		$this->template->pageDatas = $buttonsPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
+		$childPageDatas = $buttonsPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser);
+		$this->template->pageDatas = $this->requirementChecker->filterPages($childPageDatas, $this->entity);
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData, $buttonsPageData) {

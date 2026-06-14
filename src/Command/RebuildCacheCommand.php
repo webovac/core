@@ -7,6 +7,7 @@ namespace Webovac\Core\Command;
 use Build\Model\DataModel;
 use Stepapo\Utils\Command\Command;
 use Stepapo\Utils\Printer;
+use Webovac\Core\Lib\CacheRefresher;
 
 
 class RebuildCacheCommand implements Command
@@ -15,7 +16,7 @@ class RebuildCacheCommand implements Command
 
 
 	public function __construct(
-		private DataModel $dataModel,
+		private CacheRefresher $cacheRefresher,
 	) {
 		$this->printer = new Printer;
 	}
@@ -27,7 +28,7 @@ class RebuildCacheCommand implements Command
 		$this->printer->printBigSeparator();
 		$this->printer->printLine('Cache', 'aqua');
 		$this->printer->printSeparator();
-		$this->dataModel->refreshCache();
+		$this->cacheRefresher->refreshCache();
 		$end = microtime(true);
 		$this->printer->printLine(sprintf("%0.3f s | OK", $end - $start), 'lime');
 		return 0;

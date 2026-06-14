@@ -173,6 +173,7 @@ trait CoreFileRepository
 		$outputFile = "$dir/$name.mp4";
 		try {
 			$process = Process::runExecutable('systemd-run', [
+				'--user',
 				'--scope',
 				'-p', 'CPUQuota=100%',
 				'ffmpeg',
@@ -182,7 +183,7 @@ trait CoreFileRepository
 				'-b:v', '2000k',
 				'-preset', 'medium',
 				'-vtag', 'hvc1',
-				'-vf', 'scale=1920:-2,setsar=1',
+				'-vf', 'scale=min(1920\,iw):-2,setsar=1',
 				'-pix_fmt', 'yuv420p',
 				'-acodec', 'aac',
 				'-b:a', '224k',
@@ -192,7 +193,7 @@ trait CoreFileRepository
 			], timeout: null);
 			$process->ensureSuccess();
 		} catch (ProcessFailedException $e) {
-			Debugger::log([$process->getStdOutput(), $process->getStdError()], Debugger::EXCEPTION);
+			Debugger::log($process->getStdError(), Debugger::EXCEPTION);
 			throw new FileException('Process failed.');
 		}
 		

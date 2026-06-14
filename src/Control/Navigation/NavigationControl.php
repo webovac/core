@@ -13,6 +13,7 @@ use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\ModuleChecker;
+use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
 
 
@@ -29,6 +30,7 @@ class NavigationControl extends BaseControl
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
 		private CmsUser $cmsUser,
+		private PageRequirementChecker $requirementChecker,
 	) {}
 
 
@@ -47,8 +49,8 @@ class NavigationControl extends BaseControl
 		if ($this->entityList && method_exists($this->entity, 'getMenuItems')) {
 			$this->template->entityMenuItems = $this->entity->getMenuItems();
 		}
-		$pageDatas = $navigationPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser, $this->entity);
-		$this->template->pageDatas = $pageDatas;
+		$pageDatas = $navigationPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser);
+		$this->template->pageDatas = $this->requirementChecker->filterPages($pageDatas, $this->entity);
 		$pD = (array) $pageDatas;
 		uasort($pD, function (PageData $a, PageData $b) {
 			if ($a->hasStyle() === $b->hasStyle()) {

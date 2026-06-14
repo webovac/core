@@ -27,7 +27,7 @@ class ProcessFiles implements Command
 		$error = false;
 		$command = $this->orm->commandRepository->getBy(['code' => 'processFiles']);
 		$now = new DateTimeImmutable();
-		if ($command->running && $command->lastStartAt->modify('+1 hour') > $now) {
+		if ($command->running) {
 			print('Command is already running.' . PHP_EOL);
 			return 1;
 		}

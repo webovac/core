@@ -15,7 +15,7 @@
 	<meta property="og:url" content="{$metaUrl}">
 	<meta property="og:site_name" content="{$webTranslationData->title|truncate:60}">
 	<meta name="twitter:title" content="{$metaTitle|truncate:60}">
-	<meta name="twitter:description" n:if="$pageTranslation->description" content="{$pageTranslation->description|truncate:300}">
+	<meta name="twitter:description" n:if="$description" content="{$description|truncate:300}">
 	<meta name="twitter:image" n:if="$imageUrl" content="{$baseUrl}/{$imageUrl}?m={=$imageUrl|mTime}">
 	{*	<meta name="twitter:site" content="@USERNAME">*}
 {*	<meta name="twitter:creator" content="@USERNAME">*}
@@ -44,7 +44,7 @@
 					{/}
 					{control core-messages}
 				{/}
-				<div n:class="content, override-padding, str_contains($pageTranslation->content ?: '', 'ContentForm') || str_contains($pageTranslation->content ?: '', 'FooterForm') ? 'd-flex flex-column'">
+				<div n:class="content, override-padding, str_contains($pageTranslation->content ?: '', 'contentForm') || str_contains($pageTranslation->content ?: '', 'FooterForm') ? 'd-flex flex-column'">
 					{include 'main.file'}
 				</div>
 				<div class="footer small" n:ifcontent>
