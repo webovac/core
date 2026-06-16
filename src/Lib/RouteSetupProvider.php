@@ -6,6 +6,7 @@ namespace Webovac\Core\Lib;
 
 use Build\Model\DataModel;
 use Build\Model\Page\Page;
+use Build\Model\Web\WebData;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\Http\IRequest;
@@ -15,7 +16,8 @@ use Stepapo\Utils\Service;
 class RouteSetupProvider implements Service
 {
 	private Cache $cache;
-	private array $setup;
+	private array $webSetup;
+	private array $pageSetup;
 
 
 	public function __construct(
@@ -27,10 +29,61 @@ class RouteSetupProvider implements Service
 	}
 
 
-	public function getSetup(): array
+	public function getWebSetup(): array
 	{
-		if (!isset($this->setup)) {
-			$this->setup = $this->cache->load('routeSetup', function() {
+		if (!isset($this->webSetup)) {
+			$this->webSetup = $this->cache->load('webSetup', function() {
+				$webDatas = $this->dataModel->findWebDatas();
+				$apiModuleData = $this->dataModel->getModuleDataByName('Api');
+				$webSetup = [];
+				foreach ($webDatas as $webData) {
+					$webSetup[] = [
+						'mask' => $webData->getStyleRouteMask(),
+						'metadata' => $webData->getRouteMetadata('Core:Style'),
+					];
+					foreach ($webData->translations as $webTranslationData) {
+						$languageData = $this->dataModel->getLanguageData($webTranslationData->language);
+						$webSetup[] = [
+							'mask' => $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
+							'metadata' => $webData->getRouteMetadata('Core:Manifest', $languageData->shortcut),
+						];
+						if ($apiModuleData && in_array($apiModuleData->id, $webData->modules, true)) {
+							$webSetup[] = [
+								'mask' => $webData->getAuthorizationRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
+								'metadata' => $webData->getRouteMetadata('Api:Authorization', $languageData->shortcut, 'authorize'),
+							];
+							$webSetup[] = [
+								'mask' => $webData->getApiRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
+								'metadata' => $webData->getRouteMetadata('Api:Home', $languageData->shortcut),
+								'type' => 'crud',
+							];
+						}
+					}
+				}
+				/** @var WebData $webData */
+				foreach (array_reverse((array) $webDatas) as $webData) {
+					$webSetup[] = [
+						'mask' => $webData->getPageRouteMask(),
+						'metadata' => [
+							'presenter' => 'Core:Home',
+							'action' => 'default',
+							'host' => $webData->host,
+							'basePath' => $webData->basePath,
+						],
+						'type' => 'page',
+					];
+				}
+				return $webSetup;
+			}, [Cache::Tags => ['language', 'web', 'page', 'router']]);
+		}
+		return $this->webSetup;
+	}
+
+
+	public function getPageSetup(): array
+	{
+		if (!isset($this->pageSetup)) {
+			$this->pageSetup = $this->cache->load('pageSetup', function() {
 				ini_set('memory_limit', '1G');
 				$setup = [
 					'mapIn' => [],
@@ -107,6 +160,6 @@ class RouteSetupProvider implements Service
 				return $setup;
 			}, [Cache::Tags => ['language', 'web', 'page', 'router']]);
 		}
-		return $this->setup;
+		return $this->pageSetup;
 	}
 }

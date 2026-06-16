@@ -9,6 +9,7 @@ use Build\Model\Web\WebData;
 use Nette\Application\BadRequestException;
 use Nette\Application\Routers\RouteList;
 use Nette\Caching\Cache;
+use Nette\Caching\Storage;
 use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Stepapo\Restful\Application\Routes\CrudRoute;
@@ -20,58 +21,42 @@ final class CmsRouterFactory implements Service
 {
 	private array $setup;
 	private Cache $cache;
+	private array $webSetup;
 
 
 	public function __construct(
 		private DataModel $dataModel,
 		private IRequest $request,
+		private Storage $storage,
 		private RouteSetupProvider $routeSetupProvider,
-	) {}
+	) {
+		$this->cache = new Cache($this->storage, 'cms');
+	}
 
 
 	public function create(): RouteList
 	{
 		$routeList = new RouteList;
-		$webDatas = $this->dataModel->findWebDatas();
-		$apiModuleData = $this->dataModel->getModuleDataByName('Api');
-		foreach ($webDatas as $webData) {
-			$routeList->addRoute(
-				mask: $webData->getStyleRouteMask(),
-				metadata: $webData->getRouteMetadata('Core:Style'),
-			);
-			foreach ($webData->translations as $webTranslationData) {
-				$languageData = $this->dataModel->getLanguageData($webTranslationData->language);
+		foreach ($this->routeSetupProvider->getWebSetup() as $route) {
+			if (isset($route['type']) && $route['type'] === 'crud') {
+				$routeList->add(new CrudRoute(
+					mask: $route['mask'],
+					metadata: $route['metadata'],
+				));
+			} else if (isset($route['type']) && $route['type'] === 'page') {
 				$routeList->addRoute(
-					mask: $webData->getManifestRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-					metadata: $webData->getRouteMetadata('Core:Manifest', $languageData->shortcut),
-				);
-				if ($apiModuleData && in_array($apiModuleData->id, $webData->modules, true)) {
-					$routeList->addRoute(
-						mask: $webData->getAuthorizationRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-						metadata: $webData->getRouteMetadata('Api:Authorization', $languageData->shortcut, 'authorize')
-					);
-					$routeList->add(new CrudRoute(
-						mask: $webData->getApiRouteMask($webTranslationData->language === $webData->defaultLanguage ? null : $languageData->shortcut),
-						metadata: $webData->getRouteMetadata('Api:Home', $languageData->shortcut),
-					));
-				}
-			}
-		}
-		/** @var WebData $webData */
-		foreach (array_reverse((array) $webDatas) as $webData) {
-			$routeList->addRoute(
-				mask: $webData->getPageRouteMask(),
-				metadata: [
-					'presenter' => 'Core:Home',
-					'action' => 'default',
-					'host' => $webData->host,
-					'basePath' => $webData->basePath,
-					'' => [
+					mask: $route['mask'],
+					metadata: $route['metadata'] + ['' => [
 						Route::FilterIn => $this->filterIn(...),
 						Route::FilterOut => $this->filterOut(...),
-					],
-				],
-			);
+					]],
+				);
+			} else {
+				$routeList->addRoute(
+					mask: $route['mask'],
+					metadata: $route['metadata'],
+				);
+			}
 		}
 		return $routeList;
 	}
@@ -79,7 +64,7 @@ final class CmsRouterFactory implements Service
 
 	private function filterIn(array $params): array
 	{
-		$setup = $this->routeSetupProvider->getSetup();
+		$setup = $this->routeSetupProvider->getPageSetup();
 		$p = explode('/', $params['p'] ?? '');
 		$ids = [];
 		foreach ($p as $key => $part) {
@@ -157,18 +142,14 @@ final class CmsRouterFactory implements Service
 
 	private function filterOut(array $params): array
 	{
-		$setup = $this->routeSetupProvider->getSetup();
+		$setup = $this->routeSetupProvider->getPageSetup();
 		$pageName = $params['pageName'];
 		$lang = $params['lang'] ?? 'cs';
 		$do = $params['do'] ?? null;
 		$id = array_values($params['id'] ?? []);
 		$host = $params['host'] ?? $this->request->getUrl()->getHost();
 		$basePath = $params['basePath'] ?? null;
-		//$path = $params['path'];
 		$base = "//$host/" . ($basePath ?: '~');
-//		Dumper::dump($base);
-//		Dumper::dump($lang);
-//		Dumper::dump($pageName);
 		$pageOut = $setup['mapOut'][$base][$lang][$pageName];
 		if ($p = $pageOut['p']) {
 			$p = explode('/', $pageOut['p']);

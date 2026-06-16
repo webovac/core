@@ -80,7 +80,7 @@ class MenuControl extends BaseControl
 		}
 		$this->template->pageDatas = $this->requirementChecker->filterPages($pageDatas, $this->entity);
 		$this->template->dataModel = $this->dataModel;
-		$this->template->webDatas = $this->dataModel->findWebDatas();
+//		$this->template->webDatas = $this->dataModel->findWebDatas();
 		$searchModuleData = $this->dataModel->getModuleDataByName('Search');
 		$searchPageData = $this->dataModel->getPageDataByName($this->dataProvider->getWebData()->id, 'Search:Home');
 		$this->template->hasSearch = $this->moduleChecker->isModuleInstalled('search')
@@ -98,7 +98,7 @@ class MenuControl extends BaseControl
 		if ($showAdmin) {
 			$this->template->languageShortcuts = $this->dataModel->languageDataRepository->findAllPairs();
 			$this->template->pageModuleData = $pageData->module ? $this->dataModel->getModuleData($pageData->module) : null;
-			$this->template->webDatas = $this->dataModel->findWebDatas();
+//			$this->template->webDatas = $this->dataModel->findWebDatas();
 			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
 		}
 		if ($this->moduleChecker->isModuleInstalled('style')) {

@@ -40,7 +40,8 @@ class CacheRefresher implements Service
 		}
 		$this->pageDataRepository->buildCache($page?->web);
 		$this->webDataRepository->buildCache($page?->web);
-		$this->routeSetupProvider->getSetup();
+		$this->routeSetupProvider->getWebSetup();
+		$this->routeSetupProvider->getPageSetup();
 	}
 
 
@@ -52,7 +53,8 @@ class CacheRefresher implements Service
 		}
 		$this->pageDataRepository->buildCache();
 		$this->webDataRepository->buildCache();
-		$this->routeSetupProvider->getSetup();
+		$this->routeSetupProvider->getWebSetup();
+		$this->routeSetupProvider->getPageSetup();
 	}
 
 
@@ -64,7 +66,8 @@ class CacheRefresher implements Service
 		}
 		$this->pageDataRepository->buildCache($web);
 		$this->webDataRepository->buildCache($web);
-		$this->routeSetupProvider->getSetup();
+		$this->routeSetupProvider->getWebSetup();
+		$this->routeSetupProvider->getPageSetup();
 	}
 
 
@@ -78,7 +81,8 @@ class CacheRefresher implements Service
 		$this->pageDataRepository->buildCache();
 		$this->webDataRepository->buildCache();
 		$this->layoutDataRepository->buildCache();
-		$this->routeSetupProvider->getSetup();
+		$this->routeSetupProvider->getWebSetup();
+		$this->routeSetupProvider->getPageSetup();
 	}
 
 
@@ -90,7 +94,8 @@ class CacheRefresher implements Service
 		$this->webDataRepository->buildCache();
 		$this->layoutDataRepository->buildCache();
 		$this->themeDataRepository->buildCache();
-		$this->routeSetupProvider->getSetup();
+		$this->routeSetupProvider->getWebSetup();
+		$this->routeSetupProvider->getPageSetup();
 	}
 
 
