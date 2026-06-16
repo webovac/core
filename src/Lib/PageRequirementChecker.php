@@ -82,7 +82,7 @@ class PageRequirementChecker implements Service, Clearable
 	 * @param Collection<PageData> $pageDatas
 	 * @return Collection<PageData>
 	 */
-	public function filterPages(Collection $pageDatas, IEntity $entity): Collection
+	public function filterPages(Collection $pageDatas, ?IEntity $entity): Collection
 	{
 		$filteredPageDatas = [];
 		foreach ($pageDatas as $pageData) {
