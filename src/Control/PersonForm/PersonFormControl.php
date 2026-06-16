@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\PersonForm;
 
-use Build\Model\Article\Article;
-use Build\Model\Article\ArticleData;
-use Build\Model\ArticleTranslation\ArticleTranslationData;
 use Build\Model\Orm;
 use Build\Model\Person\Person;
 use Build\Model\Person\PersonData;
 use Build\Model\PersonTranslation\PersonTranslationData;
-use Build\Model\Slug\Slug;
-use Build\Model\Web\Web;
 use Nette\Application\UI\Form;
 use Nette\Forms\Container;
 use Nette\Utils\Arrays;

@@ -35,7 +35,7 @@ class SignpostControl extends BaseControl
 		$layoutData = $this->dataProvider->getLayoutData();
 		$pageData = $this->dataProvider->getPageData();
 		$languageData = $this->dataProvider->getLanguageData();
-		$pageDatas = $pageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser);
+		$pageDatas = $pageData->getChildPageDatas($this->dataModel, $webData);
 		$this->template->pageDatas = $this->requirementChecker->filterPages($pageDatas, $this->entity);
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;

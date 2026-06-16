@@ -30,7 +30,6 @@ use stdClass;
 use Stepapo\Model\Data\Item;
 use Throwable;
 use Tracy\Debugger;
-use Tracy\Dumper;
 use Tracy\ILogger;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
@@ -44,8 +43,8 @@ use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\LinkProvider;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageActivator;
-use Webovac\Core\Lib\RegisterOrmEvents;
 use Webovac\Core\Lib\PageRequirementChecker;
+use Webovac\Core\Lib\RegisterOrmEvents;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasSlugHistory;
 
@@ -372,8 +371,8 @@ trait CorePresenter
 
 	private function getEmptyNavigation(): bool
 	{
-		$pageDatas = $this->navigationPageData?->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser, $this->entity);
-		return $pageDatas && $this->requirementChecker->filterPages($pageDatas)->count()
+		$pageDatas = $this->navigationPageData?->getChildPageDatas($this->dataModel, $this->webData);
+		return $pageDatas && $this->requirementChecker->filterPages($pageDatas, $this->entity)->count()
 			+ ($this->entityList && method_exists($this->entity, 'getMenuItems') ? count($this->entity->getMenuItems()) : null) === 0;
 	}
 

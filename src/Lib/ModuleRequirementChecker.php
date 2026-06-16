@@ -4,24 +4,13 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
-use Build\Model\DataModel;
 use Build\Model\Module\Module;
 use Build\Model\Orm;
-use Build\Model\Page\Page;
-use Build\Model\Page\PageData;
 use Build\Model\Web\Web;
-use Build\Model\Web\WebData;
 use Nette\InvalidStateException;
-use Nextras\Orm\Entity\IEntity;
-use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Clearable;
 use Stepapo\Utils\Service;
-use Webovac\Core\Exception\LoginRequiredException;
-use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\HasModuleSetups;
-use Webovac\Core\HasPageSetups;
-use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\HasRequirements;
 
 
 class ModuleRequirementChecker implements Service, Clearable
@@ -35,8 +24,6 @@ class ModuleRequirementChecker implements Service, Clearable
 		private array $hasModuleSetups,
 		private Orm $orm,
 		private CmsUser $cmsUser,
-		private DataModel $dataModel,
-		private DataProvider $dataProvider,
 	) {
 		foreach ($this->hasModuleSetups as $hasModuleSetup) {
 			foreach ($hasModuleSetup->getModuleSetups() as $name => $setup) {

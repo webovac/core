@@ -15,12 +15,8 @@ use Nette\Utils\Arrays;
 use ReflectionException;
 use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Attribute\DefaultValue;
-use Webovac\Core\Exception\LoginRequiredException;
-use Webovac\Core\Exception\MissingPermissionException;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\HasRequirements;
 
 
 trait CorePageData
@@ -100,7 +96,7 @@ trait CorePageData
 
 
 	/** @return Collection<PageData> */
-	public function getChildPageDatas(DataModel $dataModel, WebData $webData, CmsUser $cmsUser): Collection
+	public function getChildPageDatas(DataModel $dataModel, WebData $webData): Collection
 	{
 		$pageDatas = [];
 		foreach ($this->childPageIds as $childPageId) {

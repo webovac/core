@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\Core;
 
-use Build\Model\Page\Page;
 use Build\Model\Person\Person;
 use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\Control\BaseControl;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Command;
 
-use Build\Model\DataModel;
 use Stepapo\Utils\Command\Command;
 use Stepapo\Utils\Printer;
 use Webovac\Core\Lib\CacheRefresher;

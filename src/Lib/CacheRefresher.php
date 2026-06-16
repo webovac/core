@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
-use Build\Model\DataModel;
 use Build\Model\Language\Language;
 use Build\Model\Language\LanguageDataRepository;
 use Build\Model\Layout\Layout;

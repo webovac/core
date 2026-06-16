@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Webovac\Core\Lib;
 
 use Build\Model\DataModel;
-use Build\Model\Module\Module;
 use Build\Model\Orm;
 use Build\Model\Page\Page;
 use Build\Model\Page\PageData;
-use Build\Model\Web\WebData;
 use Nette\InvalidStateException;
 use Nextras\Orm\Entity\IEntity;
 use Stepapo\Model\Data\Collection;
@@ -17,9 +15,7 @@ use Stepapo\Utils\Clearable;
 use Stepapo\Utils\Service;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
-use Webovac\Core\HasModuleSetups;
 use Webovac\Core\HasPageSetups;
-use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasRequirements;
 
 
@@ -86,7 +82,7 @@ class PageRequirementChecker implements Service, Clearable
 	 * @param Collection<PageData> $pageDatas
 	 * @return Collection<PageData>
 	 */
-	public function filterPages(Collection $pageDatas, ?IEntity $entity = null): Collection
+	public function filterPages(Collection $pageDatas, IEntity $entity): Collection
 	{
 		$filteredPageDatas = [];
 		foreach ($pageDatas as $pageData) {

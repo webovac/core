@@ -6,7 +6,6 @@ namespace Webovac\Core\Command;
 
 use Build\Model\File\File;
 use Build\Model\Orm;
-use Nette\Utils\ProcessFailedException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Stepapo\Utils\Command\Command;
 use Tracy\Debugger;

@@ -39,7 +39,7 @@ class ButtonsControl extends BaseControl
 		$layoutData = $this->dataProvider->getLayoutData();
 		$languageData = $this->dataProvider->getLanguageData();
 		$this->template->pageData = $buttonsPageData;
-		$childPageDatas = $buttonsPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser);
+		$childPageDatas = $buttonsPageData->getChildPageDatas($this->dataModel, $webData);
 		$this->template->pageDatas = $this->requirementChecker->filterPages($childPageDatas, $this->entity);
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;

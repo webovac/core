@@ -9,7 +9,6 @@ use Latte\Compiler\Nodes\AuxiliaryNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Extension;
-use Nette\Bridges\ApplicationLatte\Nodes\LinkNode;
 
 
 class CoreExtension extends Extension

@@ -7,7 +7,6 @@ namespace Webovac\Core\Lib;
 use Build\Model\Orm;
 use Build\Model\Page\Page;
 use Build\Model\Person\Person;
-use Nette\Utils\Json;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Utils\Service;
 use Webovac\Core\HasLinkGroups;

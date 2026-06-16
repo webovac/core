@@ -49,7 +49,7 @@ class NavigationControl extends BaseControl
 		if ($this->entityList && method_exists($this->entity, 'getMenuItems')) {
 			$this->template->entityMenuItems = $this->entity->getMenuItems();
 		}
-		$pageDatas = $navigationPageData->getChildPageDatas($this->dataModel, $webData, $this->cmsUser);
+		$pageDatas = $navigationPageData->getChildPageDatas($this->dataModel, $webData);
 		$this->template->pageDatas = $this->requirementChecker->filterPages($pageDatas, $this->entity);
 		$pD = (array) $pageDatas;
 		uasort($pD, function (PageData $a, PageData $b) {

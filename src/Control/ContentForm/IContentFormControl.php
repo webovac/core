@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Control\ContentForm;
 
-use Build\Model\Page\Page;
 use Stepapo\Utils\Factory;
 use Webovac\Core\Model\HasTranslations;
 

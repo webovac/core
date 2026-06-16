@@ -72,10 +72,10 @@ class MenuControl extends BaseControl
 		$this->template->defaultLanguageData = $this->dataModel->getLanguageData($this->webData->defaultLanguage);
 		$this->template->menuPageData = $menuPageData;
 		if ($menuPageData) {
-			$pageDatas = $menuPageData->getChildPageDatas($this->dataModel, $this->webData, $this->cmsUser);
+			$pageDatas = $menuPageData->getChildPageDatas($this->dataModel, $this->webData);
 			$this->template->homePageData = $menuPageData;
 		} else {
-			$pageDatas = $this->webData->getRootPageDatas($this->dataModel, $this->cmsUser);
+			$pageDatas = $this->webData->getRootPageDatas($this->dataModel);
 			$this->template->homePageData = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
 		}
 		$this->template->pageDatas = $this->requirementChecker->filterPages($pageDatas, $this->entity);

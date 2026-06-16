@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Web;
 
 use Build\Model\DataModel;
-use Build\Model\Page\Page;
 use Build\Model\Page\PageData;
 use Build\Model\Person\Person;
 use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DontCache;
 use Webovac\Core\Lib\CmsUser;
-use Webovac\Core\Model\CmsEntity;
 
 
 trait CoreWebData
@@ -77,7 +75,7 @@ trait CoreWebData
 
 
 	/** @return Collection<PageData> */
-	public function getRootPageDatas(DataModel $dataModel, CmsUser $cmsUser): Collection
+	public function getRootPageDatas(DataModel $dataModel): Collection
 	{
 		$pageDatas = [];
 		foreach ($this->rootPages as $rootPageId) {
