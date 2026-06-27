@@ -192,7 +192,7 @@ trait CorePresenter
 			$this->pageActivator->addPage(
 				$id,
 				($pageData->isHomePage ? '<i class="fasl fa-fw fa-home"></i> ' : '') . $title,
-				$this->presenter->link(
+				$this->getPresenter()->link(
 					'//Home:default',
 					[
 						'pageName' => $pageData->name,
