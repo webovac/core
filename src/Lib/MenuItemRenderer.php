@@ -48,7 +48,7 @@ class MenuItemRenderer implements Service
 			linkedEntity: $linkedEntity,
 			dataModel: $this->dataModel,
 			context: $context,
-			presenter: $control->presenter,
+			presenter: $control->getPresenter(),
 			pageActivator: $this->pageActivator,
 		));
 	}

@@ -114,7 +114,7 @@ class MenuControl extends BaseControl
 		$this->template->entity = $this->entity;
 		$this->template->title = $this->webData->getCollection('translations')->getByKey($this->languageData->id)->title;
 		$this->template->wwwDir = $this->dir->getWwwDir();
-		$this->template->isError = $this->presenter->getRequest()->getPresenterName() === 'Core:Error4xx';
+		$this->template->isError = $this->getPresenter()->getRequest()->getPresenterName() === 'Core:Error4xx';
 		$this->template->pageActivator = $this->pageActivator;
 		$this->template->requirementChecker = $this->requirementChecker;
 		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) {
@@ -138,13 +138,13 @@ class MenuControl extends BaseControl
 			$anchor = $pageData->targetAnchor;
 		} else {
 			$p = $pageData;
-			$parameter = $p->hasParameter && !isset($this->presenter->path) ? $e?->getParameters() : null;
-			$path = $p->hasPath && isset($this->presenter->path) ? ($this->presenter->path . '/' . Arrays::first($e->getParameters())) : '';
+			$parameter = $p->hasParameter && !isset($this->getPresenter()->path) ? $e?->getParameters() : null;
+			$path = $p->hasPath && isset($this->getPresenter()->path) ? ($this->getPresenter()->path . '/' . Arrays::first($e->getParameters())) : '';
 		}
 		return match($p->type) {
-			Page::TYPE_SIGNAL => $this->presenter->getName() === 'Core:Error4xx' ? null : $this->presenter->link('//' . $p->targetSignal . '!'),
+			Page::TYPE_SIGNAL => $this->getPresenter()->getName() === 'Core:Error4xx' ? null : $this->getPresenter()->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $this->presenter->link(
+			Page::TYPE_PAGE => $this->getPresenter()->link(
 				'//Home:' . ($anchor ? '#' . $anchor : ''),
 				[
 					'pageName' => $p->name,
@@ -162,7 +162,7 @@ class MenuControl extends BaseControl
 	{
 		# TODO fix targetPage
 		return 'menu-item' . ($pageData->style ? ' btn btn-subtle-' . $pageData->style : '')
-			. ((!$pageData->targetPath && !$pageData->targetAnchor && ($pageData->id === $this->presenter->pageData->id || $pageData->targetPage === $this->presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $this->entity))
+			. ((!$pageData->targetPath && !$pageData->targetAnchor && ($pageData->id === $this->getPresenter()->pageData->id || $pageData->targetPage === $this->getPresenter()->pageData->id) && (!$linkedEntity || $linkedEntity === $this->entity))
 			|| ($checkActive && $this->isActive($pageData, $linkedEntity, $pageData->targetPath))
 			|| ($checkActive && $pageData->targetPage && $this->isActive($pageData, $linkedEntity, $this->targetPath)) ? ' active' : '')
 			;
@@ -181,6 +181,6 @@ class MenuControl extends BaseControl
 		if ($linkedEntity && $linkedEntity !== $pageData->entity) {
 			return false;
 		}
-		return (!$path || str_contains($this->presenter->path ?? '', $path)) && $this->pageActivator->isActivePage($pageData->targetPage ?: $pageData->id);
+		return (!$path || str_contains($this->getPresenter()->path ?? '', $path)) && $this->pageActivator->isActivePage($pageData->targetPage ?: $pageData->id);
 	}
 }

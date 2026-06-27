@@ -3,7 +3,7 @@
 	<div n:if="$hasTranslations->translations->count() > 1" class="mb-3">
 		<a n:foreach="$hasTranslations->translations as $translation" n:href="//changeLang! $translation->language->shortcut" n:class="btn, $translation->language->shortcut === $lang ? btn-primary : btn-outline-primary">{$translation->language->title}</a>
 	</div>
-	{form form class => "flex-grow-1 d-flex flex-column override-padding"}
+	{form form, class => "flex-grow-1 d-flex flex-column override-padding"}
 		<div n:if="$form->errors" class="alert alert-danger">
 			<p class="mb-1"><b>{_'Chyba'}:</b></p>
 			<p n:inner-foreach="$form->errors as $error">

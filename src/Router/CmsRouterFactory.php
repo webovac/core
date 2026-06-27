@@ -8,8 +8,6 @@ use Build\Model\DataModel;
 use Build\Model\Web\WebData;
 use Nette\Application\BadRequestException;
 use Nette\Application\Routers\RouteList;
-use Nette\Caching\Cache;
-use Nette\Caching\Storage;
 use Nette\Http\IRequest;
 use Nette\Routing\Route;
 use Stepapo\Restful\Application\Routes\CrudRoute;
@@ -20,18 +18,14 @@ use Webovac\Core\Lib\RouteSetupProvider;
 final class CmsRouterFactory implements Service
 {
 	private array $setup;
-	private Cache $cache;
 	private array $webSetup;
 
 
 	public function __construct(
 		private DataModel $dataModel,
 		private IRequest $request,
-		private Storage $storage,
 		private RouteSetupProvider $routeSetupProvider,
-	) {
-		$this->cache = new Cache($this->storage, 'cms');
-	}
+	) {}
 
 
 	public function create(): RouteList

@@ -1,6 +1,6 @@
 {templateType Webovac\Core\Control\PersonForm\PersonFormTemplate}
 {snippet}
-	{form form class: "small values"}
+	{form form, class: "small values"}
 		<div n:if="$form->errors" class="alert alert-danger">
 			<p class="mb-1"><b>{_'Chyba'}:</b></p>
 			<p n:inner-foreach="$form->errors as $error">

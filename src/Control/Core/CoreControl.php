@@ -113,8 +113,8 @@ class CoreControl extends BaseControl implements MainModuleControl
 		assert($this->entity instanceof Person);
 		$control = $this->personForm->create($this->entity);
 		$control->onSave[] = function (PersonFormControl $control, Person $person) {
-			$this->presenter->flashMessage('Změny byly uloženy', 'success');
-			$this->presenter->redirect('this');
+			$this->getPresenter()->flashMessage('Změny byly uloženy', 'success');
+			$this->getPresenter()->redirect('this');
 		};
 		return $control;
 	}
@@ -126,8 +126,8 @@ class CoreControl extends BaseControl implements MainModuleControl
 		assert($this->entity instanceof HasTranslations);
 		$control = $this->contentForm->create($this->entity);
 		$control->onSave[] = function (ContentFormControl $control, HasTranslations $hasTranslations) {
-			$this->presenter->flashMessage('Změny byly uloženy.', 'success');
-			$this->presenter->redirect('this');
+			$this->getPresenter()->flashMessage('Změny byly uloženy.', 'success');
+			$this->getPresenter()->redirect('this');
 		};
 		return $control;
 	}

@@ -207,7 +207,7 @@ trait LibraryBookRepository
 
 ```php
 /** @var Book $book */
-$book->redirectToDetail($this->presenter);
+$book->redirectToDetail($this->getPresenter());
 ```
 
 #### Renderable

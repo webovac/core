@@ -102,7 +102,7 @@ class ContentFormControl extends BaseControl
 	public function handleUpload(): string
 	{
 		$upload = $this->request->getFile('upload');
-		$this->presenter->sendJson($this->fileUploader->getResponse($upload));
+		$this->getPresenter()->sendJson($this->fileUploader->getResponse($upload));
 	}
 
 

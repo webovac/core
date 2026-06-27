@@ -9,7 +9,6 @@ use Build\Model\Page\Page;
 use Build\Model\Web\WebData;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
-use Nette\Http\IRequest;
 use Stepapo\Utils\Service;
 
 
@@ -23,7 +22,6 @@ class RouteSetupProvider implements Service
 	public function __construct(
 		private DataModel $dataModel,
 		private Storage $storage,
-		private IRequest $request,
 	) {
 		$this->cache = new Cache($this->storage, 'cms');
 	}
