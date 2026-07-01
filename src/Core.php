@@ -9,7 +9,6 @@ use Build\Model\Command\CommandData;
 use Build\Model\Language\LanguageData;
 use Build\Model\Lib\LibData;
 use Build\Model\Module\ModuleData;
-use Build\Model\Orm;
 use Build\Model\Page\PageData;
 use Build\Model\Person\PersonData;
 use Build\Model\Role\RoleData;
@@ -19,17 +18,10 @@ use Stepapo\Model\Definition\DefinitionGroup;
 use Stepapo\Model\Definition\HasDefinitionGroup;
 use Stepapo\Model\Manipulation\HasManipulationGroups;
 use Stepapo\Model\Manipulation\ManipulationGroup;
-use Webovac\Core\Lib\CmsCache;
 
 
 class Core implements Module, HasDefinitionGroup, HasManipulationGroups
 {
-	public function __construct(
-		private Orm $orm,
-		private CmsCache $cmsCache,
-	) {}
-
-
 	public static function getModuleName(): string
 	{
 		return 'core';

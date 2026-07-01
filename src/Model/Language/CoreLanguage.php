@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\Language;
 use Build\Model\Language\LanguageData;
 use Build\Model\LanguageTranslation\LanguageTranslation;
 use Nette\DI\Attributes\Inject;
+use Stepapo\Model\Orm\AuditableTrait;
 use Webovac\Core\Lib\DataProvider;
 
 
@@ -15,6 +16,8 @@ use Webovac\Core\Lib\DataProvider;
  */
 trait CoreLanguage
 {
+	use AuditableTrait;
+
 	#[Inject] public DataProvider $dataProvider;
 
 

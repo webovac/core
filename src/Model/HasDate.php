@@ -7,7 +7,7 @@ namespace Webovac\Core\Model;
 use DateTimeInterface;
 
 
-interface HasDate
+interface HasDate extends ICmsEntity
 {
 	function getDate(): ?DateTimeInterface;
 }

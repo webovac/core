@@ -14,6 +14,7 @@ use Nette\Application\UI\InvalidLinkException;
 use Nette\Forms\Container;
 use Nette\Http\Request;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Arrays;
 use Nette\Utils\Json;
 use Nette\Utils\JsonException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
@@ -22,14 +23,15 @@ use Nextras\Orm\Relationships\ManyHasOne;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\OneHasOne;
 use Nextras\Orm\Repository\IRepository;
+use Stepapo\Model\Orm\Auditable;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\HasLinkGroups;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\ComponentProvider;
 use Webovac\Core\Lib\ContentProcessor;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\Form\CmsFormFactory;
 use Webovac\Core\Lib\LinkProvider;
+use Webovac\Core\Model\HasContent;
 use Webovac\Core\Model\HasTranslations;
 
 
@@ -42,7 +44,6 @@ class ContentFormControl extends BaseControl
 	/** @var \Closure[] */ public array $onSave;
 
 
-	/** @param HasLinkGroups[] $hasLinkGroups */
 	public function __construct(
 		private HasTranslations $hasTranslations,
 		private CmsFormFactory $formFactory,
@@ -58,7 +59,8 @@ class ContentFormControl extends BaseControl
 		$this->onAnchor[] = function() {
 			$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 			$translation = $this->hasTranslations->getTranslation($languageData);
-			$content = $this->contentProcessor->contentToEditor($translation?->content ?: '');
+			assert(!$translation || $translation instanceof HasContent);
+			$content = $this->contentProcessor->contentToEditor($translation?->getContent() ?: '');
 			$this['form']['content']->setDefaultValue($content);
 		};
 	}
@@ -113,7 +115,7 @@ class ContentFormControl extends BaseControl
 	{
 		$form = $this->formFactory->create();
 
-		$form->addTextarea('content')
+		$form->addTextArea('content')
 			->setHtmlAttribute('data-upload-url', $this->link('//upload!'));
 
 		$form->addSubmit('send', 'Uložit změny');
@@ -132,21 +134,27 @@ class ContentFormControl extends BaseControl
 	public function formSucceeded(Form $form, ArrayHash $values): void
 	{
 		$now = new DateTimeImmutable();
-
-		$this->hasTranslations->updatedByPerson = $this->cmsUser->getPerson();
-		$this->hasTranslations->updatedAt = $now;
+		if ($this->hasTranslations instanceof Auditable) {
+			$this->hasTranslations
+				->setUpdatedByPerson($this->cmsUser->getPerson())
+				->setUpdatedAt($now);
+		}
 		$this->orm->persist($this->hasTranslations);
-
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$translation = $this->hasTranslations->getTranslation($languageData);
-		$translation->content = $this->contentProcessor->editorToContent($form->getUntrustedValues(Container::Array)['content']);
-		$translation->updatedByPerson = $this->cmsUser->getPerson();
-		$translation->updatedAt = $now;
-		$this->orm->persist($translation);
-
-		$this->orm->flush();
-
-		$this->onSave($this, $this->hasTranslations);
+		if ($translation) {
+			$metadata = $translation->getMetadata();
+			assert($translation instanceof HasContent);
+			$translation->setContent($this->contentProcessor->editorToContent($form->getUntrustedValues(Container::Array)['content'])); // @phpstan-ignore offsetAccess.nonOffsetAccessible
+			if ($translation instanceof Auditable) {
+				$translation
+					->setUpdatedByPerson($this->cmsUser->getPerson())
+					->setUpdatedAt($now);
+			}
+			$this->orm->persist($translation);
+			$this->orm->flush();
+		}
+		Arrays::invoke($this->onSave, $this, $this->hasTranslations);
 	}
 
 

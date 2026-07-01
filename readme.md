@@ -109,7 +109,7 @@ class BookItemTemplate extends BaseTemplate
 
 /**
  * @property int $id {primary}
- * @property Web $web {m:1 Web::$books} 
+ * @property Web $web {m:1 Web::$books}
  * @property OneHasMany|BookTranslation[] $translations {1:m BookTranslation::$book, orderBy=language->rank}
  */
 class Book extends CmsEntity
@@ -120,7 +120,7 @@ class Book extends CmsEntity
 /**
  * @property int $id {primary}
  * @property string $title
- * @property Language $language {m:1 Language, oneSided=true} 
+ * @property Language $language {m:1 Language, oneSided=true}
  * @property Book $book {m:1 Book::$translations}
  */
 class BookTranslation extends CmsEntity
@@ -192,7 +192,7 @@ trait LibraryBookRepository
     /**
      * Specify a custom parameter to get book, unless you want to use just primary key,
      * which is used in CmsRepository::getKeyParameter by default
-     */ 
+     */
     public function getKeyParameter(): string
     {
         return 'slug';
@@ -213,14 +213,14 @@ $book->redirectToDetail($this->getPresenter());
 #### Renderable
 
 BookItemControl component created by IBookItemControl factory in Library module can be utilized in entity.
-                    
+
 ```php
 trait LibraryBook
-{    
+{
     use RenderableTrait;
-    
+
     #[Inject] public IBookItemControl $component;
-    
+
     public function getModuleClass(): string
     {
         return Library::class;
@@ -262,12 +262,12 @@ trait LibraryBook
     {
         # custom implementation
     }
-    
+
     public function isUpdatableByUser(CmsUser $user, WebData $webData): bool
     {
         # custom implementation
     }
-    
+
     public function isRemovableByUser(CmsUser $user, WebData $webData): bool
     {
         # custom implementation
@@ -291,17 +291,17 @@ Virtual title property can be defined in LibraryBook trait that shows title of c
 
 ```php
 /**
- * @property string $title {virtual} 
+ * @property string $title {virtual}
  */
 trait LibraryBook
 {
     #[Inject] public DataProvider $dataProvider;
-    
+
     public function getTranslation(LanguageData $languageData): ?BookTranslation
     {
         return $this->translations->toCollection()->getBy(['language' => $languageData->id]);
     }
-    
+
     public function getterTitle(): string
     {
         return $this->getTranslation($this->dataProvider->getLanguageData())->title;

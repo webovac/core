@@ -17,6 +17,7 @@ use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 trait CorePageData

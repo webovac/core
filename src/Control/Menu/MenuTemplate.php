@@ -8,13 +8,16 @@ use Build\Control\BaseTemplate;
 use Build\Model\DataModel;
 use Build\Model\Language\LanguageData;
 use Build\Model\Layout\LayoutData;
+use Build\Model\Module\ModuleData;
 use Build\Model\Page\PageData;
 use Build\Model\Theme\ThemeData;
 use Build\Model\Web\WebData;
 use Stepapo\Model\Data\Collection;
+use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 class MenuTemplate extends BaseTemplate
@@ -34,7 +37,15 @@ class MenuTemplate extends BaseTemplate
 	public bool $isError;
 	public bool $hasSearch;
 	/** @var string[] */ public array $availableTranslations;
-	/** @var ThemeData[] */ public Collection $themeDatas;
+	/** @var Collection<ThemeData> */ public Collection $themeDatas;
 	public PageActivator $pageActivator;
 	public PageRequirementChecker $requirementChecker;
+	public FileUploader $fileUploader;
+	public LanguageData $defaultLanguageData;
+	public bool $showSearch;
+	public bool $hasPersons;
+	public bool $showAdmin;
+	public array $languageShortcuts;
+	public ?ModuleData $pageModuleData;
+	public string $adminLang;
 }

@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Model\Slug;
 
-
 use Build\Model\Web\WebData;
+use Webovac\Core\Model\HasWebFilterTrait;
+
 
 trait CoreSlugRepository
 {
+	use HasWebFilterTrait;
+
+
 //	public function getByData(SlugData|string $data): ?Slug
 //	{
 //		return $this->getBy([
 //			'slug' => $data instanceof SlugData ? $data->slug : $data,
 //		]);
 //	}
-
 
 
 	public function getWebFilter(WebData $webData): array

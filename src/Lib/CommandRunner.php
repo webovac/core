@@ -21,7 +21,7 @@ class CommandRunner implements Service
 		foreach ($commands as $command) {
 			$className = get_class($command);
 			$parts = explode('\\', $className);
-			$lastKey = Arrays::lastKey($parts);
+			$lastKey = (int) Arrays::lastKey($parts);
 			$name = $parts[$lastKey];
 			$module = $parts[$lastKey - 2];
 			$this->commands[lcfirst($module)][lcfirst(str_replace('Command', '', $name))] = $command;

@@ -12,7 +12,7 @@ trait HasWebFilterTrait
 	public function getWebFilter(WebData $webData): array
 	{
 		return ['web->id' => $webData->id];
-    }
+	}
 
 
 	public function shouldFilterByWeb(WebData $webData): bool

@@ -7,7 +7,7 @@ namespace Webovac\Core\Model;
 use Build\Model\Language\LanguageData;
 
 
-interface HasTranslations
+interface HasTranslations extends ICmsEntity
 {
 	function getTranslation(LanguageData $language): ?Translation;
 }

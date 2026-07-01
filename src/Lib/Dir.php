@@ -36,4 +36,3 @@ class Dir implements Service
 		return $this->rootDir . '/temp';
 	}
 }
-

@@ -20,6 +20,21 @@ use Webovac\Core\Lib\KeyProvider;
 use Webovac\Core\Lib\ModeChecker;
 
 
+/**
+ * @property object{
+ *     parameters: array,
+ *     db: object{
+ *         driver: string,
+ *         database: string,
+ *         username: string,
+ *         password: string,
+ *         schemas: array<string>,
+ *     },
+ *     testMode: bool,
+ *     cliMode: bool,
+ *     fulltext: bool,
+ * } $config
+ */
 class CoreExtension extends StepapoExtension
 {
 	private ModelExtension $modelExtension;

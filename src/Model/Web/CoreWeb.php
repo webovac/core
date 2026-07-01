@@ -10,6 +10,7 @@ use Build\Model\WebTranslation\WebTranslation;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
+use Stepapo\Model\Orm\AuditableTrait;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Model\File\HasFilesTrait;
 
@@ -19,6 +20,7 @@ use Webovac\Core\Model\File\HasFilesTrait;
  */
 trait CoreWeb
 {
+	use AuditableTrait;
 	use HasFilesTrait;
 
 	public const string DEFAULT_COLOR = '#2196f3';

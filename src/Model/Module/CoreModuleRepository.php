@@ -10,12 +10,18 @@ use Build\Model\Page\PageRepository;
 use Build\Model\Web\WebData;
 use Nette\InvalidArgumentException;
 use Stepapo\Model\Data\Item;
+use Stepapo\Model\Orm\IStepapoEntity;
+use Stepapo\Model\Orm\StepapoEntity;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\HasWebFilterTrait;
 
 
 trait CoreModuleRepository
 {
-	public function postProcessFromData(Item $data, CmsEntity $entity, bool $skipDefaults = false): CmsEntity
+	use HasWebFilterTrait;
+
+
+	public function postProcessFromData(Item $data, IStepapoEntity $entity, bool $skipDefaults = false): Module
 	{
 		if (!$data instanceof ModuleData || !$entity instanceof Module) {
 			throw new InvalidArgumentException;

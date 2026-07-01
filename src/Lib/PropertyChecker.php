@@ -9,6 +9,7 @@ use Nextras\Orm\Entity\Reflection\PropertyMetadata;
 use Stepapo\Model\Orm\InternalProperty;
 use Stepapo\Model\Orm\PrivateProperty;
 use Stepapo\Utils\Service;
+use Webovac\Core\Model\CmsRepository;
 
 
 class PropertyChecker implements Service
@@ -28,6 +29,7 @@ class PropertyChecker implements Service
 		if (!$webData->isAdmin && array_key_exists(InternalProperty::class, $propertyMetadata->types)) {
 			return true;
 		}
+		/** @var CmsRepository|null $repository */
 		$repository = $propertyMetadata->relationship?->repository ? $this->orm->getRepository($propertyMetadata->relationship->repository) : null;
 		if ($repository?->isForbiddenRepository($webData)) {
 			return true;

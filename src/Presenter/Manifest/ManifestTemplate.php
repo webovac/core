@@ -13,4 +13,5 @@ class ManifestTemplate extends BaseTemplate
 {
 	public ?WebData $webData;
 	public ?WebTranslationData $webTranslationData;
+	public string $lang;
 }

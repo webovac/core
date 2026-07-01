@@ -6,12 +6,13 @@ namespace Webovac\Core\Control\Core;
 
 use Stepapo\Utils\Factory;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 interface ICoreControl extends Factory
 {
 	function create(
-		?CmsEntity $entity = null,
-		?array $entityList = null,
+		?CmsEntity $entity,
+		?array $entityList,
 	): CoreControl;
 }

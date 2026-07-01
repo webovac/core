@@ -11,6 +11,7 @@ use Build\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
+use Stepapo\Model\Orm\AuditableTrait;
 use Webovac\Admin\Admin;
 use Webovac\Core\Control\PageItem\IPageItemControl;
 use Webovac\Core\Lib\CmsUser;
@@ -25,6 +26,7 @@ use Webovac\Core\Model\RenderableTrait;
  */
 trait CorePage
 {
+	use AuditableTrait;
 	use LinkableTrait;
 	use RenderableTrait;
 	use HasFilesTrait;
@@ -87,8 +89,8 @@ trait CorePage
 
 	#[Inject] public DataProvider $dataProvider;
 	#[Inject] public IPageItemControl $component;
-	
-	
+
+
 	public function isEditable(CmsUser $user, WebData $webData): bool
 	{
 		return $this->type !== self::TYPE_MODULE;
@@ -122,14 +124,14 @@ trait CorePage
 	}
 
 
-	/** @return Page[]&ICollection */ 
+	/** @return Page[]&ICollection */
 	public function getPages(): ICollection
 	{
 		return $this->childPages->toCollection();
 	}
 
 
-	/** @return ICollection<Page> */ 
+	/** @return ICollection<Page> */
 	public function getPagesForMenu(): ICollection
 	{
 		$pages = [];

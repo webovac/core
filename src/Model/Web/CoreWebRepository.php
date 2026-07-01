@@ -24,6 +24,7 @@ use Nette\Utils\ImageType;
 use Nette\Utils\UnknownImageFileException;
 use Stepapo\Model\Data\Item;
 use Stepapo\Model\Orm\EntityProcessorResult;
+use Stepapo\Model\Orm\IStepapoEntity;
 use Stepapo\Model\Orm\StepapoEntity;
 use Webovac\Core\Model\CmsEntity;
 
@@ -35,13 +36,14 @@ trait CoreWebRepository
 	 */
 	public function createFromDataAndReturnResult(
 		Item $data,
-		?StepapoEntity $original = null,
+		?IStepapoEntity $original = null,
 		?Person $person = null,
 		?\DateTimeInterface $date = null,
 		bool $fromNeon = false,
 		string $namespace = 'cms',
 	): EntityProcessorResult
 	{
+		assert($data instanceof WebData);
 		if (isset($data->iconFile)) {
 			$data->iconFile->upload = $this->styleFile($data->iconFile, $data->complementaryColor, $data->color);
 			$data->iconFile->forceSquare = true;
@@ -105,14 +107,14 @@ trait CoreWebRepository
 	}
 
 
-	public function postProcessFromData(Item $data, CmsEntity $entity, bool $skipDefaults = false): CmsEntity
+	public function postProcessFromData(Item $data, IStepapoEntity $entity, bool $skipDefaults = false): Web
 	{
 		if (!$data instanceof WebData || !$entity instanceof Web) {
 			throw new InvalidArgumentException;
 		}
 		if (isset($data->homePage)) {
 			$entity->homePage = $this->getModel()->getRepository(PageRepository::class)->getBy(['web' => $entity, 'name' => $data->homePage]);
-	   	}
+		}
 		if ($entity->homePage?->isPersisted()) {
 			$defaultTranslation = $entity->homePage->getTranslation($entity->defaultLanguage->getData());
 			foreach ($entity->translations as $translation) {

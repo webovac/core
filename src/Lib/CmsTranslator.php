@@ -20,7 +20,7 @@ class CmsTranslator implements Translator, Service
 	) {}
 
 
-	public function translate($message, ...$parameters): string
+	public function translate(mixed $message, mixed ...$parameters): string
 	{
 		$lang = $this->languageData->shortcut;
 		$string = $this->dataModel->getTextTranslation($message, $this->languageData)?->string;

@@ -11,7 +11,6 @@ use Build\Model\PersonTranslation\PersonTranslationData;
 use Nette\Application\UI\Form;
 use Nette\Forms\Container;
 use Nette\Utils\Arrays;
-use Nextras\Dbal\Connection;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;
@@ -31,13 +30,10 @@ class PersonFormControl extends BaseControl
 		private CmsFormFactory $formFactory,
 		private Orm $orm,
 		private CmsUser $cmsUser,
-		private Connection $dbal,
 	) {
 		$this->onAnchor[] = function() {
-			if ($this->person) {
-				$data = $this->person->getData();
-				$this['form']->setDefaults($data);
-			}
+			$data = $this->person->getData();
+			$this['form']->setDefaults($data);
 		};
 	}
 
@@ -53,7 +49,7 @@ class PersonFormControl extends BaseControl
 	{
 		$form = $this->formFactory->create();
 		$languages = $this->orm->languageRepository->findAll()->orderBy('rank')->fetchPairs('id', 'shortcut');
-		$translations = $form->addMultiplier('translations', function (Container $translation) use ($form, $languages) {
+		$translations = $form->addMultiplier('translations', function (Container $translation) use ($languages) {
 			$translation->setMappedType(PersonTranslationData::class);
 			$translation->addSelect('language', 'Jazyk', $languages)
 				->setRequired('Vyberte ze seznamu %label');

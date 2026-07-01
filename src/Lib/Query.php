@@ -40,7 +40,7 @@ class Query extends Config
 			if (!isset($config['page']) || $config['page'] <= 0) {
 				$config['page'] = 1;
 			} else {
-				$config['page'] = (int)	$config['page'];
+				$config['page'] = (int) $config['page'];
 			}
 		}
 		$config['limit'] = (int) (isset($config['limit']) ? min($config['limit'], static::DEFAULT_LIMIT) : static::DEFAULT_LIMIT);

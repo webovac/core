@@ -7,10 +7,14 @@ namespace Webovac\Core\Model\Language;
 use Build\Model\Language\Language;
 use Build\Model\Language\LanguageData;
 use Build\Model\Web\WebData;
+use Webovac\Core\Model\HasWebFilterTrait;
 
 
 trait CoreLanguageRepository
 {
+	use HasWebFilterTrait;
+
+
 	public function getKeyParameter(): string
 	{
 		return 'shortcut';

@@ -7,14 +7,11 @@ namespace Webovac\Core\Control\Menu;
 use Build\Model\DataModel;
 use Build\Model\Language\LanguageData;
 use Build\Model\Layout\LayoutData;
-use Build\Model\Page\Page;
 use Build\Model\Page\PageData;
 use Build\Model\Theme\ThemeData;
 use Build\Model\Web\WebData;
-use Nette\Utils\Arrays;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
@@ -23,6 +20,7 @@ use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 /**
@@ -46,7 +44,6 @@ class MenuControl extends BaseControl
 		private FileUploader $fileUploader,
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
-		private CmsUser $cmsUser,
 		private PageActivator $pageActivator,
 		private PageRequirementChecker $requirementChecker,
 	) {}
@@ -69,6 +66,7 @@ class MenuControl extends BaseControl
 		$this->template->fileUploader = $this->fileUploader;
 		$this->template->pageData = $pageData;
 		$this->template->languageData = $this->languageData;
+		assert(is_int($this->webData->defaultLanguage));
 		$this->template->defaultLanguageData = $this->dataModel->getLanguageData($this->webData->defaultLanguage);
 		$this->template->menuPageData = $menuPageData;
 		if ($menuPageData) {
@@ -76,6 +74,7 @@ class MenuControl extends BaseControl
 			$this->template->homePageData = $menuPageData;
 		} else {
 			$pageDatas = $this->webData->getRootPageDatas($this->dataModel);
+			assert(is_int($this->webData->homePage));
 			$this->template->homePageData = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
 		}
 		$this->template->pageDatas = $this->requirementChecker->filterPages($pageDatas, $this->entity);
@@ -97,6 +96,7 @@ class MenuControl extends BaseControl
 		$this->template->showAdmin = $showAdmin;
 		if ($showAdmin) {
 			$this->template->languageShortcuts = $this->dataModel->languageDataRepository->findAllPairs();
+			assert(!$pageData->module || is_int($pageData->module));
 			$this->template->pageModuleData = $pageData->module ? $this->dataModel->getModuleData($pageData->module) : null;
 //			$this->template->webDatas = $this->dataModel->findWebDatas();
 			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
@@ -127,44 +127,45 @@ class MenuControl extends BaseControl
 	}
 
 
-	public function getHref(PageData $pageData, ?CmsEntity $linkedEntity = null): ?string
-	{
-		$e = $linkedEntity ?: $this->entity;
-		$anchor = null;
-		if ($pageData->type === Page::TYPE_INTERNAL_LINK && $pageData->targetPage) {
-			$p = $this->dataModel->getPageData($pageData->webData->id, $pageData->targetPage);
-			$path = $pageData->targetPath;
-			$parameter = $pageData->targetParameter ? [$e->getPageName() => $pageData->targetParameter] : null;
-			$anchor = $pageData->targetAnchor;
-		} else {
-			$p = $pageData;
-			$parameter = $p->hasParameter && !isset($this->getPresenter()->path) ? $e?->getParameters() : null;
-			$path = $p->hasPath && isset($this->getPresenter()->path) ? ($this->getPresenter()->path . '/' . Arrays::first($e->getParameters())) : '';
-		}
-		return match($p->type) {
-			Page::TYPE_SIGNAL => $this->getPresenter()->getName() === 'Core:Error4xx' ? null : $this->getPresenter()->link('//' . $p->targetSignal . '!'),
-			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $this->getPresenter()->link(
-				'//Home:' . ($anchor ? '#' . $anchor : ''),
-				[
-					'pageName' => $p->name,
-					'lang' => $this->languageData->shortcut,
-					'id' => $parameter,
-					'path' => $path,
-				],
-			),
-			default => null,
-		};
-	}
+//	public function getHref(PageData $pageData, ?CmsEntity $linkedEntity = null): ?string
+//	{
+//		$e = $linkedEntity ?: $this->entity;
+//		$anchor = null;
+//		if ($pageData->type === Page::TYPE_INTERNAL_LINK && $pageData->targetPage) {
+//			$p = $this->dataModel->getPageData($pageData->webData->id, $pageData->targetPage);
+//			$path = $pageData->targetPath;
+//			$parameter = $pageData->targetParameter ? [$e->getPageName() => $pageData->targetParameter] : null;
+//			$anchor = $pageData->targetAnchor;
+//		} else {
+//			$p = $pageData;
+//			$parameter = $p->hasParameter && !isset($this->getPresenter()->path) ? $e?->getParameters() : null;
+//			$path = $p->hasPath && isset($this->getPresenter()->path) ? ($this->getPresenter()->path . '/' . Arrays::first($e->getParameters())) : '';
+//		}
+//		return match($p->type) {
+//			Page::TYPE_SIGNAL => $this->getPresenter()->getName() === 'Core:Error4xx' ? null : $this->getPresenter()->link('//' . $p->targetSignal . '!'),
+//			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
+//			Page::TYPE_PAGE => $this->getPresenter()->link(
+//				'//Home:' . ($anchor ? '#' . $anchor : ''),
+//				[
+//					'pageName' => $p->name,
+//					'lang' => $this->languageData->shortcut,
+//					'id' => $parameter,
+//					'path' => $path,
+//				],
+//			),
+//			default => null,
+//		};
+//	}
 
 
 	public function getClass(PageData $pageData, bool $checkActive, ?CmsEntity $linkedEntity = null): string
 	{
 		# TODO fix targetPage
+		$activePageData = $this->dataProvider->getPageData();
 		return 'menu-item' . ($pageData->style ? ' btn btn-subtle-' . $pageData->style : '')
-			. ((!$pageData->targetPath && !$pageData->targetAnchor && ($pageData->id === $this->getPresenter()->pageData->id || $pageData->targetPage === $this->getPresenter()->pageData->id) && (!$linkedEntity || $linkedEntity === $this->entity))
+			. ((!$pageData->targetPath && !$pageData->targetAnchor && ($pageData->id === $activePageData->id || $pageData->targetPage === $activePageData->id) && (!$linkedEntity || $linkedEntity === $this->entity))
 			|| ($checkActive && $this->isActive($pageData, $linkedEntity, $pageData->targetPath))
-			|| ($checkActive && $pageData->targetPage && $this->isActive($pageData, $linkedEntity, $this->targetPath)) ? ' active' : '')
+			|| ($checkActive && $pageData->targetPage && $this->isActive($pageData, $linkedEntity, $pageData->targetPath)) ? ' active' : '')
 			;
 	}
 
@@ -176,11 +177,12 @@ class MenuControl extends BaseControl
 	}
 
 
-	private function isActive(PageData $pageData, ?CmsEntity $linkedEntity, ?string $path = null)
+	private function isActive(PageData $pageData, ?CmsEntity $linkedEntity, ?string $path = null): bool
 	{
 		if ($linkedEntity && $linkedEntity !== $pageData->entity) {
 			return false;
 		}
+		assert(!$pageData->targetPage || is_int($pageData->targetPage));
 		return (!$path || str_contains($this->getPresenter()->path ?? '', $path)) && $this->pageActivator->isActivePage($pageData->targetPage ?: $pageData->id);
 	}
 }

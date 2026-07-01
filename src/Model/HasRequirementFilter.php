@@ -7,7 +7,7 @@ namespace Webovac\Core\Model;
 use Webovac\Core\Lib\CmsUser;
 
 
-interface HasRequirementFilter
+interface HasRequirementFilter extends ICmsRepository
 {
 	function getRequirementFilter(CmsUser $cmsUser): ?array;
 }

@@ -7,10 +7,14 @@ namespace Webovac\Core\Model\Person;
 use Build\Model\Person\Person;
 use Build\Model\Person\PersonData;
 use Build\Model\Web\WebData;
+use Webovac\Core\Model\HasWebFilterTrait;
 
 
 trait CorePersonRepository
 {
+	use HasWebFilterTrait;
+
+
 	public function getByData(PersonData|string $data): ?Person
 	{
 		if (method_exists($this, 'getByDataCustom')) {

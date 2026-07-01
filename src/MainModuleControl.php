@@ -8,4 +8,3 @@ namespace Webovac\Core;
 interface MainModuleControl
 {
 }
-

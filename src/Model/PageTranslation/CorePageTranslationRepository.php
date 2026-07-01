@@ -13,10 +13,14 @@ use Build\Model\Path\Path;
 use Build\Model\Web\Web;
 use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
+use Webovac\Core\Model\HasWebFilterTrait;
 
 
 trait CorePageTranslationRepository
 {
+	use HasWebFilterTrait;
+
+
 	public function getByData(PageTranslationData $data, Page $page): ?PageTranslation
 	{
 		return $this->getBy(['page' => $page, is_int($data->language) ? 'language->id' : 'language->shortcut' => $data->language]);

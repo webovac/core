@@ -22,6 +22,6 @@ class KeyProvider implements Service
 
 	public function replaceKey(string $string): string
 	{
-		return preg_replace_callback('/{(.+?)}/', fn(array $m) => $this->getKey($m[1]), $string);
+		return preg_replace_callback('/{(.+?)}/', fn(array $m): string => $this->getKey($m[1]), $string);
 	}
 }

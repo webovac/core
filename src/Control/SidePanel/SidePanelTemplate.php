@@ -15,6 +15,7 @@ use Build\Model\Theme\ThemeData;
 use Build\Model\Web\WebData;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 class SidePanelTemplate extends BaseTemplate
@@ -23,7 +24,7 @@ class SidePanelTemplate extends BaseTemplate
 	public PageData $pageData;
 	public LanguageData $languageData;
 	public LayoutData $layoutData;
-	/** @var ThemeData[] */ public Collection $themeDatas;
+	/** @var Collection<ThemeData> */ public Collection $themeDatas;
 	public DataModel $dataModel;
 	public Orm $orm;
 	public ?CmsEntity $entity;

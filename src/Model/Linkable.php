@@ -7,7 +7,7 @@ namespace Webovac\Core\Model;
 use Nette\Application\UI\Component;
 
 
-interface Linkable
+interface Linkable extends ICmsEntity
 {
 	function getPageName(?string $context = null): string;
 	function getParameters(?string $context = null): array;

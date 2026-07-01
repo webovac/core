@@ -6,6 +6,7 @@ namespace Webovac\Core\Control\Gallery;
 
 use Build\Model\File\File;
 use Build\Model\Orm;
+use Nextras\Orm\Collection\ICollection;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\DataProvider;
@@ -33,7 +34,8 @@ class GalleryControl extends BaseControl
 	 */
 	public function render(): void
 	{
-		$files = $this->hasFiles->getFiles()->toCollection()->findBy(['type!=' => File::TYPE_FILE])->resetOrderBy()->orderBy('capturedAt')->orderBy('createdAt');
+		/** @var ICollection<File> $files */
+		$files = $this->hasFiles->getFiles()->toCollection()->findBy(['type!=' => File::TYPE_FILE])->resetOrderBy()->orderBy('capturedAt')->orderBy('createdAt'); // @phpstan-ignore varTag.type
 		$this->template->files = $files;
 		$this->template->fileCount = $files->count();
 		$this->template->languageData = $this->dataProvider->getLanguageData();

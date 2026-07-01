@@ -8,10 +8,14 @@ use Build\Model\Module\Module;
 use Build\Model\ModuleTranslation\ModuleTranslation;
 use Build\Model\ModuleTranslation\ModuleTranslationData;
 use Build\Model\Web\WebData;
+use Webovac\Core\Model\HasWebFilterTrait;
 
 
 trait CoreModuleTranslationRepository
 {
+	use HasWebFilterTrait;
+
+
 	public function getByData(ModuleTranslationData $data, ?Module $module): ?ModuleTranslation
 	{
 		if (!$module) {

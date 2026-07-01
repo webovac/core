@@ -24,7 +24,7 @@ use Nextras\Migrations\LogicException;
 class CmsRunner extends Runner
 {
 	private OrderResolver $orderResolver;
-	/** @var list<Group> */ private array $groups = [];
+	/** @var list<CmsGroup> */ private array $groups = [];
 	/** @var array<string, IExtensionHandler> (extension => IExtensionHandler) */ private array $extensionsHandlers = [];
 
 
@@ -39,6 +39,7 @@ class CmsRunner extends Runner
 
 	public function addGroup(Group $group): self
 	{
+		assert($group instanceof CmsGroup);
 		$this->groups[] = $group;
 		return $this;
 	}
@@ -57,7 +58,7 @@ class CmsRunner extends Runner
 
 	/**
 	 * @param  self::MODE_*   $mode
-	 */ 
+	 */
 	public function run(string $mode = self::MODE_CONTINUE, ?IConfiguration $config = null): void
 	{
 		if ($config) {
@@ -74,7 +75,7 @@ class CmsRunner extends Runner
 			$this->driver->setupConnection();
 			$this->printer->printSource($this->driver->getInitTableSource() . "\n");
 			$files = $this->getFiles();
-			$files = $this->orderResolver->resolve([], $this->groups, $files, self::MODE_RESET);
+			$files = $this->orderResolver->resolve([], $this->groups, $files, self::MODE_RESET); // @phpstan-ignore argument.type
 			$this->printer->printSource($this->driver->getInitMigrationsSource($files));
 			return;
 		}
@@ -92,7 +93,7 @@ class CmsRunner extends Runner
 			$this->driver->createTable();
 			$migrations = $this->driver->getAllMigrations();
 			$files = $this->getFiles();
-			$toExecute = $this->orderResolver->resolve($migrations, $this->groups, $files, $mode);
+			$toExecute = $this->orderResolver->resolve($migrations, $this->groups, $files, $mode); // @phpstan-ignore argument.type
 			$this->printer->printToExecute($toExecute);
 
 			foreach ($toExecute as $file) {
@@ -165,7 +166,7 @@ class CmsRunner extends Runner
 				$file->name = $f->getFilename();
 				$file->path = $f->getPathname();
 				$file->extension = $f->getExtension();
-				$file->checksum = md5(str_replace(["\r\n", "\r"], "\n", @file_get_contents($f->getPathname())));
+				$file->checksum = md5(str_replace(["\r\n", "\r"], "\n", (string) @file_get_contents($f->getPathname())));
 				$files[] = $file;
 			}
 		}

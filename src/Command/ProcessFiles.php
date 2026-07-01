@@ -54,7 +54,7 @@ class ProcessFiles implements Command
 		$path = $this->fileUploader->getPath($file->identifier);
 		$upload = $this->orm->fileRepository->createFileUploadFromFile($path);
 		if ($upload->getContentType() === 'application/pdf') {
-			$namespace = strtok($file->identifier, '/');
+			$namespace = (string) strtok($file->identifier, '/');
 			$compatibleUpload = $this->orm->fileRepository->pdf2jpeg($upload);
 			if ($compatibleUpload) {
 				$modernUpload = $this->orm->fileRepository->image2webp($compatibleUpload);
@@ -66,7 +66,7 @@ class ProcessFiles implements Command
 		}
 		if (str_contains($upload->getContentType(), 'video/')) {
 			$oldIdentifier = $file->identifier;
-			$namespace = strtok($oldIdentifier, '/');
+			$namespace = (string) strtok($oldIdentifier, '/');
 			$upload = $this->orm->fileRepository->createVideoUpload($upload);
 			$file->extension = 'mp4';
 			$file->name = pathinfo($file->name, PATHINFO_FILENAME) . '.mp4';

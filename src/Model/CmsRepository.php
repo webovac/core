@@ -16,7 +16,11 @@ use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
 
 
-abstract class CmsRepository extends StepapoRepository
+/**
+ * @method CmsEntity|null getById($id)
+ * @method CmsEntity|null getBy(array $conds)
+ */
+abstract class CmsRepository extends StepapoRepository implements ICmsRepository
 {
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public Dir $dir;

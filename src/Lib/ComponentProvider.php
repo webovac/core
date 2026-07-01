@@ -44,12 +44,12 @@ class ComponentProvider implements Service
 
 
 	/**
-	 * @throws ReflectionException
+	 * @throws \ReflectionException
 	 */
 	private function getComponentList(string $className): array
 	{
 		$return = [];
-		$rf = new \ReflectionClass($className);
+		$rf = new \ReflectionClass($className); // @phpstan-ignore argument.type
 		foreach ($rf->getMethods() as $method) {
 			preg_match('/createComponent(.+)/', $method->getName(), $m);
 			if (!isset($m[1])) {

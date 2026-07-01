@@ -9,6 +9,7 @@ use Build\Model\ModuleTranslation\ModuleTranslation;
 use Build\Model\Page\Page;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
+use Stepapo\Model\Orm\AuditableTrait;
 use Webovac\Core\Lib\DataProvider;
 
 
@@ -17,6 +18,8 @@ use Webovac\Core\Lib\DataProvider;
  */
 trait CoreModule
 {
+	use AuditableTrait;
+
 	#[Inject] public DataProvider $dataProvider;
 
 
@@ -26,14 +29,14 @@ trait CoreModule
 	}
 
 
-	/** @return ICollection<Page> */ 
+	/** @return ICollection<Page> */
 	public function getPages(): ICollection
 	{
 		return $this->pages->toCollection()->findBy(['parentPage' => null, 'web' => null]);
 	}
 
 
-	/** @return ICollection<Page> */ 
+	/** @return ICollection<Page> */
 	public function getPagesForMenu(): ICollection
 	{
 		return $this->getPages();

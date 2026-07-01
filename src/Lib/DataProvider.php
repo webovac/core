@@ -82,7 +82,7 @@ class DataProvider implements Service
 	{
 		return $this->navigationPageData;
 	}
-	
+
 
 	public function setNavigationPageData(?PageData $navigationPageData): self
 	{

@@ -19,8 +19,8 @@ use Latte\Sandbox\SecurityPolicy;
 use Nette\Application\Attributes\Parameter;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\ForbiddenRequestException;
-use Nette\Application\UI\Template;
 use Nette\Application\UI\TemplateFactory;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\DI\Attributes\Inject;
 use Nette\InvalidStateException;
 use Nette\Utils\Arrays;
@@ -28,9 +28,6 @@ use Nextras\Dbal\Platforms\Data\Fqn;
 use Nextras\Orm\Relationships\IRelationshipCollection;
 use stdClass;
 use Stepapo\Model\Data\Item;
-use Throwable;
-use Tracy\Debugger;
-use Tracy\ILogger;
 use Webovac\Core\Control\Core\CoreControl;
 use Webovac\Core\Control\Core\ICoreControl;
 use Webovac\Core\Exception\LoginRequiredException;
@@ -46,7 +43,9 @@ use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Lib\RegisterOrmEvents;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\CmsRepository;
 use Webovac\Core\Model\HasSlugHistory;
+use Webovac\Core\Model\Linkable;
 
 
 trait CorePresenter
@@ -157,6 +156,7 @@ trait CorePresenter
 			array_unshift($this->pageData->parentPages, $this->webData->homePage);
 		}
 		foreach ($this->pageData->parentPages as $id) {
+			assert(is_int($id));
 			$pageData = $this->dataModel->getPageData($this->webData->id, $id);
 			$title = $pageData->getCollection('translations')->getByKey($this->languageData->id)->title;
 			if ($pageData->hasParameter) {
@@ -166,15 +166,16 @@ trait CorePresenter
 						$parameters[$lastDetailRootPage->name] = $this->id[$lastDetailRootPage->name];
 					}
 					if ($pageData->isDetailRoot) {
-						$entity = $this->orm
-							->getRepositoryByName($lastDetailRootPage->repository . 'Repository')
-							->getByParameters($parameters, null, $this->webData);
+						/** @var CmsRepository $repository */
+						$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
+						$entity = $repository->getByParameters($parameters, null, $this->webData);
 						$title = $entity->getTitle();
 					}
 				} elseif ($this->path) {
 					$path = [];
 					$title = $this->entity->getTitle();
 					foreach ($this->entityList as $entity) {
+						assert($entity instanceof Linkable);
 						if ($entity === $this->entity) {
 							continue;
 						}
@@ -223,23 +224,31 @@ trait CorePresenter
 	{
 		$this->languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
+		assert(is_int($this->webData->defaultLanguage));
 		if (!$this->webData) {
 			$this->error();
 		}
-		$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
+		/** @var WebTranslationData|null $webTranslationData */
+		$webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id);
+		$this->webTranslationData = $webTranslationData;
 		if (!$this->webTranslationData) {
 			$this->languageData = $this->dataModel->getLanguageData($this->webData->defaultLanguage);
 			$this->lang = $this->languageData->shortcut;
-			$this->webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
+			/** @var WebTranslationData|null $webTranslationData */
+			$webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id);
+			$this->webTranslationData = $webTranslationData;
 		}
 		$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->pageName);
 		$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
-		$this->pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id) ?? null;
+		/** @var PageTranslationData|null $pageTranslationData */
+		$pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id);
+		$this->pageTranslationData = $pageTranslationData;
 		$this->deployData = $this->dataModel->getLastDeployData();
 		$this->menuPageData = $this->pageData->menuPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->menuPage) : null;
 		$this->navigationPageData = $this->pageData->navigationPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->navigationPage) : null;
 		$this->buttonsPageData = $this->pageData->buttonsPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->buttonsPage) : null;
 		$this->translator->setLanguageData($this->languageData);
+		assert($this->templateFactory instanceof \Nette\Bridges\ApplicationLatte\TemplateFactory);
 		$this->templateFactory->onCreate[] = function (Template $template) {
 			$template->getLatte()->setLocale($this->languageData->shortcut);
 		};
@@ -293,6 +302,7 @@ trait CorePresenter
 				throw new InvalidStateException;
 			}
 			$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
+			/** @var CmsRepository $repository */
 			$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
 			$this->entity = $repository->getByParameters($this->id, $this->path ?? null, $this->webData);
 			if ($this->path) {
@@ -329,9 +339,7 @@ trait CorePresenter
 
 	private function getTitle(): ?string
 	{
-		return $this->entity && method_exists($this->entity, 'getTitle')
-			? $this->entity->getTitle()
-			: $this->pageTranslation->title;
+		return $this->entity ? $this->entity->getTitle() : $this->pageTranslation->title;
 	}
 
 
@@ -379,6 +387,7 @@ trait CorePresenter
 
 	private function getMetaUrl(): string
 	{
+		assert(is_int($this->webData->homePage));
 		$homePage = $this->dataModel->getPageData($this->webData->id, $this->webData->homePage);
 		return $this->getRequest()->getPresenterName() === 'Core:Error4xx'
 			? $this->link('//Home:default', [
@@ -418,20 +427,16 @@ trait CorePresenter
 	{
 		if ($this->getRequest()->getPresenterName() === 'Core:Error4xx') {
 			$file = __DIR__ . "/Error4xx/{$this->getParameter('exception')->getCode()}.latte";
-			$main = file_get_contents(is_file($file) ? $file : __DIR__ . '/4xx.latte');
+			$main = (string) file_get_contents(is_file($file) ? $file : __DIR__ . '/4xx.latte');
 		} else {
 			$main = $this->pageTranslation->content ?: '';
 		}
 		$this->template->getLatte()->setLoader(new StringLoader([
-			'@layout.latte' => file_get_contents($this->dir->getAppDir() . "/Presenter/@layout.latte"),
-			'layout.latte' => file_get_contents(__DIR__ . "/../templates/layout.latte"),
+			'@layout.latte' => (string) file_get_contents($this->dir->getAppDir() . "/Presenter/@layout.latte"),
+			'layout.latte' => (string) file_get_contents(__DIR__ . "/../templates/layout.latte"),
 			'main.file' => $main,
 			'footer.file' => $this->webTranslationData->footer ?: '',
 		]))
-			->setExceptionHandler(function (Throwable $e, \Latte\Runtime\Template $template) {
-				bdump($e->getMessage());
-				Debugger::log($e->getMessage(), ILogger::EXCEPTION);
-			})
 			->setSandboxMode()
 			->setPolicy($this->policy);
 		$this->template->setFile('@layout.latte');

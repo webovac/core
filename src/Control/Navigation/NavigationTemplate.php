@@ -12,6 +12,7 @@ use Build\Model\Web\WebData;
 use Nextras\Orm\Entity\IEntity;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 class NavigationTemplate extends BaseTemplate
@@ -23,5 +24,9 @@ class NavigationTemplate extends BaseTemplate
 	public DataModel $dataModel;
 	public ?CmsEntity $entity;
 	/** @var Collection<PageData> */ public Collection $pageDatas;
+	/** @var Collection<PageData> */ public Collection $mobilePageDatas;
 	/** @var IEntity[] */ public array $entityMenuItems;
+	public ?string $icon;
+	public ?string $imageIdentifier;
+	public ?string $imageUrl;
 }

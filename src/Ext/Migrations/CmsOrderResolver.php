@@ -13,11 +13,14 @@ use Stepapo\Model\Definition\DefinitionGroup;
 class CmsOrderResolver extends OrderResolver
 {
 	/**
-	 * @param  list<File> $files
-	 * @param  array<string, CmsGroup>  $groups (name => CmsGroup)
-	 * @return list<File> sorted
+	 * @param  CmsFile[] $files
+	 * @param  array<string, CmsGroup> $groups (name => CmsGroup)
+	 * @return CmsFile[] sorted
 	 */
-	protected function sortFiles(array $files, array $groups): array
+	protected function sortFiles( // @phpstan-ignore method.childParameterType, method.childParameterType, method.childReturnType
+		array $files,
+		array $groups,
+	): array
 	{
 		uasort($files, fn(File $a, File $b): int =>
 			[$a->group->name, str_contains($b->name, 'insert'), $a->name]
@@ -54,7 +57,7 @@ class CmsOrderResolver extends OrderResolver
 			}
 		}
 		$files = $sortedFiles;
-		uasort($files, fn(File $a, File $b): int => $b->group->migrationGroup instanceof DefinitionGroup <=> $a->group->migrationGroup instanceof DefinitionGroup);
+		uasort($files, fn(CmsFile $a, CmsFile $b): int => $b->group->migrationGroup instanceof DefinitionGroup <=> $a->group->migrationGroup instanceof DefinitionGroup);
 		return $files;
 	}
 }

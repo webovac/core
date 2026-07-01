@@ -9,7 +9,7 @@ use Build\Model\Page\PageData;
 use Nette\Application\UI\Component;
 
 
-interface HasSlugHistory
+interface HasSlugHistory extends ICmsEntity
 {
 	function checkForRedirect(array $id, PageData $pageData, LanguageData $languageData, Component $component): void;
 }

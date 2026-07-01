@@ -9,14 +9,14 @@ use Build\Model\Orm;
 use Build\Model\Page\Page;
 use Build\Model\Page\PageData;
 use Nette\InvalidStateException;
-use Nextras\Orm\Entity\IEntity;
 use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Clearable;
 use Stepapo\Utils\Service;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\HasPageSetups;
-use Webovac\Core\Model\HasRequirements;
+use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 class PageRequirementChecker implements Service, Clearable
@@ -63,7 +63,7 @@ class PageRequirementChecker implements Service, Clearable
 	}
 
 
-	public function isPageAccessible(PageData $pageData, ?IEntity $entity = null): bool
+	public function isPageAccessible(PageData $pageData, ?CmsEntity $entity = null): bool
 	{
 		if (array_key_exists($pageData->name, $this->checked)) {
 			return $this->checked[$pageData->name];
@@ -82,7 +82,7 @@ class PageRequirementChecker implements Service, Clearable
 	 * @param Collection<PageData> $pageDatas
 	 * @return Collection<PageData>
 	 */
-	public function filterPages(Collection $pageDatas, ?IEntity $entity): Collection
+	public function filterPages(Collection $pageDatas, ?CmsEntity $entity): Collection
 	{
 		$filteredPageDatas = [];
 		foreach ($pageDatas as $pageData) {
@@ -91,6 +91,7 @@ class PageRequirementChecker implements Service, Clearable
 				$add = false;
 			}
 			if ($add && $pageData->type === Page::TYPE_INTERNAL_LINK) {
+				assert(is_int($pageData->targetPage));
 				$targetPageData = $this->dataModel->getPageData($this->dataProvider->getWebData()->id, $pageData->targetPage);
 				if (!$this->isPageAccessible($targetPageData, $entity)) {
 					$add = false;
@@ -115,10 +116,10 @@ class PageRequirementChecker implements Service, Clearable
 	}
 
 
-	private function isPageTagAllowed(PageData $pageData, ?IEntity $entity): bool
+	private function isPageTagAllowed(PageData $pageData, ?CmsEntity $entity): bool
 	{
 		if ($pageData->authorizingTag && $entity) {
-			if ($entity instanceof HasRequirements && !$entity->check($this->cmsUser, $this->dataProvider->getWebData(), $pageData->authorizingTag)) {
+			if (!$entity->check($this->cmsUser, $this->dataProvider->getWebData(), $pageData->authorizingTag)) {
 				return false;
 			}
 		}

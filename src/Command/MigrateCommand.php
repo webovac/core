@@ -63,7 +63,7 @@ class MigrateCommand implements Command
 		$folders = [];
 		foreach ($this->modules as $module) {
 			$reflection = new \ReflectionClass($module);
-			if (file_exists($dir = dirname($reflection->getFileName()) . "/config/definitions")) {
+			if (file_exists($dir = dirname((string) $reflection->getFileName()) . "/config/definitions")) {
 				$folders[] = $dir;
 			}
 		}
@@ -96,7 +96,7 @@ class MigrateCommand implements Command
 		$groups = [];
 		foreach ($this->modules as $module) {
 			$reflection = new \ReflectionClass($module);
-			if (file_exists($dir = dirname($reflection->getFileName()) . "/config/manipulations")) {
+			if (file_exists($dir = dirname((string) $reflection->getFileName()) . "/config/manipulations")) {
 				$folders[] = $dir;
 			}
 		}
@@ -129,7 +129,7 @@ class MigrateCommand implements Command
 		$reflection = new \ReflectionClass($hasDefinitionGroup);
 		$files = [];
 		$db = $this->driver instanceof PgSqlDriver ? 'pgsql' : 'mysql';
-		if (file_exists($dir = dirname($reflection->getFileName()) . "/config/migrations/$db")) {
+		if (file_exists($dir = dirname((string) $reflection->getFileName()) . "/config/migrations/$db")) {
 			$sqlFiles = Finder::findFiles("*.sql")->from($dir);
 			$files = array_merge($files, $sqlFiles->collect());
 		}

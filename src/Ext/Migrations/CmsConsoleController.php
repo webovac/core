@@ -28,7 +28,7 @@ class CmsConsoleController extends ConsoleController
 	{
 		$this->printHeader();
 		$this->registerGroups();
-		$this->runner->run($this->mode);
+		$this->runner->run($this->mode); // @phpstan-ignore argument.type
 	}
 
 

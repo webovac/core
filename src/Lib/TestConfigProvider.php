@@ -14,7 +14,7 @@ use Webovac\Core\Module;
 
 class TestConfigProvider implements Service
 {
-	private array $paths = [];
+	/** @var list<string> */ private array $paths = [];
 
 
 	/** @param Module[] $modules */
@@ -24,7 +24,7 @@ class TestConfigProvider implements Service
 	) {
 		foreach ($modules as $module) {
 			$reflection = new ReflectionClass($module);
-			if (file_exists($path = dirname($reflection->getFileName()) . '/config/tests')) {
+			if (file_exists($path = dirname((string) $reflection->getFileName()) . '/config/tests')) {
 				if (str_contains($path, 'vendor')) {
 					continue;
 				}
@@ -59,7 +59,7 @@ class TestConfigProvider implements Service
 		$setups = [];
 		foreach ($this->modules as $module) {
 			$reflection = new ReflectionClass($module);
-			if (file_exists($path = dirname($reflection->getFileName()) . '/config/tests')) {
+			if (file_exists($path = dirname((string) $reflection->getFileName()) . '/config/tests')) {
 				if (str_contains($path, 'vendor')) {
 					continue;
 				}

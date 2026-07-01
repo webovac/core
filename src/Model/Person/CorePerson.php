@@ -8,6 +8,7 @@ use Build\Model\Language\LanguageData;
 use Build\Model\PersonTranslation\PersonTranslation;
 use Build\Model\Web\WebData;
 use Nette\DI\Attributes\Inject;
+use Stepapo\Model\Orm\AuditableTrait;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Model\File\HasFilesTrait;
 
@@ -20,6 +21,7 @@ use Webovac\Core\Model\File\HasFilesTrait;
  */
 trait CorePerson
 {
+	use AuditableTrait;
 	use HasFilesTrait;
 
 	#[Inject] public DataProvider $dataProvider;

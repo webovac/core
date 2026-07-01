@@ -16,13 +16,13 @@ class AccessSetup
 {
 	public string $accessFor;
 	/** @var int[] */ public array $authorizedPersons;
-	/** @var string */ public array $authorizedRoles;
+	/** @var string[] */ public array $authorizedRoles;
 
 
 	/**
 	 * @throws LoginRequiredException
 	 * @throws MissingPermissionException
-	 */ 
+	 */
 	public function checkRequirements(CmsUser $cmsUser, WebData $webData): void
 	{
 		if ($this->accessFor === Page::ACCESS_FOR_ALL) {

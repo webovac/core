@@ -14,7 +14,7 @@
 		"issues": "https://github.com/webovac/core/issues"
 	},
 	"require": {
-		"php": ">=8.3",
+		"php": ">=8.5",
 		"ext-imagick": "*",
 		"ext-exif": "*",
 		"contributte/forms-multiplier": "^4.0",

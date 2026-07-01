@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Router;
 
-use Build\Model\DataModel;
-use Build\Model\Web\WebData;
 use Nette\Application\BadRequestException;
 use Nette\Application\Routers\RouteList;
 use Nette\Http\IRequest;
@@ -17,12 +15,7 @@ use Webovac\Core\Lib\RouteSetupProvider;
 
 final class CmsRouterFactory implements Service
 {
-	private array $setup;
-	private array $webSetup;
-
-
 	public function __construct(
-		private DataModel $dataModel,
 		private IRequest $request,
 		private RouteSetupProvider $routeSetupProvider,
 	) {}

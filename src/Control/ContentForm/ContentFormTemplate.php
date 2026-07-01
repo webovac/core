@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Webovac\Core\Control\ContentForm;
 
 use Build\Control\BaseTemplate;
-use Build\Model\Page\Page;
+use Webovac\Core\Model\HasTranslations;
 
 
 class ContentFormTemplate extends BaseTemplate
 {
-	public Page $page;
+	public HasTranslations $hasTranslations;
 	public string $lang;
 	public string $mentions;
 	public string $linkGroups;

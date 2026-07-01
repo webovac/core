@@ -6,10 +6,10 @@ namespace Webovac\Core\Model\Page;
 
 use Build\Model\Page\Page;
 use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Entity\IEntity;
+use Webovac\Core\Model\ICmsEntity;
 
 
-interface HasPages extends IEntity
+interface HasPages extends ICmsEntity
 {
 	/** @return ICollection<Page> */ function getPages(): ICollection;
 	/** @return ICollection<Page> */ function getPagesForMenu(): ICollection;

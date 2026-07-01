@@ -27,10 +27,14 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Tracy\Debugger;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\HasWebFilterTrait;
 
 
 trait CoreFileRepository
 {
+	use HasWebFilterTrait;
+
+
 	public function getByData(FileData $data, ?CmsEntity $entity = null): ?File
 	{
 		if ($data instanceof FileData) {
@@ -196,7 +200,7 @@ trait CoreFileRepository
 			Debugger::log($process->getStdError(), Debugger::EXCEPTION);
 			throw new FileException('Process failed.');
 		}
-		
+
 		return $this->createFileUploadFromFile($outputFile);
 	}
 

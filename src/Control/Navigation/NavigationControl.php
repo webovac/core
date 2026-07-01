@@ -9,12 +9,12 @@ use Build\Model\Page\PageData;
 use ReflectionException;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 /**
@@ -29,7 +29,6 @@ class NavigationControl extends BaseControl
 		private ModuleChecker $moduleChecker,
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
-		private CmsUser $cmsUser,
 		private PageRequirementChecker $requirementChecker,
 	) {}
 

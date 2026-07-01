@@ -30,4 +30,3 @@ class BreadcrumbsControl extends BaseControl
 		$this->template->render(__DIR__ . '/breadcrumbs.latte');
 	}
 }
-

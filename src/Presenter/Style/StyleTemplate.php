@@ -13,6 +13,7 @@ use Build\Model\Web\WebData;
 class StyleTemplate extends BaseTemplate
 {
 	public ?WebData $webData;
+	public ?ThemeData $themeData;
 	public string $backgroundUrl;
 	public array $colors;
 	public LayoutData|array $l;

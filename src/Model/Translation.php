@@ -5,6 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model;
 
 
-interface Translation
+interface Translation extends ICmsEntity
 {
 }

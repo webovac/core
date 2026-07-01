@@ -16,11 +16,17 @@ use Nette\InvalidArgumentException;
 use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Model\Data\Item;
+use Stepapo\Model\Orm\IStepapoEntity;
+use Stepapo\Model\Orm\StepapoEntity;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\HasWebFilterTrait;
 
 
 trait CorePageRepository
 {
+	use HasWebFilterTrait;
+
+
 	public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?Page
 	{
 		if (isset($parameters['ModuleDetail'])) {
@@ -30,7 +36,7 @@ trait CorePageRepository
 	}
 
 
-	/** @return ICollection<Page> */ 
+	/** @return ICollection<Page> */
 	public function findRootPages(): ICollection
 	{
 		return $this->findBy(['parentPage' => null, 'web!=' => null])->orderBy('rank');
@@ -163,7 +169,7 @@ trait CorePageRepository
 	}
 
 
-	public function postProcessFromData(Item $data, CmsEntity $entity, bool $skipDefaults = false): Page
+	public function postProcessFromData(Item $data, IStepapoEntity $entity, bool $skipDefaults = false): Page
 	{
 		if (!$data instanceof PageData || !$entity instanceof Page) {
 			throw new InvalidArgumentException;

@@ -12,7 +12,7 @@ use Nextras\Orm\Collection\ICollection;
 
 class GalleryTemplate extends BaseTemplate
 {
-	/** @var File[] */ public ICollection $files;
+	/** @var ICollection<File> */ public ICollection $files;
 	public int $fileCount;
 	public array $urls;
 	public LanguageData $languageData;

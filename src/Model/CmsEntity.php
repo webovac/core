@@ -9,7 +9,10 @@ use Stepapo\Model\Orm\StepapoEntity;
 use Webovac\Core\Lib\CmsUser;
 
 
-abstract class CmsEntity extends StepapoEntity
+/**
+ * @method CmsRepository getRepository()
+ */
+abstract class CmsEntity extends StepapoEntity implements ICmsEntity
 {
 	public function check(CmsUser $cmsUser, WebData $webData, ?string $tag = null): bool
 	{

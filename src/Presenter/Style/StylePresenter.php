@@ -39,6 +39,7 @@ class StylePresenter extends Presenter
 	public function actionDefault(): void
 	{
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
+		assert(is_int($this->webData->layout));
 		$this->layoutData = $this->dataModel->getLayoutData($this->webData->layout);
 		if ($this->cmsUser->isLoggedIn()) {
 			$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
@@ -50,6 +51,7 @@ class StylePresenter extends Presenter
 		) {
 			$this->themeData = $this->dataModel->getThemeData($themeId);
 		} else {
+			assert(is_int($this->layoutData->defaultTheme));
 			$this->themeData = $this->dataModel->getThemeData($this->layoutData->defaultTheme);
 		}
 	}
@@ -64,6 +66,7 @@ class StylePresenter extends Presenter
 			: 'dist/images/fsv_background.webp';
 		$this->template->colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
 		if ($this->moduleChecker->isModuleInstalled('style')) {
+			assert(is_int($this->webData->layout));
 			$layout = $this->dataModel->getLayoutData($this->webData->layout);
 			$this->template->l = $layout;
 			foreach ($layout->themes as $themeId) {

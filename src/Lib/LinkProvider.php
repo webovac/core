@@ -6,11 +6,11 @@ namespace Webovac\Core\Lib;
 
 use Build\Model\Orm;
 use Build\Model\Page\Page;
-use Build\Model\Person\Person;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Utils\Service;
 use Webovac\Core\HasLinkGroups;
 use Webovac\Core\Model\HasTranslations;
+use Webovac\Core\Model\HasWeb;
 
 
 class LinkProvider implements Service
@@ -25,8 +25,7 @@ class LinkProvider implements Service
 	public function getLinkGroups(HasTranslations $hasTranslations): array
 	{
 		$linkGroups = [];
-		if (!$hasTranslations instanceof Person) {
-			$pages = $this->buildPages($this->getAssocPages($hasTranslations));
+		if ($pages = $this->buildPages($this->getAssocPages($hasTranslations))) {
 			$linkGroups += ['Stránky' => $pages];
 		}
 		foreach ($this->hasLinkGroups as $hasLinkGroups) {
@@ -38,18 +37,26 @@ class LinkProvider implements Service
 
 	private function getAssocPages(HasTranslations $hasTranslations): array
 	{
-		$pages = $this->orm->pageRepository->findBy([
+		if (!$hasTranslations instanceof Page && !$hasTranslations instanceof HasWeb) {
+			return [];
+		}
+		$filter = [
 			ICollection::AND,
-			[ICollection::OR, 'web' => $hasTranslations->web, 'module' => $hasTranslations->web?->modules->toCollection()->fetchPairs('id') ?: $hasTranslations->module],
 			['type' => [Page::TYPE_PAGE, Page::TYPE_MODULE]],
 			['hasParameter' => false],
-		])->orderBy('rank');
+		];
+		if ($hasTranslations instanceof Page) {
+			$filter[] = [ICollection::OR, 'web' => $hasTranslations->web, 'module' => $hasTranslations->web?->modules->toCollection()->fetchPairs('id') ?: $hasTranslations->module];
+		} else {
+			$filter[] = [ICollection::OR, 'web' => $hasTranslations->getWeb(), 'module' => $hasTranslations->getWeb()->modules->toCollection()->fetchPairs('id')];
+		}
+		$pages = $this->orm->pageRepository->findBy($filter)->orderBy('rank');
 		$assocPages = [];
 		foreach ($pages as $page) {
 			if ($page->parentPage) {
-				$assocPages['pages'][$page->parentPage->id][] = $page;
+				$assocPages['pages'][$page->parentPage->id][] = $page; // @phpstan-ignore offsetAccess.nonOffsetAccessible
 			} elseif ($page->module) {
-				$assocPages['modules'][$page->module->id][] = $page;
+				$assocPages['modules'][$page->module->id][] = $page; // @phpstan-ignore offsetAccess.nonOffsetAccessible
 			} else {
 				$assocPages['root'][] = $page;
 			}

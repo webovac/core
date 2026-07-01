@@ -31,7 +31,9 @@ use Webovac\Core\Control\Signpost\ISignpostControl;
 use Webovac\Core\Control\Signpost\SignpostControl;
 use Webovac\Core\MainModuleControl;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\File\HasFiles;
 use Webovac\Core\Model\HasTranslations;
+use Webovac\Core\Model\Linkable;
 
 
 class CoreControl extends BaseControl implements MainModuleControl
@@ -97,12 +99,14 @@ class CoreControl extends BaseControl implements MainModuleControl
 
 	public function createComponentGallery(): GalleryControl
 	{
+		assert($this->entity instanceof HasFiles);
 		return $this->gallery->create($this->entity);
 	}
 
 
 	public function createComponentDocuments(): DocumentsControl
 	{
+		assert($this->entity instanceof HasFiles);
 		return $this->documents->create($this->entity);
 	}
 

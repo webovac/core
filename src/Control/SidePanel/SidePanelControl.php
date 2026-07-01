@@ -9,11 +9,11 @@ use Build\Model\Orm;
 use Build\Model\Theme\ThemeData;
 use ReflectionException;
 use Webovac\Core\Control\BaseControl;
-use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
+use Webovac\Core\Model\Linkable;
 
 
 /**
@@ -31,7 +31,6 @@ class SidePanelControl extends BaseControl
 		private DataModel $dataModel,
 		private ModuleChecker $moduleChecker,
 		private DataProvider $dataProvider,
-		private CmsUser $cmsUser,
 		private Orm $orm,
 		private PageRequirementChecker $requirementChecker,
 	) {}
@@ -59,6 +58,7 @@ class SidePanelControl extends BaseControl
 			&& $personsModuleData
 			&& in_array($personsModuleData->id, $webData->modules, true);
 		if ($this->moduleChecker->isModuleInstalled('style')) {
+			assert(is_int($webData->layout));
 			$layoutData = $this->dataModel->getLayoutData($webData->layout);
 			$this->template->layoutData = $layoutData;
 			$this->template->themeDatas = $this->dataModel->findThemeDatas($layoutData->themes);
@@ -74,6 +74,7 @@ class SidePanelControl extends BaseControl
 		$this->template->showAdmin = $showAdmin;
 		if ($showAdmin) {
 			$this->template->languageShortcuts = $this->dataModel->languageDataRepository->findAllPairs();
+			assert(!$pageData->module || is_int($pageData->module));
 			$this->template->pageModuleData = $pageData->module ? $this->dataModel->getModuleData($pageData->module) : null;
 //			$this->template->webDatas = $this->dataModel->findWebDatas();
 			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
