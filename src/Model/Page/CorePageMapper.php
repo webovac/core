@@ -42,22 +42,22 @@ trait CorePageMapper
 
 		if ($oldParentPage === $newParentPage) {
 			if ($newRank < $oldRank) {
-				$this->connection->query("
+				$this->connection->query('
 					UPDATE page
 					SET rank = rank + 1
 					WHERE %and;
-				", [
+				', [
 					'parent_page_id' => $newParentPage?->id,
 					['id <> %i', $movedPage->id],
 					['rank >= %i', $newRank],
 					['rank < %i', $oldRank],
 				] + $filter);
 			} elseif ($newRank > $oldRank) {
-				$this->connection->query("
+				$this->connection->query('
 					UPDATE page
 					SET rank = rank - 1
 					WHERE %and;
-				", [
+				', [
 					'parent_page_id' => $newParentPage?->id,
 					['id <> %i', $movedPage->id],
 					['rank > %i', $oldRank],
@@ -65,20 +65,20 @@ trait CorePageMapper
 				] + $filter);
 			}
 		} else {
-			$this->connection->query("
+			$this->connection->query('
 				UPDATE page
 				SET rank = rank + 1
 				WHERE %and;
-			", [
+			', [
 				'parent_page_id' => $newParentPage?->id,
 				['rank >= %i', $newRank],
 			] + $filter);
 
-			$this->connection->query("
+			$this->connection->query('
 				UPDATE page
 				SET rank = rank - 1
 				WHERE %and;
-			", [
+			', [
 				'parent_page_id' => $oldParentPage?->id,
 				['rank > %i', $oldRank],
 			] + $filter);
@@ -100,11 +100,11 @@ trait CorePageMapper
 			? ['web_id' => $page->web->id]
 			: ['module_id' => $page->module->id, 'web_id' => null];
 
-		$this->connection->query("
+		$this->connection->query('
 			UPDATE page
 			SET rank = rank - 1
 			WHERE %and;
-		", [
+		', [
 			'parent_page_id' => $page->parentPage?->id,
 			['rank > %i', $page->rank],
 		] + $filter);

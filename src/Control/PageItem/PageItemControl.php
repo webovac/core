@@ -17,7 +17,8 @@ class PageItemControl extends BaseControl
 		private Page $page,
 		private string $moduleClass,
 		private string $templateName,
-	) {}
+	) {
+	}
 
 
 	public function render(): void

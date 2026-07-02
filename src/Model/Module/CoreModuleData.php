@@ -12,7 +12,12 @@ trait CoreModuleData
 	public array $tree;
 
 
-	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
+	public static function createFromArray(
+		mixed $config = [],
+		mixed $key = null,
+		bool $skipDefaults = false,
+		mixed $parentKey = null,
+	): static
 	{
 		$data = parent::createFromArray($config, $key, $skipDefaults);
 		$rank = 1;
@@ -23,30 +28,30 @@ trait CoreModuleData
 	}
 
 
-//	private static function checkPage(string $page, ModuleData $data)
-//	{
-//		if (isset($data->pages[$page])) {
-//			$p = $data->pages[$page];
-//			$relatedPage = $p['targetPage'] ?? ($p['redirectPage'] ?? null);
-//			if (!$relatedPage) {
-//				return true;
-//			}
-//			return ModuleData::checkPage(str_contains($relatedPage, ':') ? strtok($relatedPage, ':') : $relatedPage, $data);
-//		}
-//		return false;
-//	}
+	//	private static function checkPage(string $page, ModuleData $data)
+	//	{
+	//		if (isset($data->pages[$page])) {
+	//			$p = $data->pages[$page];
+	//			$relatedPage = $p['targetPage'] ?? ($p['redirectPage'] ?? null);
+	//			if (!$relatedPage) {
+	//				return true;
+	//			}
+	//			return ModuleData::checkPage(str_contains($relatedPage, ':') ? strtok($relatedPage, ':') : $relatedPage, $data);
+	//		}
+	//		return false;
+	//	}
 
 
-	private static function processTree(array $pages, string $parentPage, int $rank, ModuleData &$data): void
-	{
-		$r = 1;
-		$data->pages[$parentPage]['rank'] = $rank;
-		foreach ($pages as $page => $subPages) {
-//			if (!ModuleData::checkPage($page, $data)) {
-//				continue;
-//			}
-			$data->pages[$page]['parentPage'] = $parentPage;
-			ModuleData::processTree((array) $subPages, $page, $r++, $data);
+		private static function processTree(array $pages, string $parentPage, int $rank, ModuleData &$data): void
+		{
+			$r = 1;
+			$data->pages[$parentPage]['rank'] = $rank;
+			foreach ($pages as $page => $subPages) {
+				//			if (!ModuleData::checkPage($page, $data)) {
+				//				continue;
+				//			}
+							$data->pages[$page]['parentPage'] = $parentPage;
+				ModuleData::processTree((array) $subPages, $page, $r++, $data);
+			}
 		}
-	}
 }

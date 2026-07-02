@@ -36,7 +36,7 @@ class CmsConsoleController extends ConsoleController
 	private function printHeader(): void
 	{
 		$this->printer->printBigSeparator();
-		$this->printer->printLine("Migrations", "aqua");
+		$this->printer->printLine('Migrations', 'aqua');
 		$this->printer->printSeparator();
 	}
 

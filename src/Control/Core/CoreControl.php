@@ -33,7 +33,6 @@ use Webovac\Core\MainModuleControl;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\File\HasFiles;
 use Webovac\Core\Model\HasTranslations;
-use Webovac\Core\Model\Linkable;
 
 
 class CoreControl extends BaseControl implements MainModuleControl
@@ -52,7 +51,8 @@ class CoreControl extends BaseControl implements MainModuleControl
 		private IDocumentsControl $documents,
 		private IPersonFormControl $personForm,
 		private IContentFormControl $contentForm,
-	) {}
+	) {
+	}
 
 
 	public function createComponentMenu(): MenuControl

@@ -9,12 +9,12 @@ use Build\Model\ModuleTranslation\ModuleTranslation;
 use Build\Model\ModuleTranslation\ModuleTranslationData;
 use Build\Model\Web\WebData;
 use Webovac\Core\Model\HasWebFilterTrait;
+use function is_int;
 
 
 trait CoreModuleTranslationRepository
 {
 	use HasWebFilterTrait;
-
 
 	public function getByData(ModuleTranslationData $data, ?Module $module): ?ModuleTranslation
 	{

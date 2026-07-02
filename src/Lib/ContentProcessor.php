@@ -13,7 +13,7 @@ class ContentProcessor implements Service
 		'h1', 'h2', 'h3', 'p', 'b', 'strong', 'i', 'a', 'br', 'hr',
 		'ol', 'ul', 'li',
 		'table', 'thead', 'tbody', 'th', 'tr', 'td',
-		'div', 'figure', 'figcaption', 'colgroup', 'col', 'img', 'span', 'code', 'pre'
+		'div', 'figure', 'figcaption', 'colgroup', 'col', 'img', 'span', 'code', 'pre',
 	];
 
 

@@ -11,15 +11,13 @@ use Build\Model\Web\WebData;
 use Nette\InvalidArgumentException;
 use Stepapo\Model\Data\Item;
 use Stepapo\Model\Orm\IStepapoEntity;
-use Stepapo\Model\Orm\StepapoEntity;
-use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasWebFilterTrait;
+use function array_key_exists;
 
 
 trait CoreModuleRepository
 {
 	use HasWebFilterTrait;
-
 
 	public function postProcessFromData(Item $data, IStepapoEntity $entity, bool $skipDefaults = false): Module
 	{

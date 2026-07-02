@@ -12,5 +12,6 @@ use Webovac\Core\Model\ICmsEntity;
 interface HasPages extends ICmsEntity
 {
 	/** @return ICollection<Page> */ function getPages(): ICollection;
+
 	/** @return ICollection<Page> */ function getPagesForMenu(): ICollection;
 }

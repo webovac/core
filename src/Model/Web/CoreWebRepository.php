@@ -25,8 +25,8 @@ use Nette\Utils\UnknownImageFileException;
 use Stepapo\Model\Data\Item;
 use Stepapo\Model\Orm\EntityProcessorResult;
 use Stepapo\Model\Orm\IStepapoEntity;
-use Stepapo\Model\Orm\StepapoEntity;
-use Webovac\Core\Model\CmsEntity;
+use function array_key_exists;
+use const UPLOAD_ERR_NO_FILE, UPLOAD_ERR_OK;
 
 
 trait CoreWebRepository
@@ -47,7 +47,7 @@ trait CoreWebRepository
 		if (isset($data->iconFile)) {
 			$data->iconFile->upload = $this->styleFile($data->iconFile, $data->complementaryColor, $data->color);
 			$data->iconFile->forceSquare = true;
-			$data->largeIconFile = $data->largeIconFile ?? new FileData;
+			$data->largeIconFile ??= new FileData;
 			$data->largeIconFile->upload = $this->createLargeIcon($data->iconFile, $data->iconBackgroundColor);
 		}
 		if (isset($data->logoFile)) {
@@ -131,8 +131,8 @@ trait CoreWebRepository
 		}
 		$this->persist($entity);
 		if (isset($data->pages)) {
-			/** @var Page $page */
 			foreach ($entity->pages->toCollection() as $page) {
+				\assert($page instanceof Page);
 				if (!array_key_exists($page->name, $data->pages)) {
 					if (!$skipDefaults) {
 						$this->getModel()->getRepository(PageRepository::class)->delete($page);
@@ -161,13 +161,13 @@ trait CoreWebRepository
 			if ($file->upload instanceof FileUpload) {
 				$content = file_get_contents($file->upload->getTemporaryFile());
 			} else {
-				$content = base64_decode($file->upload);
+				$content = base64_decode($file->upload, true);
 			}
 		} else {
 			$content = file_get_contents($this->fileUploader->getPath($file->identifier));
 		}
 		return $this->getModel()->getRepository(FileRepository::class)->createFileUploadFromString(base64_encode(preg_replace_callback_array([
-			'/<!--.*-->/' => fn() => "",
+			'/<!--.*-->/' => fn() => '',
 			'/<style>.*<\/style>/' => fn() => "<style>.fa-primary{fill:$primary}.fa-secondary{fill:$secondary}</style>",
 		], $content)));
 	}
@@ -183,7 +183,10 @@ trait CoreWebRepository
 			if ($iconFile->upload instanceof FileUpload) {
 				if ($iconFile->upload->getContentType() === 'image/svg+xml') {
 					$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->svg2png($iconFile->upload, true)->getTemporaryFile());
-				} elseif ($iconFile->upload->getContentType() === 'image/webp' || $iconFile->upload->getContentType() === 'image/avif') {
+				} elseif (
+					$iconFile->upload->getContentType() === 'image/webp'
+					|| $iconFile->upload->getContentType() === 'image/avif'
+				) {
 					$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->image2jpeg($iconFile->upload, true)->getTemporaryFile());
 				} elseif (!$iconFile->upload->isImage()) {
 					throw new InvalidArgumentException;
@@ -191,27 +194,27 @@ trait CoreWebRepository
 					$image = $iconFile->upload->toImage();
 				}
 			} else {
-				$image = Image::fromString(base64_decode($iconFile->upload));
+				$image = Image::fromString(base64_decode($iconFile->upload, true));
 			}
 		} else {
 			$image = Image::fromString(file_get_contents($this->fileUploader->getPath($iconFile->identifier)));
 		}
-//		if ($iconFile->upload instanceof FileUpload) {
-//			if ($iconFile->upload->getContentType() === 'image/svg+xml') {
-//				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->svg2png($iconFile->upload, true)->getTemporaryFile());
-//			} elseif ($iconFile->upload->getContentType() === 'image/webp' || $iconFile->getContentType() === 'image/avif') {
-//				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->image2jpeg($iconFile->upload, true)->getTemporaryFile());
-//			} elseif (!$iconFile->upload->isImage()) {
-//				throw new InvalidArgumentException;
-//			} else {
-//				$image = $iconFile->upload->toImage();
-//			}
-//		} elseif ($iconFile instanceof File) {
-//			$image = Image::fromString(file_get_contents($this->fileUploader->getPath($iconFile->identifier)));
-//		} else {
-//			$image = Image::fromString(base64_decode($iconFile));
-//		}
-		$width = $image->getWidth();
+		//		if ($iconFile->upload instanceof FileUpload) {
+		//			if ($iconFile->upload->getContentType() === 'image/svg+xml') {
+		//				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->svg2png($iconFile->upload, true)->getTemporaryFile());
+		//			} elseif ($iconFile->upload->getContentType() === 'image/webp' || $iconFile->getContentType() === 'image/avif') {
+		//				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->image2jpeg($iconFile->upload, true)->getTemporaryFile());
+		//			} elseif (!$iconFile->upload->isImage()) {
+		//				throw new InvalidArgumentException;
+		//			} else {
+		//				$image = $iconFile->upload->toImage();
+		//			}
+		//		} elseif ($iconFile instanceof File) {
+		//			$image = Image::fromString(file_get_contents($this->fileUploader->getPath($iconFile->identifier)));
+		//		} else {
+		//			$image = Image::fromString(base64_decode($iconFile));
+		//		}
+				$width = $image->getWidth();
 		$height = $image->getHeight();
 		$largeIconFile = Image::fromBlank($width, $height, ImageColor::hex($iconBackgroundColor));
 		$largeIconFile->resize('133%', '133%');

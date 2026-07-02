@@ -7,7 +7,6 @@ namespace Webovac\Core\Model\Web;
 use Build\Model\Page\PageDataRepository;
 use Build\Model\Web\Web;
 use Build\Model\Web\WebData;
-use Build\Model\WebTranslation\WebTranslationDataRepository;
 use Nette\Caching\Cache;
 use Nette\DI\Attributes\Inject;
 use Nextras\Orm\Collection\ICollection;
@@ -71,8 +70,8 @@ trait CoreWebDataRepository
 		if (!isset($this->aliases)) {
 			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
-				/** @var WebData $web */
 				foreach ($this->getCollection() as $web) {
+					\assert($web instanceof WebData);
 					$aliases["$web->host-$web->basePath"] = $web->id;
 					$aliases[$web->code] = $web->id;
 				}

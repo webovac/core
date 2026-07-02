@@ -36,7 +36,7 @@ class Core implements Module, HasDefinitionGroup, HasManipulationGroups
 
 	public function getDefinitionGroup(): DefinitionGroup
 	{
-		return new DefinitionGroup(Core::getModuleName(), Core::class);
+		return new DefinitionGroup(self::getModuleName(), self::class);
 	}
 
 

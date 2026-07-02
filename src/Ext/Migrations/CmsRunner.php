@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Ext\Migrations;
 
 use DateTime;
-use Nette\Utils\FileInfo;
 use Nextras\Migrations\Engine\OrderResolver;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\Entities\File;
@@ -19,6 +18,7 @@ use Nextras\Migrations\IExtensionHandler;
 use Nextras\Migrations\IPrinter;
 use Nextras\Migrations\LockException;
 use Nextras\Migrations\LogicException;
+use function sprintf;
 
 
 class CmsRunner extends Runner
@@ -86,11 +86,11 @@ class CmsRunner extends Runner
 			$this->driver->lock();
 
 			$this->printer->printIntro($mode);
-//			if ($mode === self::MODE_RESET) {
-//				$this->driver->emptyDatabase();
-//			}
+			//			if ($mode === self::MODE_RESET) {
+			//				$this->driver->emptyDatabase();
+			//			}
 
-			$this->driver->createTable();
+						$this->driver->createTable();
 			$migrations = $this->driver->getAllMigrations();
 			$files = $this->getFiles();
 			$toExecute = $this->orderResolver->resolve($migrations, $this->groups, $files, $mode); // @phpstan-ignore argument.type
@@ -143,7 +143,7 @@ class CmsRunner extends Runner
 		try {
 			$queriesCount = $this->getExtension($file->extension)->execute($file);
 
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			$this->driver->rollbackTransaction();
 			throw new ExecutionException(sprintf('Executing migration "%s" has failed.', $file->path), 0, $e);
 		}
@@ -159,7 +159,6 @@ class CmsRunner extends Runner
 	{
 		$files = [];
 		foreach ($this->groups as $group) {
-			/** @var FileInfo $f */
 			foreach ($group->files as $f) {
 				$file = new File;
 				$file->group = $group;

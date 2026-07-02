@@ -20,7 +20,8 @@ final class ErrorPresenter implements IPresenter
 {
 	public function __construct(
 		private ILogger $logger,
-	) {}
+	) {
+	}
 
 
 	public function run(Request $request): Response

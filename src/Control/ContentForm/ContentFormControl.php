@@ -33,6 +33,7 @@ use Webovac\Core\Lib\Form\CmsFormFactory;
 use Webovac\Core\Lib\LinkProvider;
 use Webovac\Core\Model\HasContent;
 use Webovac\Core\Model\HasTranslations;
+use function in_array;
 
 
 /**
@@ -77,7 +78,10 @@ class ContentFormControl extends BaseControl
 		if ($this->hasTranslations instanceof Page) {
 			foreach ($this->componentProvider->getComponents() as $component) {
 				if ($component['requires']) {
-					if (!$this->hasTranslations->hasParameter || $this->hasTranslations->repository !== lcfirst($component['requires'])) {
+					if (
+					    !$this->hasTranslations->hasParameter
+					    || $this->hasTranslations->repository !== lcfirst($component['requires'])
+					) {
 						continue;
 					}
 				}
@@ -133,7 +137,7 @@ class ContentFormControl extends BaseControl
 
 	public function formSucceeded(Form $form, ArrayHash $values): void
 	{
-		$now = new DateTimeImmutable();
+		$now = new DateTimeImmutable;
 		if ($this->hasTranslations instanceof Auditable) {
 			$this->hasTranslations
 				->setUpdatedByPerson($this->cmsUser->getPerson())
@@ -158,7 +162,12 @@ class ContentFormControl extends BaseControl
 	}
 
 
-	private function buildEntityMentions(IRepository $repository, array &$mentions = [], string $base = '$entity->', int $depth = 1): array
+	private function buildEntityMentions(
+	    IRepository $repository,
+	    array &$mentions = [],
+	    string $base = '$entity->',
+	    int $depth = 1,
+	): array
 	{
 		$properties = $repository->getEntityMetadata()->getProperties();
 		foreach ($properties as $property) {

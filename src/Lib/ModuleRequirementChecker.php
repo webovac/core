@@ -11,6 +11,7 @@ use Nette\InvalidStateException;
 use Stepapo\Utils\Clearable;
 use Stepapo\Utils\Service;
 use Webovac\Core\HasModuleSetups;
+use function array_key_exists;
 
 
 class ModuleRequirementChecker implements Service, Clearable
@@ -51,10 +52,6 @@ class ModuleRequirementChecker implements Service, Clearable
 	}
 
 
-	/**
-	 * @param array $modules
-	 * @return array
-	 */
 	public function filterModules(array $modules, Web $web): array
 	{
 		$filteredModules = [];

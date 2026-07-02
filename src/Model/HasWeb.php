@@ -11,5 +11,6 @@ use Build\Model\Web\WebData;
 interface HasWeb extends ICmsEntity
 {
 	function getWeb(): Web;
+
 	function checkWeb(WebData $webData): bool;
 }

@@ -11,6 +11,7 @@ use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Attributes\Inject;
 use ReflectionException;
+use function is_int;
 
 
 /**
@@ -33,8 +34,8 @@ class ManifestPresenter extends Presenter
 	{
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
-		/** @var WebTranslationData|null $webTranslationData */
 		$webTranslationData = $this->webData->getCollection('translations')->getByKey($languageData->id);
+		\assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
 		$this->webTranslationData = $webTranslationData;
 	}
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Webovac\Core\Lib;
 
 use Stepapo\Utils\Service;
+use function array_key_exists;
 
 
 class PageActivator implements Service

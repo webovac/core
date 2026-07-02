@@ -13,7 +13,6 @@ trait CoreText
 {
 	use AuditableTrait;
 
-
 	public function getTranslation(LanguageData $language): ?TextTranslation
 	{
 		return $this->translations->toCollection()->getBy(['language' => $language->id]);

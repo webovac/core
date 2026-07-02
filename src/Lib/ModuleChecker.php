@@ -6,6 +6,7 @@ namespace Webovac\Core\Lib;
 
 use Stepapo\Utils\Service;
 use Webovac\Core\Module;
+use function in_array;
 
 
 class ModuleChecker implements Service

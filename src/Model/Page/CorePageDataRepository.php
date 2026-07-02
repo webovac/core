@@ -72,8 +72,8 @@ trait CorePageDataRepository
 		if (!isset($this->aliases)) {
 			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
-				/** @var PageData $page */
 				foreach ($this->getCollection() as $page) {
+					\assert($page instanceof PageData);
 					$aliases["$page->web-$page->name"] = $page->id;
 				}
 				return $aliases;
@@ -100,8 +100,8 @@ trait CorePageDataRepository
 		$pages = $hasPages
 			? $hasPages->getPages()
 			: $this->orm->pageRepository->findRootPages();
-		/** @var Page $page */
 		foreach ($pages as $page) {
+			\assert($page instanceof Page);
 			$accessSetup = new AccessSetup;
 			$accessSetup->accessFor = $page->accessFor;
 			$accessSetup->authorizedRoles = $page->accessFor === Page::ACCESS_FOR_SPECIFIC
@@ -152,7 +152,7 @@ trait CorePageDataRepository
 				foreach ($lib->assets as $asset) {
 					if ($asset->type === Asset::TYPE_STYLESHEET) {
 						$pageData->stylesheets[] = $asset->getData();
-					} else if ($asset->type === Asset::TYPE_SCRIPT) {
+					} elseif ($asset->type === Asset::TYPE_SCRIPT) {
 						$pageData->scripts[] = $asset->getData();
 					}
 				}

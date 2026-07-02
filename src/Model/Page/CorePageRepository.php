@@ -17,15 +17,14 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Model\Data\Item;
 use Stepapo\Model\Orm\IStepapoEntity;
-use Stepapo\Model\Orm\StepapoEntity;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasWebFilterTrait;
+use function is_int;
 
 
 trait CorePageRepository
 {
 	use HasWebFilterTrait;
-
 
 	public function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?Page
 	{
@@ -51,8 +50,8 @@ trait CorePageRepository
 		$page->hideInNavigation = $module->homePage->hideInNavigation;
 		$page->icon = $module->icon;
 		$page->targetModule = $module;
-//		$page->module = $module;
-		$page->name = $module->name . 'Module';
+		//		$page->module = $module;
+				$page->name = $module->name . 'Module';
 		$page->type = Page::TYPE_MODULE;
 		$page->rank = $count + 1;
 		$page->createdByPerson = $person;
@@ -182,7 +181,7 @@ trait CorePageRepository
 						ICollection::AND,
 						['name' => $data->redirectPage],
 						$entity->web ? [ICollection::OR, 'web' => $entity->web, 'module' => $entity->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $entity->module],
-					]
+					],
 			);
 		}
 		if (isset($data->type) && $data->type === Page::TYPE_INTERNAL_LINK) {
@@ -194,7 +193,7 @@ trait CorePageRepository
 							ICollection::AND,
 							['name' => $data->targetPage],
 							$entity->web ? [ICollection::OR, 'web' => $entity->web, 'module' => $entity->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $entity->module],
-						]
+						],
 				);
 			}
 		}
@@ -206,7 +205,7 @@ trait CorePageRepository
 						ICollection::AND,
 						['name' => $data->parentPage],
 						$entity->web ? [ICollection::OR, 'web' => $entity->web, 'module' => $entity->web->modules->toCollection()->fetchPairs(null, 'id')] : ['module' => $entity->module],
-					]
+					],
 			);
 		}
 		$this->persist($entity);

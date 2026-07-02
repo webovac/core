@@ -17,7 +17,6 @@ use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 class MenuTemplate extends BaseTemplate

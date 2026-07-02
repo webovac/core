@@ -28,8 +28,8 @@ class CacheRefresher implements Service
 		private LayoutDataRepository $layoutDataRepository,
 		private ThemeDataRepository $themeDataRepository,
 		private RouteSetupProvider $routeSetupProvider,
-	) {}
-
+	) {
+	}
 
 
 	public function refreshCacheWithPage(?Page $page = null): void

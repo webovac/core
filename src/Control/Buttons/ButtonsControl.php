@@ -11,7 +11,6 @@ use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 /**
@@ -25,7 +24,8 @@ class ButtonsControl extends BaseControl
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
 		private PageRequirementChecker $requirementChecker,
-	) {}
+	) {
+	}
 
 
 	public function render(): void
@@ -42,7 +42,7 @@ class ButtonsControl extends BaseControl
 		$this->template->pageDatas = $this->requirementChecker->filterPages($childPageDatas, $this->entity);
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData, $buttonsPageData) {
+		$this->template->addFunction('renderMenuItem', function (PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData, $buttonsPageData) {
 			$checkActive = !$pageData->targetAnchor && ($pageData->targetPage
 				? $pageData->targetPage !== $buttonsPageData->id
 				: $pageData->id !== $buttonsPageData->id);

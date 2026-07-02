@@ -19,7 +19,8 @@ class LinkProvider implements Service
 	public function __construct(
 		private array $hasLinkGroups,
 		private Orm $orm,
-	) {}
+	) {
+	}
 
 
 	public function getLinkGroups(HasTranslations $hasTranslations): array
@@ -65,16 +66,22 @@ class LinkProvider implements Service
 	}
 
 
-	private function buildPages(array $assocPages, array &$mentions = [], string $type = 'root', ?int $id = null, int $depth = 0): array
+	private function buildPages(
+		array $assocPages,
+		array &$mentions = [],
+		string $type = 'root',
+		?int $id = null,
+		int $depth = 0,
+	): array
 	{
 		$source = $id ? ($assocPages[$type][$id] ?? []) : ($assocPages[$type] ?? []);
-		/** @var Page $page */
 		foreach ($source as $page) {
+			\assert($page instanceof Page);
 			if ($page->type === Page::TYPE_PAGE) {
 				$mentions[] = [
 					'id' => $page->name,
 					'href' => "{pageLink $page->name}",
-					'label' => ($depth > 0 ? str_repeat("  ", $depth - 1) . "– " : '') . $page->title,
+					'label' => ($depth > 0 ? str_repeat('  ', $depth - 1) . '– ' : '') . $page->title,
 				];
 			}
 			if ($page->type === Page::TYPE_MODULE) {

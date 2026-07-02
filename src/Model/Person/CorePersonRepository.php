@@ -14,7 +14,6 @@ trait CorePersonRepository
 {
 	use HasWebFilterTrait;
 
-
 	public function getByData(PersonData|string $data): ?Person
 	{
 		if (method_exists($this, 'getByDataCustom')) {

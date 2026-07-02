@@ -14,6 +14,7 @@ use Stepapo\Model\Orm\PrivateRepository;
 use Stepapo\Model\Orm\StepapoRepository;
 use Webovac\Core\Lib\Dir;
 use Webovac\Core\Lib\FileUploader;
+use function is_array;
 
 
 /**
@@ -61,10 +62,7 @@ abstract class CmsRepository extends StepapoRepository implements ICmsRepository
 		if ($this instanceof PrivateRepository) {
 			return true;
 		}
-		if (!$webData->isAdmin && $this instanceof InternalRepository) {
-			return true;
-		}
-		return false;
+		return !$webData->isAdmin && $this instanceof InternalRepository;
 	}
 
 

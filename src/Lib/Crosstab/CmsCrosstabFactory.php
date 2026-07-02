@@ -14,7 +14,8 @@ class CmsCrosstabFactory implements Service
 {
 	public function __construct(
 		private Orm $orm,
-	) {}
+	) {
+	}
 
 
 	public function create(string $file, array $params = []): CrosstabControl

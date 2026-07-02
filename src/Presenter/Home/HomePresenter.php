@@ -13,5 +13,6 @@ use Build\Presenter\BasePresenter;
 class HomePresenter extends BasePresenter
 {
 	public function renderDefault(string $pageName, ?array $id = null, ?string $path = null): void
-	{}
+	{
+	}
 }

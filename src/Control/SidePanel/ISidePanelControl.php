@@ -7,7 +7,6 @@ namespace Webovac\Core\Control\SidePanel;
 use Stepapo\Utils\Factory;
 use Webovac\Core\Core;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 interface ISidePanelControl extends Factory

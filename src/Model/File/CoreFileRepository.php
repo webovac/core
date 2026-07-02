@@ -28,12 +28,13 @@ use Nextras\Orm\Collection\ICollection;
 use Tracy\Debugger;
 use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\HasWebFilterTrait;
+use function is_string, sprintf;
+use const PATHINFO_DIRNAME, PATHINFO_EXTENSION, PATHINFO_FILENAME, UPLOAD_ERR_NO_FILE, UPLOAD_ERR_OK;
 
 
 trait CoreFileRepository
 {
 	use HasWebFilterTrait;
-
 
 	public function getByData(FileData $data, ?CmsEntity $entity = null): ?File
 	{
@@ -76,8 +77,8 @@ trait CoreFileRepository
 			$this->rotateImage($data->upload);
 		}
 		if (str_contains($data->upload->getContentType(), 'video/')) {
-//			$data->upload = $this->createVideoUpload($data->upload);
-//			$data->capturedAt = $this->getCapturedAt($data->upload);
+			//			$data->upload = $this->createVideoUpload($data->upload);
+			//			$data->capturedAt = $this->getCapturedAt($data->upload);
 		}
 		$identifier = $this->fileUploader->upload($data->upload, $namespace);
 		$file = $this->getModel()->getRepository(FileRepository::class)->getBy(['identifier' => $identifier]);
@@ -88,9 +89,9 @@ trait CoreFileRepository
 			$data->identifier = $identifier;
 			$data->contentType = $data->upload->getContentType();
 			$data->type = $data->upload->getContentType() === 'image/svg+xml' ? File::TYPE_SVG : (
-			$data->upload->isImage()
-				? File::TYPE_IMAGE
-				: (str_contains($data->upload->getContentType(), 'video/') ? File::TYPE_VIDEO : File::TYPE_FILE)
+				$data->upload->isImage()
+					? File::TYPE_IMAGE
+					: (str_contains($data->upload->getContentType(), 'video/') ? File::TYPE_VIDEO : File::TYPE_FILE)
 			);
 			if ($data->upload->getContentType() === 'image/svg+xml') {
 				$compatibleUpload = $this->svg2png($data->upload, $data->forceSquare);
@@ -110,17 +111,17 @@ trait CoreFileRepository
 				$data->compatibleIdentifier = $identifier;
 				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			} elseif ($data->upload->getContentType() === 'application/pdf') {
-//				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
-//				if ($compatibleUpload) {
-//					$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
-//					$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
-//					$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
-//				}
+				//				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
+				//				if ($compatibleUpload) {
+				//					$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+				//					$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
+				//					$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+				//				}
 			} elseif (str_contains($data->upload->getContentType(), 'video/')) {
-//				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
-//				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
-//				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare, 1920);
-//				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+				//				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
+				//				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+				//				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare, 1920);
+				//				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			}
 		} else {
 			$data->identifier = $file->identifier;
@@ -137,7 +138,10 @@ trait CoreFileRepository
 			$data->width = $image->getWidth();
 			$data->height = $image->getHeight();
 		}
-		if ($data->upload->getContentType() !== 'application/pdf' && !str_contains($data->upload->getContentType(), 'video/')) {
+		if (
+			$data->upload->getContentType() !== 'application/pdf'
+			&& !str_contains($data->upload->getContentType(), 'video/')
+		) {
 			$data->ready = true;
 		}
 		return $data;
@@ -208,7 +212,7 @@ trait CoreFileRepository
 	public function getCapturedAt(FileUpload $upload): ?DateTimeImmutable
 	{
 		$file = $upload->getTemporaryFile();
-		$proc = "ffprobe -v quiet %s -print_format json -show_entries format_tags=creation_time";
+		$proc = 'ffprobe -v quiet %s -print_format json -show_entries format_tags=creation_time';
 		$process = Process::runExecutable('ffprobe', [
 			'-v', 'quiet',
 			$file,
@@ -340,7 +344,7 @@ trait CoreFileRepository
 
 	public function createFileUploadFromString(string $upload): FileUpload
 	{
-		$content = base64_decode($upload);
+		$content = base64_decode($upload, true);
 		$name = substr(sha1($content), 0, 8);
 		$path = $this->dir->getTempDir() . '/' . $name;
 		$size = file_put_contents($path, $content);

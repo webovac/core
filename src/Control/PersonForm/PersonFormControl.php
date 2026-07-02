@@ -15,6 +15,7 @@ use Nextras\Dbal\Utils\DateTimeImmutable;
 use Webovac\Core\Control\BaseControl;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\Form\CmsFormFactory;
+use function in_array;
 
 
 /**
@@ -31,7 +32,7 @@ class PersonFormControl extends BaseControl
 		private Orm $orm,
 		private CmsUser $cmsUser,
 	) {
-		$this->onAnchor[] = function() {
+		$this->onAnchor[] = function () {
 			$data = $this->person->getData();
 			$this['form']->setDefaults($data);
 		};

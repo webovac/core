@@ -16,7 +16,7 @@ use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\HasPageSetups;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
+use function array_key_exists, is_int;
 
 
 class PageRequirementChecker implements Service, Clearable
@@ -54,7 +54,10 @@ class PageRequirementChecker implements Service, Clearable
 			return;
 		}
 		$webData = $this->dataProvider->getWebData();
-		if (isset($this->setups[$pageData->name]) && !($this->setups[$pageData->name])($this->orm, $this->cmsUser, $webData)) {
+		if (
+			isset($this->setups[$pageData->name])
+			&& !($this->setups[$pageData->name])($this->orm, $this->cmsUser, $webData)
+		) {
 			throw new MissingPermissionException;
 		}
 		foreach ($pageData->accessSetups as $accessSetup) {
@@ -68,7 +71,10 @@ class PageRequirementChecker implements Service, Clearable
 		if (array_key_exists($pageData->name, $this->checked)) {
 			return $this->checked[$pageData->name];
 		}
-		if (isset($this->setups[$pageData->name]) && !($this->setups[$pageData->name])($this->orm, $this->cmsUser, $this->dataProvider->getWebData())) {
+		if (
+			isset($this->setups[$pageData->name])
+			&& !($this->setups[$pageData->name])($this->orm, $this->cmsUser, $this->dataProvider->getWebData())
+		) {
 			$this->checked[$pageData->name] = false;
 			return false;
 		}

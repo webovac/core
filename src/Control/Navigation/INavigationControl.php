@@ -6,7 +6,6 @@ namespace Webovac\Core\Control\Navigation;
 
 use Stepapo\Utils\Factory;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 interface INavigationControl extends Factory

@@ -13,7 +13,8 @@ class CmsFormFactory implements Service
 {
 	public function __construct(
 		private CmsTranslator $translator,
-	) {}
+	) {
+	}
 
 
 	public function create(): Form

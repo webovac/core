@@ -17,7 +17,6 @@ trait CorePathRepository
 {
 	use HasWebFilterTrait;
 
-
 	public function getByData(PathData|string $data, PageTranslation $pageTranslation): ?Path
 	{
 		return $this->getBy([
@@ -28,13 +27,20 @@ trait CorePathRepository
 	}
 
 
-	public function getPath(string $p, Web $web, Language $language, ?Path $path = null, string $separator = '-', int $num = 1): string
+	public function getPath(
+		string $p,
+		Web $web,
+		Language $language,
+		?Path $path = null,
+		string $separator = '-',
+		int $num = 1,
+	): string
 	{
-		$p = $p . ($num > 1 ? '-' . $num : '');
+		$p .= ($num > 1 ? '-' . $num : '');
 		$filter = [
 			'path' => $p,
 			'web' => $web,
-			'pageTranslation->language' => $language
+			'pageTranslation->language' => $language,
 		];
 		$filter['active'] = true;
 		if ($path) {

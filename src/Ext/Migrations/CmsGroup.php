@@ -8,6 +8,7 @@ use Nette\Utils\FileInfo;
 use Nextras\Migrations\Entities\Group;
 use Nextras\Migrations\IDiffGenerator;
 use Stepapo\Model\MigrationGroup;
+use function in_array;
 
 
 class CmsGroup extends Group

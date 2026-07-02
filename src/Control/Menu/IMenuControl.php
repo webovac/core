@@ -7,7 +7,6 @@ namespace Webovac\Core\Control\Menu;
 use Stepapo\Utils\Factory;
 use Webovac\Core\Core;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 interface IMenuControl extends Factory

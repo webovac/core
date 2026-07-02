@@ -46,6 +46,7 @@ use Webovac\Core\Model\CmsEntity;
 use Webovac\Core\Model\CmsRepository;
 use Webovac\Core\Model\HasSlugHistory;
 use Webovac\Core\Model\Linkable;
+use function count, in_array, is_int;
 
 
 trait CorePresenter
@@ -71,12 +72,12 @@ trait CorePresenter
 	#[Inject] public PageActivator $pageActivator;
 	#[Inject] public PageRequirementChecker $requirementChecker;
 	#[Inject] public LinkProvider $linkProvider;
-	private SecurityPolicy $policy;
 	public ?WebData $webData;
-	private ?WebTranslationData $webTranslationData;
-	private ?LanguageData $languageData;
 	public ?PageData $pageData;
 	protected ?PageTranslation $pageTranslation;
+	private SecurityPolicy $policy;
+	private ?WebTranslationData $webTranslationData;
+	private ?LanguageData $languageData;
 	private ?PageTranslationData $pageTranslationData;
 	private ?PageData $menuPageData;
 	private ?PageData $navigationPageData;
@@ -166,8 +167,8 @@ trait CorePresenter
 						$parameters[$lastDetailRootPage->name] = $this->id[$lastDetailRootPage->name];
 					}
 					if ($pageData->isDetailRoot) {
-						/** @var CmsRepository $repository */
 						$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
+						\assert($repository instanceof CmsRepository);
 						$entity = $repository->getByParameters($parameters, null, $this->webData);
 						$title = $entity->getTitle();
 					}
@@ -228,20 +229,20 @@ trait CorePresenter
 		if (!$this->webData) {
 			$this->error();
 		}
-		/** @var WebTranslationData|null $webTranslationData */
 		$webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id);
+		\assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
 		$this->webTranslationData = $webTranslationData;
 		if (!$this->webTranslationData) {
 			$this->languageData = $this->dataModel->getLanguageData($this->webData->defaultLanguage);
 			$this->lang = $this->languageData->shortcut;
-			/** @var WebTranslationData|null $webTranslationData */
 			$webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id);
+			\assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
 			$this->webTranslationData = $webTranslationData;
 		}
 		$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->pageName);
 		$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
-		/** @var PageTranslationData|null $pageTranslationData */
 		$pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id);
+		\assert($pageTranslationData instanceof PageTranslationData || $pageTranslationData === null);
 		$this->pageTranslationData = $pageTranslationData;
 		$this->deployData = $this->dataModel->getLastDeployData();
 		$this->menuPageData = $this->pageData->menuPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->menuPage) : null;
@@ -285,7 +286,10 @@ trait CorePresenter
 		if ($this->cmsUser->isLoggedIn()) {
 			$this->preference = $this->orm->preferenceRepository->getPreference($this->webData, $this->cmsUser->getPerson());
 			if ($this->preference && $this->preference->language) {
-				if ($this->lang !== $this->preference->language->shortcut && $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)) {
+				if (
+					$this->lang !== $this->preference->language->shortcut
+					&& $this->pageData->getCollection('translations')->getByKey($this->preference->language->id)
+				) {
 					$languageData = $this->dataModel->getLanguageData($this->preference->language->id);
 					$this->lang = $languageData->shortcut;
 					$this->redirect('this');
@@ -302,8 +306,8 @@ trait CorePresenter
 				throw new InvalidStateException;
 			}
 			$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
-			/** @var CmsRepository $repository */
 			$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
+			\assert($repository instanceof CmsRepository);
 			$this->entity = $repository->getByParameters($this->id, $this->path ?? null, $this->webData);
 			if ($this->path) {
 				$this->entityList = $repository->getEntityListByPath($this->path);
@@ -346,7 +350,7 @@ trait CorePresenter
 	private function getMetaTitle(): string
 	{
 		return (!$this->entity || !$this->pageData->isDetailRoot ? $this->pageTranslation->title : '')
-			. ($this->entity && !$this->pageData->isDetailRoot ? ' | ' : '' )
+			. ($this->entity && !$this->pageData->isDetailRoot ? ' | ' : '')
 			. ($this->entity ? $this->entity->getTitle() : '');
 	}
 
@@ -394,7 +398,7 @@ trait CorePresenter
 				'pageName' => $homePage->name,
 				'host' => $this->host,
 				'basePath' => $this->basePath,
-				'lang' => $this->lang
+				'lang' => $this->lang,
 			])
 			: $this->link('//this');
 	}
@@ -416,8 +420,8 @@ trait CorePresenter
 				}
 			}
 		} else {
-			$classes[] = "primary-m-collapsed";
-			$classes[] = "secondary-m-collapsed";
+			$classes[] = 'primary-m-collapsed';
+			$classes[] = 'secondary-m-collapsed';
 		}
 		return $classes;
 	}
@@ -432,8 +436,8 @@ trait CorePresenter
 			$main = $this->pageTranslation->content ?: '';
 		}
 		$this->template->getLatte()->setLoader(new StringLoader([
-			'@layout.latte' => (string) file_get_contents($this->dir->getAppDir() . "/Presenter/@layout.latte"),
-			'layout.latte' => (string) file_get_contents(__DIR__ . "/../templates/layout.latte"),
+			'@layout.latte' => (string) file_get_contents($this->dir->getAppDir() . '/Presenter/@layout.latte'),
+			'layout.latte' => (string) file_get_contents(__DIR__ . '/../templates/layout.latte'),
 			'main.file' => $main,
 			'footer.file' => $this->webTranslationData->footer ?: '',
 		]))

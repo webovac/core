@@ -14,12 +14,12 @@ use Build\Model\Web\Web;
 use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Model\HasWebFilterTrait;
+use function is_int;
 
 
 trait CorePageTranslationRepository
 {
 	use HasWebFilterTrait;
-
 
 	public function getByData(PageTranslationData $data, Page $page): ?PageTranslation
 	{
@@ -32,7 +32,7 @@ trait CorePageTranslationRepository
 		?Module $module = null,
 		?Page $parentPage = null,
 		?Language $language = null,
-		?string $parentPath = null
+		?string $parentPath = null,
 	): void
 	{
 		if ($module) {
@@ -54,7 +54,7 @@ trait CorePageTranslationRepository
 				$parts[] = $parentPath;
 			}
 			if ($pageTranslation->path) {
-				$parts[] = preg_replace('/<id(.*)>/', "<id[" . $pageTranslation->page->name . "]>", $pageTranslation->path);
+				$parts[] = preg_replace('/<id(.*)>/', '<id[' . $pageTranslation->page->name . ']>', $pageTranslation->path);
 			}
 			$path = implode('/', $parts);
 			$web = $pageTranslation->page->web ?: $web;

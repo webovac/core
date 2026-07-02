@@ -17,7 +17,8 @@ class CmsTranslator implements Translator, Service
 
 	public function __construct(
 		private DataModel $dataModel,
-	) {}
+	) {
+	}
 
 
 	public function translate(mixed $message, mixed ...$parameters): string

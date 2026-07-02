@@ -6,6 +6,7 @@ namespace Webovac\Core\Lib;
 
 use Nette\Utils\Json;
 use Stepapo\Utils\Config;
+use function is_string;
 
 
 class Query extends Config
@@ -20,7 +21,12 @@ class Query extends Config
 	public int $page = 1;
 
 
-	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
+	public static function createFromArray(
+		mixed $config = [],
+		mixed $key = null,
+		bool $skipDefaults = false,
+		mixed $parentKey = null,
+	): static
 	{
 		if (isset($config['query'])) {
 			$config = is_string($config['query'])

@@ -7,12 +7,12 @@ namespace Webovac\Core\Model\WebTranslation;
 
 trait CoreWebTranslationData
 {
-//	public ?int $id;
-//	#[KeyProperty] public int|string $language;
-//	public string $title;
-//	public ?string $footer;
-//	public int|string|null $createdByPerson;
-//	public int|string|null $updatedByPerson;
-//	public ?DateTimeInterface $createdAt;
-//	public ?DateTimeInterface $updatedAt;
+	//	public ?int $id;
+	//	#[KeyProperty] public int|string $language;
+	//	public string $title;
+	//	public ?string $footer;
+	//	public int|string|null $createdByPerson;
+	//	public int|string|null $updatedByPerson;
+	//	public ?DateTimeInterface $createdAt;
+	//	public ?DateTimeInterface $updatedAt;
 }

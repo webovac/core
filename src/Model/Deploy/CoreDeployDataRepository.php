@@ -12,8 +12,6 @@ trait CoreDeployDataRepository
 {
 	public function getLastDeployData(): ?DeployData
 	{
-		return $this->cache->load('lastDeployData', function () {
-			return $this->getOrmRepository()->findAll()->orderBy('createdAt', ICollection::DESC)->fetch()?->getData();
-		});
+		return $this->cache->load('lastDeployData', fn() => $this->getOrmRepository()->findAll()->orderBy('createdAt', ICollection::DESC)->fetch()?->getData());
 	}
 }

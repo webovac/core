@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Webovac\Core\Lib;
 
 use Stepapo\Utils\Service;
+use function is_string, sprintf;
+use const STR_PAD_LEFT;
 
 
 class ColorMixer implements Service
 {
 	public function rgb(string $color): string
 	{
-		list($r, $g, $b) = $this->hex2rgb($color);
-		return sprintf("%s, %s, %s", $r, $g, $b);
+		[$r, $g, $b] = $this->hex2rgb($color);
+		return sprintf('%s, %s, %s', $r, $g, $b);
 	}
 
 
@@ -52,15 +54,15 @@ class ColorMixer implements Service
 	{
 		return array_map(
 			fn($x) => hexdec($x),
-			str_split(str_replace("#", "", $hex), 2),
+			str_split(str_replace('#', '', $hex), 2),
 		);
 	}
 
 
 	private function rgb2hex(array $rgb): string
 	{
-		return "#" . implode("", array_map(
-			fn($x) => str_pad(dechex((int) $x), 2, "0", STR_PAD_LEFT),
+		return '#' . implode('', array_map(
+			fn($x) => str_pad(dechex((int) $x), 2, '0', STR_PAD_LEFT),
 			$rgb,
 		));
 	}

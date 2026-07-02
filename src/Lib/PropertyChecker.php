@@ -10,6 +10,7 @@ use Stepapo\Model\Orm\InternalProperty;
 use Stepapo\Model\Orm\PrivateProperty;
 use Stepapo\Utils\Service;
 use Webovac\Core\Model\CmsRepository;
+use function array_key_exists;
 
 
 class PropertyChecker implements Service
@@ -17,7 +18,8 @@ class PropertyChecker implements Service
 	public function __construct(
 		private DataProvider $dataProvider,
 		private Orm $orm,
-	) {}
+	) {
+	}
 
 
 	public function isForbiddenProperty(PropertyMetadata $propertyMetadata): bool
@@ -29,11 +31,8 @@ class PropertyChecker implements Service
 		if (!$webData->isAdmin && array_key_exists(InternalProperty::class, $propertyMetadata->types)) {
 			return true;
 		}
-		/** @var CmsRepository|null $repository */
 		$repository = $propertyMetadata->relationship?->repository ? $this->orm->getRepository($propertyMetadata->relationship->repository) : null;
-		if ($repository?->isForbiddenRepository($webData)) {
-			return true;
-		}
-		return false;
+		\assert($repository instanceof CmsRepository || $repository === null);
+		return (bool) $repository?->isForbiddenRepository($webData);
 	}
 }

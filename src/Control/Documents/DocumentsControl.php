@@ -48,11 +48,9 @@ class DocumentsControl extends BaseControl
 
 	public function createComponentFileItem(): Multiplier
 	{
-		return new Multiplier(function ($id): FileItemControl {
-			return $this->fileItem->create(
-				$this->template->files[$id] ?? $this->orm->fileRepository->getById($id),
-				templateName: 'block',
-			);
-		});
+		return new Multiplier(fn($id): FileItemControl => $this->fileItem->create(
+			$this->template->files[$id] ?? $this->orm->fileRepository->getById($id),
+			templateName: 'block',
+		));
 	}
 }

@@ -16,6 +16,7 @@ use Nette\DI\Attributes\Inject;
 use Webovac\Core\Lib\CmsUser;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Lib\ModuleChecker;
+use function in_array, is_int;
 
 
 /**
@@ -30,10 +31,10 @@ class StylePresenter extends Presenter
 	#[Inject] public FileUploader $fileUploader;
 	#[Inject] public ModuleChecker $moduleChecker;
 	#[Inject] public CmsUser $cmsUser;
-	private ?Preference $preference;
 	public ?WebData $webData;
 	public LayoutData $layoutData;
 	public ThemeData $themeData;
+	private ?Preference $preference;
 
 
 	public function actionDefault(): void
@@ -47,7 +48,7 @@ class StylePresenter extends Presenter
 		if (
 			$this->cmsUser->isLoggedIn()
 			&& ($themeId = $this->preference?->theme?->id)
-			&& in_array($themeId, $this->layoutData->themes)
+			&& in_array($themeId, $this->layoutData->themes, true)
 		) {
 			$this->themeData = $this->dataModel->getThemeData($themeId);
 		} else {

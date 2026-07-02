@@ -9,8 +9,10 @@ use Stepapo\Utils\Service;
 
 class Dir implements Service
 {
-	public function __construct(private string $rootDir)
-	{}
+	public function __construct(
+		private string $rootDir,
+	) {
+	}
 
 
 	public function getRootDir(): string

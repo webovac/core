@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\TextTranslation;
 use Build\Model\Text\Text;
 use Build\Model\TextTranslation\TextTranslation;
 use Build\Model\TextTranslation\TextTranslationData;
+use function is_int;
 
 
 trait CoreTextTranslationRepository

@@ -9,7 +9,6 @@ use Build\Model\Page\PageData;
 use Build\Model\Web\WebData;
 use Stepapo\Model\Data\Collection;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 class SignpostTemplate extends BaseTemplate

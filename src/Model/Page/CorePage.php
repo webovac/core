@@ -135,8 +135,8 @@ trait CorePage
 	public function getPagesForMenu(): ICollection
 	{
 		$pages = [];
-		/** @var Page $page */
 		foreach ($this->childPages->toCollection() as $page) {
+			\assert($page instanceof Page);
 			if ($page->type === Page::TYPE_MODULE) {
 				foreach ($page->targetModule->getPages() as $modulePage) {
 					$pages[] = $modulePage;

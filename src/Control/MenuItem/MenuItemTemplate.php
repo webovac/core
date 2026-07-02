@@ -13,7 +13,6 @@ use Build\Model\Web\WebData;
 use Nette\Application\UI\Presenter;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 class MenuItemTemplate

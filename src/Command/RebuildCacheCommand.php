@@ -7,6 +7,7 @@ namespace Webovac\Core\Command;
 use Stepapo\Utils\Command\Command;
 use Stepapo\Utils\Printer;
 use Webovac\Core\Lib\CacheRefresher;
+use function sprintf;
 
 
 class RebuildCacheCommand implements Command
@@ -29,7 +30,7 @@ class RebuildCacheCommand implements Command
 		$this->printer->printSeparator();
 		$this->cacheRefresher->refreshCache();
 		$end = microtime(true);
-		$this->printer->printLine(sprintf("%0.3f s | OK", $end - $start), 'lime');
+		$this->printer->printLine(sprintf('%0.3f s | OK', $end - $start), 'lime');
 		return 0;
 	}
 }

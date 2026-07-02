@@ -15,8 +15,12 @@ use Stepapo\Model\Orm\IStepapoRepository;
 interface ICmsRepository extends IStepapoRepository
 {
 	function getByParameters(?array $parameters = null, ?string $path = null, ?WebData $webData = null): ?CmsEntity;
+
 	function getEntityListByPath(string $path, ?WebData $webData = null): array;
+
 	function isForbiddenRepository(WebData $webData): bool;
+
 	function getKeyParameter(): string;
+
 	function prefix(string $prefix, array $filter): ?array;
 }

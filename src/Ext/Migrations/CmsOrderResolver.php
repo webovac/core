@@ -8,6 +8,7 @@ use Nextras\Migrations\Engine\OrderResolver;
 use Nextras\Migrations\Entities\File;
 use Nextras\Migrations\LogicException;
 use Stepapo\Model\Definition\DefinitionGroup;
+use function count;
 
 
 class CmsOrderResolver extends OrderResolver
@@ -17,20 +18,21 @@ class CmsOrderResolver extends OrderResolver
 	 * @param  array<string, CmsGroup> $groups (name => CmsGroup)
 	 * @return CmsFile[] sorted
 	 */
-	protected function sortFiles( // @phpstan-ignore method.childParameterType, method.childParameterType, method.childReturnType
+	protected function sortFiles(// @phpstan-ignore method.childParameterType, method.childParameterType, method.childReturnType
 		array $files,
 		array $groups,
 	): array
 	{
-		uasort($files, fn(File $a, File $b): int =>
-			[$a->group->name, str_contains($b->name, 'insert'), $a->name]
+		uasort(
+			$files,
+			fn(File $a, File $b): int => [$a->group->name, str_contains($b->name, 'insert'), $a->name]
 			<=>
-			[$b->group->name, str_contains($a->name, 'insert'), $b->name]
+			[$b->group->name, str_contains($a->name, 'insert'), $b->name],
 		);
 		$sortedFiles = [];
 		$doneFiles = [];
 		$doneGroups = [];
-		while(count($files) > count($sortedFiles)) {
+		while (count($files) > count($sortedFiles)) {
 			$resolvable = false;
 			foreach ($files as $key => $file) {
 				if (isset($doneFiles[$key])) {

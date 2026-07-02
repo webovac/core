@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Webovac\Core\Model\Module;
 
 use Build\Model\Module\ModuleData;
-use Build\Model\ModuleTranslation\ModuleTranslationDataRepository;
 use Nette\Caching\Cache;
 
 
@@ -19,8 +18,8 @@ trait CoreModuleDataRepository
 		if (!isset($this->aliases)) {
 			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
-				/** @var ModuleData $module */
 				foreach ($this->getCollection() as $module) {
+					\assert($module instanceof ModuleData);
 					$aliases[$module->name] = $module->id;
 				}
 				return $aliases;

@@ -11,7 +11,8 @@ class KeyProvider implements Service
 {
 	public function __construct(
 		private array $keys,
-	) {}
+	) {
+	}
 
 
 	public function getKey(string $keyName): ?string

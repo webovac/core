@@ -10,6 +10,7 @@ use Build\Model\Web\WebData;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Stepapo\Utils\Service;
+use function in_array;
 
 
 class RouteSetupProvider implements Service
@@ -30,7 +31,7 @@ class RouteSetupProvider implements Service
 	public function getWebSetup(): array
 	{
 		if (!isset($this->webSetup)) {
-			$this->webSetup = $this->cache->load('webSetup', function() {
+			$this->webSetup = $this->cache->load('webSetup', function () {
 				$webDatas = $this->dataModel->findWebDatas();
 				$apiModuleData = $this->dataModel->getModuleDataByName('Api');
 				$webSetup = [];
@@ -58,8 +59,8 @@ class RouteSetupProvider implements Service
 						}
 					}
 				}
-				/** @var WebData $webData */
 				foreach (array_reverse((array) $webDatas) as $webData) {
+					\assert($webData instanceof WebData);
 					$webSetup[] = [
 						'mask' => $webData->getPageRouteMask(),
 						'metadata' => [
@@ -81,7 +82,7 @@ class RouteSetupProvider implements Service
 	public function getPageSetup(): array
 	{
 		if (!isset($this->pageSetup)) {
-			$this->pageSetup = $this->cache->load('pageSetup', function() {
+			$this->pageSetup = $this->cache->load('pageSetup', function () {
 				ini_set('memory_limit', '1G');
 				$setup = [
 					'mapIn' => [],

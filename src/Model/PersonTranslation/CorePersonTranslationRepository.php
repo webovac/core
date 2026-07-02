@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\PersonTranslation;
 use Build\Model\Person\Person;
 use Build\Model\PersonTranslation\PersonTranslation;
 use Build\Model\PersonTranslation\PersonTranslationData;
+use function is_int;
 
 
 trait CorePersonTranslationRepository

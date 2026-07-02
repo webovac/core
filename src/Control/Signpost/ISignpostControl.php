@@ -6,7 +6,6 @@ namespace Webovac\Core\Control\Signpost;
 
 use Stepapo\Utils\Factory;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 interface ISignpostControl extends Factory

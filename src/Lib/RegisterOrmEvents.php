@@ -12,8 +12,9 @@ class RegisterOrmEvents implements Service
 {
 	/** @param HasOrmEvents[] $withOrmEvents */
 	public function __construct(
-		private array $withOrmEvents
-	) {}
+		private array $withOrmEvents,
+	) {
+	}
 
 
 	public function register(): void

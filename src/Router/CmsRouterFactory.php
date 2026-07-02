@@ -11,6 +11,7 @@ use Nette\Routing\Route;
 use Stepapo\Restful\Application\Routes\CrudRoute;
 use Stepapo\Utils\Service;
 use Webovac\Core\Lib\RouteSetupProvider;
+use function count, in_array;
 
 
 final class CmsRouterFactory implements Service
@@ -18,7 +19,8 @@ final class CmsRouterFactory implements Service
 	public function __construct(
 		private IRequest $request,
 		private RouteSetupProvider $routeSetupProvider,
-	) {}
+	) {
+	}
 
 
 	public function create(): RouteList
@@ -30,7 +32,7 @@ final class CmsRouterFactory implements Service
 					mask: $route['mask'],
 					metadata: $route['metadata'],
 				));
-			} else if (isset($route['type']) && $route['type'] === 'page') {
+			} elseif (isset($route['type']) && $route['type'] === 'page') {
 				$routeList->addRoute(
 					mask: $route['mask'],
 					metadata: $route['metadata'] + ['' => [

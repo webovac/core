@@ -8,6 +8,7 @@ use Nette\Utils\Arrays;
 use Stepapo\Utils\Service;
 use Webovac\Core\Attribute\RequiresEntity;
 use Webovac\Core\MainModuleControl;
+use function in_array;
 
 
 class ComponentProvider implements Service
@@ -20,7 +21,7 @@ class ComponentProvider implements Service
 		if (!isset($this->components)) {
 			$mainModuleControls = array_filter(
 				get_declared_classes(),
-				fn($className) => in_array(MainModuleControl::class, class_implements($className)),
+				fn($className) => in_array(MainModuleControl::class, class_implements($className), true),
 			);
 			foreach ($mainModuleControls as $mainModuleControl) {
 				$this->addComponents($mainModuleControl);

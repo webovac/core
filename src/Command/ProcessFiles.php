@@ -11,6 +11,7 @@ use Stepapo\Utils\Command\Command;
 use Tracy\Debugger;
 use Webovac\Core\Lib\FileUploader;
 use Webovac\Core\Model\File\FileException;
+use const PATHINFO_FILENAME, PHP_EOL;
 
 
 class ProcessFiles implements Command
@@ -18,16 +19,17 @@ class ProcessFiles implements Command
 	public function __construct(
 		private Orm $orm,
 		private FileUploader $fileUploader,
-	) {}
+	) {
+	}
 
 
 	public function run(): int
 	{
 		$error = false;
 		$command = $this->orm->commandRepository->getBy(['code' => 'processFiles']);
-		$now = new DateTimeImmutable();
+		$now = new DateTimeImmutable;
 		if ($command->running) {
-			print('Command is already running.' . PHP_EOL);
+			print 'Command is already running.' . PHP_EOL;
 			return 1;
 		}
 		$command->running = true;
@@ -44,7 +46,7 @@ class ProcessFiles implements Command
 		$command->running = false;
 		$command->lastEndAt = new DateTimeImmutable;
 		$this->orm->persistAndFlush($command);
-		print(($error ? 'Finished with error' : 'Finished successfully.') . PHP_EOL);
+		print ($error ? 'Finished with error' : 'Finished successfully.') . PHP_EOL;
 		return $error ? 1 : 0;
 	}
 
@@ -79,7 +81,7 @@ class ProcessFiles implements Command
 			$file->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			$file->ready = true;
 			$this->orm->persistAndFlush($file);
-//			$this->fileUploader->delete($oldIdentifier);
+			//			$this->fileUploader->delete($oldIdentifier);
 		}
 	}
 }

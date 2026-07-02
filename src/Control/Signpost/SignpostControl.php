@@ -11,7 +11,6 @@ use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 /**
@@ -25,7 +24,8 @@ class SignpostControl extends BaseControl
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
 		private PageRequirementChecker $requirementChecker,
-	) {}
+	) {
+	}
 
 
 	public function render(): void
@@ -39,7 +39,7 @@ class SignpostControl extends BaseControl
 		$this->template->webData = $webData;
 		$this->template->entity = $this->entity;
 		$this->template->pageData = $pageData;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData) {
+		$this->template->addFunction('renderMenuItem', function (PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $layoutData, $languageData) {
 			$this->menuItemRenderer->render('signpost', $this, $webData, $pageData, $layoutData, $languageData, false, $this->entity, $linkedEntity);
 		});
 		$this->template->render(__DIR__ . '/signpost.latte');

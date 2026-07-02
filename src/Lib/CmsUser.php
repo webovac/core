@@ -11,6 +11,7 @@ use Nette\Security\IIdentity;
 use Nette\Security\User;
 use Stepapo\Utils\Clearable;
 use Stepapo\Utils\Service;
+use function in_array;
 
 
 class CmsUser implements Clearable, Service
@@ -21,7 +22,8 @@ class CmsUser implements Clearable, Service
 	public function __construct(
 		protected User $user,
 		protected Orm $orm,
-	) {}
+	) {
+	}
 
 
 	public function getPerson(): ?Person

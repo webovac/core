@@ -8,4 +8,5 @@ use Exception;
 
 
 class MissingPermissionException extends Exception
-{}
+{
+}

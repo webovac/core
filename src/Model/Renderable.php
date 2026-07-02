@@ -11,7 +11,10 @@ use Webovac\Core\Control\BaseControl;
 interface Renderable extends Stringable, ICmsEntity
 {
 	function getComponent(string $moduleClass, string $templateName): BaseControl;
+
 	function render(string $moduleClass, string $templateName): void;
+
 	function getEntityIcon(): ?string;
+
 	function getModuleClass(): ?string;
 }

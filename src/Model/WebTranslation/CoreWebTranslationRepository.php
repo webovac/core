@@ -7,6 +7,7 @@ namespace Webovac\Core\Model\WebTranslation;
 use Build\Model\Web\Web;
 use Build\Model\WebTranslation\WebTranslation;
 use Build\Model\WebTranslation\WebTranslationData;
+use function is_int;
 
 
 trait CoreWebTranslationRepository

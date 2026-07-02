@@ -40,7 +40,6 @@ class GalleryControl extends BaseControl
 		$this->template->fileCount = $files->count();
 		$this->template->languageData = $this->dataProvider->getLanguageData();
 		$urls = [];
-		/** @var File $file */
 		foreach ($files as $file) {
 			if ($file->type === File::TYPE_VIDEO) {
 				$urls[$file->id] = [

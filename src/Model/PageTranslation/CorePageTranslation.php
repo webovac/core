@@ -15,7 +15,6 @@ trait CorePageTranslation
 	use AuditableTrait;
 	use HasContentTrait;
 
-
 	public function getActivePath(Web $web): ?Path
 	{
 		return $this->paths->toCollection()->getBy(['web' => $web, 'active' => true]);

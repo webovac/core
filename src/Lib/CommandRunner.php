@@ -19,7 +19,7 @@ class CommandRunner implements Service
 	public function __construct(array $commands)
 	{
 		foreach ($commands as $command) {
-			$className = get_class($command);
+			$className = $command::class;
 			$parts = explode('\\', $className);
 			$lastKey = (int) Arrays::lastKey($parts);
 			$name = $parts[$lastKey];
@@ -32,7 +32,7 @@ class CommandRunner implements Service
 	public function run(string $name): int
 	{
 		if (!str_contains($name, ':')) {
-			throw new InvalidArgumentException("Invalid command.");
+			throw new InvalidArgumentException('Invalid command.');
 		}
 		[$module, $command] = explode(':', $name);
 		if (!isset($this->commands[$module][$command])) {

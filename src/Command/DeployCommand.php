@@ -13,7 +13,8 @@ class DeployCommand implements Command
 {
 	public function __construct(
 		private Orm $orm,
-	) {}
+	) {
+	}
 
 
 	public function run(): int

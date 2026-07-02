@@ -10,6 +10,7 @@ use Build\Model\Web\WebData;
 use Webovac\Core\Exception\LoginRequiredException;
 use Webovac\Core\Exception\MissingPermissionException;
 use Webovac\Core\Lib\CmsUser;
+use function in_array;
 
 
 class AccessSetup
@@ -89,5 +90,4 @@ class AccessSetup
 		}
 		return false;
 	}
-
 }

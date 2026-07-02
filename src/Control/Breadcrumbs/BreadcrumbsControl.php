@@ -20,7 +20,8 @@ class BreadcrumbsControl extends BaseControl
 	public function __construct(
 		private DataProvider $dataProvider,
 		private PageActivator $pageActivator,
-	) {}
+	) {
+	}
 
 
 	public function render(): void

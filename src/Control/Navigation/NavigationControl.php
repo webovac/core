@@ -14,7 +14,6 @@ use Webovac\Core\Lib\MenuItemRenderer;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
 
 
 /**
@@ -30,7 +29,8 @@ class NavigationControl extends BaseControl
 		private MenuItemRenderer $menuItemRenderer,
 		private DataProvider $dataProvider,
 		private PageRequirementChecker $requirementChecker,
-	) {}
+	) {
+	}
 
 
 	/**
@@ -76,7 +76,7 @@ class NavigationControl extends BaseControl
 		$this->template->webData = $webData;
 		$this->template->dataModel = $this->dataModel;
 		$this->template->entity = $this->entity;
-		$this->template->addFunction('renderMenuItem', function(PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData, $layoutData, $navigationPageData) {
+		$this->template->addFunction('renderMenuItem', function (PageData $pageData, ?CmsEntity $linkedEntity = null) use ($webData, $languageData, $layoutData, $navigationPageData) {
 			$checkActive = !$pageData->targetAnchor && ($pageData->targetPage
 				? $pageData->targetPage !== $navigationPageData->id
 				: $pageData->id !== $navigationPageData->id);

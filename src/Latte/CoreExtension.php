@@ -26,7 +26,7 @@ class CoreExtension extends Extension
 		$pageName = $tag->parser->parseUnquotedStringOrExpression();
 
 		return new AuxiliaryNode(
-			fn (PrintContext $context) => $context->format('echo $this->global->uiPresenter->pageLink(%node);', $pageName)
+			fn(PrintContext $context) => $context->format('echo $this->global->uiPresenter->pageLink(%node);', $pageName),
 		);
 	}
 }

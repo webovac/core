@@ -13,7 +13,7 @@ use Webovac\Core\Lib\DataProvider;
 use Webovac\Core\Lib\ModuleChecker;
 use Webovac\Core\Lib\PageRequirementChecker;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
+use function in_array, is_int;
 
 
 /**
@@ -33,7 +33,8 @@ class SidePanelControl extends BaseControl
 		private DataProvider $dataProvider,
 		private Orm $orm,
 		private PageRequirementChecker $requirementChecker,
-	) {}
+	) {
+	}
 
 
 	/**
@@ -76,9 +77,9 @@ class SidePanelControl extends BaseControl
 			$this->template->languageShortcuts = $this->dataModel->languageDataRepository->findAllPairs();
 			assert(!$pageData->module || is_int($pageData->module));
 			$this->template->pageModuleData = $pageData->module ? $this->dataModel->getModuleData($pageData->module) : null;
-//			$this->template->webDatas = $this->dataModel->findWebDatas();
-			$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
+			//			$this->template->webDatas = $this->dataModel->findWebDatas();
+						$this->template->adminLang = in_array($this->dataProvider->getLanguageData()->id, $adminPageData->getLanguageIds(), true) ? $this->dataProvider->getLanguageData()->shortcut : 'cs';
 		}
-		$this->template->renderFile($this->moduleClass, SidePanelControl::class, $this->templateName);
+		$this->template->renderFile($this->moduleClass, self::class, $this->templateName);
 	}
 }

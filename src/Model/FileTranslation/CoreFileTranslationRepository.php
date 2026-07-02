@@ -10,12 +10,12 @@ use Build\Model\FileTranslation\FileTranslationData;
 use Build\Model\Web\WebData;
 use Nextras\Orm\Collection\ICollection;
 use Webovac\Core\Model\HasWebFilterTrait;
+use function is_int;
 
 
 trait CoreFileTranslationRepository
 {
 	use HasWebFilterTrait;
-
 
 	public function getByData(FileTranslationData $data, ?File $file): ?FileTranslation
 	{

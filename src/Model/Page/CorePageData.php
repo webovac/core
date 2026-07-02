@@ -17,7 +17,7 @@ use Stepapo\Model\Data\Collection;
 use Stepapo\Utils\Attribute\DefaultValue;
 use Webovac\Core\Lib\PageActivator;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
+use function array_key_exists;
 
 
 trait CorePageData
@@ -52,7 +52,14 @@ trait CorePageData
 	}
 
 
-	public function getHref(LanguageData $languageData, WebData $webData, DataModel $dataModel, IPresenter $presenter, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): ?string
+	public function getHref(
+		LanguageData $languageData,
+		WebData $webData,
+		DataModel $dataModel,
+		IPresenter $presenter,
+		?CmsEntity $entity,
+		?CmsEntity $linkedEntity = null,
+	): ?string
 	{
 		$e = $linkedEntity ?: $entity;
 		$anchor = null;
@@ -66,10 +73,12 @@ trait CorePageData
 			$parameter = $p->hasParameter && !isset($presenter->path) ? $e?->getParameters() : null;
 			$path = $p->hasPath && isset($presenter->path) ? ($presenter->path . '/' . Arrays::first($e->getParameters())) : '';
 		}
-		return match($p->type) {
+		return match ($p->type) {
 			Page::TYPE_SIGNAL => $presenter->getName() === 'Core:Error4xx' ? null : $presenter->link('//' . $p->targetSignal . '!'),
 			Page::TYPE_EXTERNAL_LINK => $p->targetUrl,
-			Page::TYPE_PAGE => $presenter->link('//Home:' . ($anchor ? '#' . $anchor : ''), [
+			Page::TYPE_PAGE => $presenter->link(
+				'//Home:' . ($anchor ? '#' . $anchor : ''),
+				[
 					'pageName' => $p->name,
 					'lang' => $languageData->shortcut,
 					'id' => $parameter,
@@ -81,18 +90,24 @@ trait CorePageData
 	}
 
 
-	public function getClass(string $context, bool $checkActive, IPresenter $presenter, PageActivator $pageActivator, ?CmsEntity $entity, ?CmsEntity $linkedEntity = null): string
+	public function getClass(
+		string $context,
+		bool $checkActive,
+		IPresenter $presenter,
+		PageActivator $pageActivator,
+		?CmsEntity $entity,
+		?CmsEntity $linkedEntity = null,
+	): string
 	{
-		# TODO fix targetPage
-		return match($context) {
+		// TODO fix targetPage
+		return match ($context) {
 			'buttons' => 'btn btn-outline-' . ($this->style ?: 'primary'),
-			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->style ? ($this->style . '-subtle') : 'light') .  ' p-3',
+			'signpost' => 'g-col-6 g-col-lg-4 bg-' . ($this->style ? ($this->style . '-subtle') : 'light') . ' p-3',
 			default => 'menu-item' . ($this->style ? ' btn btn-subtle-' . $this->style : ''),
 		}
-			. ((!$this->targetPath && !$this->targetAnchor && ($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
-			|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath))
-			|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath)) ? ' active' : '')
-			;
+		. ((!$this->targetPath && !$this->targetAnchor && ($this->id === $presenter->pageData->id || $this->targetPage === $presenter->pageData->id) && (!$linkedEntity || $linkedEntity === $entity))
+		|| ($checkActive && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath))
+		|| ($checkActive && $this->targetPage && $this->isActive($entity, $linkedEntity, $presenter, $pageActivator, $this->targetPath)) ? ' active' : '');
 	}
 
 
@@ -108,8 +123,13 @@ trait CorePageData
 	}
 
 
-	private function isActive(?CmsEntity $entity, ?CmsEntity $linkedEntity, IPresenter $presenter, PageActivator $pageActivator, ?string $path = null)
-	{
+	private function isActive(
+		?CmsEntity $entity,
+		?CmsEntity $linkedEntity,
+		IPresenter $presenter,
+		PageActivator $pageActivator,
+		?string $path = null,
+	) {
 		if ($linkedEntity && $linkedEntity !== $entity) {
 			return false;
 		}

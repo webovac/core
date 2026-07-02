@@ -14,7 +14,7 @@ use Nette\Application\UI\Control;
 use Stepapo\Utils\Service;
 use Webovac\Core\Control\MenuItem\MenuItemTemplate;
 use Webovac\Core\Model\CmsEntity;
-use Webovac\Core\Model\Linkable;
+use function is_int;
 
 
 class MenuItemRenderer implements Service
@@ -22,7 +22,8 @@ class MenuItemRenderer implements Service
 	public function __construct(
 		private DataModel $dataModel,
 		private PageActivator $pageActivator,
-	) {}
+	) {
+	}
 
 
 	public function render(
@@ -39,8 +40,8 @@ class MenuItemRenderer implements Service
 	{
 		assert(is_int($webData->defaultLanguage));
 		$t = $pageData->getCollection('translations')->getByKey($languageData->id);
-		/** @var PageTranslationData $pageTranslationData */
 		$pageTranslationData = $t ?: $pageData->getCollection('translations')->getByKey($webData->defaultLanguage);
+		\assert(!$pageTranslationData || $pageTranslationData instanceof PageTranslationData);
 		$control->template->getLatte()->render(__DIR__ . '/../templates/menuItem.latte', new MenuItemTemplate(
 			webData: $webData,
 			pageData: $pageData,

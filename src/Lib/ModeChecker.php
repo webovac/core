@@ -13,7 +13,8 @@ class ModeChecker implements Service
 		private bool $debugMode = false,
 		private bool $testMode = false,
 		private bool $cliMode = false,
-	) {}
+	) {
+	}
 
 
 	public function isDebug(): bool

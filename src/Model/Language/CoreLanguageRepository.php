@@ -14,7 +14,6 @@ trait CoreLanguageRepository
 {
 	use HasWebFilterTrait;
 
-
 	public function getKeyParameter(): string
 	{
 		return 'shortcut';

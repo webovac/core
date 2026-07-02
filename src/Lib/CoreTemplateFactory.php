@@ -8,6 +8,7 @@ use Nette\Application\UI\Template;
 use Nette\DI\Attributes\Inject;
 use Stepapo\Utils\Latte\Filters;
 use Webovac\Core\Latte\CoreExtension;
+use const DIRECTORY_SEPARATOR;
 
 
 trait CoreTemplateFactory
