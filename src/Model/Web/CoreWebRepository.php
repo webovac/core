@@ -75,7 +75,7 @@ trait CoreWebRepository
 		$module = $this->getModel()->getRepository(ModuleRepository::class)->getBy(['name' => $moduleName]);
 		$page = $modulePageData ?: new PageData;
 		$page->name = $module->name . 'Module';
-		$page->hideInNavigation = $module->homePage->hideInNavigation;
+		$page->hideInNavigation = $modulePageData?->hideInNavigation === null ? $module->homePage->hideInNavigation : $modulePageData->hideInNavigation;
 		$page->icon = $module->icon;
 		$page->targetModule = $module->name;
 		$page->type = Page::TYPE_MODULE;
