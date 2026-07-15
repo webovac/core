@@ -73,7 +73,7 @@ trait CorePageDataRepository
 			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
 				foreach ($this->getCollection() as $page) {
-					\assert($page instanceof PageData);
+					assert($page instanceof PageData);
 					$aliases["$page->web-$page->name"] = $page->id;
 				}
 				return $aliases;
@@ -101,7 +101,7 @@ trait CorePageDataRepository
 			? $hasPages->getPages()
 			: $this->orm->pageRepository->findRootPages();
 		foreach ($pages as $page) {
-			\assert($page instanceof Page);
+			assert($page instanceof Page);
 			$accessSetup = new AccessSetup;
 			$accessSetup->accessFor = $page->accessFor;
 			$accessSetup->authorizedRoles = $page->accessFor === Page::ACCESS_FOR_SPECIFIC

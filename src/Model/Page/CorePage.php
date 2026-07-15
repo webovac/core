@@ -124,7 +124,7 @@ trait CorePage
 	}
 
 
-	/** @return Page[]&ICollection */
+	/** @return ICollection<Page> */
 	public function getPages(): ICollection
 	{
 		return $this->childPages->toCollection();
@@ -136,7 +136,6 @@ trait CorePage
 	{
 		$pages = [];
 		foreach ($this->childPages->toCollection() as $page) {
-			\assert($page instanceof Page);
 			if ($page->type === Page::TYPE_MODULE) {
 				foreach ($page->targetModule->getPages() as $modulePage) {
 					$pages[] = $modulePage;

@@ -23,7 +23,7 @@ use function in_array;
  */
 class PersonFormControl extends BaseControl
 {
-	/** @var \Closure[] */ public array $onSave;
+	/** @var array<callable(static, Person): void> */ public array $onSave;
 
 
 	public function __construct(

@@ -32,7 +32,7 @@ class PropertyChecker implements Service
 			return true;
 		}
 		$repository = $propertyMetadata->relationship?->repository ? $this->orm->getRepository($propertyMetadata->relationship->repository) : null;
-		\assert($repository instanceof CmsRepository || $repository === null);
+		assert($repository instanceof CmsRepository || $repository === null);
 		return (bool) $repository?->isForbiddenRepository($webData);
 	}
 }

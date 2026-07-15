@@ -10,6 +10,6 @@ use Webovac\Core\Model\ICmsEntity;
 
 interface HasFiles extends ICmsEntity
 {
-	/** @returns IRelationshipCollection<File> */
+	/** @returns HasMany<File> */
 	function getFiles(): IRelationshipCollection;
 }

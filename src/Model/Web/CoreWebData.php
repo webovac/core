@@ -111,15 +111,17 @@ trait CoreWebData
 	}
 
 
-	//	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
-	//	{
-	//		foreach (['iconFile', 'logoFile', 'backgroundFile'] as $name) {
-	//			if (isset($config[$name]) and is_string($config[$name])) {
-	//				$upload = $config[$name];
-	//				$config[$name] = new FileData;
-	//				$config[$name]->upload = $upload;
-	//			}
-	//		}
-	//		return parent::createFromArray($config, $key, $skipDefaults, $parentKey);
-	//	}
+	/*
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
+	{
+		foreach (['iconFile', 'logoFile', 'backgroundFile'] as $name) {
+			if (isset($config[$name]) and is_string($config[$name])) {
+				$upload = $config[$name];
+				$config[$name] = new FileData;
+				$config[$name]->upload = $upload;
+			}
+		}
+		return parent::createFromArray($config, $key, $skipDefaults, $parentKey);
+	}
+	*/
 }

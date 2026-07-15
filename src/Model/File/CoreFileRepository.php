@@ -77,8 +77,8 @@ trait CoreFileRepository
 			$this->rotateImage($data->upload);
 		}
 		if (str_contains($data->upload->getContentType(), 'video/')) {
-			//			$data->upload = $this->createVideoUpload($data->upload);
-			//			$data->capturedAt = $this->getCapturedAt($data->upload);
+			//$data->upload = $this->createVideoUpload($data->upload);
+			//$data->capturedAt = $this->getCapturedAt($data->upload);
 		}
 		$identifier = $this->fileUploader->upload($data->upload, $namespace);
 		$file = $this->getModel()->getRepository(FileRepository::class)->getBy(['identifier' => $identifier]);
@@ -111,17 +111,21 @@ trait CoreFileRepository
 				$data->compatibleIdentifier = $identifier;
 				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			} elseif ($data->upload->getContentType() === 'application/pdf') {
-				//				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
-				//				if ($compatibleUpload) {
-				//					$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
-				//					$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
-				//					$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
-				//				}
+				/*
+				$compatibleUpload = $this->pdf2jpeg($data->upload, $data->forceSquare);
+				if ($compatibleUpload) {
+					$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+					$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare);
+					$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+				}
+				*/
 			} elseif (str_contains($data->upload->getContentType(), 'video/')) {
-				//				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
-				//				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
-				//				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare, 1920);
-				//				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+				/*
+				$compatibleUpload = $this->video2jpg($data->upload, $data->forceSquare);
+				$data->compatibleIdentifier = $this->fileUploader->upload($compatibleUpload, $namespace);
+				$modernUpload = $this->image2webp($compatibleUpload, $data->forceSquare, 1920);
+				$data->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
+				*/
 			}
 		} else {
 			$data->identifier = $file->identifier;

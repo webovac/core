@@ -71,6 +71,7 @@ class StylePresenter extends Presenter
 			$layout = $this->dataModel->getLayoutData($this->webData->layout);
 			$this->template->l = $layout;
 			foreach ($layout->themes as $themeId) {
+				assert(is_int($themeId));
 				$theme = $this->dataModel->getThemeData($themeId);
 				$this->template->t[$theme->code] = $theme;
 			}

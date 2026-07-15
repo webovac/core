@@ -168,7 +168,7 @@ trait CorePresenter
 					}
 					if ($pageData->isDetailRoot) {
 						$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
-						\assert($repository instanceof CmsRepository);
+						assert($repository instanceof CmsRepository);
 						$entity = $repository->getByParameters($parameters, null, $this->webData);
 						$title = $entity->getTitle();
 					}
@@ -230,19 +230,19 @@ trait CorePresenter
 			$this->error();
 		}
 		$webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id);
-		\assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
+		assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
 		$this->webTranslationData = $webTranslationData;
 		if (!$this->webTranslationData) {
 			$this->languageData = $this->dataModel->getLanguageData($this->webData->defaultLanguage);
 			$this->lang = $this->languageData->shortcut;
 			$webTranslationData = $this->webData->getCollection('translations')->getByKey($this->languageData->id);
-			\assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
+			assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
 			$this->webTranslationData = $webTranslationData;
 		}
 		$this->pageData = $this->dataModel->getPageDataByName($this->webData->id, $this->pageName);
 		$this->pageTranslation = $this->orm->pageTranslationRepository->getBy(['page' => $this->pageData->id, 'language' => $this->languageData->id]);
 		$pageTranslationData = $this->pageData->getCollection('translations')->getByKey($this->languageData->id);
-		\assert($pageTranslationData instanceof PageTranslationData || $pageTranslationData === null);
+		assert($pageTranslationData instanceof PageTranslationData || $pageTranslationData === null);
 		$this->pageTranslationData = $pageTranslationData;
 		$this->deployData = $this->dataModel->getLastDeployData();
 		$this->menuPageData = $this->pageData->menuPage ? $this->dataModel->getPageData($this->webData->id, $this->pageData->menuPage) : null;
@@ -307,7 +307,7 @@ trait CorePresenter
 			}
 			$lastDetailRootPage = $this->dataModel->getPageData($this->webData->id, Arrays::last($this->pageData->parentDetailRootPages));
 			$repository = $this->orm->getRepositoryByName($lastDetailRootPage->repository . 'Repository');
-			\assert($repository instanceof CmsRepository);
+			assert($repository instanceof CmsRepository);
 			$this->entity = $repository->getByParameters($this->id, $this->path ?? null, $this->webData);
 			if ($this->path) {
 				$this->entityList = $repository->getEntityListByPath($this->path);

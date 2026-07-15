@@ -35,7 +35,7 @@ class ManifestPresenter extends Presenter
 		$languageData = $this->dataModel->getLanguageDataByShortcut($this->lang);
 		$this->webData = $this->dataModel->getWebDataByHost($this->host, $this->basePath);
 		$webTranslationData = $this->webData->getCollection('translations')->getByKey($languageData->id);
-		\assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
+		assert($webTranslationData instanceof WebTranslationData || $webTranslationData === null);
 		$this->webTranslationData = $webTranslationData;
 	}
 

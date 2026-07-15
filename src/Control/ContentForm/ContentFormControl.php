@@ -42,7 +42,7 @@ use function in_array;
 class ContentFormControl extends BaseControl
 {
 	#[Persistent] public string $lang = 'cs';
-	/** @var \Closure[] */ public array $onSave;
+	/** @var array<callable(static, HasTranslations): void> */ public array $onSave;
 
 
 	public function __construct(
@@ -79,8 +79,8 @@ class ContentFormControl extends BaseControl
 			foreach ($this->componentProvider->getComponents() as $component) {
 				if ($component['requires']) {
 					if (
-					    !$this->hasTranslations->hasParameter
-					    || $this->hasTranslations->repository !== lcfirst($component['requires'])
+						!$this->hasTranslations->hasParameter
+						|| $this->hasTranslations->repository !== lcfirst($component['requires'])
 					) {
 						continue;
 					}
@@ -163,10 +163,10 @@ class ContentFormControl extends BaseControl
 
 
 	private function buildEntityMentions(
-	    IRepository $repository,
-	    array &$mentions = [],
-	    string $base = '$entity->',
-	    int $depth = 1,
+		IRepository $repository,
+		array &$mentions = [],
+		string $base = '$entity->',
+		int $depth = 1,
 	): array
 	{
 		$properties = $repository->getEntityMetadata()->getProperties();

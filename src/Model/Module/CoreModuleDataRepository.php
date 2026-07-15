@@ -19,7 +19,7 @@ trait CoreModuleDataRepository
 			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
 				foreach ($this->getCollection() as $module) {
-					\assert($module instanceof ModuleData);
+					assert($module instanceof ModuleData);
 					$aliases[$module->name] = $module->id;
 				}
 				return $aliases;

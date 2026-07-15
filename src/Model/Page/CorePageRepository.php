@@ -50,8 +50,8 @@ trait CorePageRepository
 		$page->hideInNavigation = $module->homePage->hideInNavigation;
 		$page->icon = $module->icon;
 		$page->targetModule = $module;
-		//		$page->module = $module;
-				$page->name = $module->name . 'Module';
+		//$page->module = $module;
+		$page->name = $module->name . 'Module';
 		$page->type = Page::TYPE_MODULE;
 		$page->rank = $count + 1;
 		$page->createdByPerson = $person;

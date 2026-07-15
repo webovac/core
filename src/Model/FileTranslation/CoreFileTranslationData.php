@@ -7,11 +7,4 @@ namespace Webovac\Core\Model\FileTranslation;
 
 trait CoreFileTranslationData
 {
-	//	public ?int $id;
-	//	#[KeyProperty] public null|int|string $language;
-	//	public ?string $description;
-	//	public int|string|null $createdByPerson;
-	//	public int|string|null $updatedByPerson;
-	//	public ?DateTimeInterface $createdAt;
-	//	public ?DateTimeInterface $updatedAt;
 }

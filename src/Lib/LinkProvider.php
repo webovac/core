@@ -76,7 +76,7 @@ class LinkProvider implements Service
 	{
 		$source = $id ? ($assocPages[$type][$id] ?? []) : ($assocPages[$type] ?? []);
 		foreach ($source as $page) {
-			\assert($page instanceof Page);
+			assert($page instanceof Page);
 			if ($page->type === Page::TYPE_PAGE) {
 				$mentions[] = [
 					'id' => $page->name,

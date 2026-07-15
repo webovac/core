@@ -86,11 +86,12 @@ class CmsRunner extends Runner
 			$this->driver->lock();
 
 			$this->printer->printIntro($mode);
-			//			if ($mode === self::MODE_RESET) {
-			//				$this->driver->emptyDatabase();
-			//			}
-
-						$this->driver->createTable();
+			/*
+			if ($mode === self::MODE_RESET) {
+				$this->driver->emptyDatabase();
+			}
+			*/
+			$this->driver->createTable();
 			$migrations = $this->driver->getAllMigrations();
 			$files = $this->getFiles();
 			$toExecute = $this->orderResolver->resolve($migrations, $this->groups, $files, $mode); // @phpstan-ignore argument.type

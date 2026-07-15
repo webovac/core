@@ -60,7 +60,7 @@ class RouteSetupProvider implements Service
 					}
 				}
 				foreach (array_reverse((array) $webDatas) as $webData) {
-					\assert($webData instanceof WebData);
+					assert($webData instanceof WebData);
 					$webSetup[] = [
 						'mask' => $webData->getPageRouteMask(),
 						'metadata' => [

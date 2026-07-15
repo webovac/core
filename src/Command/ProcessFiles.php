@@ -81,7 +81,7 @@ class ProcessFiles implements Command
 			$file->modernIdentifier = $this->fileUploader->upload($modernUpload, $namespace);
 			$file->ready = true;
 			$this->orm->persistAndFlush($file);
-			//			$this->fileUploader->delete($oldIdentifier);
+			//$this->fileUploader->delete($oldIdentifier);
 		}
 	}
 }

@@ -71,7 +71,7 @@ trait CoreWebDataRepository
 			$this->aliases = $this->cache->load('aliases', function () {
 				$aliases = [];
 				foreach ($this->getCollection() as $web) {
-					\assert($web instanceof WebData);
+					assert($web instanceof WebData);
 					$aliases["$web->host-$web->basePath"] = $web->id;
 					$aliases[$web->code] = $web->id;
 				}

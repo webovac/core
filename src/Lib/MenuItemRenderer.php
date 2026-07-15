@@ -41,7 +41,7 @@ class MenuItemRenderer implements Service
 		assert(is_int($webData->defaultLanguage));
 		$t = $pageData->getCollection('translations')->getByKey($languageData->id);
 		$pageTranslationData = $t ?: $pageData->getCollection('translations')->getByKey($webData->defaultLanguage);
-		\assert(!$pageTranslationData || $pageTranslationData instanceof PageTranslationData);
+		assert(!$pageTranslationData || $pageTranslationData instanceof PageTranslationData);
 		$control->template->getLatte()->render(__DIR__ . '/../templates/menuItem.latte', new MenuItemTemplate(
 			webData: $webData,
 			pageData: $pageData,

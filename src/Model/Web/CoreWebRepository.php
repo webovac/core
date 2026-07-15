@@ -132,7 +132,7 @@ trait CoreWebRepository
 		$this->persist($entity);
 		if (isset($data->pages)) {
 			foreach ($entity->pages->toCollection() as $page) {
-				\assert($page instanceof Page);
+				assert($page instanceof Page);
 				if (!array_key_exists($page->name, $data->pages)) {
 					if (!$skipDefaults) {
 						$this->getModel()->getRepository(PageRepository::class)->delete($page);
@@ -199,22 +199,24 @@ trait CoreWebRepository
 		} else {
 			$image = Image::fromString(file_get_contents($this->fileUploader->getPath($iconFile->identifier)));
 		}
-		//		if ($iconFile->upload instanceof FileUpload) {
-		//			if ($iconFile->upload->getContentType() === 'image/svg+xml') {
-		//				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->svg2png($iconFile->upload, true)->getTemporaryFile());
-		//			} elseif ($iconFile->upload->getContentType() === 'image/webp' || $iconFile->getContentType() === 'image/avif') {
-		//				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->image2jpeg($iconFile->upload, true)->getTemporaryFile());
-		//			} elseif (!$iconFile->upload->isImage()) {
-		//				throw new InvalidArgumentException;
-		//			} else {
-		//				$image = $iconFile->upload->toImage();
-		//			}
-		//		} elseif ($iconFile instanceof File) {
-		//			$image = Image::fromString(file_get_contents($this->fileUploader->getPath($iconFile->identifier)));
-		//		} else {
-		//			$image = Image::fromString(base64_decode($iconFile));
-		//		}
-				$width = $image->getWidth();
+		/*
+		if ($iconFile->upload instanceof FileUpload) {
+			if ($iconFile->upload->getContentType() === 'image/svg+xml') {
+				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->svg2png($iconFile->upload, true)->getTemporaryFile());
+			} elseif ($iconFile->upload->getContentType() === 'image/webp' || $iconFile->getContentType() === 'image/avif') {
+				$image = Image::fromFile($this->getModel()->getRepository(FileRepository::class)->image2jpeg($iconFile->upload, true)->getTemporaryFile());
+			} elseif (!$iconFile->upload->isImage()) {
+				throw new InvalidArgumentException;
+			} else {
+				$image = $iconFile->upload->toImage();
+			}
+		} elseif ($iconFile instanceof File) {
+			$image = Image::fromString(file_get_contents($this->fileUploader->getPath($iconFile->identifier)));
+		} else {
+			$image = Image::fromString(base64_decode($iconFile));
+		}
+		*/
+		$width = $image->getWidth();
 		$height = $image->getHeight();
 		$largeIconFile = Image::fromBlank($width, $height, ImageColor::hex($iconBackgroundColor));
 		$largeIconFile->resize('133%', '133%');

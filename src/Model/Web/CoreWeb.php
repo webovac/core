@@ -54,7 +54,7 @@ trait CoreWeb
 	{
 		$pages = [];
 		foreach ($this->pages->toCollection()->findBy(['parentPage' => null]) as $page) {
-			\assert($page instanceof Page);
+			assert($page instanceof Page);
 			if ($page->type === Page::TYPE_MODULE) {
 				foreach ($page->targetModule->getPages() as $modulePage) {
 					$pages[] = $modulePage;
