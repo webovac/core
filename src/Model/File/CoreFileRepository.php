@@ -263,7 +263,9 @@ trait CoreFileRepository
 		$tmpFile = $upload->getTemporaryFile();
 		$cloneFile = $this->dir->getTempDir() . '/' . Random::generate(8);
 		copy($tmpFile, $cloneFile);
-		Image::fromFile($cloneFile)->resize(1920, $maxHeight, Image::ShrinkOnly)->save($cloneFile, type: ImageType::WEBP);
+		$image = Image::fromFile($cloneFile)->resize(1920, $maxHeight, Image::ShrinkOnly);
+		$image->paletteToTrueColor();
+		$image->save($cloneFile, type: ImageType::WEBP);
 		$upload = $this->createFileUploadFromFile($cloneFile);
 		return $forceSquare ? $this->image2square($upload) : $upload;
 	}
