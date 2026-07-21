@@ -42,7 +42,7 @@ use function in_array;
 class ContentFormControl extends BaseControl
 {
 	#[Persistent] public string $lang = 'cs';
-	/** @var array<callable(static, HasTranslations): void> */ public array $onSave;
+	/** @var array<callable(static, HasTranslations): void> */ public array $onSave = [];
 
 
 	public function __construct(
