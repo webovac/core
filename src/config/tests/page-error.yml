@@ -1,0 +1,17 @@
+# $schema: https://cms.postler.cz/schemas/stepapo/request-tester/request.json
+name: Core - access Error
+identity:
+    id: 1
+    roles: admin
+asserts:
+    httpCode: 404
+requests:
+#    wrong host:
+#        host: tst # TODO konfigurovatelny error presenter RequestTester:155
+#        path: weby/1
+#    wrong path:
+#        host: test
+#        path: webz # netestovatelne, 404 vyhazuje Router
+    wrong id:
+        host: test
+        path: weby/999

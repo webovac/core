@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Webovac\Core\Lib;
 
+use Nette\InvalidArgumentException;
 use Nette\Neon\Neon;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
 use ReflectionClass;
 use Stepapo\Utils\Service;
 use Webovac\Core\Module;
+use const PATHINFO_EXTENSION;
 
 
 class TestConfigProvider implements Service
@@ -40,8 +42,12 @@ class TestConfigProvider implements Service
 	public function getTestConfigs(): array
 	{
 		$configs = [];
-		foreach (Finder::findFiles('*.neon')->from($this->paths) as $file) {
-			$config = (array) Neon::decode(FileSystem::read((string) $file));
+		foreach (Finder::findFiles(['*.neon', '*.yml'])->from($this->paths) as $file) {
+			$config = match ($ext = pathinfo($file->getFilename(), PATHINFO_EXTENSION)) {
+				'neon' => (array) Neon::decode(FileSystem::read((string) $file)),
+				'yml' => yaml_parse_file($file->getRealPath()),
+				default => throw new InvalidArgumentException("File extension '$ext' is not supported."),
+			};
 			$configs[$config['name']] = $config;
 		}
 		$keys = array_keys($configs);

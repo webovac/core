@@ -1,0 +1,5 @@
+# $schema: https://cms.postler.cz/schemas/stepapo/model/manipulation.json
+class: Build\Model\Role\RoleData
+items:
+    admin:
+        code: admin

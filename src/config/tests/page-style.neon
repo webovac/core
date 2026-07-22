@@ -1,5 +1,0 @@
-name: Core - access Style
-host: test
-path: style
-asserts:
-	renders: ':root {'

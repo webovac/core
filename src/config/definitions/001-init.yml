@@ -1,0 +1,537 @@
+# $schema: https://cms.postler.cz/schemas/stepapo/model/definition.json
+schemas:
+    $defaultSchema:
+        tables:
+            asset:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    lib_id: {type: int, nullable: false}
+                    link: {type: string, nullable: false, keyProperty: true}
+                    local: {type: bool, nullable: false, default: false}
+                    type: {type: string, nullable: false}
+                primaryKey: id
+                indexes: [lib_id]
+                foreignKeys:
+                    lib_id: {table: lib, column: id, onDelete: cascade, reverseName: assets, reverseData: true}
+            command:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    code: {type: string, nullable: false, keyProperty: true}
+                    should_run: {type: bool, nullable: false, default: false}
+                    running: {type: bool, nullable: false, default: false}
+                    last_start_at: {type: datetime, nullable: true, skipInManipulation: true}
+                    last_end_at: {type: datetime, nullable: true, skipInManipulation: true}
+                primaryKey: id
+                uniqueKeys: [code]
+            deploy:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                primaryKey: id
+            file:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    web_id: {type: int, nullable: true, internal: true}
+                    page_id: {type: int, nullable: true}
+                    person_id: {type: int, nullable: true}
+                    created_by_person_id: {type: int, nullable: true, dontCache: true}
+                    identifier: {type: string, nullable: false}
+                    modern_identifier: {type: string, nullable: true}
+                    compatible_identifier: {type: string, nullable: true}
+                    name: {type: string, nullable: false}
+                    extension: {type: string, nullable: false}
+                    content_type: {type: string, nullable: false}
+                    type: {type: string, nullable: false}
+                    width: {type: int, nullable: true}
+                    height: {type: int, nullable: true}
+                    ready: {type: bool, nullable: false, default: false}
+                    captured_at: {type: datetime, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now, dontCache: true}
+                primaryKey: id
+                indexes: [web_id, page_id, person_id, created_by_person_id]
+                foreignKeys:
+                    web_id: {table: web, column: id, onDelete: cascade, reverseName: files, reverseSkipInManipulation: true, reverseData: true, reverseDontCache: true, reverseOrder: id}
+                    page_id: {table: page, column: id, onDelete: cascade, reverseName: files, reverseSkipInManipulation: true, reverseData: true, reverseDontCache: true, reverseOrder: id}
+                    person_id: {table: person, column: id, onDelete: cascade, reverseName: files, reverseSkipInManipulation: true, reverseData: true, reverseDontCache: true, reverseOrder: id}
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+            file_translation:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    file_id: {type: int, nullable: false}
+                    language_id: {type: int, nullable: false, keyProperty: true}
+                    description: {type: text, nullable: true}
+                primaryKey: id
+                uniqueKeys: [[file_id, language_id]]
+                indexes: [created_by_person_id, updated_by_person_id, file_id, language_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    file_id: {table: file, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true}
+                    language_id: {table: language, column: id}
+            index:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    language_id: {type: int, nullable: true}
+                    module_id: {type: int, nullable: true}
+                    page_id: {type: int, nullable: true}
+                    web_id: {type: int, nullable: true}
+                    person_id: {type: int, nullable: true}
+                    date: {type: datetime, nullable: true}
+                primaryKey: id
+                uniqueKeys: [language_id, module_id, page_id, web_id, person_id]
+                indexes: [language_id, module_id, page_id, web_id, person_id]
+                foreignKeys:
+                    language_id: {table: language, column: id}
+                    module_id: {table: module, column: id}
+                    page_id: {table: page, column: id}
+                    web_id: {table: web, column: id}
+                    person_id: {table: person, column: id}
+            language:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    shortcut: {type: string, nullable: false}
+                    name: {type: string, nullable: false}
+                    rank: {type: int, nullable: false}
+                primaryKey: id
+                uniqueKeys: [shortcut, name, rank]
+                indexes: [created_by_person_id, updated_by_person_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+            language_translation:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    language_id: {type: int, nullable: false,}
+                    translation_language_id: {type: int, nullable: false, keyProperty: true}
+                    title: {type: string, nullable: false}
+                primaryKey: id
+                uniqueKeys: [[language_id, translation_language_id]]
+                indexes: [created_by_person_id, updated_by_person_id, language_id, translation_language_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    language_id: {table: language, column: id, reverseName: translations, reverseData: true}
+                    translation_language_id: {table: language, column: id}
+            lib:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    name: {type: string, nullable: false, keyProperty: true}
+                primaryKey: id
+                uniqueKeys: [name]
+            log:
+                columns:
+                    id: {type: bigint, nullable: false}
+                    created_by_person_id: {type: int, nullable: true}
+                    date: {type: datetime, nullable: true}
+                    language_id: {type: int, nullable: true}
+                    module_id: {type: int, nullable: true}
+                    page_id: {type: int, nullable: true}
+                    web_id: {type: int, nullable: true}
+                    person_id: {type: int, nullable: true}
+                    type: {type: string, nullable: false}
+                primaryKey: id
+                indexes: [created_by_person_id, language_id, module_id, page_id, web_id, person_id, type, date]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: set null}
+                    language_id: {table: language, column: id}
+                    module_id: {table: module, column: id}
+                    page_id: {table: page, column: id}
+                    web_id: {table: web, column: id}
+                    person_id: {table: person, column: id}
+            module:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    name: {type: string, nullable: false}
+                    icon: {type: string, nullable: true}
+                    home_page_id: {type: int, nullable: true}
+                    internal: {type: bool, nullable: false, default: false}
+                primaryKey: id
+                uniqueKeys: [name]
+                indexes: [created_by_person_id, updated_by_person_id, home_page_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    home_page_id: {table: page, column: id, onDelete: set null}
+            module2web:
+                columns:
+                    module_id: {type: int, nullable: false}
+                    web_id: {type: int, nullable: false}
+                primaryKey: [module_id, web_id]
+                indexes: [module_id, web_id]
+                foreignKeys:
+                    module_id: {table: module, column: id, reverseName: webs}
+                    web_id: {table: web, column: id, reverseName: modules, reverseData: true}
+            module_translation:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    module_id: {type: int, nullable: false}
+                    language_id: {type: int, nullable: false, keyProperty: true}
+                    title: {type: string, nullable: false}
+                    description: {type: text, nullable: true}
+                    base_path: {type: string, nullable: true}
+                primaryKey: id
+                uniqueKeys: [[module_id, language_id]]
+                indexes: [created_by_person_id, updated_by_person_id, module_id, language_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    module_id: {table: module, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true}
+                    language_id: {table: language, column: id}
+            page:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true, dontCache: true}
+                    updated_by_person_id: {type: int, nullable: true, dontCache: true}
+                    created_at: {type: datetime, nullable: false, default: now, dontCache: true}
+                    updated_at: {type: datetime, nullable: true, dontCache: true}
+                    web_id: {type: int, nullable: true, internal: true}
+                    parent_page_id: {type: int, nullable: true}
+                    icon: {type: string, nullable: true}
+                    redirect_page_id: {type: int, nullable: true}
+                    module_id: {type: int, nullable: true}
+                    target_module_id: {type: int, nullable: true}
+                    template_page_id: {type: int, nullable: true}
+                    image_file_id: {type: int, nullable: true}
+                    layout_width: {type: int, nullable: true}
+                    published_at: {type: datetime, nullable: true}
+                    name: {type: string, nullable: false, keyProperty: true}
+                    style: {type: string, nullable: true}
+                    repository: {type: string, nullable: true}
+                    provides_menu: {type: bool, nullable: false, default: false}
+                    provides_navigation: {type: bool, nullable: false, default: false}
+                    rank: {type: int, nullable: true, default: 1}
+                    hide_in_navigation: {type: bool, nullable: false, default: false}
+                    provides_buttons: {type: bool, nullable: false, default: false}
+                    dont_inherit_path: {type: bool, nullable: false, default: false}
+                    dont_inherit_access_setup: {type: bool, nullable: false, default: false}
+                    has_parameter: {type: bool, nullable: false, default: false}
+                    ajax: {type: bool, nullable: false, default: false}
+                    target_page_id: {type: int, nullable: true}
+                    target_parameter: {type: string, nullable: true}
+                    target_path: {type: string, nullable: true}
+                    target_anchor: {type: string, nullable: true}
+                    target_url: {type: string, nullable: true}
+                    type: {type: string, nullable: false, default: page}
+                    access_for: {type: string, nullable: false, default: all}
+                    authorizing_tag: {type: string, nullable: true}
+                    target_signal: {type: string, nullable: true}
+                    stretched: {type: bool, nullable: false, default: false}
+                primaryKey: id
+                uniqueKeys: [[web_id, name]]
+                indexes: [created_by_person_id, updated_by_person_id, has_parameter, module_id, target_module_id, parent_page_id, redirect_page_id, target_page_id, template_page_id, image_file_id, web_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    module_id: {table: module, column: id, reverseName: pages, reverseOrder: rank, reverseData: true, reverseDontCache: true}
+                    target_module_id: {table: module, column: id}
+                    parent_page_id: {table: page, column: id, onDelete: cascade, reverseName: childPages, reverseOrder: rank}
+                    redirect_page_id: {table: page, column: id, onDelete: cascade}
+                    target_page_id: {table: page, column: id, onDelete: cascade}
+                    template_page_id: {table: page, column: id, onDelete: set null}
+                    web_id: {table: web, column: id, reverseName: pages, reverseOrder: rank, reverseData: true, reverseDontCache: true}
+                    image_file_id: {table: file, column: id, onDelete: set null}
+            page2lib:
+                columns:
+                    page_id: {type: int, nullable: false}
+                    lib_id: {type: int, nullable: false}
+                primaryKey: [page_id, lib_id]
+                indexes: [page_id, lib_id]
+                foreignKeys:
+                    page_id: {table: page, column: id, reverseName: libs, reverseData: true}
+                    lib_id: {table: lib, column: id}
+            page2authorized_person:
+                columns:
+                    page_id: {type: int, nullable: false}
+                    person_id: {type: int, nullable: false}
+                primaryKey: [page_id, person_id]
+                indexes: [page_id, person_id]
+                foreignKeys:
+                    page_id: {table: page, column: id, reverseName: authorizedPersons, reverseData: true}
+                    person_id: {table: person, column: id}
+            page2authorized_role:
+                columns:
+                    page_id: {type: int, nullable: false}
+                    role_id: {type: int, nullable: false}
+                primaryKey: [page_id, role_id]
+                indexes: [page_id, role_id]
+                foreignKeys:
+                    page_id: {table: page, column: id, reverseName: authorizedRoles, reverseData: true}
+                    role_id: {table: role, column: id}
+            page_translation:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    page_id: {type: int, nullable: false}
+                    language_id: {type: int, nullable: false, keyProperty: true}
+                    path: {type: string, nullable: true}
+                    title: {type: string, nullable: true}
+                    description: {type: text, nullable: true}
+                    onclick: {type: text, nullable: true}
+                    content: {type: text, nullable: true}
+                primaryKey: id
+                uniqueKeys: [[page_id, language_id]]
+                indexes: [created_by_person_id, updated_by_person_id, page_id, language_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    page_id: {table: page, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true}
+                    language_id: {table: language, column: id}
+            path:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    web_id: {type: int, nullable: true, internal: true}
+                    page_translation_id: {type: int, nullable: false}
+                    path: {type: string, nullable: false}
+                    active: {type: bool, nullable: false, default: false}
+                primaryKey: id
+                uniqueKeys: [[web_id, page_translation_id, path]]
+                indexes: [web_id, page_translation_id]
+                foreignKeys:
+                    web_id: {table: web, column: id}
+                    page_translation_id: {table: page_translation, column: id, reverseName: paths, reverseOrder: id, reverseData: true, reverseSkipInManipulation: true}
+            parameter:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    page_id: {type: int, nullable: false}
+                    query: {type: string, nullable: false, keyProperty: true}
+                    parameter: {type: string, nullable: false, valueProperty: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                primaryKey: id
+                indexes: [created_by_person_id, updated_by_person_id, page_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    page_id: {table: page, column: id, reverseName: parameters, reverseData: true}
+            person:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    email: {type: string, nullable: true}
+                    first_name: {type: string, nullable: false}
+                    last_name: {type: string, nullable: false}
+                    last_login_at: {type: datetime, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                primaryKey: id
+                uniqueKeys: [email]
+                indexes: [created_by_person_id, updated_by_person_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: set null}
+                    updated_by_person_id: {table: person, column: id, onDelete: set null}
+            person_translation:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    person_id: {type: int, nullable: false}
+                    language_id: {type: int, nullable: false, keyProperty: true}
+                    title: {type: text, nullable: true}
+                    content: {type: text, nullable: true}
+                primaryKey: id
+                uniqueKeys: [[person_id, language_id]]
+                indexes: [created_by_person_id, updated_by_person_id, person_id, language_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    person_id: {table: person, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true}
+                    language_id: {table: language, column: id}
+            preference:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    person_id: {type: int, nullable: false}
+                    web_id: {type: int, nullable: false}
+                    language_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                primaryKey: id
+                indexes: [person_id, web_id, language_id]
+                foreignKeys:
+                    person_id: {table: person, column: id, reverseName: preferences, reverseData: true}
+                    web_id: {table: web, column: id}
+                    language_id: {table: language, column: id}
+            role:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    code: {type: string, nullable: false}
+                primaryKey: id
+                uniqueKeys: [code]
+            role2person:
+                columns:
+                    role_id: {type: int, nullable: false}
+                    person_id: {type: int, nullable: false}
+                primaryKey: [role_id, person_id]
+                indexes: [role_id, person_id]
+                foreignKeys:
+                    role_id: {table: role, column: id, reverseName: persons}
+                    person_id: {table: person, column: id, reverseName: roles, reverseData: true}
+            signal:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    page_id: {type: int, nullable: false}
+                    name: {type: string, nullable: false, keyProperty: true}
+                    signal: {type: string, nullable: false, valueProperty: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                primaryKey: id
+                indexes: [created_by_person_id, updated_by_person_id, page_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    page_id: {table: page, column: id, reverseName: signals, reverseData: true}
+            slug:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    slug: {type: string, nullable: false}
+                    active: {type: bool, nullable: false, default: false}
+                primaryKey: id
+                indexes: [slug]
+            text:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    name: {type: string, nullable: false, keyProperty: true}
+                primaryKey: id
+                indexes: [created_by_person_id, updated_by_person_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+            text_translation:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    text_id: {type: int, nullable: false}
+                    language_id: {type: int, nullable: false, keyProperty: true}
+                    string: {type: string, nullable: false, valueProperty: true}
+                primaryKey: id
+                uniqueKeys: [[text_id, language_id]]
+                indexes: [created_by_person_id, updated_by_person_id, text_id, language_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    text_id: {table: text, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true}
+                    language_id: {table: language, column: id}
+            web:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true, dontCache: true}
+                    updated_by_person_id: {type: int, nullable: true, dontCache: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    color: {type: string, nullable: false, default: '#2196f3'}
+                    complementary_color: {type: string, nullable: false, default: '#888888'}
+                    host: {type: string, nullable: false}
+                    published_at: {type: datetime, nullable: true}
+                    base_path: {type: string, nullable: false, default: '~'}
+                    icon_background_color: {type: string, nullable: false, default: '#ffffff'}
+                    home_page_id: {type: int, nullable: true}
+                    default_language_id: {type: int, nullable: true, dataDefault: cs}
+                    icon_file_id: {type: int, nullable: true}
+                    large_icon_file_id: {type: int, nullable: true}
+                    logo_file_id: {type: int, nullable: true}
+                    background_file_id: {type: int, nullable: true}
+                    code: {type: string, nullable: false}
+                    is_admin: {type: bool, nullable: false, default: false}
+                    disable_index: {type: bool, nullable: false, default: false}
+                    disable_backlink: {type: bool, nullable: false, default: false}
+                    hide_side_panel: {type: bool, nullable: false, default: false}
+                    responsible_person_id: {type: int, nullable: true}
+                primaryKey: id
+                uniqueKeys: [[host, base_path], code]
+                indexes: [created_by_person_id, updated_by_person_id, base_path, default_language_id, icon_file_id, large_icon_file_id, logo_file_id, background_file_id, home_page_id, responsible_person_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    default_language_id: {table: language, column: id, onDelete: restrict}
+                    icon_file_id: {table: file, column: id, onDelete: set null}
+                    large_icon_file_id: {table: file, column: id, onDelete: set null}
+                    logo_file_id: {table: file, column: id, onDelete: set null}
+                    background_file_id: {table: file, column: id, onDelete: set null}
+                    home_page_id: {table: page, column: id, onDelete: set null} # ne restirct kvůli mysql, nedovolí smazání webu
+                    responsible_person_id: {table: person, column: id, onDelete: restrict, reverseName: responsibleForWebs}
+            web2admin_person:
+                columns:
+                    web_id: {type: int, nullable: false}
+                    person_id: {type: int, nullable: false}
+                primaryKey: [web_id, person_id]
+                indexes: [web_id, person_id]
+                foreignKeys:
+                    web_id: {table: web, column: id, reverseName: adminPersons, reverseData: true}
+                    person_id: {table: person, column: id}
+            web2admin_role:
+                columns:
+                    web_id: {type: int, nullable: false}
+                    role_id: {type: int, nullable: false}
+                primaryKey: [web_id, role_id]
+                indexes: [web_id, role_id]
+                foreignKeys:
+                    web_id: {table: web, column: id, reverseName: adminRoles, reverseData: true}
+                    role_id: {table: role, column: id}
+            web2person:
+                columns:
+                    web_id: {type: int, nullable: false}
+                    person_id: {type: int, nullable: false}
+                primaryKey: [web_id, person_id]
+                indexes: [web_id, person_id]
+                foreignKeys:
+                    web_id: {table: web, column: id, reverseName: persons}
+                    person_id: {table: person, column: id, reverseName: webs}
+            web_translation:
+                columns:
+                    id: {type: int, nullable: false, auto: true}
+                    created_by_person_id: {type: int, nullable: true}
+                    updated_by_person_id: {type: int, nullable: true}
+                    created_at: {type: datetime, nullable: false, default: now}
+                    updated_at: {type: datetime, nullable: true}
+                    web_id: {type: int, nullable: false}
+                    language_id: {type: int, nullable: false, keyProperty: true}
+                    title: {type: string, nullable: false}
+                    footer: {type: string, nullable: true}
+                primaryKey: id
+                uniqueKeys: [[web_id, language_id]]
+                indexes: [created_by_person_id, updated_by_person_id, web_id, language_id]
+                foreignKeys:
+                    created_by_person_id: {table: person, column: id, onDelete: restrict}
+                    updated_by_person_id: {table: person, column: id, onDelete: restrict}
+                    web_id: {table: web, column: id, reverseName: translations, reverseOrder: language->rank, reverseData: true}
+                    language_id: {table: language, column: id}

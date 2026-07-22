@@ -1,0 +1,6 @@
+# $schema: https://cms.postler.cz/schemas/stepapo/request-tester/request.json
+name: Core - access Style
+host: test
+path: style
+asserts:
+    renders: ':root {'

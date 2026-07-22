@@ -1,0 +1,6 @@
+# $schema: https://cms.postler.cz/schemas/stepapo/request-tester/request.json
+name: Core - access Manifest
+host: test
+path: manifest.json
+asserts:
+    renders: '"name": "CMS"'

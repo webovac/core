@@ -32,38 +32,38 @@ webovac.core:
 
 Let's have a database table with books and their translations represented by Book and BookTranslation entity in Library module.
 
-- `App/Module/Library/config/definitions/library.neon`
+- `App/Module/Library/config/definitions/library.yml`
 
-```neon
+```yml
 schemas:
     library:
         tables:
             book:
                 columns:
-                    id: [type: int, null: false, auto: true]
-                    web_id: [type: int, null: false]
+                    id: {type: int, null: false, auto: true}
+                    web_id: {type: int, null: false}
                 indexes: [web_id]
                 foreignKeys:
-                    web_id: [table: web, column: id, reverseName: books]
+                    web_id: {table: web, column: id, reverseName: books}
             book_translation:
                 columns:
-                    id: [type: int, null: false, auto: true]
-                    title: [type: string, null: false]
-                    language_id: [type: int, null: false]
-                    book_id: [type: int, null: false]
+                    id: {type: int, null: false, auto: true}
+                    title: {type: string, null: false}
+                    language_id: {type: int, null: false}
+                    book_id: {type: int, null: false}
                 indexes: [language_id, book_id]
                 foreignKeys:
-                    language_id: [table: language, column: id]
-                    book_id: [schema: library, table: book, column: id, reverseName: translations, reverseOrder: language->rank]
+                    language_id: {table: language, column: id}
+                    book_id: {schema: library, table: book, column: id, reverseName: translations, reverseOrder: language->rank}
 ```
 
-- `App/Module/Library/config/files/library.neon`
+- `App/Module/Library/config/files/library.yml`
 
-```neon
+```yml
 modules:
     Library:
         components:
-            BookItem: [entity: Build\Model\Book\Book, withTemplateName: true]
+            BookItem: {entity: Build\Model\Book\Book, withTemplateName: true}
         entities:
             Book:
             BookTranslation:
@@ -139,13 +139,13 @@ trait LibraryBookRepository
 
 ### Interfaces
 
-- `App/Module/Library/config/files/book.neon`
+- `App/Module/Library/config/files/book.yml`
 
-```neon
+```yml
 modules:
     Library:
         components:
-            BookItem: [entity: Build\Model\Book\Book, withTemplateName: true]
+            BookItem: {entity: Build\Model\Book\Book, withTemplateName: true}
         entities:
             Book:
                 entityImplements:

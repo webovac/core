@@ -1,5 +1,0 @@
-name: Core - access Manifest
-host: test
-path: manifest.json
-asserts:
-	renders: '"name": "CMS"'

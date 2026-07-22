@@ -1,8 +1,0 @@
-class: Build\Model\Language\LanguageData
-iteration: 2
-items:
-	en:
-		shortcut: en
-		translations:
-			cs: [title: Angličtina]
-			en: [title: English]

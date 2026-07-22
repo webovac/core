@@ -1,0 +1,4 @@
+# $schema: https://cms.postler.cz/schemas/stepapo/model/manipulation.json
+class: Build\Model\Command\CommandData
+items:
+    processFiles: {}

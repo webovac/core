@@ -1,4 +1,0 @@
-class: Build\Model\Role\RoleData
-items:
-	admin:
-		code: admin
