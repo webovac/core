@@ -17,6 +17,7 @@ class CoreExtension extends Extension
 	{
 		return [
 			'pageLink' => [$this, 'pageLink'],
+			'fileLink' => [$this, 'fileLink'],
 		];
 	}
 
@@ -27,6 +28,16 @@ class CoreExtension extends Extension
 
 		return new AuxiliaryNode(
 			fn(PrintContext $context) => $context->format('echo $this->global->uiPresenter->pageLink(%node);', $pageName),
+		);
+	}
+
+
+	public function fileLink(Tag $tag): Node
+	{
+		$pageName = $tag->parser->parseUnquotedStringOrExpression();
+
+		return new AuxiliaryNode(
+			fn(PrintContext $context) => $context->format('echo $this->global->uiPresenter->fileLink(%node);', $pageName),
 		);
 	}
 }

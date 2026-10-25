@@ -6,9 +6,11 @@ namespace Webovac\Core\Lib;
 
 use Build\Model\Orm;
 use Build\Model\Page\Page;
+use Nette\Utils\Strings;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Utils\Service;
 use Webovac\Core\HasLinkGroups;
+use Webovac\Core\Model\File\HasFiles;
 use Webovac\Core\Model\HasTranslations;
 use Webovac\Core\Model\HasWeb;
 
@@ -28,6 +30,19 @@ class LinkProvider implements Service
 		$linkGroups = [];
 		if ($pages = $this->buildPages($this->getAssocPages($hasTranslations))) {
 			$linkGroups += ['Stránky' => $pages];
+		}
+		if ($hasTranslations instanceof HasFiles) {
+			$fileLinks = [];
+			foreach ($hasTranslations->getFiles() as $file) {
+				$fileLinks[] = [
+					'id' => $file->id,
+					'href' => "{fileLink $file->id}",
+					'label' => Strings::truncate($file->description ?: $file->name, 50),
+				];;
+			}
+			if ($fileLinks) {
+				$linkGroups += ['Soubory' => $fileLinks];
+			}
 		}
 		foreach ($this->hasLinkGroups as $hasLinkGroups) {
 			$linkGroups += $hasLinkGroups->getLinkGroups();

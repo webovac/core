@@ -328,7 +328,7 @@ trait CorePresenter
 	private function setPolicy(): void
 	{
 		$this->policy = SecurityPolicy::createSafePolicy()
-			->allowTags(['include', 'control', 'plink', 'pageLink', 'contentType', 'sandbox', 'snippet', 'snippetArea'])
+			->allowTags(['include', 'control', 'plink', 'pageLink', 'fileLink', 'contentType', 'sandbox', 'snippet', 'snippetArea'])
 			->allowFilters(['replaceKey', 'mTime', 'translate', 'localDate'])
 			->allowProperties(stdClass::class, SecurityPolicy::All)
 			->allowProperties(CmsEntity::class, SecurityPolicy::All)
@@ -450,5 +450,11 @@ trait CorePresenter
 	public function pageLink(string $pageName): string
 	{
 		return $this->link('//default', $pageName);
+	}
+
+
+	public function fileLink(int $id): string
+	{
+		return $this->link('//this', ['do' => "core-documents-fileItem-$id-download"]);
 	}
 }
