@@ -14,6 +14,7 @@ class ContentProcessor implements Service
 		'ol', 'ul', 'li',
 		'table', 'thead', 'tbody', 'th', 'tr', 'td',
 		'div', 'figure', 'figcaption', 'colgroup', 'col', 'img', 'span', 'code', 'pre',
+		'iframe',
 	];
 
 
@@ -24,7 +25,7 @@ class ContentProcessor implements Service
 			'/<span.*?>{\$entity->(.+?)}<\/span>/' => fn(array $m) => "{\$entity->$m[1]}",
 			'/<p>[^<>]*?(<span.*?>)?{control (.+?)}(<\/span>)?[^<>]*?<\/p>/' => fn(array $m) => "{control $m[2]}",
 			'/}&nbsp;/' => fn() => '}',
-			'/<figure class="table"( style=".+?")?><table.*?>(.+?)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => "<figure class=\"table override-padding\"$m[1]><table class=\"table table-bordered\">$m[2]</table>$m[3]</figure>",
+			'/<figure class="table"( style=".+?")?><table.*?>(.+?)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => "<figure class=\"table override-padding\"$m[1]><table class=\"table table-bordered\">$m[2]</table>" . ($m[3] ?? '') . "</figure>",
 		], $editor);
 		return strip_tags($content, self::ALLOWED_TAGS);
 	}
@@ -35,7 +36,7 @@ class ContentProcessor implements Service
 		return preg_replace_callback_array([
 			'/{\$entity->(.+?)}/' => fn(array $m) => "<span class=\"mention\" data-mention=\"{\$entity->$m[1]}\">{\$entity->$m[1]}</span>",
 			'/{control (.+?)}/' => fn(array $m) => "<p><span class=\"mention\" data-mention=\"{control $m[1]}\">{control $m[1]}</span></p>",
-			'/<figure class="table override-padding"( style=".+?")><table class="table table-bordered">(.+?)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => "<figure class=\"table\"$m[1]><table>$m[2]</table>$m[3]</figure>",
+			'/<figure class="table override-padding"( style=".+?")><table class="table table-bordered">(.+?)<\/table>(<figcaption>.*?<\/figcaption>)?<\/figure>/' => fn(array $m) => "<figure class=\"table\"$m[1]><table>$m[2]</table>" . ($m[3] ?? '') . "</figure>",
 		], $content);
 	}
 }
